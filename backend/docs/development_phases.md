@@ -21,6 +21,8 @@
 - manually add data to the KeywordsTable for testing
 - have this running on a CRON setup
 - have DLQ in place
+- add a nice logger (with context, and remove console.logs)
+- add "with_environemnt" script
 
 # Phase 2 - Tests, DevX, CI and Envs (2 week)
 

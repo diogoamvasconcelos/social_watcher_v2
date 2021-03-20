@@ -1,1 +1,2 @@
 - Notify users direclty with IM (telegram, discord, etc)
+- use graphql for the FE (search, keywords, etc)

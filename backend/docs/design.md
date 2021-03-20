@@ -6,11 +6,11 @@
 
 ### KeywordsTable
 
-- pk: keyword & sk: socialMedia
+- pk: keyword (lowercase enforced) & sk: socialMedia
 
   - Allow activating/deactivating a socialMedia search on a keyword (triggered by event from UsersTable1)
 
-- gsi1pk: socialMedia#active (sparse index) & gsi1sk: keyword
+- gsi1pk: socialMedia|active (sparse index) & gsi1sk: keyword
 
   - Allow query for active keywords of a certain social media (done by the dispatchSearchJobs lambda)
 
@@ -40,4 +40,4 @@
   - index can be used to add more aggregated data from some post-processing (not sure what yet)
 
 - gsi1pk: keyword & sk: happened_at
-  - could be useful for getting all results for a certain keyword (no use case yet)
+  - could be useful for getting all results for a certain keyword (no use case yet``ß)

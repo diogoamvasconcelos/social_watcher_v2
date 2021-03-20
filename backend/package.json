@@ -2,7 +2,12 @@
   "name": "social_watcher_backend",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check-all": "npm run lint:check && npm run build && npm run test",
+    "build": "tsc --noEmit",
+    "build:watch": "tsc --noEmit --watch",
+    "lint:check": "eslint --ext .ts .",
+    "lint:fix": "eslint --fix --ext .ts .",
+    "test": "jest -i --testPathIgnorePatterns 'test/environment' --passWithNoTests"
   },
   "dependencies": {
     "aws": "0.0.3-2",
@@ -11,6 +16,9 @@
     "io-ts": "^2.2.16",
     "io-ts-types": "^0.5.15",
     "lodash": "^4.17.21",
+    "monocle-ts": "^2.3.9",
+    "newtype-ts": "^0.3.4",
+    "ruins-ts": "0.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
