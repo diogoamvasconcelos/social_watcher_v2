@@ -8,9 +8,10 @@ locals {
   lambda_file = "${var.out_dir}/lambda_artifact.zip"
 
   lambda_env_vars = {
-    ENV_NAME = var.env
+    ENV = var.env
     AWS_NODEJS_CONNECTION_REUSE_ENABLED = 1
     KEYWORDS_TABLE_NAME = aws_dynamodb_table.keywords.name
+    SEARCH_JOBS_QUEUE_TEMPLATE_NAME = "search_jobs_{socialMedia}_${var.env}"
   }
 
   tags = {

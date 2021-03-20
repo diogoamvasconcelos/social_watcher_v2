@@ -24,6 +24,7 @@ export const getConfig = () => {
   return {
     envName: ensure("ENV"),
     keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
+    searchJobQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),
   };
 };
 

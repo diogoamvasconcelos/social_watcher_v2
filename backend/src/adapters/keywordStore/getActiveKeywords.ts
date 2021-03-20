@@ -1,15 +1,13 @@
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { SocialMedia } from "../../core/models/socialMedia";
-import { GetActiveKeywordsFn } from "../../core/ports/keywordStore/getActiveKeywords";
+import { SocialMedia } from "../../domain/models/socialMedia";
+import { GetActiveKeywordsFn } from "../../domain/ports/keywordStore/getActiveKeywords";
 import { queryItems } from "../../lib/dynamoDb";
-import { toGSI1PK, unknownToDomain } from "./client";
+import { getClient, toGSI1PK, unknownToDomain } from "./client";
 
 export const makeGetActiveKeywords = (
-  client: DocumentClient,
+  client: ReturnType<typeof getClient>,
   tableName: string
 ): GetActiveKeywordsFn => {
   return async (socialMedia: SocialMedia) => {
-    console.log(`Quering: ${toGSI1PK(socialMedia)}`);
     return await queryItems(
       client,
       {

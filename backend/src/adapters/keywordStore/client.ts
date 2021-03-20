@@ -1,5 +1,5 @@
-import { KeywordData, keywordDataCodec } from "../../core/models/keyword";
-import { SocialMedia } from "../../core/models/socialMedia";
+import { KeywordData, keywordDataCodec } from "../../domain/models/keyword";
+import { SocialMedia } from "../../domain/models/socialMedia";
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
