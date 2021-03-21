@@ -47,6 +47,8 @@ const handler = async () => {
       console.error(`Failed to queueSearchJobs) ${queueSearchJobsResult.left}`);
       return;
     }
+
+    console.log(`Dispatched ${searchJobs.length} for ${socialMedia}`);
   }
 };
 

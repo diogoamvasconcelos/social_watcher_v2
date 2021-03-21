@@ -11,7 +11,7 @@ locals {
     ENV = var.env
     AWS_NODEJS_CONNECTION_REUSE_ENABLED = 1
     KEYWORDS_TABLE_NAME = aws_dynamodb_table.keywords.name
-    SEARCH_JOBS_QUEUE_TEMPLATE_NAME = "search_jobs_{socialMedia}_${var.env}"
+    SEARCH_JOBS_QUEUE_TEMPLATE_NAME = "{socialMedia}_search_jobs"
   }
 
   tags = {

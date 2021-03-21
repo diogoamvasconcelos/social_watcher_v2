@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import _ from "lodash";
 import {
   MessageList,
   ChangeMessageVisibilityBatchRequestEntry,
@@ -72,11 +73,25 @@ export const sendMessages = async (
   );
 
   try {
-    return right(
-      await client
-        .sendMessageBatch({ QueueUrl: queueUrl, Entries: entries })
-        .promise()
+    // sendMessageBatch has a limit of 10 messages
+    const batches = _.chunk(entries, 10);
+    const batchesResult = await Promise.all(
+      batches.map(async (batch) => {
+        return await client
+          .sendMessageBatch({ QueueUrl: queueUrl, Entries: batch })
+          .promise();
+      })
     );
+
+    const result: AWS.SQS.SendMessageBatchResult = batchesResult.reduce(
+      (acc, batchResult) => {
+        acc.Successful = acc.Successful.concat(batchResult.Successful);
+        acc.Failed = acc.Failed.concat(batchResult.Failed);
+        return acc;
+      }
+    );
+
+    return right(result);
   } catch (error) {
     console.error("sqs/sendMessageBatch failed", { error: error.stack });
     return left("ERROR");

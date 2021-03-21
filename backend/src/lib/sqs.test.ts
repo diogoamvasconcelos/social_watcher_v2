@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   sendMessage,
   sendMessages,
@@ -6,7 +7,7 @@ import {
   deleteMessages,
 } from "./sqs";
 import * as AWS from "aws-sdk";
-import { getLogger } from "../../test/lib/mocks";
+import _ from "lodash";
 import { left, right } from "fp-ts/lib/Either";
 
 jest.mock("aws-sdk", () => {
@@ -25,9 +26,11 @@ jest.mock("aws-sdk", () => {
 });
 
 const client = new AWS.SQS();
-let logger = getLogger();
 
-const messages = [{ MessageId: "test", MessageBody: "hello world" }];
+const messages = _.range(21).map((i) => ({
+  MessageId: `test#${i}`,
+  MessageBody: `hello world ${i}`,
+}));
 const result = { result: "not an error!" };
 
 const sendMessageRequest = {
@@ -44,15 +47,13 @@ const sendMessageRequest = {
 describe("sendMessage", () => {
   beforeEach(() => {
     (client.sendMessage().promise as jest.MockedFunction<any>).mockReset();
-    logger = getLogger();
   });
 
   it("throws when result.MessageID is empty", async () => {
-    (client.sendMessage().promise as jest.MockedFunction<
-      any
-    >).mockReturnValueOnce({});
+    (client.sendMessage()
+      .promise as jest.MockedFunction<any>).mockReturnValueOnce({});
 
-    expect(await sendMessage(client, sendMessageRequest, logger)).toEqual(
+    expect(await sendMessage(client, sendMessageRequest)).toEqual(
       left("ERROR")
     );
   });
@@ -60,11 +61,12 @@ describe("sendMessage", () => {
   it("succeeds when result.MessageId is returned", async () => {
     const messageId = "dummyId";
 
-    (client.sendMessage().promise as jest.MockedFunction<
-      any
-    >).mockReturnValueOnce({ MessageId: messageId });
+    (client.sendMessage()
+      .promise as jest.MockedFunction<any>).mockReturnValueOnce({
+      MessageId: messageId,
+    });
 
-    const result = await sendMessage(client, sendMessageRequest, logger);
+    const result = await sendMessage(client, sendMessageRequest);
 
     expect(result).toEqual(right(messageId));
 
@@ -78,23 +80,28 @@ describe("sendMessageBatch", () => {
     (client.sendMessageBatch().promise as jest.MockedFunction<any>).mockReset();
   });
 
+  it("succeeds when AWS.SQS returns data", async () => {
+    const batchResult = { Successful: [result], Failed: [] };
+    client.sendMessageBatch().promise = jest
+      .fn()
+      .mockResolvedValue(batchResult);
+
+    expect(await sendMessages(client, "url", messages)).toEqual(
+      right(batchResult)
+    );
+    expect(client.sendMessageBatch().promise).toBeCalledTimes(
+      Math.trunc(messages.length / 10) + (messages.length % 10 > 0 ? 1 : 0)
+    );
+  });
+
   it("throws when AWS.SQS returns an error", async () => {
     client.sendMessageBatch().promise = jest
       .fn()
       .mockRejectedValue(new Error("such broke"));
 
-    expect(await sendMessages(client, "url", messages, logger)).toEqual(
-      left("ERROR")
-    );
-  });
-
-  it("succeeds when AWS.SQS returns data", async () => {
-    client.sendMessageBatch().promise = jest.fn().mockResolvedValue(result);
-
-    // This test may seem unimpressive as we just pass the response.
-    // But it is good for catching regressions.
-    expect(await sendMessages(client, "url", messages, logger)).toEqual(
-      right(result)
+    expect(await sendMessages(client, "url", messages)).toEqual(left("ERROR"));
+    expect(client.sendMessageBatch().promise).toBeCalledTimes(
+      Math.trunc(messages.length / 10) + (messages.length % 10 > 0 ? 1 : 0)
     );
   });
 });
@@ -111,7 +118,7 @@ describe("getMessages", () => {
       .fn()
       .mockRejectedValue(new Error(errorMessageFromAWS));
 
-    expect(await getMessages(client, "url", logger)).toEqual(left("ERROR"));
+    expect(await getMessages(client, "url")).toEqual(left("ERROR"));
   });
 
   it("succeeds when the client returns data", async () => {
@@ -122,7 +129,7 @@ describe("getMessages", () => {
       .fn()
       .mockResolvedValue({ Messages: messages });
 
-    expect(await getMessages(client, "url", logger)).toEqual(right(messages));
+    expect(await getMessages(client, "url")).toEqual(right(messages));
   });
 });
 
@@ -138,7 +145,7 @@ describe("getQueueUrlFromName", () => {
       QueueUrl: queueUrl,
     });
 
-    expect(await getQueueUrlFromName(client, "my queue", logger)).toEqual(
+    expect(await getQueueUrlFromName(client, "my queue")).toEqual(
       right(queueUrl)
     );
   });
@@ -146,9 +153,8 @@ describe("getQueueUrlFromName", () => {
 
 describe("deleteMessageBatch", () => {
   beforeEach(() => {
-    (client.deleteMessageBatch().promise as jest.MockedFunction<
-      any
-    >).mockReset();
+    (client.deleteMessageBatch()
+      .promise as jest.MockedFunction<any>).mockReset();
   });
 
   it("returns error when client throws", async () => {
@@ -156,7 +162,7 @@ describe("deleteMessageBatch", () => {
       .fn()
       .mockRejectedValue(new Error("eek!"));
 
-    expect(await deleteMessages(client, "url", messages, logger)).toEqual(
+    expect(await deleteMessages(client, "url", messages)).toEqual(
       left("ERROR")
     );
   });
@@ -166,7 +172,7 @@ describe("deleteMessageBatch", () => {
     // But it is good for catching regressions.
     client.deleteMessageBatch().promise = jest.fn().mockResolvedValue(result);
 
-    expect(await deleteMessages(client, "url", messages, logger)).toEqual(
+    expect(await deleteMessages(client, "url", messages)).toEqual(
       right(result)
     );
   });

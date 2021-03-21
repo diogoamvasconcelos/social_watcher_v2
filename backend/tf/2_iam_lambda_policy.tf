@@ -32,6 +32,7 @@ resource "aws_iam_policy" "lambda_default" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "Logs",
       "Action": [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
@@ -41,6 +42,7 @@ resource "aws_iam_policy" "lambda_default" {
       "Effect": "Allow"
     },
     {
+      "Sid": "SSM",
       "Action": [
         "ssm:Get*"
       ],
@@ -48,6 +50,7 @@ resource "aws_iam_policy" "lambda_default" {
       "Effect": "Allow"
     },
     {
+      "Sid": "DynamoDB",
       "Action": [
         "dynamodb:*"
       ],
@@ -55,10 +58,26 @@ resource "aws_iam_policy" "lambda_default" {
       "Effect": "Allow"
     },
     {
+      "Sid": "Translate",
       "Action": [
         "translate:TranslateText"
       ],
       "Resource": "*",
+      "Effect": "Allow"
+    },
+    {
+      "Sid": "SQS",
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ListDeadLetterSourceQueues",
+        "sqs:ListQueueTags",
+        "sqs:ReceiveMessage"
+      ],
+      "Resource": "arn:aws:sqs:*:*",
       "Effect": "Allow"
     }
   ]
