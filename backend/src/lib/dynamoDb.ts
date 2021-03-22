@@ -1,17 +1,18 @@
 import { DocumentClient, Put } from "aws-sdk/clients/dynamodb";
 import { Either, right, left, isLeft } from "fp-ts/lib/Either";
 import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
+import { applyTransformToItem } from "./iots";
 
-export function getClient() {
+export const getClient = () => {
   return new DocumentClient();
-}
+};
 
 export type PutParams = Put;
 
-export async function transactPutItems(
+export const transactPutItems = async (
   client: DocumentClient,
   paramsList: NonEmptyArray<PutParams>
-): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> {
+): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
     const putParamsList: { ["Put"]: Put }[] = paramsList.map((params: Put) => ({
       Put: params,
@@ -36,13 +37,13 @@ export async function transactPutItems(
     );
     return left("ERROR");
   }
-}
+};
 
-export async function queryItems<T>(
+export const queryItems = async <T>(
   client: DocumentClient,
   params: DocumentClient.QueryInput,
   transformFn: (item: unknown) => Either<string[], T>
-): Promise<Either<"ERROR", T[]>> {
+): Promise<Either<"ERROR", T[]>> => {
   try {
     let cursor: DocumentClient.Key | undefined = undefined;
     const items: unknown[] = [];
@@ -60,7 +61,7 @@ export async function queryItems<T>(
     const transformedItems = [];
 
     for (const item of items) {
-      const transformResult = applyTransform(transformFn, item);
+      const transformResult = applyTransformToItem(transformFn, item);
       if (isLeft(transformResult)) {
         return transformResult;
       }
@@ -75,12 +76,12 @@ export async function queryItems<T>(
     );
     return left("ERROR");
   }
-}
+};
 
-export async function putItem(
+export const putItem = async (
   client: DocumentClient,
   params: DocumentClient.PutItemInput
-): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> {
+): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
     await client.put(params).promise();
     return right("OK");
@@ -98,12 +99,12 @@ export async function putItem(
     );
     return left("ERROR");
   }
-}
+};
 
-export async function scanItems(
+export const scanItems = async (
   client: DocumentClient,
   params: DocumentClient.ScanInput
-) {
+) => {
   try {
     const scanResult: DocumentClient.QueryOutput = await client
       .scan(params)
@@ -113,20 +114,20 @@ export async function scanItems(
     console.error(`Call to DynamoDB scan exited with error`);
     throw e;
   }
-}
+};
 
-export async function getItem<T>(
+export const getItem = async <T>(
   client: DocumentClient,
   params: DocumentClient.GetItemInput,
   transformFn: (item: unknown) => Either<string[], T>
-): Promise<Either<"ERROR", "NOT_FOUND" | T>> {
+): Promise<Either<"ERROR", "NOT_FOUND" | T>> => {
   try {
     const getResult = await client.get(params).promise();
     if (!getResult.Item) {
       return right("NOT_FOUND");
     }
 
-    return applyTransform(transformFn, getResult.Item);
+    return applyTransformToItem(transformFn, getResult.Item);
   } catch (error) {
     console.error(
       "Call to DynamoDB get exited with following error:\n" +
@@ -134,12 +135,12 @@ export async function getItem<T>(
     );
     return left("ERROR");
   }
-}
+};
 
-export async function deleteItem(
+export const deleteItem = async (
   client: DocumentClient,
   params: DocumentClient.DeleteItemInput
-) {
+) => {
   try {
     const result = await client.delete(params).promise();
     return result;
@@ -147,23 +148,4 @@ export async function deleteItem(
     console.error("Call to DynamoDB delete exited with error");
     throw e;
   }
-}
-
-function applyTransform<T>(
-  transformFn: (item: unknown) => Either<string[], T>,
-  item: unknown
-): Either<"ERROR", T> {
-  const transformResult = transformFn(item);
-
-  if (isLeft(transformResult)) {
-    console.error(
-      "Unable to transform DynamoDB item.\n" +
-        "Item:\n" +
-        JSON.stringify(item) +
-        "Errors:\n" +
-        JSON.stringify(transformResult.left)
-    );
-    return left("ERROR");
-  }
-  return transformResult;
-}
+};

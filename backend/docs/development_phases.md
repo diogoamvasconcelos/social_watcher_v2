@@ -23,6 +23,7 @@
 - have DLQ in place
 - add a nice logger (with context, and remove console.logs)
 - add "with_environemnt" script
+- use new io-ts decode/etc libs
 
 # Phase 2 - Tests, DevX, CI and Envs (2 week)
 
