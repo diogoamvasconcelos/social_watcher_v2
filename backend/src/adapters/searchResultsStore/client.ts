@@ -1,46 +1,45 @@
-// import { KeywordData, keywordDataCodec } from "../../domain/models/keyword";
-// import { SocialMedia } from "../../domain/models/socialMedia";
+import {
+  SearchResult,
+  searchResultCodec,
+} from "../../domain/models/searchResult";
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
-// import * as t from "io-ts";
-// import _ from "lodash";
-// import { decode } from "../../lib/iots";
-// import { map } from "fp-ts/lib/Either";
+import * as t from "io-ts";
+import _ from "lodash";
+import { decode } from "../../lib/iots";
+import { map } from "fp-ts/lib/Either";
 
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
 
-/*
-export const keywordDataDocCodec = t.intersection([
-  keywordDataCodec,
+export const searchResultDocCodec = t.intersection([
+  searchResultCodec,
   t.type({
     pk: t.string,
     sk: t.string,
-    gsi1pk: t.union([t.string, t.undefined]),
+    gsi1pk: t.string,
     gsi1sk: t.string,
   }),
 ]);
-export type KeywordDataDoc = t.TypeOf<typeof keywordDataDocCodec>;
+export type SearchResultDoc = t.TypeOf<typeof searchResultDocCodec>;
 
-export const toGSI1PK = (socialMedia: SocialMedia) => `${socialMedia}|active`;
-
-export const domainToDocument = (domainItem: KeywordData): KeywordDataDoc => {
-  return {
-    ...domainItem,
-    pk: domainItem.keyword,
-    sk: domainItem.socialMedia,
-    gsi1pk:
-      domainItem.status == "ENABLED"
-        ? toGSI1PK(domainItem.socialMedia)
-        : undefined,
-    gsi1sk: domainItem.keyword,
-  };
+export const domainToDocument = (domainItem: SearchResult) => {
+  return { ...domainItem, ...toDocKeys(domainItem) };
 };
 
-export const documentToDomain = (docItem: KeywordDataDoc): KeywordData => {
+export const toDocKeys = (
+  { socialMedia, id, keyword, happened_at }: SearchResult,
+  index: number = 0
+) => ({
+  pk: `${socialMedia}|${id}`,
+  sk: index.toString(),
+  gsi1pk: keyword,
+  gsi1sk: happened_at.toISOString(),
+});
+
+export const documentToDomain = (docItem: SearchResultDoc): SearchResult => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
 export const unknownToDomain = (item: unknown) => {
-  return map(documentToDomain)(decode(keywordDataDocCodec, item));
+  return map(documentToDomain)(decode(searchResultDocCodec, item));
 };
-*/

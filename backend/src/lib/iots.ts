@@ -36,3 +36,5 @@ export const applyTransformToItem = <T, U>(
   }
   return transformResult;
 };
+
+export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);

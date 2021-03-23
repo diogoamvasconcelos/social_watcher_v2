@@ -1,8 +1,22 @@
-import { SearchRecentResponse } from "../../lib/twitter";
+import * as t from "io-ts";
+import { searchRecentResponseDataCodec } from "../../lib/twitter";
+import { keywordCodec } from "./keyword";
+import { DateFromISOString } from "io-ts-types/DateFromISOString";
 
-export type TwitterSearchResult = SearchRecentResponse["data"][0];
+export const searchResultMetadaCodec = t.type({
+  id: t.string,
+  keyword: keywordCodec,
+  happened_at: DateFromISOString,
+});
 
-export type SearchResult = {
-  type: "twitter";
-  data: TwitterSearchResult;
-};
+export const twitterSearchResultCodec = t.intersection([
+  searchResultMetadaCodec,
+  t.type({
+    socialMedia: t.literal("twitter"),
+    data: searchRecentResponseDataCodec,
+  }),
+]);
+export type TwitterSearchResult = t.TypeOf<typeof twitterSearchResultCodec>;
+
+export const searchResultCodec = twitterSearchResultCodec;
+export type SearchResult = t.TypeOf<typeof searchResultCodec>;

@@ -5,7 +5,14 @@ import { lambdaHandler } from "../../src/handlers/searchTwitter";
 const main = async () => {
   try {
     const result = await lambdaHandler(
-      { Records: [1] } as any,
+      {
+        Records: [
+          {
+            messageId: "918fbc9c-ba87-44ef-8c90-351630ce4526",
+            body: '{"socialMedia":"twitter","keyword":"pureref"}',
+          },
+        ],
+      } as any,
       {} as any,
       {} as any
     );

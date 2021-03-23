@@ -17,5 +17,6 @@ env \
   TF_VAR_aws_region=$REGION \
   TF_VAR_env=$ENV \
   KEYWORDS_TABLE_NAME="keywords" \
+  SEARCH_RESULTS_TABLE_NAME="search_results" \
   SEARCH_JOBS_QUEUE_TEMPLATE_NAME="{socialMedia}_search_jobs" \
   $@

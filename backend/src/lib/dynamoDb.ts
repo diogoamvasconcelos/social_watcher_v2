@@ -102,10 +102,6 @@ export const putItem = async (
   }
 };
 
-export const putItemBatch = async (client: Client) => {
-  const res = client.batchWrite();
-};
-
 export const scanItems = async (
   client: Client,
   params: DocumentClient.ScanInput
@@ -114,10 +110,13 @@ export const scanItems = async (
     const scanResult: DocumentClient.QueryOutput = await client
       .scan(params)
       .promise();
-    return scanResult;
-  } catch (e) {
-    console.error(`Call to DynamoDB scan exited with error`);
-    throw e;
+    return right(scanResult);
+  } catch (error) {
+    console.error(
+      "Call to DynamoDB scan exited with following error:\n" +
+        (error.message as string)
+    );
+    return left("ERROR");
   }
 };
 

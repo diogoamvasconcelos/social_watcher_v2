@@ -3,7 +3,7 @@ import { SocialMedia } from "../../domain/models/socialMedia";
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode } from "../../lib/iots";
+import { decode, optional } from "../../lib/iots";
 import { map } from "fp-ts/lib/Either";
 
 export const getClient = getDynamodbClient;
@@ -14,7 +14,7 @@ export const keywordDataDocCodec = t.intersection([
   t.type({
     pk: t.string,
     sk: t.string,
-    gsi1pk: t.union([t.string, t.undefined]),
+    gsi1pk: optional(t.string),
     gsi1sk: t.string,
   }),
 ]);

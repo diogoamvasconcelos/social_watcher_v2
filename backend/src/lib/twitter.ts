@@ -3,7 +3,7 @@ import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { getMinutesAgo } from "./date";
 import { DateFromISOString } from "io-ts-types/DateFromISOString";
-import { decode } from "./iots";
+import { decode, optional } from "./iots";
 
 export const twitterCredentialsCodec = t.type({
   apiKey: t.string,
@@ -24,32 +24,30 @@ export const getClient = (credentials: TwitterCredentials) => {
 };
 export type Client = ReturnType<typeof getClient>;
 
-// TODO: move specifics to port and adapter
+export const searchRecentResponseDataCodec = t.type({
+  id: t.string,
+  text: t.string,
+  created_at: DateFromISOString,
+  conversation_id: t.string,
+  author_id: t.string,
+  lang: t.string,
+});
+export const searchRecentResponseMetaCodec = t.type({
+  result_count: t.number,
+  newest_id: optional(t.string),
+  oldest_id: optional(t.string),
+  next_token: optional(t.string),
+});
+export const searchRecentResponseCodec = t.type({
+  data: t.array(searchRecentResponseDataCodec),
+  meta: searchRecentResponseMetaCodec,
+});
+export type SearchRecentResponse = t.TypeOf<typeof searchRecentResponseCodec>;
+
 export type SearchRecentOptions = {
   maxResults: number;
   minutesAgo: number;
 };
-
-export const searchRecentResponseCodec = t.type({
-  data: t.array(
-    t.type({
-      id: t.string,
-      text: t.string,
-      created_at: DateFromISOString,
-      conversation_id: t.string,
-      author_id: t.string,
-      lang: t.string,
-    })
-  ),
-  meta: t.type({
-    newest_id: t.string,
-    oldest_id: t.string,
-    result_count: t.string,
-    next_token: t.string,
-  }),
-});
-export type SearchRecentResponse = t.TypeOf<typeof searchRecentResponseCodec>;
-
 export const searchRecent = async (
   client: Client,
   keyword: string,
@@ -76,8 +74,12 @@ export const searchRecent = async (
   };
 
   const response = await doRequest(client, request);
-  if (response.status != 400) {
-    return left([JSON.stringify(response)]);
+  if (response.status != 200) {
+    return left([`${response.status} : ${response.data}`]);
+  }
+
+  if (response.data["data"] == undefined) {
+    response.data["data"] = [];
   }
 
   const decodeResult = decode(searchRecentResponseCodec, response.data);
