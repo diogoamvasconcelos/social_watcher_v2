@@ -11,7 +11,7 @@ export type Client = ReturnType<typeof getClient>;
 export type PutParams = Put;
 
 export const transactPutItems = async (
-  client: DocumentClient,
+  client: Client,
   paramsList: NonEmptyArray<PutParams>
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
@@ -41,7 +41,7 @@ export const transactPutItems = async (
 };
 
 export const queryItems = async <T>(
-  client: DocumentClient,
+  client: Client,
   params: DocumentClient.QueryInput,
   transformFn: (item: unknown) => Either<string[], T>
 ): Promise<Either<"ERROR", T[]>> => {
@@ -80,7 +80,7 @@ export const queryItems = async <T>(
 };
 
 export const putItem = async (
-  client: DocumentClient,
+  client: Client,
   params: DocumentClient.PutItemInput
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
@@ -102,8 +102,12 @@ export const putItem = async (
   }
 };
 
+export const putItemBatch = async (client: Client) => {
+  const res = client.batchWrite();
+};
+
 export const scanItems = async (
-  client: DocumentClient,
+  client: Client,
   params: DocumentClient.ScanInput
 ) => {
   try {
@@ -118,7 +122,7 @@ export const scanItems = async (
 };
 
 export const getItem = async <T>(
-  client: DocumentClient,
+  client: Client,
   params: DocumentClient.GetItemInput,
   transformFn: (item: unknown) => Either<string[], T>
 ): Promise<Either<"ERROR", "NOT_FOUND" | T>> => {
@@ -139,7 +143,7 @@ export const getItem = async <T>(
 };
 
 export const deleteItem = async (
-  client: DocumentClient,
+  client: Client,
   params: DocumentClient.DeleteItemInput
 ) => {
   try {

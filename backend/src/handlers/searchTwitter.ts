@@ -1,16 +1,12 @@
 import { SQSEvent, SQSHandler } from "aws-lambda";
 import { isLeft } from "fp-ts/lib/Either";
+import { makeSearchTwitter } from "../adapters/twitterSearcher/searchTwitter";
 import { decode } from "../lib/iots";
 import { getClient as getSsmClient, getParameter } from "../lib/ssm";
 import {
   getClient as getTwitterClient,
-  searchRecent,
   twitterCredentialsCodec,
 } from "../lib/twitter";
-
-/* TODO
-  limit search results (for crazy stuff like bitcoin, etc)
-*/
 
 const handler = async (event: SQSEvent) => {
   console.log(event);
@@ -18,7 +14,9 @@ const handler = async (event: SQSEvent) => {
 
   const twitterCredentials = await getTwitterCredentials(getSsmClient());
   const twitterClient = getTwitterClient(twitterCredentials);
-  await searchRecent(twitterClient, "Tesla");
+  const searchTwitterFn = makeSearchTwitter(twitterClient);
+
+  const searchResult = await searchTwitterFn("Tesla");
 };
 
 export const lambdaHandler: SQSHandler = async (event: SQSEvent) => {
