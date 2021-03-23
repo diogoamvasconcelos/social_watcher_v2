@@ -5,6 +5,7 @@ import { applyTransformToItem } from "./iots";
 export const getClient = () => {
   return new AWS.SSM();
 };
+export type Client = ReturnType<typeof getClient>;
 
 export const getParameter = async <T>(
   client: AWS.SSM,

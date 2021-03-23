@@ -6,6 +6,7 @@ import { applyTransformToItem } from "./iots";
 export const getClient = () => {
   return new DocumentClient();
 };
+export type Client = ReturnType<typeof getClient>;
 
 export type PutParams = Put;
 

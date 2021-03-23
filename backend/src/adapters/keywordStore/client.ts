@@ -7,6 +7,7 @@ import { decode } from "../../lib/iots";
 import { map } from "fp-ts/lib/Either";
 
 export const getClient = getDynamodbClient;
+export type Client = ReturnType<typeof getClient>;
 
 export const keywordDataDocCodec = t.intersection([
   keywordDataCodec,

@@ -1,10 +1,10 @@
 import { SocialMedia } from "../../domain/models/socialMedia";
 import { GetActiveKeywordsFn } from "../../domain/ports/keywordStore/getActiveKeywords";
 import { queryItems } from "../../lib/dynamoDb";
-import { getClient, toGSI1PK, unknownToDomain } from "./client";
+import { Client, toGSI1PK, unknownToDomain } from "./client";
 
 export const makeGetActiveKeywords = (
-  client: ReturnType<typeof getClient>,
+  client: Client,
   tableName: string
 ): GetActiveKeywordsFn => {
   return async (socialMedia: SocialMedia) => {

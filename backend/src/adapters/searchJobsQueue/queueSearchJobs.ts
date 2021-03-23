@@ -3,10 +3,10 @@ import { SearchJob } from "../../domain/models/searchJobs";
 import { SocialMedia } from "../../domain/models/socialMedia";
 import { QueueSearchJobsFn } from "../../domain/ports/searchJobsQueue/queueSearchJobs";
 import { getQueueUrlFromName, sendMessages } from "../../lib/sqs";
-import { getClient } from "./client";
+import { Client } from "./client";
 
 export const makeQueueSearchJobs = (
-  client: ReturnType<typeof getClient>,
+  client: Client,
   searchJobQueueTemplateName: string
 ): QueueSearchJobsFn => {
   return async (socialMedia: SocialMedia, searchJobs: SearchJob[]) => {
