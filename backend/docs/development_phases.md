@@ -16,12 +16,13 @@
 
 # Phase 1 - Search Keyword in Twitter CRON MVP (1 week)
 
-- only one socialMediaType: twitter
+- only one socialMediaType: twitter <DONE>
   - translate twit
-- manually add data to the KeywordsTable for testing
-- have this running on a CRON setup
-- have DLQ in place
+- manually add data to the KeywordsTable for testing <DONE>
+- have this running on a CRON setup <DONE>
+- have DLQ in place <DONE>
 - add a nice logger (with context, and remove console.logs)
+  - uniform error logging on ./lib
 - add "with_environemnt" script
 - use new io-ts decode/etc libs
 

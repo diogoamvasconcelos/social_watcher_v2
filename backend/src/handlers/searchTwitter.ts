@@ -11,6 +11,9 @@ import {
 } from "../lib/twitter";
 import { getClient as getSearchResultStoreClient } from "../adapters/searchResultsStore/client";
 import { searchJobCodec } from "../domain/models/searchJobs";
+import { translateTwitterSearchResults } from "../domain/controllers/translateTwitterSearchResults";
+import { getClient as getTranslateClient } from "../lib/translate";
+import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
 
 const config = getConfig();
 
@@ -25,6 +28,8 @@ const handler = async (event: SQSEvent) => {
     searchResultStoreClient,
     config.searchResultsTableName
   );
+  const translateClient = getTranslateClient();
+  const translateToEnglishFn = makeTranslateToEnglish(translateClient);
 
   await Promise.all(
     event.Records.map(async (record) => {
@@ -41,9 +46,12 @@ const handler = async (event: SQSEvent) => {
         `Found ${searchResults.right.length} twits for: ${decodeResult.right.keyword}`
       );
 
-      // TODO: Add translation
+      const twitterSearchResults = await translateTwitterSearchResults(
+        translateToEnglishFn,
+        searchResults.right
+      );
 
-      const putResult = await putSearchResultFn(searchResults.right);
+      const putResult = await putSearchResultFn(twitterSearchResults);
       if (isLeft(putResult)) {
         throw new Error("Failed to put results");
       }

@@ -13,7 +13,10 @@ export const twitterSearchResultCodec = t.intersection([
   searchResultMetadaCodec,
   t.type({
     socialMedia: t.literal("twitter"),
-    data: searchRecentResponseDataCodec,
+    data: t.intersection([
+      searchRecentResponseDataCodec,
+      t.partial({ translatedText: t.string }),
+    ]),
   }),
 ]);
 export type TwitterSearchResult = t.TypeOf<typeof twitterSearchResultCodec>;
