@@ -2,6 +2,7 @@ import { DocumentClient, Put } from "aws-sdk/clients/dynamodb";
 import { Either, right, left, isLeft } from "fp-ts/lib/Either";
 import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
 import { applyTransformToItem } from "./iots";
+import { Logger } from "./logger";
 
 export const getClient = () => {
   return new DocumentClient();
@@ -12,7 +13,8 @@ export type PutParams = Put;
 
 export const transactPutItems = async (
   client: Client,
-  paramsList: NonEmptyArray<PutParams>
+  paramsList: NonEmptyArray<PutParams>,
+  logger: Logger
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
     const putParamsList: { ["Put"]: Put }[] = paramsList.map((params: Put) => ({
@@ -26,13 +28,13 @@ export const transactPutItems = async (
     return right("OK");
   } catch (error) {
     if (error?.code === "TransactionCanceledException") {
-      console.log(
+      logger.info(
         `Call to DynamoDB transactWrite with TransactionCanceledException. But that's OK`
       );
       return right("CONDITION_CHECK_FAILED");
     }
 
-    console.error(
+    logger.error(
       "Call to DynamoDB get exited with following error:\n" +
         (error.message as string)
     );
@@ -43,7 +45,8 @@ export const transactPutItems = async (
 export const queryItems = async <T>(
   client: Client,
   params: DocumentClient.QueryInput,
-  transformFn: (item: unknown) => Either<string[], T>
+  transformFn: (item: unknown) => Either<string[], T>,
+  logger: Logger
 ): Promise<Either<"ERROR", T[]>> => {
   try {
     let cursor: DocumentClient.Key | undefined = undefined;
@@ -62,7 +65,7 @@ export const queryItems = async <T>(
     const transformedItems = [];
 
     for (const item of items) {
-      const transformResult = applyTransformToItem(transformFn, item);
+      const transformResult = applyTransformToItem(transformFn, item, logger);
       if (isLeft(transformResult)) {
         return transformResult;
       }
@@ -71,7 +74,7 @@ export const queryItems = async <T>(
 
     return right(transformedItems);
   } catch (error) {
-    console.error(
+    logger.error(
       "Call to queryAlltItems exited with following error:\n" +
         (error.message as string)
     );
@@ -81,7 +84,8 @@ export const queryItems = async <T>(
 
 export const putItem = async (
   client: Client,
-  params: DocumentClient.PutItemInput
+  params: DocumentClient.PutItemInput,
+  logger: Logger
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
     await client.put(params).promise();
@@ -94,7 +98,7 @@ export const putItem = async (
       return right("CONDITION_CHECK_FAILED");
     }
 
-    console.error(
+    logger.error(
       "Call to DynamoDB get exited with following error:\n" +
         (error.message as string)
     );
@@ -104,7 +108,8 @@ export const putItem = async (
 
 export const scanItems = async (
   client: Client,
-  params: DocumentClient.ScanInput
+  params: DocumentClient.ScanInput,
+  logger: Logger
 ) => {
   try {
     const scanResult: DocumentClient.QueryOutput = await client
@@ -112,7 +117,7 @@ export const scanItems = async (
       .promise();
     return right(scanResult);
   } catch (error) {
-    console.error(
+    logger.error(
       "Call to DynamoDB scan exited with following error:\n" +
         (error.message as string)
     );
@@ -123,7 +128,8 @@ export const scanItems = async (
 export const getItem = async <T>(
   client: Client,
   params: DocumentClient.GetItemInput,
-  transformFn: (item: unknown) => Either<string[], T>
+  transformFn: (item: unknown) => Either<string[], T>,
+  logger: Logger
 ): Promise<Either<"ERROR", "NOT_FOUND" | T>> => {
   try {
     const getResult = await client.get(params).promise();
@@ -131,9 +137,9 @@ export const getItem = async <T>(
       return right("NOT_FOUND");
     }
 
-    return applyTransformToItem(transformFn, getResult.Item);
+    return applyTransformToItem(transformFn, getResult.Item, logger);
   } catch (error) {
-    console.error(
+    logger.error(
       "Call to DynamoDB get exited with following error:\n" +
         (error.message as string)
     );
@@ -143,13 +149,14 @@ export const getItem = async <T>(
 
 export const deleteItem = async (
   client: Client,
-  params: DocumentClient.DeleteItemInput
+  params: DocumentClient.DeleteItemInput,
+  logger: Logger
 ) => {
   try {
     const result = await client.delete(params).promise();
     return result;
   } catch (e) {
-    console.error("Call to DynamoDB delete exited with error");
+    logger.error("Call to DynamoDB delete exited with error");
     throw e;
   }
 };

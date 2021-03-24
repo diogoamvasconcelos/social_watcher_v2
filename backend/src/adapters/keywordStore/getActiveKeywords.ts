@@ -1,4 +1,3 @@
-import { SocialMedia } from "../../domain/models/socialMedia";
 import { GetActiveKeywordsFn } from "../../domain/ports/keywordStore/getActiveKeywords";
 import { queryItems } from "../../lib/dynamoDb";
 import { Client, toGSI1PK, unknownToDomain } from "./client";
@@ -7,7 +6,7 @@ export const makeGetActiveKeywords = (
   client: Client,
   tableName: string
 ): GetActiveKeywordsFn => {
-  return async (socialMedia: SocialMedia) => {
+  return async (logger, socialMedia) => {
     return await queryItems(
       client,
       {
@@ -18,7 +17,8 @@ export const makeGetActiveKeywords = (
           ":gsi1pk": toGSI1PK(socialMedia),
         },
       },
-      unknownToDomain
+      unknownToDomain,
+      logger
     );
   };
 };

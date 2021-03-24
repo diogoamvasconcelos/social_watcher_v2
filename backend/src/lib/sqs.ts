@@ -10,40 +10,44 @@ import { left, right, Either, isLeft } from "fp-ts/lib/Either";
 import { decode } from "./iots";
 import AWS from "aws-sdk";
 import { v4 as uuid } from "uuid";
+import { Logger } from "./logger";
 
 export const getClient = () => {
   return new AWS.SQS();
 };
+export type Client = ReturnType<typeof getClient>;
 
 export const getQueueUrlFromName = async (
-  client: AWS.SQS,
-  name: string
+  client: Client,
+  name: string,
+  logger: Logger
 ): Promise<Either<"ERROR", string>> => {
   try {
     const result = await client.getQueueUrl({ QueueName: name }).promise();
 
     if (result.QueueUrl == null) {
-      console.error("sqs/getQueueUrlFromName: url not found");
+      logger.error("sqs/getQueueUrlFromName: url not found");
       return left("ERROR");
     }
 
     return right(result.QueueUrl);
   } catch (error) {
-    console.error(`sqs/getQueueUrlFromName: could not find queue (${name})`, {
-      error: error.stack,
+    logger.error(`sqs/getQueueUrlFromName: could not find queue (${name})`, {
+      error: JSON.stringify(error),
     });
     return left("ERROR");
   }
 };
 
 export const sendMessage = async (
-  client: AWS.SQS,
-  request: AWS.SQS.SendMessageRequest
+  client: Client,
+  request: AWS.SQS.SendMessageRequest,
+  logger: Logger
 ): Promise<Either<"ERROR", string>> => {
   const result = await client.sendMessage(request).promise();
 
   if (result.MessageId == null) {
-    console.error("sqs/sendMessage failed", { error: JSON.stringify(result) });
+    logger.error("sqs/sendMessage failed", { error: JSON.stringify(result) });
     return left("ERROR");
   }
 
@@ -51,9 +55,10 @@ export const sendMessage = async (
 };
 
 export const sendMessages = async (
-  client: AWS.SQS,
+  client: Client,
   queueUrl: string,
-  messages: MessageList
+  messages: MessageList,
+  logger: Logger
 ): Promise<Either<"ERROR", AWS.SQS.SendMessageBatchResult>> => {
   const entries: AWS.SQS.SendMessageBatchRequestEntryList = messages.map(
     (message: AWS.SQS.Message) => {
@@ -93,14 +98,15 @@ export const sendMessages = async (
 
     return right(result);
   } catch (error) {
-    console.error("sqs/sendMessageBatch failed", { error: error.stack });
+    logger.error("sqs/sendMessageBatch failed", { error: error });
     return left("ERROR");
   }
 };
 
 export const getMessages = async (
-  client: AWS.SQS,
-  queueUrl: string
+  client: Client,
+  queueUrl: string,
+  logger: Logger
 ): Promise<Either<"ERROR", MessageList>> => {
   try {
     const result = await client
@@ -114,14 +120,15 @@ export const getMessages = async (
 
     return right(result.Messages ?? []);
   } catch (error) {
-    console.error("sqs/getMessages failed", { error: error.stack });
+    logger.error("sqs/getMessages failed", { error });
     return left("ERROR");
   }
 };
 
 export const getApproximateNumberOfMessages = async (
-  client: AWS.SQS,
-  queueUrl: string
+  client: Client,
+  queueUrl: string,
+  logger: Logger
 ): Promise<Either<"ERROR", number>> => {
   const result = await client
     .getQueueAttributes({
@@ -131,14 +138,14 @@ export const getApproximateNumberOfMessages = async (
     .promise();
 
   if (!result.Attributes) {
-    console.error("sqs/getApproximateNumberOfMessages failed", {
+    logger.error("sqs/getApproximateNumberOfMessages failed", {
       error: "result.Attributes === undefined",
     });
     return left("ERROR");
   }
 
   if (result.Attributes.ApproximateNumberOfMessages === undefined) {
-    console.error("sqs/getApproximateNumberOfMessages failed", {
+    logger.error("sqs/getApproximateNumberOfMessages failed", {
       error: "result.Attributes.ApproximateNumberOfMessages === undefined",
     });
     return left("ERROR");
@@ -150,7 +157,7 @@ export const getApproximateNumberOfMessages = async (
   );
 
   if (isLeft(decodeResult)) {
-    console.error("sqs/getApproximateNumberOfMessages failed", {
+    logger.error("sqs/getApproximateNumberOfMessages failed", {
       error: decodeResult.left,
     });
     return left("ERROR");
@@ -160,9 +167,10 @@ export const getApproximateNumberOfMessages = async (
 };
 
 export const deleteMessages = async (
-  client: AWS.SQS,
+  client: Client,
   queueUrl: string,
-  messages: MessageList
+  messages: MessageList,
+  logger: Logger
 ): Promise<Either<"ERROR", AWS.SQS.DeleteMessageBatchResult>> => {
   const entries = messages.map((m) => {
     return {
@@ -181,13 +189,13 @@ export const deleteMessages = async (
 
     return right(result);
   } catch (error) {
-    console.error("sqs/deleteMessages failed", { error: error.stack });
+    logger.error("sqs/deleteMessages failed", { error: error });
     return left("ERROR");
   }
 };
 
 export const hideMessages = async (
-  client: AWS.SQS,
+  client: Client,
   queueUrl: string,
   messages: MessageList,
   seconds: number

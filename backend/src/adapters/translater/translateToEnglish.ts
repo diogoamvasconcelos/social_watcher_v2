@@ -6,15 +6,19 @@ import { Client } from "./client";
 export const makeTranslateToEnglish = (
   client: Client
 ): TranslateToEnglishFn => {
-  return async (text: string, sourceLanguage: string) => {
+  return async (logger, text, sourceLanguage) => {
     if (sourceLanguage == "en") {
       return right(text);
     }
 
-    return await translateText(client, {
-      SourceLanguageCode: sourceLanguage,
-      TargetLanguageCode: "en",
-      Text: text,
-    });
+    return await translateText(
+      client,
+      {
+        SourceLanguageCode: sourceLanguage,
+        TargetLanguageCode: "en",
+        Text: text,
+      },
+      logger
+    );
   };
 };

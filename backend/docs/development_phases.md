@@ -17,20 +17,19 @@
 # Phase 1 - Search Keyword in Twitter CRON MVP (1 week)
 
 - only one socialMediaType: twitter <DONE>
-  - translate twit
+  - translate twit <DONE>
 - manually add data to the KeywordsTable for testing <DONE>
 - have this running on a CRON setup <DONE>
 - have DLQ in place <DONE>
-- add a nice logger (with context, and remove console.logs)
-  - uniform error logging on ./lib
+- add a nice logger (with context, and remove console.logs) <DONE>
+  - uniform error logging on ./lib <DONE>
+  - add a middleware to inject context and try-catch on handlers <DONE>
 - add "with_environemnt" script
-- use new io-ts decode/etc libs
 
 # Phase 2 - Tests, DevX, CI and Envs (2 week)
 
 - add tests
   - unit
-    - with_env_vars script
   - local integration (ddblocal)
     - with_dynamodb script
     - with_es script
@@ -55,6 +54,20 @@
 
 # Phase 3 - user/keyword API (1 week)
 
+- userDB
+  - ddbstream
+    - activate/deactivate keywords
+- API - REST
+  - POST sign-up
+  - POST confirm-user
+  - POST user/id/delete (?)
+  - POST user/id/keyword (add new keyword)
+  - GET/UPDATE user/id/keyword/id (get/update keyword data)
+  - GET user/id (user data with keyword list)
+  - POST result/search
+- congnito
+  - auth
+
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 
 - deploy ES (on VPC)
@@ -70,3 +83,10 @@
 - with filters/queries and pagination (SSLF)
 
 # Phase 6 - NotifyDiscord integration (1 week)
+
+# Phase 7 - Stripe integration (maybe after FE)
+
+- store stripe id in users table
+  "Cognito just had a big release, so there might be a better way to do this now. Here is how I did it. I created a user table in DynamoDB. Then I created a lambda trigger to update DB that fires when a user has registered. Then another lambda trigger when the user verifies their email. Finally, I created a lambda function to run the server-side of the stripe script. This server side code will also update the user table when a user pays the subscription fee."
+- stripeClient
+  - create account and get keys

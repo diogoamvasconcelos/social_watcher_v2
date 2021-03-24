@@ -9,6 +9,7 @@ import {
 import * as AWS from "aws-sdk";
 import _ from "lodash";
 import { left, right } from "fp-ts/lib/Either";
+import { getLogger } from "./logger";
 
 jest.mock("aws-sdk", () => {
   return {
@@ -26,6 +27,7 @@ jest.mock("aws-sdk", () => {
 });
 
 const client = new AWS.SQS();
+const logger = getLogger();
 
 const messages = _.range(21).map((i) => ({
   MessageId: `test#${i}`,
@@ -53,7 +55,7 @@ describe("sendMessage", () => {
     (client.sendMessage()
       .promise as jest.MockedFunction<any>).mockReturnValueOnce({});
 
-    expect(await sendMessage(client, sendMessageRequest)).toEqual(
+    expect(await sendMessage(client, sendMessageRequest, logger)).toEqual(
       left("ERROR")
     );
   });
@@ -66,7 +68,7 @@ describe("sendMessage", () => {
       MessageId: messageId,
     });
 
-    const result = await sendMessage(client, sendMessageRequest);
+    const result = await sendMessage(client, sendMessageRequest, logger);
 
     expect(result).toEqual(right(messageId));
 
@@ -86,7 +88,7 @@ describe("sendMessageBatch", () => {
       .fn()
       .mockResolvedValue(batchResult);
 
-    expect(await sendMessages(client, "url", messages)).toEqual(
+    expect(await sendMessages(client, "url", messages, logger)).toEqual(
       right(batchResult)
     );
     expect(client.sendMessageBatch().promise).toBeCalledTimes(
@@ -99,7 +101,9 @@ describe("sendMessageBatch", () => {
       .fn()
       .mockRejectedValue(new Error("such broke"));
 
-    expect(await sendMessages(client, "url", messages)).toEqual(left("ERROR"));
+    expect(await sendMessages(client, "url", messages, logger)).toEqual(
+      left("ERROR")
+    );
     expect(client.sendMessageBatch().promise).toBeCalledTimes(
       Math.trunc(messages.length / 10) + (messages.length % 10 > 0 ? 1 : 0)
     );
@@ -118,7 +122,7 @@ describe("getMessages", () => {
       .fn()
       .mockRejectedValue(new Error(errorMessageFromAWS));
 
-    expect(await getMessages(client, "url")).toEqual(left("ERROR"));
+    expect(await getMessages(client, "url", logger)).toEqual(left("ERROR"));
   });
 
   it("succeeds when the client returns data", async () => {
@@ -129,7 +133,7 @@ describe("getMessages", () => {
       .fn()
       .mockResolvedValue({ Messages: messages });
 
-    expect(await getMessages(client, "url")).toEqual(right(messages));
+    expect(await getMessages(client, "url", logger)).toEqual(right(messages));
   });
 });
 
@@ -145,7 +149,7 @@ describe("getQueueUrlFromName", () => {
       QueueUrl: queueUrl,
     });
 
-    expect(await getQueueUrlFromName(client, "my queue")).toEqual(
+    expect(await getQueueUrlFromName(client, "my queue", logger)).toEqual(
       right(queueUrl)
     );
   });
@@ -162,7 +166,7 @@ describe("deleteMessageBatch", () => {
       .fn()
       .mockRejectedValue(new Error("eek!"));
 
-    expect(await deleteMessages(client, "url", messages)).toEqual(
+    expect(await deleteMessages(client, "url", messages, logger)).toEqual(
       left("ERROR")
     );
   });
@@ -172,7 +176,7 @@ describe("deleteMessageBatch", () => {
     // But it is good for catching regressions.
     client.deleteMessageBatch().promise = jest.fn().mockResolvedValue(result);
 
-    expect(await deleteMessages(client, "url", messages)).toEqual(
+    expect(await deleteMessages(client, "url", messages, logger)).toEqual(
       right(result)
     );
   });

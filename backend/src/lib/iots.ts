@@ -2,6 +2,7 @@ import * as t from "io-ts";
 import { isRight, left, Either, isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
+import { Logger } from "./logger";
 
 export const fromEither = ruins.fromEither;
 
@@ -20,21 +21,21 @@ export const decode = <A>(
 
 export const applyTransformToItem = <T, U>(
   transformFn: (item: U) => Either<string[], T>,
-  item: U
+  item: U,
+  logger: Logger
 ): Either<"ERROR", T> => {
   const transformResult = transformFn(item);
 
   if (isLeft(transformResult)) {
-    console.error(
-      "Unable to transform item.\n" +
-        "Item:\n" +
-        JSON.stringify(item) +
-        "Errors:\n" +
-        JSON.stringify(transformResult.left)
-    );
+    logger.error("Unable to transform item", {
+      item: JSON.stringify(item),
+      error: transformResult.left,
+    });
     return left("ERROR");
   }
   return transformResult;
 };
 
+// Useful sometimes, but doens't solve all the problems, as it doesn't create the "?" field
+// more info: https://github.com/gcanti/io-ts/issues/56
 export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);

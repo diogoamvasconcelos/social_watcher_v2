@@ -1,4 +1,3 @@
-import { ScheduledHandler } from "aws-lambda";
 import { isLeft } from "fp-ts/lib/Either";
 import { getClient as getKeywordStoreClient } from "../adapters/keywordStore/client";
 import { getClient as getSearchJobsQueueClient } from "../adapters/searchJobsQueue/client";
@@ -8,12 +7,11 @@ import { getConfig } from "../lib/config";
 import _ from "lodash";
 import { KeywordData } from "../domain/models/keyword";
 import { makeQueueSearchJobs } from "../adapters/searchJobsQueue/queueSearchJobs";
-
-/*
-TODO:
-*/
+import { getLogger } from "../lib/logger";
+import { defaultOutLayerMiddleware } from "./middlewares/common";
 
 const config = getConfig();
+const logger = getLogger();
 
 const handler = async () => {
   const keywordStoreClient = getKeywordStoreClient();
@@ -28,33 +26,30 @@ const handler = async () => {
   );
 
   for (const socialMedia of socialMedias) {
-    console.log(`Handling ${socialMedia}...`);
+    logger.info(`Handling ${socialMedia}...`);
 
-    const activeKeywordsResult = await getActiveKeywordsFn(socialMedia);
+    const activeKeywordsResult = await getActiveKeywordsFn(logger, socialMedia);
     if (isLeft(activeKeywordsResult)) {
-      console.error(
-        `Failed to getActiveKeywords: ${activeKeywordsResult.left}`
-      );
+      logger.error(`Failed to getActiveKeywords: ${activeKeywordsResult.left}`);
       return;
     }
 
     const searchJobs = activeKeywordsResult.right.map(keywordDataToSearchJob);
     const queueSearchJobsResult = await queueSearchJobsFn(
+      logger,
       socialMedia,
       searchJobs
     );
     if (isLeft(queueSearchJobsResult)) {
-      console.error(`Failed to queueSearchJobs) ${queueSearchJobsResult.left}`);
+      logger.error(`Failed to queueSearchJobs: ${queueSearchJobsResult.left}`);
       return;
     }
 
-    console.log(`Dispatched ${searchJobs.length} for ${socialMedia}`);
+    logger.info(`Dispatched ${searchJobs.length} for ${socialMedia}`);
   }
 };
 
-export const lambdaHandler: ScheduledHandler = async () => {
-  await handler();
-};
+export const lambdaHandler = defaultOutLayerMiddleware(handler);
 
 const keywordDataToSearchJob = (keywordData: KeywordData) => {
   return _.omit(keywordData, ["status"]);
