@@ -1,0 +1,14 @@
+# "${}"" is replaced in 'with_env.lf' (build time)
+# "{}" is replaced in the lambda (run time)
+
+common:
+  OUT_DIR: "${rootPath}/.out"
+  TF_DIR: "${rootPath}/tf"
+  AWS_REGION: us-east-1
+  KEYWORDS_TABLE_NAME: keywords
+  SEARCH_RESULTS_TABLE_NAME: search_results
+  SEARCH_JOBS_QUEUE_TEMPLATE_NAME: "{socialMedia}_search_jobs"
+
+local:
+  DYNAMODB_PORT: 8060
+  DYNAMODB_URL: http://localhost:8060

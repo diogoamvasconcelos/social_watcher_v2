@@ -24,7 +24,7 @@
 - add a nice logger (with context, and remove console.logs) <DONE>
   - uniform error logging on ./lib <DONE>
   - add a middleware to inject context and try-catch on handlers <DONE>
-- add "with_environemnt" script
+- add "with_environemnt" script <DONE>
 
 # Phase 2 - Tests, DevX, CI and Envs (2 week)
 
