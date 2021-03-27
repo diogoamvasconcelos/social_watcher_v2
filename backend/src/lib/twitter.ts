@@ -48,6 +48,8 @@ export type SearchRecentOptions = {
   maxResults: number;
   minutesAgo: number;
 };
+
+// https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
 export const searchRecent = async (
   client: Client,
   keyword: string,
@@ -56,38 +58,46 @@ export const searchRecent = async (
     minutesAgo: 10,
   }
 ): Promise<Either<string[], SearchRecentResponse["data"]>> => {
-  // use response `next_token` if paginations is needed (maxResults max is 100)
-  const request: AxiosRequestConfig = {
-    params: {
-      query: `${keyword} -is:retweet`,
-      max_results: maxResults,
-      start_time: getMinutesAgo(minutesAgo),
-      "tweet.fields": [
-        "created_at",
-        "lang",
-        "conversation_id",
-        "author_id",
-      ].join(","),
-    },
-    url: "2/tweets/search/recent",
-    method: "GET",
-  };
+  let results: SearchRecentResponse["data"] = [];
+  let token: string | undefined = undefined;
 
-  const response = await doRequest(client, request);
-  if (response.status != 200) {
-    return left([`${response.status} : ${response.data}`]);
-  }
+  do {
+    const request: AxiosRequestConfig = {
+      params: {
+        query: `${keyword} -is:retweet`,
+        max_results: maxResults,
+        next_token: token,
+        start_time: getMinutesAgo(minutesAgo),
+        "tweet.fields": [
+          "created_at",
+          "lang",
+          "conversation_id",
+          "author_id",
+        ].join(","),
+      },
+      url: "2/tweets/search/recent",
+      method: "GET",
+    };
 
-  if (response.data["data"] == undefined) {
-    response.data["data"] = [];
-  }
+    const response = await doRequest(client, request);
+    if (response.status != 200) {
+      return left([`${response.status} : ${response.data}`]);
+    }
 
-  const decodeResult = decode(searchRecentResponseCodec, response.data);
-  if (isLeft(decodeResult)) {
-    return decodeResult;
-  }
+    if (response.data["data"] == undefined) {
+      response.data["data"] = [];
+    }
 
-  return right(decodeResult.right.data);
+    const decodeResult = decode(searchRecentResponseCodec, response.data);
+    if (isLeft(decodeResult)) {
+      return decodeResult;
+    }
+
+    token = decodeResult.right.meta.next_token;
+    results = [...results, ...decodeResult.right.data];
+  } while (token != undefined);
+
+  return right(results);
 };
 
 const doRequest = async (client: Client, request: AxiosRequestConfig) => {
