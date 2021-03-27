@@ -1,4 +1,4 @@
-const ensure = (name: string): string => {
+export const ensure = (name: string): string => {
   const value = process.env[name];
   if (value == null) {
     throw new Error(`Missing environment variable ${name}`);

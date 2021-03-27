@@ -29,10 +29,9 @@
 # Phase 2 - Tests, DevX, CI and Envs (2 week)
 
 - add tests
-  - unit
-  - local integration (ddblocal)
-    - with_dynamodb script
-    - with_es script
+  - unit <DONE>
+  - local integration (ddblocal) <DONE>
+    - with_dynamodb script (using docker) <DONE>
   - env (integration and acceptance)
 - add Ops
   - clean database

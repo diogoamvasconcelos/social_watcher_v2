@@ -7,7 +7,8 @@
     "build:watch": "tsc --noEmit --watch",
     "lint:check": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
-    "test": "jest -i --testPathIgnorePatterns 'test/environment' --passWithNoTests"
+    "test": "scripts/with_env.js npx \"jest -i --testPathIgnorePatterns 'test/environment' --passWithNoTests\"",
+    "test:unit": "scripts/with_env.js npx \"jest test --testMatch '<rootDir>/src/**/*.test.ts?(x)'\""
   },
   "dependencies": {
     "aws": "0.0.3-2",

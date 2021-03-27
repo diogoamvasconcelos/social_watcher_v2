@@ -4,8 +4,8 @@ import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
 
-export const getClient = () => {
-  return new DocumentClient();
+export const getClient = (endpoint: string | undefined = undefined) => {
+  return new DocumentClient({ endpoint });
 };
 export type Client = ReturnType<typeof getClient>;
 
