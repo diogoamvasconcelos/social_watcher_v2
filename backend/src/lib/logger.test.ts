@@ -16,32 +16,32 @@ describe("lib/logger", () => {
 
   describe("it adds to context correctly when we call...", () => {
     test(".info()", () => {
-      logger.info("", context2);
+      logger.info("an info", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
 
     test(".warn()", () => {
-      logger.warn("", context2);
+      logger.warn("a warn", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
 
     test(".fatal()", () => {
-      logger.fatal("", context2);
+      logger.fatal("a fatal", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
 
     test(".error()", () => {
-      logger.error("", context2);
+      logger.error("an error", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
 
     test(".debug()", () => {
-      logger.debug("", context2);
+      logger.debug("a debug", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
 
     test(".trace()", () => {
-      logger.trace("", context2);
+      logger.trace("a trace", context2);
       expect(logger.getContext()).toEqual(expectedContext);
     });
   });

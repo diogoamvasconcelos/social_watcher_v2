@@ -39,3 +39,16 @@ export const applyTransformToItem = <T, U>(
 // Useful sometimes, but doens't solve all the problems, as it doesn't create the "?" field
 // more info: https://github.com/gcanti/io-ts/issues/56
 export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);
+
+// lower case: https://github.com/gcanti/io-ts/blob/master/index.md#branded-types--refinements
+interface LowerCaseBrand {
+  readonly LowerCase: unique symbol;
+}
+
+export const lowerCase = t.brand(
+  t.string,
+  (s): s is t.Branded<string, LowerCaseBrand> => s == s.toLocaleLowerCase(),
+  "LowerCase" // the name must match the readonly field in the brand);
+);
+
+export type LowerCase = t.TypeOf<typeof lowerCase>;

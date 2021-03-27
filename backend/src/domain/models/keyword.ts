@@ -1,7 +1,8 @@
 import * as t from "io-ts";
+import { lowerCase } from "../../lib/iots";
 import { socialMediaCodec } from "./socialMedia";
 
-export const keywordCodec = t.string;
+export const keywordCodec = lowerCase;
 export type Keyword = t.TypeOf<typeof keywordCodec>;
 
 export const keywordStatusCodec = t.union([
