@@ -13,7 +13,7 @@ export const stackMiddlewares = (
   );
 };
 
-const loggerMiddleware: Middleware = <T, U>(handler: Handler<T, U>) => {
+export const loggerMiddleware: Middleware = <T, U>(handler: Handler<T, U>) => {
   return async (event: T, context: Context, callback: Callback<U>) => {
     logger.createContext({
       functionName: context.functionName,
@@ -38,7 +38,9 @@ const loggerMiddleware: Middleware = <T, U>(handler: Handler<T, U>) => {
   };
 };
 
-const errorMiddleware: Middleware = <T, U>(handler: Handler<T, U>) => {
+export const errorCatchMiddleware: Middleware = <T, U>(
+  handler: Handler<T, U>
+) => {
   return async (event: T, context: Context, callback: Callback<U>) => {
     try {
       return await handler(event, context, callback);
@@ -58,5 +60,5 @@ const errorMiddleware: Middleware = <T, U>(handler: Handler<T, U>) => {
 export const defaultOutLayerMiddleware: Middleware = <T, U>(
   handler: Handler<T, U>
 ) => {
-  return stackMiddlewares([loggerMiddleware, errorMiddleware], handler);
+  return stackMiddlewares([loggerMiddleware, errorCatchMiddleware], handler);
 };

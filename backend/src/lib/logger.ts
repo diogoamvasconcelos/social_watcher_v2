@@ -5,15 +5,15 @@ const options = {
   level: process.env.LOG_LEVEL ?? "info",
 };
 
-function newPinoLogger() {
+const newPinoLogger = () => {
   return pino(options);
-}
+};
 
 let pinoLogger = newPinoLogger();
 
-function getPinoLoggerBindings(): JsonObjectEncodable {
+const getPinoLoggerBindings = (): JsonObjectEncodable => {
   return pinoLogger.bindings();
-}
+};
 
 type LogFn = (message: string, context?: JsonObjectEncodable) => void;
 
@@ -75,9 +75,9 @@ const logger: Logger = {
   },
 };
 
-export function getLogger(): Logger {
+export const getLogger = (): Logger => {
   return logger;
-}
+};
 
 export default logger;
 

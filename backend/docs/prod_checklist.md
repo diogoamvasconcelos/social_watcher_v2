@@ -1,0 +1,4 @@
+- have `ci_deploy_main` and `ci_deploy_branch` scripts
+- have DLQ alarms
+- have DLQ tools
+- have apigw 500 alarms

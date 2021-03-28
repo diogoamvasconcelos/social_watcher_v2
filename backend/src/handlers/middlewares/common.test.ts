@@ -1,6 +1,14 @@
 import "jest-extended";
 import { Callback, Context } from "aws-lambda";
-import { Middleware, stackMiddlewares } from "./common";
+import {
+  errorCatchMiddleware,
+  loggerMiddleware,
+  Middleware,
+  stackMiddlewares,
+} from "./common";
+import logger from "../../lib/logger";
+
+jest.mock("../../lib/logger");
 
 describe("stackMiddlewares", () => {
   it("applies from left to right", async () => {
@@ -46,4 +54,46 @@ describe("stackMiddlewares", () => {
   });
 });
 
-// logger middleware
+describe("loggerMiddleware", () => {
+  it("logs before execution and adds to context", async () => {
+    const mockHandler = jest.fn();
+
+    await loggerMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+
+    expect(mockHandler).toHaveBeenCalledTimes(1);
+    expect(logger.info).toHaveBeenCalledWith("Entering lambda execution.");
+    expect(logger.resetContext).toHaveBeenCalledTimes(1);
+  });
+
+  it("logs return value", async () => {
+    const returnValue = { data: "some-data" };
+    const mockHandler = jest.fn().mockReturnValue(returnValue);
+
+    await loggerMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+
+    expect(mockHandler).toHaveBeenCalledTimes(1);
+    expect(logger.info).toHaveBeenCalledWith(expect.any(String), {
+      returnValue,
+    });
+  });
+});
+
+describe("errorCatchMiddleware", () => {
+  it("logs error", async () => {
+    const error = new Error("error");
+    const mockHandler = jest.fn(async () => {
+      throw error;
+    });
+
+    await errorCatchMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(expect.any(String), {
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      },
+    });
+  });
+});

@@ -34,19 +34,19 @@
     - with_dynamodb script (using docker) <DONE>
   - env (integration and acceptance) <DONE>/<SKIP>
 - add Ops
-  - clean database
+  - clean database <DONE>
   - dlq managment <SKIP>
 - add CI steps
-  - lint && format
-  - build
-  - local tests
-  - deploy
-  - env tests
-  - test coverage report
-  - vuln scanning
+  - lint && format <DONE>
+  - build <DONE>
+  - local tests <DONE>
+  - deploy <DONE>
+  - env tests <DONE>
+  - test coverage report <DONE>
+  - vuln scanning <DONE>
 - CI scripts
-  - do simple as you will deploy manually
-- Env creation
+  - do simple as you will deploy manually <HALFDONE>
+- Env creation <SKIP>
   - dev, staging (master only) and production (master only)
     - share some resources like ES on dev & staging (only in phase 4)
     - different config on these (ES size, etc)
