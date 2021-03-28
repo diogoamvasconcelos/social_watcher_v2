@@ -5,6 +5,10 @@ import { invokeLambda } from "../../../lib/lambda";
 const lambdaName = getEnvTestConfig().dispatchSearchJobsLambdaName;
 
 describe("handler/dispatchSearchJobs", () => {
+  beforeAll(async () => {
+    jest.setTimeout(10000);
+  });
+
   it("can fetch active search jobs", async () => {
     const invokeResult = fromEither(await invokeLambda(lambdaName, {}));
 

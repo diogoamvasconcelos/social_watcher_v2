@@ -83,7 +83,6 @@ const main = async () => {
   program
     .version("0.0.1")
     .option("-e, --env <environment>", "the environment", "local")
-    .option("-c, --cmd <...commands>")
     .action(cli);
 
   await program.parseAsync(process.argv);
