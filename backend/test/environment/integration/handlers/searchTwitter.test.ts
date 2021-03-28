@@ -28,7 +28,7 @@ const buildTwitterSearchJobEvent = (
 ) => {
   const searchJob: TwitterSearchJob = deepmerge(partialJob, {
     socialMedia: "twitter",
-    keyword: "test",
+    keyword: "diogo vasconcelos",
   });
   return buildSQSEvent([searchJob]);
 };

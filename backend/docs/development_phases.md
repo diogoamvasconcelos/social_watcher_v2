@@ -26,16 +26,16 @@
   - add a middleware to inject context and try-catch on handlers <DONE>
 - add "with_environemnt" script <DONE>
 
-# Phase 2 - Tests, DevX, CI and Envs (2 week)
+# Phase 2 - Tests, DevX, CI and Envs (1 week)
 
 - add tests
   - unit <DONE>
   - local integration (ddblocal) <DONE>
     - with_dynamodb script (using docker) <DONE>
-  - env (integration and acceptance)
+  - env (integration and acceptance) <DONE>/<SKIP>
 - add Ops
   - clean database
-  - dlq managment
+  - dlq managment <SKIP>
 - add CI steps
   - lint && format
   - build

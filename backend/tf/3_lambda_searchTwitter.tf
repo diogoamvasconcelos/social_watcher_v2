@@ -10,7 +10,7 @@ resource "aws_lambda_function" "search_twitter" {
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
-  timeout          = "10"
+  timeout          = "15"
   source_code_hash = filebase64sha256(local.lambda_file)
   description      = "Searches twitter for specifc keyword"
   depends_on       = [aws_cloudwatch_log_group.search_twitter]
