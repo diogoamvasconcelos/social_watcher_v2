@@ -54,7 +54,7 @@ export const searchRecent = async (
   client: Client,
   keyword: string,
   { maxResults, minutesAgo }: SearchRecentOptions = {
-    maxResults: 10,
+    maxResults: 100,
     minutesAgo: 10,
   }
 ): Promise<Either<string[], SearchRecentResponse["data"]>> => {
@@ -65,7 +65,7 @@ export const searchRecent = async (
     const request: AxiosRequestConfig = {
       params: {
         query: `${keyword} -is:retweet`,
-        max_results: maxResults,
+        max_results: Math.min(maxResults, 100),
         next_token: token,
         start_time: getMinutesAgo(minutesAgo),
         "tweet.fields": [
@@ -95,7 +95,7 @@ export const searchRecent = async (
 
     token = decodeResult.right.meta.next_token;
     results = [...results, ...decodeResult.right.data];
-  } while (token != undefined);
+  } while (token != undefined && results.length < maxResults);
 
   return right(results);
 };

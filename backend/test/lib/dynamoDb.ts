@@ -1,9 +1,9 @@
 import { getClient as getDynamoDBClient } from "../../src/lib/dynamoDb";
 
 import * as AWS from "aws-sdk";
-import { getTestConfig } from "./config";
+import { getLocalTestConfig } from "./config";
 
-const endpoint = getTestConfig().dynamoDbUrl;
+const endpoint = getLocalTestConfig().dynamoDbUrl;
 const dynamoDb = new AWS.DynamoDB({ endpoint });
 export const client = getDynamoDBClient(endpoint);
 

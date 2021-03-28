@@ -8,7 +8,7 @@ const execSync = require("child_process").execSync;
 
 const fetchEnvironmentConfig = () => {
   const configPath = path.join(__dirname, "../env/environments.yaml");
-  return yaml.safeLoad(fs.readFileSync(configPath, "utf8"));
+  return yaml.load(fs.readFileSync(configPath, "utf8"));
 };
 
 // not used (yet?)

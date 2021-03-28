@@ -8,6 +8,8 @@ common:
   KEYWORDS_TABLE_NAME: keywords
   SEARCH_RESULTS_TABLE_NAME: search_results
   SEARCH_JOBS_QUEUE_TEMPLATE_NAME: "{socialMedia}_search_jobs"
+  DISPATCH_SEARCH_JOBS_LAMBDA_NAME: dispatch_search_jobs
+  SEARCH_TWITTER_LAMBDA_NAME: search_twitter
 
 local:
   DYNAMODB_PORT: 8000
