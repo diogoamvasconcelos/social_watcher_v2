@@ -3,7 +3,7 @@
 .out
 .DS_store
 
-coverage/
+coverage
 
 **/node_modules
 **/.terraform

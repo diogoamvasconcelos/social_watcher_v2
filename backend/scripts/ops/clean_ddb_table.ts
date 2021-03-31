@@ -66,9 +66,7 @@ const cleanTable = async (tableName: string) => {
       itemCount += scanResult.Count ?? 0;
       cursor = scanResult.LastEvaluatedKey;
 
-      if (verbose) {
-        console.log("Deleting...");
-      }
+      console.log(`Deleting ${scanResult.Count} items...`);
 
       await Promise.all(
         (scanResult.Items ?? []).map(async (item) => {
