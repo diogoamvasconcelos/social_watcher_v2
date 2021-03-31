@@ -2,3 +2,4 @@
 - use graphql for the FE (search, keywords, etc)
 - search on twitter for only "popular" posts option (nof followers, nof replies, etc). This should be an option to the normal search (do 2 searches per keyword if popular is wanted :))
   - inspiration: https://twitter.com/search-advanced?lang=en
+- if you want to do token based auth: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-enable-cognito-user-pool.html (4.)

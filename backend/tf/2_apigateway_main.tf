@@ -16,11 +16,16 @@ resource "aws_api_gateway_rest_api" "main_api" {
 
 resource "aws_api_gateway_deployment" "main_api" {
   depends_on = [
-    aws_api_gateway_rest_api.main_api,
     aws_api_gateway_account.main_api,
+    aws_cloudwatch_log_group.main_api,
   ]
   rest_api_id = aws_api_gateway_rest_api.main_api.id
-  stage_name  = local.main_api_stage_name
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.main_api.body))
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_account" "main_api" {
@@ -90,13 +95,41 @@ resource "aws_iam_role_policy_attachment" "main_api" {
 
 resource "aws_api_gateway_method_settings" "main_api" {
   rest_api_id = aws_api_gateway_rest_api.main_api.id
-  stage_name  = aws_api_gateway_deployment.main_api.stage_name
+  stage_name  = aws_api_gateway_stage.main_api.stage_name
   method_path = "*/*"
   settings {
     logging_level      = "INFO"
     data_trace_enabled = true
     metrics_enabled    = true
   }
+}
+
+resource "aws_api_gateway_stage" "main_api" {
+  stage_name    = local.main_api_stage_name
+  rest_api_id   = aws_api_gateway_rest_api.main_api.id
+  deployment_id = aws_api_gateway_deployment.main_api.id
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.main_api.arn
+    format = jsonencode({
+      "api_id" : "$context.apiId",
+      "domain_name" : "$context.domainName",
+      "http_method" : "$context.httpMethod",
+      "request_id" : "$context.requestId",
+      "request_path" : "$context.path",
+      "request_time" : "$context.requestTime",
+      "resource_id" : "$context.resourceId",
+      "resource_path" : "$context.resourcePath",
+      "source_ip" : "$context.identity.sourceIp",
+      "stage" : "$context.stage",
+      "user_agent" : "$context.identity.userAgent",
+      "status" : "$context.status",
+    }) # overridden by deployApiGateway function ??
+  }
+}
+
+resource "aws_cloudwatch_log_group" "main_api" {
+  name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.main_api.id}/${local.main_api_stage_name}"
+  retention_in_days = 30
 }
 
 output "main_apigateway_base_url" {

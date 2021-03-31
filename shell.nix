@@ -9,5 +9,6 @@ let
 in nixpkgs.mkShell {
   buildInputs = with nixpkgs; [
     nodejs-14_x
+    jq
   ];
 }

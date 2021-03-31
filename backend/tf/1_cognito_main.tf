@@ -27,3 +27,33 @@ resource "aws_cognito_user_pool" "main_pool" {
 
   tags = local.tags
 }
+
+resource "aws_cognito_user_pool_client" "main_pool_client" {
+  name                   = "main_pool_client"
+  user_pool_id           = aws_cognito_user_pool.main_pool.id
+  refresh_token_validity = 30 #default
+  explicit_auth_flows = [
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+  ]
+  supported_identity_providers         = ["COGNITO"]
+  prevent_user_existence_errors        = "ENABLED"
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["code"]
+  allowed_oauth_scopes                 = ["openid", "email", "aws.cognito.signin.user.admin", "profile"]
+  callback_urls                        = ["https://thesocialwatcher.com"]
+  logout_urls                          = ["https://thesocialwatcher.com"]
+}
+
+resource "aws_cognito_user_pool_domain" "main_pool" {
+  domain       = "thesocialwatcher"
+  user_pool_id = aws_cognito_user_pool.main_pool.id
+}
+
+output "cognito_main_pool_user_id" {
+  value = aws_cognito_user_pool.main_pool.id
+}
+output "cognito_main_pool_client_id" {
+  value = aws_cognito_user_pool_client.main_pool_client.id
+}

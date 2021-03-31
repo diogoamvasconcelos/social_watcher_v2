@@ -53,6 +53,20 @@
 
 # Phase 3 - user/keyword API (1 week)
 
+- congnito
+  - auth <DONE>
+  - create user
+  - confirm user
+  - change password
+  - recover password
+  - delete user (?)
+  - login / token
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html
+- apigw handler
+  - middlewares
+    - errors, 400 / 500
+  - env tests (axios client)
+    - test user credentials
 - userDB
   - ddbstream
     - activate/deactivate keywords
@@ -64,13 +78,6 @@
   - GET/UPDATE user/id/keyword/id (get/update keyword data)
   - GET user/id (user data with keyword list)
   - POST result/search
-- congnito
-  - auth
-  - create user
-  - confirm user
-  - change password
-  - recover password
-  - delete user (?)
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 

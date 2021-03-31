@@ -2,16 +2,43 @@ openapi: 3.0.1
 info:
   version: 0.1
   title: Main REST API
+
 paths:
-  "/test":
+  /test/noauth:
     get:
       description: Test GET endpoint
       responses:
         200:
           description: Successful Test
       x-amazon-apigateway-integration:
-        uri: ${congnito_test_invoke_arn}
+        uri: ${cognito_test_invoke_arn}
         credentials: ${main_api_role_arn}
         timeoutInMillis: 20000
         httpMethod: "POST"
         type: "aws_proxy"
+  /test/withauth:
+    get:
+      description: Test GET endpoint behind cognito auth
+      responses:
+        200:
+          description: Successful Test
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        uri: ${cognito_test_invoke_arn}
+        credentials: ${main_api_role_arn}
+        timeoutInMillis: 20000
+        httpMethod: "POST"
+        type: "aws_proxy"
+
+components:
+  securitySchemes:
+    cognitoPool:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: cognito_user_pools
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - ${cognito_pool_auth_arn}
