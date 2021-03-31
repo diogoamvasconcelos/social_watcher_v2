@@ -1,0 +1,17 @@
+openapi: 3.0.1
+info:
+  version: 0.1
+  title: Main REST API
+paths:
+  "/test":
+    get:
+      description: Test GET endpoint
+      responses:
+        200:
+          description: Successful Test
+      x-amazon-apigateway-integration:
+        uri: ${congnito_test_invoke_arn}
+        credentials: ${main_api_role_arn}
+        timeoutInMillis: 20000
+        httpMethod: "POST"
+        type: "aws_proxy"

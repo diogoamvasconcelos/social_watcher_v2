@@ -3,6 +3,8 @@
 resource "aws_cloudwatch_event_rule" "trigger_cron_jobs" {
   name                = "trigger_cron_jobs"
   schedule_expression = "rate(100 minutes)"
+
+  tags = local.tags
 }
 
 resource "aws_cloudwatch_event_target" "dispatch_search_jobs" {

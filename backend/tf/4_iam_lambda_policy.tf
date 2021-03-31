@@ -20,6 +20,8 @@ resource "aws_iam_role" "lambda_default" {
   ]
 }
 EOF
+
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "lambda_default" {

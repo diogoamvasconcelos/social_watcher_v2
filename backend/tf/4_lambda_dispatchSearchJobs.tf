@@ -25,4 +25,6 @@ resource "aws_lambda_function" "dispatch_search_jobs" {
 resource "aws_cloudwatch_log_group" "dispatch_search_jobs" {
   name              = "/aws/lambda/${local.dispatch_search_jobs_lambda_name}"
   retention_in_days = 30
+
+  tags = local.tags
 }

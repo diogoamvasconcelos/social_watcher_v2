@@ -25,6 +25,8 @@ resource "aws_lambda_function" "search_twitter" {
 resource "aws_cloudwatch_log_group" "search_twitter" {
   name              = "/aws/lambda/${local.search_twitter_lambda_name}"
   retention_in_days = 30
+
+  tags = local.tags
 }
 
 resource "aws_lambda_event_source_mapping" "twitter_search_jobs_mapping" {

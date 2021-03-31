@@ -66,6 +66,11 @@
   - POST result/search
 - congnito
   - auth
+  - create user
+  - confirm user
+  - change password
+  - recover password
+  - delete user (?)
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 

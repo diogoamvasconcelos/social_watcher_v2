@@ -1,0 +1,3 @@
+- https://www.integralist.co.uk/posts/cognito/
+- https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
+- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_pool
