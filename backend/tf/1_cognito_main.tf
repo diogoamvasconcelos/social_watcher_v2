@@ -24,8 +24,18 @@ resource "aws_cognito_user_pool" "main_pool" {
     require_symbols   = false
     require_uppercase = false
   }
+  lambda_config {
+    pre_sign_up = aws_lambda_function.cognito_pre_signup.arn
+  }
 
   tags = local.tags
+}
+
+resource "aws_lambda_permission" "cognito_allow_lambda_invokation" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cognito_pre_signup.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.main_pool.arn
 }
 
 resource "aws_cognito_user_pool_client" "main_pool_client" {

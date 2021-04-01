@@ -3,3 +3,6 @@
 - have DLQ tools
 - have apigw 500 alarms
 - Note: You have chosen to have Cognito send emails on your behalf. Best practices suggest that customers send emails through Amazon SES for production User Pools due to a daily email limit. Learn more about email best [practices](https://docs.aws.amazon.com/cognito/latest/developerguide/signing-up-users-in-your-app.html).
+- improve the cognito hosted UI - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html
+  - host in my domain
+  - make it look nicer

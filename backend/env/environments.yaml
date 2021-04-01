@@ -13,6 +13,7 @@ common:
   API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
+  COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
 
 local:
   DYNAMODB_PORT: 8000
