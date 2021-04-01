@@ -52,3 +52,17 @@ export const lowerCase = t.brand(
 );
 
 export type LowerCase = t.TypeOf<typeof lowerCase>;
+
+// postive integer
+interface PositiveIntegerBrand {
+  readonly PositiveInteger: unique symbol;
+}
+
+export const positiveInteger = t.brand(
+  t.number,
+  (n): n is t.Branded<number, PositiveIntegerBrand> =>
+    Number.isInteger(n) && n >= 0,
+  "PositiveInteger"
+);
+
+export type PositiveInteger = t.TypeOf<typeof positiveInteger>;

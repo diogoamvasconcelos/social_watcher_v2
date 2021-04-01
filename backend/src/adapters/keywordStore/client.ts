@@ -22,17 +22,15 @@ export type KeywordDataDoc = t.TypeOf<typeof keywordDataDocCodec>;
 
 export const toGSI1PK = (socialMedia: SocialMedia) => `${socialMedia}|active`;
 
-export const domainToDocument = (domainItem: KeywordData): KeywordDataDoc => {
-  return {
-    ...domainItem,
-    pk: domainItem.keyword,
-    sk: domainItem.socialMedia,
-    gsi1pk:
-      domainItem.status == "ENABLED"
-        ? toGSI1PK(domainItem.socialMedia)
-        : undefined,
-    gsi1sk: domainItem.keyword,
-  };
+export const toDocKeys = ({ socialMedia, keyword, status }: KeywordData) => ({
+  pk: keyword,
+  sk: socialMedia,
+  gsi1pk: status == "ENABLED" ? toGSI1PK(socialMedia) : undefined,
+  gsi1sk: keyword,
+});
+
+export const domainToDocument = (domainItem: KeywordData) => {
+  return { ...domainItem, ...toDocKeys(domainItem) };
 };
 
 export const documentToDomain = (docItem: KeywordDataDoc): KeywordData => {

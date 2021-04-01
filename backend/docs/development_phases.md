@@ -55,7 +55,7 @@
 
 - congnito
   - auth <DONE>
-  - create user
+  - create user <DONE>
   - confirm user
   - change password
   - recover password
@@ -78,6 +78,12 @@
   - GET/UPDATE user/id/keyword/id (get/update keyword data)
   - GET user/id (user data with keyword list)
   - POST result/search
+
+todo:
+
+- add tests for preSignup lambda
+  - acceptance?
+  - integration test for the user table
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 

@@ -23,6 +23,7 @@ const ensureAndDecode<A>(name: string, codec: t.Decoder<unknown, A>): A => {
 export const getConfig = () => {
   return {
     env: ensure("ENV"),
+    usersTableName: ensure("USERS_TABLE_NAME"),
     keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
     searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
     searchJobQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),

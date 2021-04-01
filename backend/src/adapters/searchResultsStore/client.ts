@@ -22,10 +22,6 @@ export const searchResultDocCodec = t.intersection([
 ]);
 export type SearchResultDoc = t.TypeOf<typeof searchResultDocCodec>;
 
-export const domainToDocument = (domainItem: SearchResult) => {
-  return { ...domainItem, ...toDocKeys(domainItem) };
-};
-
 export const toDocKeys = (
   { socialMedia, id, keyword, happened_at }: SearchResult,
   index: number = 0
@@ -35,6 +31,10 @@ export const toDocKeys = (
   gsi1pk: keyword,
   gsi1sk: happened_at.toISOString(),
 });
+
+export const domainToDocument = (domainItem: SearchResult) => {
+  return { ...domainItem, ...toDocKeys(domainItem) };
+};
 
 export const documentToDomain = (docItem: SearchResultDoc): SearchResult => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);

@@ -105,6 +105,7 @@ const cleanTable = async (tableName: string) => {
 
 const main = async () => {
   await Promise.all([
+    //cleanTable(process.env.USERS_TABLE_NAME ?? ""),
     //cleanTable(process.env.KEYWORDS_TABLE_NAME ?? ""),
     cleanTable(process.env.SEARCH_RESULTS_TABLE_NAME ?? ""),
   ]);

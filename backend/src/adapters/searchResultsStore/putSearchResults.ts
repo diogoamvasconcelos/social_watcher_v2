@@ -16,7 +16,7 @@ export const makePutSearchResults = (
           {
             TableName: tableName,
             Item: domainToDocument(searchResult),
-            ConditionExpression: "attribute_not_exists(krn)",
+            ConditionExpression: "attribute_not_exists(pk)",
           },
           logger
         );

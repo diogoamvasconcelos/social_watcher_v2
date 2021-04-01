@@ -24,13 +24,13 @@
       - subscription data (paid|trial|special, nofKeywordsAllowed|unlimited)
       - profile data (name, email, payment config)
       - query: by FE for obvious reasons
-    - "keyword"|socialMedia|keyword: metadata about a keyword social media combo
+    - "keyword"|keyword|socialmedia: metadata about a keyword social media combo
       - slack/discord/teams integration data
       - some custom metadata about search result (include translation, nof followers, etc)
       - queries:
         - by search endpoint to check if user is allowed to search for certain keyword
 
-- gsi1pk: custom|socialMedia|keyword & gsi1sk: userId (flipped primary key)
+- gsi1pk: "keyword"|keyword|socialmedia & gsi1sk: userId (flipped primary key)
   - get all users metadata about a certain keyword/socialmedia (done by dispatchNotifySocialMediaJobs lambda)
 
 ### SearchResultsTable
