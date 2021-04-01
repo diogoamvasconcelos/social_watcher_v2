@@ -9,6 +9,7 @@ export const subscriptionDataCodec = t.type({
 export type SubscriptionData = t.TypeOf<typeof subscriptionDataCodec>;
 
 export const userCodec = t.intersection([
+  t.type({ id: t.string }),
   t.type({ email: t.string }),
   subscriptionDataCodec,
 ]);

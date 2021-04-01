@@ -154,9 +154,9 @@ export const deleteItem = async (
 ) => {
   try {
     const result = await client.delete(params).promise();
-    return result;
+    return right(result);
   } catch (e) {
     logger.error("Call to DynamoDB delete exited with error");
-    throw e;
+    return left("ERROR");
   }
 };

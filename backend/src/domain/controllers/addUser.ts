@@ -6,14 +6,14 @@ import { PutUserFn } from "../ports/userStore/putUser";
 export const addUser = async ({
   putUserFn,
   logger,
-  email,
+  data,
 }: {
   putUserFn: PutUserFn;
   logger: Logger;
-  email: User["email"];
+  data: { email: User["email"]; id: User["id"] };
 }) => {
   const user: User = {
-    email,
+    ...data,
     subscriptionType: "NORMAL",
     subscriptionStatus: "INACTIVE",
     nofKeywords: fromEither(decode(positiveInteger, 0)),

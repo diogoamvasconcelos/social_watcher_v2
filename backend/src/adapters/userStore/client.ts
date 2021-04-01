@@ -1,7 +1,7 @@
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode, optional } from "../../lib/iots";
+import { decode } from "../../lib/iots";
 import { map } from "fp-ts/lib/Either";
 import { User, userCodec } from "../../domain/models/user";
 
@@ -10,20 +10,22 @@ export type Client = ReturnType<typeof getClient>;
 
 export const userDocCodec = t.intersection([
   userCodec,
-  t.type({
-    pk: t.string,
-    sk: t.string,
-    gsi1pk: optional(t.string),
-    gsi1sk: optional(t.string),
-  }),
+  t.intersection([
+    t.type({
+      pk: t.string,
+      sk: t.string,
+    }),
+    t.partial({
+      gsi1pk: t.string,
+      gsi1sk: t.string,
+    }),
+  ]),
 ]);
 export type UserDoc = t.TypeOf<typeof userDocCodec>;
 
-export const toUserDocKeys = ({ email }: User) => ({
-  pk: email,
+export const toUserDocKeys = ({ id }: Pick<User, "id">) => ({
+  pk: id,
   sk: "data",
-  gsi1pk: undefined,
-  gsi1sk: undefined,
 });
 
 export const userToDocument = (user: User): UserDoc => {

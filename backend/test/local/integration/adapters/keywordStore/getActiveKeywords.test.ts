@@ -1,10 +1,10 @@
-import { v4 as uuid } from "uuid";
 import { domainToDocument } from "../../../../../src/adapters/keywordStore/client";
 import { makeGetActiveKeywords } from "../../../../../src/adapters/keywordStore/getActiveKeywords";
 import { KeywordData } from "../../../../../src/domain/models/keyword";
 import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
 import { putItem } from "../../../../../src/lib/dynamoDb";
 import { decode, fromEither, lowerCase } from "../../../../../src/lib/iots";
+import { uuid } from "../../../../../src/lib/uuid";
 import { client, preparesKeywordsTable } from "../../../../lib/dynamoDb";
 import { getLoggerMock } from "../../../../lib/mocks";
 

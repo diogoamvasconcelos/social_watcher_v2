@@ -1,5 +1,5 @@
 import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
-import { v4 as uuid } from "uuid";
+import { uuid } from "../../src/lib/uuid";
 
 export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {
   return {

@@ -9,8 +9,8 @@ import {
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
 import { decode } from "./iots";
 import AWS from "aws-sdk";
-import { v4 as uuid } from "uuid";
 import { Logger } from "./logger";
+import { uuid } from "./uuid";
 
 export const getClient = () => {
   return new AWS.SQS();
