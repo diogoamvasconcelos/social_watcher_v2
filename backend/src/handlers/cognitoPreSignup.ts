@@ -1,5 +1,5 @@
 import { PreSignUpTriggerEvent } from "aws-lambda";
-import { defaultOutLayerMiddleware } from "./middlewares/common";
+import { defaultMiddlewareStack } from "./middlewares/common";
 import { getLogger } from "../lib/logger";
 import { addUser } from "../domain/controllers/addUser";
 import { getClient as getUserStoreClient } from "../adapters/userStore/client";
@@ -41,4 +41,4 @@ const handler = async (event: PreSignUpTriggerEvent) => {
   return event;
 };
 
-export const lambdaHandler = defaultOutLayerMiddleware(handler);
+export const lambdaHandler = defaultMiddlewareStack(handler);

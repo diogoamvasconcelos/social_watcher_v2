@@ -1,4 +1,13 @@
 openapi: 3.0.1
+
+x-types:
+  # DOESN'T WORK with APIGW (parser for yaml doesn't support "<<" merge syntax)
+  - &APIGatewayIntegration
+    type: "aws_proxy"
+    httpMethod: "POST"
+    timeoutInMillis: 29000
+    credentials: ${main_api_role_arn}
+
 info:
   version: 0.1
   title: Main REST API
@@ -6,32 +15,60 @@ info:
 paths:
   /test/noauth:
     get:
-      description: Test GET endpoint
+      description: Test GET endpoint without auth
       responses:
         200:
-          description: Successful Test
+          description: Success
       x-amazon-apigateway-integration:
-        uri: ${cognito_test_invoke_arn}
-        credentials: ${main_api_role_arn}
-        timeoutInMillis: 20000
-        httpMethod: "POST"
         type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${cognito_test_invoke_arn}
   /test/withauth:
     get:
-      description: Test GET endpoint behind cognito auth
+      description: Test GET endpoint with auth
       responses:
         200:
-          description: Successful Test
+          description: Success
       security:
         - cognitoPool: []
       x-amazon-apigateway-integration:
-        uri: ${cognito_test_invoke_arn}
-        credentials: ${main_api_role_arn}
-        timeoutInMillis: 20000
-        httpMethod: "POST"
         type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${cognito_test_invoke_arn}
+  /user:
+    parameters:
+      - $ref: "#/components/parameters/userId"
+    get:
+      description: Get user
+      responses:
+        200:
+          description: A user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${get_user_invoke_arn}
 
 components:
+  schemas:
+    userId:
+      type: string
+    user:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/userId"
   securitySchemes:
     cognitoPool:
       type: apiKey

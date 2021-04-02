@@ -1,8 +1,8 @@
 import "jest-extended";
 import { Callback, Context } from "aws-lambda";
 import {
-  errorCatchMiddleware,
-  loggerMiddleware,
+  makeErrorCatchMiddleware,
+  makeLoggerMiddleware,
   Middleware,
   stackMiddlewares,
 } from "./common";
@@ -58,7 +58,11 @@ describe("loggerMiddleware", () => {
   it("logs before execution and adds to context", async () => {
     const mockHandler = jest.fn();
 
-    await loggerMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+    await makeLoggerMiddleware()(mockHandler)(
+      {},
+      {} as Context,
+      {} as Callback
+    );
 
     expect(mockHandler).toHaveBeenCalledTimes(1);
     expect(logger.info).toHaveBeenCalledWith("Entering lambda execution.");
@@ -69,7 +73,11 @@ describe("loggerMiddleware", () => {
     const returnValue = { data: "some-data" };
     const mockHandler = jest.fn().mockReturnValue(returnValue);
 
-    await loggerMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+    await makeLoggerMiddleware()(mockHandler)(
+      {},
+      {} as Context,
+      {} as Callback
+    );
 
     expect(mockHandler).toHaveBeenCalledTimes(1);
     expect(logger.info).toHaveBeenCalledWith(expect.any(String), {
@@ -85,7 +93,11 @@ describe("errorCatchMiddleware", () => {
       throw error;
     });
 
-    await errorCatchMiddleware(mockHandler)({}, {} as Context, {} as Callback);
+    await makeErrorCatchMiddleware()(mockHandler)(
+      {},
+      {} as Context,
+      {} as Callback
+    );
 
     expect(logger.error).toHaveBeenCalledTimes(1);
     expect(logger.error).toHaveBeenCalledWith(expect.any(String), {

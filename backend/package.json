@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "with-local-stack": "scripts/with_env.js scripts/local_stack/with_dynamodb_local.sh",
-    "check-all": "npm run lint:check && npm run build && npm run with-local-stack \"npm run test\"",
+    "check-all": "npm run lint:check && npm run build && npm run test",
     "build": "tsc --noEmit",
     "build:watch": "tsc --noEmit --watch",
     "lint:check": "eslint --ext .ts .",

@@ -3,7 +3,7 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
-import { defaultOutLayerMiddleware } from "./middlewares/common";
+import { defaultMiddlewareStack } from "./middlewares/common";
 import { getLogger } from "../lib/logger";
 import { JsonEncodable } from "../lib/models/jsonEncodable";
 
@@ -19,4 +19,4 @@ const handler = async (event: APIGatewayProxyEvent, context: Context) => {
   return response;
 };
 
-export const lambdaHandler = defaultOutLayerMiddleware(handler);
+export const lambdaHandler = defaultMiddlewareStack(handler);

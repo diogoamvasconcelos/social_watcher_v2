@@ -19,7 +19,7 @@ import { translateTwitterSearchResults } from "../domain/controllers/translateTw
 import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
 import { getLogger, Logger } from "../lib/logger";
-import { defaultOutLayerMiddleware } from "./middlewares/common";
+import { defaultMiddlewareStack } from "./middlewares/common";
 
 const config = getConfig();
 const logger = getLogger();
@@ -72,7 +72,7 @@ const handler = async (event: SQSEvent) => {
   );
 };
 
-export const lambdaHandler = defaultOutLayerMiddleware(handler);
+export const lambdaHandler = defaultMiddlewareStack(handler);
 
 const getTwitterCredentials = async (ssmClient: SSMClient, logger: Logger) => {
   const result = await getParameter(

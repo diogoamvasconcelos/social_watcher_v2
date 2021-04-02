@@ -8,7 +8,7 @@ import _ from "lodash";
 import { KeywordData } from "../domain/models/keyword";
 import { makeQueueSearchJobs } from "../adapters/searchJobsQueue/queueSearchJobs";
 import { getLogger } from "../lib/logger";
-import { defaultOutLayerMiddleware } from "./middlewares/common";
+import { defaultMiddlewareStack } from "./middlewares/common";
 
 const config = getConfig();
 const logger = getLogger();
@@ -49,7 +49,7 @@ const handler = async () => {
   }
 };
 
-export const lambdaHandler = defaultOutLayerMiddleware(handler);
+export const lambdaHandler = defaultMiddlewareStack(handler);
 
 const keywordDataToSearchJob = (keywordData: KeywordData) => {
   return _.omit(keywordData, ["status"]);

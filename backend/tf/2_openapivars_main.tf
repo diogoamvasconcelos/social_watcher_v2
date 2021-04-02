@@ -6,5 +6,6 @@ data "template_file" "main_api_openapi_spec_swagger" {
     cognito_pool_auth_arn = aws_cognito_user_pool.main_pool.arn
     # Add lambda invoke arns below
     cognito_test_invoke_arn = aws_lambda_function.cognito_test.invoke_arn
+    get_user_invoke_arn = aws_lambda_function.get_user.invoke_arn
   }
 }

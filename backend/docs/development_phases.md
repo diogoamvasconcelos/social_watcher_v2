@@ -63,8 +63,8 @@
   - login / token
     - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html
 - apigw handler
-  - middlewares
-    - errors, 400 / 500
+  - middlewares <DONE>
+    - errors, 400 / 500 <DONE>
   - env tests (axios client)
     - test user credentials
 - userDB
@@ -81,9 +81,7 @@
 
 todo:
 
-- add tests for preSignup lambda
-  - acceptance?
-  - integration test for the user table
+- getUser env test
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 
