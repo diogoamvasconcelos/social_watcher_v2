@@ -32,10 +32,10 @@ export const userToDocument = (user: User): UserDoc => {
   return { ...user, ...toUserDocKeys(user) };
 };
 
-export const documentToDomain = (docItem: UserDoc): User => {
+export const documentToUser = (docItem: UserDoc): User => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
-export const unknownToDomain = (item: unknown) => {
-  return map(documentToDomain)(decode(userDocCodec, item));
+export const unknownToUser = (item: unknown) => {
+  return map(documentToUser)(decode(userDocCodec, item));
 };

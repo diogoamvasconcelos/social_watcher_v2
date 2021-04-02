@@ -15,3 +15,9 @@ LOG_LEVEL=info && npm run test
 ```
 npm run test:environment
 ```
+
+## Run single test
+
+```
+scripts/with_env.js npx 'jest -t="some text"'
+```

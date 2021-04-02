@@ -1,5 +1,6 @@
+import { fromEither } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
-import { createTestUser, deleteUser } from "./steps";
+import { createTestUser, deleteUser, getUser } from "./steps";
 
 describe("signup e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
@@ -9,10 +10,12 @@ describe("signup e2e test", () => {
   });
 
   it("created user in users table", async () => {
-    expect(true).toBeTrue;
+    const userData = fromEither(await getUser(testUser.id));
+    expect(userData).toEqual(expect.objectContaining(testUser));
   });
 
   it("token can be used to access API", async () => {
+    // TODO!
     expect(true).toBeTrue;
   });
 

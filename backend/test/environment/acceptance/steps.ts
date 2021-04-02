@@ -13,6 +13,7 @@ import {
   getClient as getDynamoDbClient,
 } from "../../../src/lib/dynamoDb";
 import { toUserDocKeys } from "../../../src/adapters/userStore/client";
+import { makeGetUser } from "../../../src/adapters/userStore/getUser";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -76,4 +77,8 @@ export const deleteUser = async ({
       logger
     )
   );
+};
+
+export const getUser = async (id: string) => {
+  return await makeGetUser(dynamoDbClient, config.usersTableName)(logger, id);
 };
