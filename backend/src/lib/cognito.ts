@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import { AuthenticationResultType } from "aws-sdk/clients/cognitoidentityserviceprovider";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
 
@@ -45,6 +46,24 @@ export const adminDeleteUser = async (
     return right("OK");
   } catch (error) {
     logger.error("cognito admin delete user failed.", { error });
+    return left("ERROR");
+  }
+};
+
+export const initiateAuth = async (
+  client: Client,
+  params: AWS.CognitoIdentityServiceProvider.InitiateAuthRequest,
+  logger: Logger
+): Promise<Either<"ERROR", AuthenticationResultType>> => {
+  try {
+    const result = await client.initiateAuth(params).promise();
+    if (!result.AuthenticationResult) {
+      logger.error("cognito initiateAuth didn't return AuthenticationResult.");
+      return left("ERROR");
+    }
+    return right(result.AuthenticationResult);
+  } catch (error) {
+    logger.error("cognito initiateAuth failed.", { error });
     return left("ERROR");
   }
 };

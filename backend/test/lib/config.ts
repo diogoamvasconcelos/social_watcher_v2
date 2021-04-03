@@ -12,6 +12,7 @@ export const getEnvTestConfig = () => {
     searchTwitterLambdaName: ensure("SEARCH_TWITTER_LAMBDA_NAME"),
     cognitoClientId: ensure("COGNITO_CLIENT_ID"),
     cognitoUserPoolId: ensure("COGNITO_USER_POOL_ID"),
+    apiEndpoint: ensure("API_ENDPOINT"),
     usersTableName: ensure("USERS_TABLE_NAME"),
   };
 };

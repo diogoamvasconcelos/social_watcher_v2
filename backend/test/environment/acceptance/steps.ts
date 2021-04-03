@@ -6,6 +6,7 @@ import {
   adminConfirmSignUp,
   adminDeleteUser,
   getClient as getCognitoClient,
+  initiateAuth,
   signUp,
 } from "../../../src/lib/cognito";
 import {
@@ -49,7 +50,7 @@ export const createTestUser = async () => {
     )
   );
 
-  return { id: userSub, email };
+  return { id: userSub, email, password };
 };
 
 export const deleteUser = async ({
@@ -81,4 +82,33 @@ export const deleteUser = async ({
 
 export const getUser = async (id: string) => {
   return await makeGetUser(dynamoDbClient, config.usersTableName)(logger, id);
+};
+
+export const getIdToken = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  const tokens = fromEither(
+    await initiateAuth(
+      cognitoClient,
+      {
+        ClientId: config.cognitoClientId,
+        AuthFlow: "USER_PASSWORD_AUTH",
+        AuthParameters: {
+          USERNAME: username,
+          PASSWORD: password,
+        },
+      },
+      logger
+    )
+  );
+
+  if (!tokens.IdToken) {
+    return "Failed to get id token";
+  }
+
+  return tokens.IdToken;
 };
