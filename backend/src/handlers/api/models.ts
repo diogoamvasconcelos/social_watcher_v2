@@ -26,4 +26,8 @@ export type ApiErrorResponse<
   errorMessage: string;
 };
 
-export type ApiBaseErrorCode = "INTERNAL_ERROR" | "REQUEST_MALFORMED";
+export type ApiBaseErrorCode =
+  | "INTERNAL_ERROR"
+  | "REQUEST_MALFORMED"
+  | "FORBIDDEN"
+  | "UNAUTHORIZED";

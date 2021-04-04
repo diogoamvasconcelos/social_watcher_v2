@@ -40,7 +40,6 @@ export const makeRequestMalformedResponse = (
 ): ApiErrorResponse<"REQUEST_MALFORMED"> =>
   makeBadRequestResponse("REQUEST_MALFORMED", errorMessage);
 
-/*
 export const makeUnauthorizedResponse = (
   errorMessage: string
 ): ApiErrorResponse => ({
@@ -56,4 +55,3 @@ export const makeForbiddenResponse = (
   errorCode: "FORBIDDEN",
   errorMessage,
 });
-*/
