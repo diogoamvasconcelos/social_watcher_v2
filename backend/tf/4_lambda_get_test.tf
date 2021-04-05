@@ -10,7 +10,7 @@ resource "aws_lambda_function" "get_user" {
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
-  timeout          = "15"
+  timeout          = "3"
   source_code_hash = filebase64sha256(local.lambda_file)
   description      = "Gets user details"
   depends_on       = [aws_cloudwatch_log_group.get_user]

@@ -28,6 +28,7 @@ describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
 
   beforeAll(async () => {
+    jest.setTimeout(10000);
     testUser = await createTestUser();
   });
 
