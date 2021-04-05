@@ -12,7 +12,7 @@ resource "aws_lambda_function" "dispatch_search_jobs" {
   memory_size      = "128"
   timeout          = "3"
   source_code_hash = filebase64sha256(local.lambda_file)
-  description      = "Send search jobs from Keywords table to SQSs"
+  description      = "Sends search jobs from Keywords table to SQSs"
   depends_on       = [aws_cloudwatch_log_group.dispatch_search_jobs]
 
   environment {

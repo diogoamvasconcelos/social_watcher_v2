@@ -1,0 +1,40 @@
+UserId:
+  type: string
+
+User:
+  type: object
+  properties:
+    id:
+      $ref: "#/components/schemas/UserId"
+
+SearchObjectIndex:
+  type: number
+
+SearchObject:
+  type: object
+  properties:
+    index:
+      $ref: "#/components/schemas/SearchObjectIndex"
+
+UpdateSearchObjectRequestBody:
+  type: object
+  required:
+    - keyword
+    - searchData
+  properties:
+    keyword:
+      type: string
+    searchData:
+      type: object
+      required:
+        - twitter
+      properties:
+        twitter:
+          requred:
+            - enabledStatus
+          properties:
+            enabledStatus:
+              type: string
+              enum:
+                - DISABLED
+                - ENABLED

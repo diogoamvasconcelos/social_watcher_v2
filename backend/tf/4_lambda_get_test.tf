@@ -12,7 +12,7 @@ resource "aws_lambda_function" "get_user" {
   memory_size      = "128"
   timeout          = "15"
   source_code_hash = filebase64sha256(local.lambda_file)
-  description      = "Test"
+  description      = "Gets user details"
   depends_on       = [aws_cloudwatch_log_group.get_user]
 
   environment {

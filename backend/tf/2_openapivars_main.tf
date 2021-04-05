@@ -7,5 +7,6 @@ data "template_file" "main_api_openapi_spec_swagger" {
     # Add lambda invoke arns below
     cognito_test_invoke_arn = aws_lambda_function.cognito_test.invoke_arn
     get_user_invoke_arn = aws_lambda_function.get_user.invoke_arn
+    update_search_object_invoke_arn = aws_lambda_function.update_search_object.invoke_arn
   }
 }

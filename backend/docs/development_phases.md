@@ -79,19 +79,8 @@
 
 todo:
 
-- updateSearchObject api
-  - change keyword
-  - twitter config (enabled/disabled for now)
-- searchObject#0|data
-  - keyword
-  - active/deactivated
-- searchObject#0|twitter
-
-  - creates gsi1pk index (with keyword. updates to keyword need to update this field!!)
-  - enabled/disable (stream events change keywordsTable (this consumers should only run 1 lambda at a time to remove concurrency issues (add this comment to tf file)))
-
-  - write handler tests
-  - write env test: putSearchObject, getSeatchObject (getUser)
+- enabled/disable (stream events change keywordsTable (this consumers should only run 1 lambda at a time to remove concurrency issues (add this comment to tf file)))
+- move some of the steps.ts to ops ? (promote to controller -> deleteUser, updateSubscription?)
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 

@@ -13,44 +13,16 @@ info:
   title: Main REST API
 
 paths:
-  /test/noauth:
-    get:
-      description: Test GET endpoint without auth
-      responses:
-        200:
-          description: Success
-      x-amazon-apigateway-integration:
-        type: "aws_proxy"
-        httpMethod: "POST"
-        timeoutInMillis: 29000
-        credentials: ${main_api_role_arn}
-        uri: ${cognito_test_invoke_arn}
-  /test/withauth:
-    get:
-      description: Test GET endpoint with auth
-      responses:
-        200:
-          description: Success
-      security:
-        - cognitoPool: []
-      x-amazon-apigateway-integration:
-        type: "aws_proxy"
-        httpMethod: "POST"
-        timeoutInMillis: 29000
-        credentials: ${main_api_role_arn}
-        uri: ${cognito_test_invoke_arn}
   /user:
-    parameters:
-      - $ref: "#/components/parameters/userId"
     get:
-      description: Get user
+      description: Get User
       responses:
         200:
-          description: A user
+          description: A User
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/user"
+                $ref: "#/components/schemas/User"
       security:
         - cognitoPool: []
       x-amazon-apigateway-integration:
@@ -59,16 +31,94 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${get_user_invoke_arn}
+  /user/searchObject/{index}:
+    parameters:
+      - $ref: "#/components/parameters/searchObjectIndex"
+    put:
+      description: Update SearchObject of a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSearchObjectRequestBody"
+      responses:
+        200:
+          description: A SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${update_search_object_invoke_arn}
+
+# ++++++++++++++
+# + COMPONENTS +
+# ++++++++++++++
 
 components:
+  # +++++++++++
+  # + SCHEMAS +
   schemas:
-    userId:
+    UserId:
       type: string
-    user:
+
+    User:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/userId"
+          $ref: "#/components/schemas/UserId"
+
+    SearchObjectIndex:
+      type: number
+
+    SearchObject:
+      type: object
+      properties:
+        index:
+          $ref: "#/components/schemas/SearchObjectIndex"
+
+    UpdateSearchObjectRequestBody:
+      type: object
+      required:
+        - keyword
+        - searchData
+      properties:
+        keyword:
+          type: string
+        searchData:
+          type: object
+          required:
+            - twitter
+          properties:
+            twitter:
+              requred:
+                - enabledStatus
+              properties:
+                enabledStatus:
+                  type: string
+                  enum:
+                    - DISABLED
+                    - ENABLED
+
+  # ++++++++++++++
+  # + PARAMETERS +
+  parameters:
+    searchObjectIndex:
+      - name: index
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/SearchObjectIndex"
+
+  # ++++++++++++++++++++
+  # + SECURITY-SCHEMES +
   securitySchemes:
     cognitoPool:
       type: apiKey

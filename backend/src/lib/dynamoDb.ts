@@ -34,10 +34,7 @@ export const transactPutItems = async (
       return right("CONDITION_CHECK_FAILED");
     }
 
-    logger.error(
-      "Call to DynamoDB get exited with following error:\n" +
-        (error.message as string)
-    );
+    logger.error("Call to DynamoDB get exited with following error", { error });
     return left("ERROR");
   }
 };
@@ -74,10 +71,9 @@ export const queryItems = async <T>(
 
     return right(transformedItems);
   } catch (error) {
-    logger.error(
-      "Call to queryAlltItems exited with following error:\n" +
-        (error.message as string)
-    );
+    logger.error("Call to queryAlltItems exited with following error", {
+      error,
+    });
     return left("ERROR");
   }
 };
@@ -98,10 +94,7 @@ export const putItem = async (
       return right("CONDITION_CHECK_FAILED");
     }
 
-    logger.error(
-      "Call to DynamoDB get exited with following error:\n" +
-        (error.message as string)
-    );
+    logger.error("Call to DynamoDB get exited with following error", { error });
     return left("ERROR");
   }
 };
@@ -117,10 +110,9 @@ export const scanItems = async (
       .promise();
     return right(scanResult);
   } catch (error) {
-    logger.error(
-      "Call to DynamoDB scan exited with following error:\n" +
-        (error.message as string)
-    );
+    logger.error("Call to DynamoDB scan exited with following error", {
+      error,
+    });
     return left("ERROR");
   }
 };
@@ -139,10 +131,7 @@ export const getItem = async <T>(
 
     return applyTransformToItem(transformFn, getResult.Item, logger);
   } catch (error) {
-    logger.error(
-      "Call to DynamoDB get exited with following error:\n" +
-        (error.message as string)
-    );
+    logger.error("Call to DynamoDB get exited with following error", { error });
     return left("ERROR");
   }
 };
@@ -155,8 +144,8 @@ export const deleteItem = async (
   try {
     const result = await client.delete(params).promise();
     return right(result);
-  } catch (e) {
-    logger.error("Call to DynamoDB delete exited with error");
+  } catch (error) {
+    logger.error("Call to DynamoDB delete exited with error", { error });
     return left("ERROR");
   }
 };

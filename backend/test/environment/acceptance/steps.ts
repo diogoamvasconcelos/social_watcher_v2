@@ -12,9 +12,14 @@ import {
 import {
   deleteItem,
   getClient as getDynamoDbClient,
+  queryItems,
 } from "../../../src/lib/dynamoDb";
 import { toUserDocKeys } from "../../../src/adapters/userStore/client";
 import { makeGetUser } from "../../../src/adapters/userStore/getUser";
+import { SubscriptionData, UserId } from "../../../src/domain/models/user";
+import deepmerge from "deepmerge";
+import { unknownToDocKeys } from "../../../src/adapters/shared";
+import _ from "lodash";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -68,15 +73,32 @@ export const deleteUser = async ({
     )
   );
 
-  fromEither(
-    await deleteItem(
+  const allPartitionItems = fromEither(
+    await queryItems(
       dynamoDbClient,
       {
         TableName: config.usersTableName,
-        Key: toUserDocKeys({ id }),
+        KeyConditionExpression: "pk = :pk",
+        ExpressionAttributeValues: {
+          ":pk": id,
+        },
       },
+      unknownToDocKeys,
       logger
     )
+  );
+
+  await Promise.all(
+    allPartitionItems.map(async (doc) => {
+      return await deleteItem(
+        dynamoDbClient,
+        {
+          TableName: config.usersTableName,
+          Key: _.pick(doc, ["pk", "sk"]),
+        },
+        logger
+      );
+    })
   );
 };
 
@@ -111,4 +133,30 @@ export const getIdToken = async ({
   }
 
   return tokens.IdToken;
+};
+
+export const updateUserSubscription = async ({
+  userId,
+  updatedData,
+}: {
+  userId: UserId;
+  updatedData: Partial<SubscriptionData>;
+}) => {
+  const userDataItem = (
+    await dynamoDbClient
+      .get({
+        TableName: config.usersTableName,
+        Key: toUserDocKeys({ id: userId }),
+      })
+      .promise()
+  ).Item;
+
+  const updatedUserItem = deepmerge(userDataItem ?? {}, updatedData);
+
+  await dynamoDbClient
+    .put({
+      TableName: config.usersTableName,
+      Item: updatedUserItem,
+    })
+    .promise();
 };

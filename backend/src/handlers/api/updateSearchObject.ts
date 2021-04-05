@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { getConfig } from "../../lib/config";
-import { getLogger } from "../../lib/logger";
+import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import {
   ApiBaseErrorCode,
@@ -33,12 +33,12 @@ const config = getConfig();
 const logger = getLogger();
 
 type UpdateSearchObjectRequest = ApiRequestMetadata & {
-  data: Omit<SearchObjectUserData, "lockedStatus">;
+  data: SearchObjectUserData;
 } & { index: SearchObject["index"] };
 
 type UpdateSearchObjectErrorCode = ApiBaseErrorCode;
 
-const handler = async (
+export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<ApiResponse<UpdateSearchObjectErrorCode>> => {
   const userStoreClient = getUsersStoreClient();
@@ -48,7 +48,7 @@ const handler = async (
     config.usersTableName
   );
 
-  const requestEither = toUpdateKeywordRequest(event);
+  const requestEither = toUpdateKeywordRequest(event, logger);
   if (isLeft(requestEither)) {
     return requestEither;
   }
@@ -90,7 +90,8 @@ const handler = async (
 export const lambdaHandler = apigwMiddlewareStack(handler);
 
 const toUpdateKeywordRequest = (
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent,
+  logger: Logger
 ): Either<ApiErrorResponse, UpdateSearchObjectRequest> => {
   const metadata = toApigwRequestMetadata(event);
   if (isLeft(metadata)) {
@@ -99,6 +100,7 @@ const toUpdateKeywordRequest = (
 
   const bodyEither = parseSafe(event.body ?? "");
   if (isLeft(bodyEither)) {
+    logger.error("Failed to parse body to json.", { error: bodyEither.left });
     return left(
       makeRequestMalformedResponse("Request body is not a json file.")
     );
@@ -106,11 +108,13 @@ const toUpdateKeywordRequest = (
   const body = bodyEither.right;
   const data = decode(searchObjectUserDataCodec, body);
   if (isLeft(data)) {
+    logger.error("Failed to decode body.", { error: data.left });
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
   const index = decode(searchObjectIndexCodec, event.pathParameters?.index);
   if (isLeft(index)) {
+    logger.error("Failed to decode path paramters.", { error: index.left });
     return left(
       makeRequestMalformedResponse("Request pathParameters are invalid.")
     );

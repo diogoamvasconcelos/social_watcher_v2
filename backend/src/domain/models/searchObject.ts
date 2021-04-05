@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { NumberFromString } from "io-ts-types";
 import { positiveInteger } from "../../lib/iots";
 import { keywordCodec } from "./keyword";
 import { userIdCodec } from "./user";
@@ -17,7 +18,10 @@ export const searchObjectUserDataCodec = t.type({
 });
 export type SearchObjectUserData = t.TypeOf<typeof searchObjectUserDataCodec>;
 
-export const searchObjectIndexCodec = positiveInteger;
+export const searchObjectIndexCodec = t.union([
+  NumberFromString.pipe(positiveInteger),
+  positiveInteger,
+]);
 
 export const searchObjectCodec = t.intersection([
   t.type({

@@ -3,6 +3,11 @@ import { Either, isLeft, left } from "fp-ts/lib/Either";
 import { User, userCodec } from "../../domain/models/user";
 import { decode } from "../iots";
 import { Logger } from "../logger";
+import {
+  SearchObject,
+  searchObjectCodec,
+  SearchObjectUserData,
+} from "../../domain/models/searchObject";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -56,6 +61,30 @@ export const getUser = async (
   }
 
   const decodeResult = decode(userCodec, apiResult.data);
+  if (isLeft(decodeResult)) {
+    return left("DECODE_ERROR");
+  }
+
+  return decodeResult;
+};
+
+export const updateSearchObject = async (
+  deps: ApiClientDeps,
+  data: {
+    index: SearchObject["index"];
+    userData: SearchObjectUserData;
+  }
+): Promise<Either<ApiError, SearchObject>> => {
+  const apiResult = await doGenericAPICall(deps, {
+    method: "put",
+    url: `user/searchObject/${data.index}`,
+    data: JSON.stringify(data.userData),
+  });
+  if (apiResult.status != 200) {
+    return left(apiResult);
+  }
+
+  const decodeResult = decode(searchObjectCodec, apiResult.data);
   if (isLeft(decodeResult)) {
     return left("DECODE_ERROR");
   }
