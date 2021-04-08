@@ -1,6 +1,6 @@
 import { GetActiveKeywordsFn } from "../../domain/ports/keywordStore/getActiveKeywords";
 import { queryItems } from "../../lib/dynamoDb";
-import { Client, toGSI1PK, unknownToDomain } from "./client";
+import { Client, toGSI1PK, unknownToKeywordData } from "./client";
 
 export const makeGetActiveKeywords = (
   client: Client,
@@ -17,7 +17,7 @@ export const makeGetActiveKeywords = (
           ":gsi1pk": toGSI1PK(socialMedia),
         },
       },
-      unknownToDomain,
+      unknownToKeywordData,
       logger
     );
   };

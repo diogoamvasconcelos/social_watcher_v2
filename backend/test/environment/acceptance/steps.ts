@@ -1,4 +1,9 @@
-import { fromEither } from "../../../src/lib/iots";
+import {
+  decode,
+  fromEither,
+  lowerCase,
+  positiveInteger,
+} from "../../../src/lib/iots";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { getLogger } from "../../../src/lib/logger";
@@ -14,19 +19,38 @@ import {
   getClient as getDynamoDbClient,
   queryItems,
 } from "../../../src/lib/dynamoDb";
-import { toUserDocKeys } from "../../../src/adapters/userStore/client";
 import { makeGetUser } from "../../../src/adapters/userStore/getUser";
 import { SubscriptionData, UserId } from "../../../src/domain/models/user";
 import deepmerge from "deepmerge";
-import { unknownToDocKeys } from "../../../src/adapters/shared";
 import _ from "lodash";
+import {
+  toUserDataDocKeys,
+  unknownToUserItem,
+} from "../../../src/adapters/userStore/client";
+import { SocialMediaSearchData } from "../../../src/domain/models/userItem";
+import {
+  getClient as getApiClient,
+  updateSearchObject,
+} from "../../../src/lib/apiClient/apiClient";
+import { KeywordData } from "../../../src/domain/models/keyword";
+import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
+import { retryUntil } from "../../lib/retry";
+import { isLeft, isRight } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
 const cognitoClient = getCognitoClient();
 const dynamoDbClient = getDynamoDbClient();
+const apiClient = getApiClient(config.apiEndpoint);
 
-export const createTestUser = async () => {
+const getKeywordDataFn = makeGetKeywordData(
+  dynamoDbClient,
+  config.usersTableName
+);
+
+export const createTestUser = async (
+  subscriptionData?: Partial<SubscriptionData>
+) => {
   // Test emails should look like "success+whatevs@simulator.amazonses.com"; see
   // https://docs.aws.amazon.com/cognito/latest/developerguide/signing-up-users-in-your-app.html#managing-users-accounts-email-testing
   const email = `success+${uuid()}@simulator.amazonses.com`;
@@ -54,6 +78,13 @@ export const createTestUser = async () => {
       logger
     )
   );
+
+  if (subscriptionData) {
+    await updateUserSubscription({
+      userId: userSub,
+      updatedData: subscriptionData,
+    });
+  }
 
   return { id: userSub, email, password };
 };
@@ -83,7 +114,7 @@ export const deleteUser = async ({
           ":pk": id,
         },
       },
-      unknownToDocKeys,
+      unknownToUserItem,
       logger
     )
   );
@@ -146,7 +177,7 @@ export const updateUserSubscription = async ({
     await dynamoDbClient
       .get({
         TableName: config.usersTableName,
-        Key: toUserDocKeys({ id: userId }),
+        Key: toUserDataDocKeys({ id: userId }),
       })
       .promise()
   ).Item;
@@ -159,4 +190,65 @@ export const updateUserSubscription = async ({
       Item: updatedUserItem,
     })
     .promise();
+};
+
+export const updateKeyword = async ({
+  token,
+  keyword,
+  index,
+  twitterStatus,
+}: {
+  token: string;
+  keyword: string;
+  index: number;
+  twitterStatus: SocialMediaSearchData["enabledStatus"];
+}) => {
+  return fromEither(
+    await updateSearchObject(
+      {
+        client: apiClient,
+        token,
+        logger,
+      },
+      {
+        index: fromEither(decode(positiveInteger, index)),
+        userData: {
+          keyword: fromEither(decode(lowerCase, keyword)),
+          searchData: {
+            twitter: { enabledStatus: twitterStatus },
+          },
+        },
+      }
+    )
+  );
+};
+
+export const checkKeyword = async ({
+  keyword,
+  socialMedia,
+  status: expectedStatus,
+  exists,
+}: Omit<KeywordData, "keyword"> & { keyword: string; exists: boolean }) => {
+  const res = await retryUntil(
+    async () => {
+      return await getKeywordDataFn(
+        logger,
+        socialMedia,
+        fromEither(decode(lowerCase, keyword))
+      );
+    },
+    (res) => {
+      if (isLeft(res)) {
+        return false;
+      }
+
+      if (res.right === "NOT_FOUND") {
+        return !exists;
+      }
+
+      return res.right.status === expectedStatus;
+    }
+  );
+
+  expect(isRight(res)).toBeTrue;
 };

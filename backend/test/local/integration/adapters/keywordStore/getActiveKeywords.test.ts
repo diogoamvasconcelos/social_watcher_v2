@@ -1,4 +1,4 @@
-import { domainToDocument } from "../../../../../src/adapters/keywordStore/client";
+import { keywordDataToDocument } from "../../../../../src/adapters/keywordStore/client";
 import { makeGetActiveKeywords } from "../../../../../src/adapters/keywordStore/getActiveKeywords";
 import { KeywordData } from "../../../../../src/domain/models/keyword";
 import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
@@ -18,7 +18,7 @@ describe("getActiveKeywords", () => {
       client,
       {
         TableName: tableName,
-        Item: domainToDocument(keywordData),
+        Item: keywordDataToDocument(keywordData),
       },
       logger
     );
@@ -33,12 +33,12 @@ describe("getActiveKeywords", () => {
     const socialMedia: SocialMedia = "twitter";
     const activeKeyword: KeywordData = {
       keyword: fromEither(decode(lowerCase, "active_keyword")),
-      status: "ENABLED",
+      status: "ACTIVE",
       socialMedia,
     };
     const inactiveKeyword: KeywordData = {
       keyword: fromEither(decode(lowerCase, "inactive_keyword")),
-      status: "DISABLED",
+      status: "INACTIVE",
       socialMedia,
     };
 

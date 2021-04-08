@@ -1,8 +1,8 @@
 import { Logger } from "../../../lib/logger";
-import { SearchResult } from "../../models/searchResult";
+import { KeywordData } from "../../models/keyword";
 import { DefaultOkReturn } from "../shared";
 
-export type PutSearchResultsFn = (
+export type UpdateKeywordDataFn = (
   logger: Logger,
-  searchResults: SearchResult[]
+  keywordData: KeywordData
 ) => DefaultOkReturn;

@@ -25,7 +25,7 @@ import {
   searchObjectIndexCodec,
   SearchObjectUserData,
   searchObjectUserDataCodec,
-} from "../../domain/models/searchObject";
+} from "../../domain/models/userItem";
 import { parseSafe } from "../../lib/json";
 import { decode } from "../../lib/iots";
 
@@ -43,7 +43,7 @@ export const handler = async (
 ): Promise<ApiResponse<UpdateSearchObjectErrorCode>> => {
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
-  const putSearchObject = makePutSearchObject(
+  const putSearchObjectFn = makePutSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -74,8 +74,9 @@ export const handler = async (
     );
   }
 
-  const putResultEither = await putSearchObject(logger, {
-    userId: user.id,
+  const putResultEither = await putSearchObjectFn(logger, {
+    type: "SEARCH_OBJECT",
+    id: user.id,
     index: request.index,
     ...request.data,
     lockedStatus: "UNLOCKED",

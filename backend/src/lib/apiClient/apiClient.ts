@@ -7,7 +7,7 @@ import {
   SearchObject,
   searchObjectCodec,
   SearchObjectUserData,
-} from "../../domain/models/searchObject";
+} from "../../domain/models/userItem";
 
 export const getClient = (baseURL: string) => {
   return axios.create({

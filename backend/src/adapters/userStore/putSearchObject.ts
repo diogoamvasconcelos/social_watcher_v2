@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { putSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
-import { Client, searchObjectToDocument } from "./client";
+import { Client, userItemToDocument } from "./client";
 import { putItem } from "../../lib/dynamoDb";
 
 export const makePutSearchObject = (
@@ -12,7 +12,7 @@ export const makePutSearchObject = (
       client,
       {
         TableName: tableName,
-        Item: searchObjectToDocument(searchObject),
+        Item: userItemToDocument(searchObject),
       },
       logger
     );

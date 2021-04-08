@@ -6,8 +6,8 @@ export const keywordCodec = lowerCase;
 export type Keyword = t.TypeOf<typeof keywordCodec>;
 
 export const keywordStatusCodec = t.union([
-  t.literal("DISABLED"),
-  t.literal("ENABLED"),
+  t.literal("INACTIVE"),
+  t.literal("ACTIVE"),
 ]);
 export type KeywordStatus = t.TypeOf<typeof keywordStatusCodec>;
 

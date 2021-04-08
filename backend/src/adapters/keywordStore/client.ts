@@ -22,21 +22,28 @@ export type KeywordDataDoc = t.TypeOf<typeof keywordDataDocCodec>;
 
 export const toGSI1PK = (socialMedia: SocialMedia) => `${socialMedia}|active`;
 
-export const toDocKeys = ({ socialMedia, keyword, status }: KeywordData) => ({
+export const toDocPrimaryKeys = ({
+  socialMedia,
+  keyword,
+}: Pick<KeywordData, "socialMedia" | "keyword">) => ({
   pk: keyword,
   sk: socialMedia,
-  gsi1pk: status == "ENABLED" ? toGSI1PK(socialMedia) : undefined,
+});
+
+export const toDocKeys = ({ socialMedia, keyword, status }: KeywordData) => ({
+  ...toDocPrimaryKeys({ socialMedia, keyword }),
+  gsi1pk: status == "ACTIVE" ? toGSI1PK(socialMedia) : undefined,
   gsi1sk: keyword,
 });
 
-export const domainToDocument = (domainItem: KeywordData) => {
+export const keywordDataToDocument = (domainItem: KeywordData) => {
   return { ...domainItem, ...toDocKeys(domainItem) };
 };
 
-export const documentToDomain = (docItem: KeywordDataDoc): KeywordData => {
+export const documentToKeywordData = (docItem: KeywordDataDoc): KeywordData => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
-export const unknownToDomain = (item: unknown) => {
-  return map(documentToDomain)(decode(keywordDataDocCodec, item));
+export const unknownToKeywordData = (item: unknown) => {
+  return map(documentToKeywordData)(decode(keywordDataDocCodec, item));
 };

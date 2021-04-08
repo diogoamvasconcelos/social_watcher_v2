@@ -14,6 +14,8 @@ resource "aws_lambda_function" "users_stream_consumer" {
   source_code_hash = filebase64sha256(local.lambda_file)
   description      = "Users table stream consumer"
   depends_on       = [aws_cloudwatch_log_group.users_stream_consumer]
+  // race conditions in the handling of stream events can cause bad state (inactivate keyword than is was activate in the meanwhile)
+  reserved_concurrent_executions = 1
 
   environment {
     variables = local.lambda_env_vars

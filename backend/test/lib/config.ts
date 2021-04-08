@@ -14,5 +14,6 @@ export const getEnvTestConfig = () => {
     cognitoUserPoolId: ensure("COGNITO_USER_POOL_ID"),
     apiEndpoint: ensure("API_ENDPOINT"),
     usersTableName: ensure("USERS_TABLE_NAME"),
+    keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
   };
 };

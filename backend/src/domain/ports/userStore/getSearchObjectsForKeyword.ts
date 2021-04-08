@@ -1,8 +1,9 @@
 import { Logger } from "../../../lib/logger";
+import { Keyword } from "../../models/keyword";
 import { SearchObject } from "../../models/userItem";
 import { CustomRightReturn } from "../shared";
 
-export type putSearchObjectFn = (
+export type GetSearchObjectsForKeywordFn = (
   logger: Logger,
-  searchObject: SearchObject
-) => CustomRightReturn<SearchObject>;
+  keyword: Keyword
+) => CustomRightReturn<SearchObject[]>;

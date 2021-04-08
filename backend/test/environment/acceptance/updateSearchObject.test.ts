@@ -1,4 +1,4 @@
-import { SearchObjectUserData } from "../../../src/domain/models/searchObject";
+import { SearchObjectUserData } from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
   updateSearchObject,
@@ -13,12 +13,7 @@ import { getLogger } from "../../../src/lib/logger";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
-import {
-  createTestUser,
-  deleteUser,
-  getIdToken,
-  updateUserSubscription,
-} from "./steps";
+import { createTestUser, deleteUser, getIdToken } from "./steps";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -29,16 +24,13 @@ describe("update searchObject e2e test", () => {
 
   beforeAll(async () => {
     jest.setTimeout(10000);
-    testUser = await createTestUser();
+    testUser = await createTestUser({
+      nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+    });
   });
 
   it("updateSearchKeyword works", async () => {
-    await updateUserSubscription({
-      userId: testUser.id,
-      updatedData: { nofSearchObjects: fromEither(decode(positiveInteger, 1)) },
-    });
-
-    const idToken = await getIdToken({
+    const token = await getIdToken({
       username: testUser.email,
       password: testUser.password,
     });
@@ -55,7 +47,7 @@ describe("update searchObject e2e test", () => {
       await updateSearchObject(
         {
           client: apiClient,
-          token: idToken,
+          token,
           logger,
         },
         { index, userData }

@@ -2,7 +2,7 @@ import { isLeft, left, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { PutSearchResultsFn } from "../../domain/ports/searchResultsStore/putSearchResults";
 import { putItem } from "../../lib/dynamoDb";
-import { Client, domainToDocument } from "./client";
+import { Client, searchResultToDocument } from "./client";
 
 export const makePutSearchResults = (
   client: Client,
@@ -15,7 +15,7 @@ export const makePutSearchResults = (
           client,
           {
             TableName: tableName,
-            Item: domainToDocument(searchResult),
+            Item: searchResultToDocument(searchResult),
             ConditionExpression: "attribute_not_exists(pk)",
           },
           logger

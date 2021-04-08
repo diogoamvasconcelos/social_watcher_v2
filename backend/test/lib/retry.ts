@@ -6,7 +6,7 @@ export const sleep = async (ms: number) => {
 
 export const retryUntil = async <T>(
   doFn: () => Promise<T>,
-  checkFn: (res: unknown) => boolean,
+  checkFn: (res: T) => boolean,
   maxRetries = 5,
   initialDurationMs = 1000,
   durationMultFactor = 2

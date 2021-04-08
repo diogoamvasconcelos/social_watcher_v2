@@ -1,5 +1,5 @@
 import { PutUserFn } from "../../domain/ports/userStore/putUser";
-import { Client, userToDocument } from "./client";
+import { Client, userItemToDocument } from "./client";
 import { putItem } from "../../lib/dynamoDb";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 
@@ -9,7 +9,7 @@ export const makePutUser = (client: Client, tableName: string): PutUserFn => {
       client,
       {
         TableName: tableName,
-        Item: userToDocument(user),
+        Item: userItemToDocument({ ...user, type: "USER_DATA" }),
         ConditionExpression: "attribute_not_exists(pk)",
       },
       logger

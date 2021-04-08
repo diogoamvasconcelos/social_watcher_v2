@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
-import { SearchObjectUserData } from "../../domain/models/searchObject";
+import { SearchObjectUserData } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
 import { decode, fromEither, lowerCase, positiveInteger } from "../../lib/iots";
 import { apiGetUser } from "./shared";

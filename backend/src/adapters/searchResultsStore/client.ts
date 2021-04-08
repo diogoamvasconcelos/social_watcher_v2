@@ -32,14 +32,16 @@ export const toDocKeys = (
   gsi1sk: happened_at.toISOString(),
 });
 
-export const domainToDocument = (domainItem: SearchResult) => {
+export const searchResultToDocument = (domainItem: SearchResult) => {
   return { ...domainItem, ...toDocKeys(domainItem) };
 };
 
-export const documentToDomain = (docItem: SearchResultDoc): SearchResult => {
+export const documentToSearchResult = (
+  docItem: SearchResultDoc
+): SearchResult => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
-export const unknownToDomain = (item: unknown) => {
-  return map(documentToDomain)(decode(searchResultDocCodec, item));
+export const unknownToSearchResult = (item: unknown) => {
+  return map(documentToSearchResult)(decode(searchResultDocCodec, item));
 };
