@@ -79,8 +79,9 @@
 
 todo:
 
-- enabled/disable (stream events change keywordsTable (this consumers should only run 1 lambda at a time to remove concurrency issues (add this comment to tf file)))
-- move some of the steps.ts to ops ? (promote to controller -> deleteUser, updateSubscription?)
+- add DLQ for dbstream consumer
+- errorMiddleware throw error
+  - write test
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 

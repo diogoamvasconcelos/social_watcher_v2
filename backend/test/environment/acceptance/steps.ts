@@ -25,7 +25,7 @@ import deepmerge from "deepmerge";
 import _ from "lodash";
 import {
   toUserDataDocKeys,
-  unknownToUserItem,
+  userItemDocCodec,
 } from "../../../src/adapters/userStore/client";
 import { SocialMediaSearchData } from "../../../src/domain/models/userItem";
 import {
@@ -36,6 +36,7 @@ import { KeywordData } from "../../../src/domain/models/keyword";
 import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
 import { retryUntil } from "../../lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
+import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -114,7 +115,7 @@ export const deleteUser = async ({
           ":pk": id,
         },
       },
-      unknownToUserItem,
+      (item: unknown) => decode(userItemDocCodec, item),
       logger
     )
   );
@@ -238,6 +239,9 @@ export const checkKeyword = async ({
       );
     },
     (res) => {
+      logger.info("checkKeyword:getKeywordDataFn attempt", {
+        res: (res as unknown) as JsonObjectEncodable,
+      });
       if (isLeft(res)) {
         return false;
       }

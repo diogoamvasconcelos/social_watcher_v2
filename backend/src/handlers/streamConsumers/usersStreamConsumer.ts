@@ -19,6 +19,7 @@ import { UpdateKeywordDataFn } from "../../domain/ports/keywordStore/updateKeywo
 import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
 import { deactivateSearchObject } from "../../domain/controllers/deactivateSearchObject";
 import _ from "lodash";
+import { Converter } from "aws-sdk/clients/dynamodb";
 
 /*
   TODO:
@@ -32,7 +33,7 @@ import _ from "lodash";
 const config = getConfig();
 const logger = getLogger();
 
-const handler = async (event: DynamoDBStreamEvent) => {
+export const handler = async (event: DynamoDBStreamEvent) => {
   logger.info("got an event", {
     event: (event as unknown) as JsonObjectEncodable,
   });
@@ -64,11 +65,12 @@ const handler = async (event: DynamoDBStreamEvent) => {
         return left("ERROR");
       }
 
+      const oldImageDoc = Converter.unmarshall(record.dynamodb?.OldImage ?? {});
+      const newImageDoc = Converter.unmarshall(record.dynamodb?.NewImage ?? {});
+
       switch (record.eventName) {
         case "INSERT": {
-          const newItem = fromEither(
-            unknownToUserItem(record.dynamodb?.NewImage)
-          );
+          const newItem = fromEither(unknownToUserItem(newImageDoc));
 
           return newItem.type === "USER_DATA"
             ? handleUserData(deps, {
@@ -84,12 +86,8 @@ const handler = async (event: DynamoDBStreamEvent) => {
         }
 
         case "MODIFY": {
-          const newItem = fromEither(
-            unknownToUserItem(record.dynamodb?.NewImage)
-          );
-          const oldItem = fromEither(
-            unknownToUserItem(record.dynamodb?.OldImage)
-          );
+          const oldItem = fromEither(unknownToUserItem(oldImageDoc));
+          const newItem = fromEither(unknownToUserItem(newImageDoc));
 
           return newItem.type === "USER_DATA" && oldItem.type === "USER_DATA"
             ? handleUserData(deps, {
@@ -107,9 +105,7 @@ const handler = async (event: DynamoDBStreamEvent) => {
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
         case "REMOVE": {
-          const oldItem = fromEither(
-            unknownToUserItem(record.dynamodb?.OldImage)
-          );
+          const oldItem = fromEither(unknownToUserItem(oldImageDoc));
 
           return oldItem.type === "USER_DATA"
             ? handleUserData(deps, {

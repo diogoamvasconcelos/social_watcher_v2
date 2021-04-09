@@ -87,17 +87,15 @@ describe("loggerMiddleware", () => {
 });
 
 describe("errorCatchMiddleware", () => {
-  it("logs error", async () => {
+  it("logs error, and throws error (no errorReturnFn given)", async () => {
     const error = new Error("error");
     const mockHandler = jest.fn(async () => {
       throw error;
     });
 
-    await makeErrorCatchMiddleware()(mockHandler)(
-      {},
-      {} as Context,
-      {} as Callback
-    );
+    await expect(
+      makeErrorCatchMiddleware()(mockHandler)({}, {} as Context, {} as Callback)
+    ).rejects.toThrowError(error);
 
     expect(logger.error).toHaveBeenCalledTimes(1);
     expect(logger.error).toHaveBeenCalledWith(expect.any(String), {
@@ -107,5 +105,18 @@ describe("errorCatchMiddleware", () => {
         stack: error.stack,
       },
     });
+  });
+
+  it("returns value when errorReturnFn is given", async () => {
+    const error = new Error("error");
+    const mockHandler = jest.fn(async () => {
+      throw error;
+    });
+
+    const returnValue = await makeErrorCatchMiddleware((error: unknown) => ({
+      gotError: error,
+    }))(mockHandler)({}, {} as Context, {} as Callback);
+
+    expect(returnValue).toEqual({ gotError: error });
   });
 });

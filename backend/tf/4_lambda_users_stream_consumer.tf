@@ -39,4 +39,9 @@ resource "aws_lambda_event_source_mapping" "user_stream_consumer" {
   # maximum_batching_window_in_seconds = 30 // worth for batch_sise > 1
   maximum_retry_attempts        = 5
   maximum_record_age_in_seconds = 60
+  destination_config {
+    on_failure {
+      destination_arn = aws_sqs_queue.users_stream_consumer_dlq.arn
+    }
+  }
 }

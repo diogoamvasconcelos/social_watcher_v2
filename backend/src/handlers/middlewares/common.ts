@@ -65,6 +65,8 @@ export const makeErrorCatchMiddleware = (
       if (errorReturnFn) {
         return errorReturnFn(error);
       }
+
+      throw error;
     }
   };
 };

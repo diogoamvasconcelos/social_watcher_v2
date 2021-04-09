@@ -57,7 +57,7 @@ describe("keyword interaction between multiple users", () => {
       keyword: theKeyword,
       socialMedia: "twitter",
       status: "INACTIVE",
-      exists: true,
+      exists: false,
     });
 
     await updateKeyword({
