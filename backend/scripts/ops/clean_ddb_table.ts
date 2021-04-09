@@ -10,15 +10,13 @@ import {
   ScanInput,
 } from "aws-sdk/clients/dynamodb";
 
-const verbose = false;
-
 const printObjectBlock = (label: string, obj: Object) => {
   console.log("================");
   console.log(label);
   console.log(obj);
 };
 
-const cleanTable = async (tableName: string) => {
+const cleanTable = async (tableName: string, verbose: boolean = false) => {
   const region = process.env.AWS_REGION;
   if (!region) {
     throw new Error(`'AWS_REGION' environment variable needs to be set.`);

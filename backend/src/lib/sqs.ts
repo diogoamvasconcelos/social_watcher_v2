@@ -62,7 +62,7 @@ export const sendMessages = async (
 ): Promise<Either<"ERROR", AWS.SQS.SendMessageBatchResult>> => {
   const entries: AWS.SQS.SendMessageBatchRequestEntryList = messages.map(
     (message: AWS.SQS.Message) => {
-      const retries = message.MessageAttributes?.retries?.StringValue ?? "0";
+      const retries = message.MessageAttributes?.retries.StringValue ?? "0";
 
       return {
         Id: message.MessageId ?? uuid(),
@@ -140,13 +140,6 @@ export const getApproximateNumberOfMessages = async (
   if (!result.Attributes) {
     logger.error("sqs/getApproximateNumberOfMessages failed", {
       error: "result.Attributes === undefined",
-    });
-    return left("ERROR");
-  }
-
-  if (result.Attributes.ApproximateNumberOfMessages === undefined) {
-    logger.error("sqs/getApproximateNumberOfMessages failed", {
-      error: "result.Attributes.ApproximateNumberOfMessages === undefined",
     });
     return left("ERROR");
   }

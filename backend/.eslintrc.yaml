@@ -66,3 +66,9 @@ rules:
   "@typescript-eslint/no-explicit-any":
     - error
     - ignoreRestArgs: true
+  # prevent's bugs like: if (!a.status), where (typeof status) = "ENABLED" | "DISABLED", where that "if" is never true
+  "@typescript-eslint/no-unnecessary-condition":
+    - error
+  #"@typescript-eslint/strict-boolean-expressions": # this rule is too annoying tbh
+  #  - error
+  #  - allowNullableString: true

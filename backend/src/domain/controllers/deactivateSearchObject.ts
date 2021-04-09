@@ -22,7 +22,7 @@ export const deactivateSearchObject = async (
     getSearchObjectsForKeywordFn: GetSearchObjectsForKeywordFn;
   },
   searchObject: SearchObject,
-  force: Boolean
+  force: boolean
 ): DefaultOkReturn => {
   logger.info("controllers/deactivateSearchObject", { searchObject });
 
@@ -38,7 +38,10 @@ export const deactivateSearchObject = async (
 
   const results = await Promise.all(
     socialMedias.map(async (socialMedia) => {
-      if (!force && searchObject.searchData[socialMedia].enabledStatus) {
+      if (
+        !force &&
+        searchObject.searchData[socialMedia].enabledStatus === "ENABLED"
+      ) {
         logger.info(
           `${socialMedia}: skipping as searchObject socialMedia config is enabled`
         );
@@ -53,6 +56,10 @@ export const deactivateSearchObject = async (
       if (isLeft(keywordDataEither)) {
         return keywordDataEither;
       }
+
+      logger.debug("controllers/deactivateSearchObject", {
+        keywordDataEither: (keywordDataEither as unknown) as JsonObjectEncodable,
+      });
 
       if (
         keywordDataEither.right === "NOT_FOUND" ||

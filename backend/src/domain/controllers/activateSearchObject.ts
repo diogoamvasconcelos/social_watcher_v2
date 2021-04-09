@@ -24,7 +24,7 @@ export const activateSearchObject = async (
 
   const results = await Promise.all(
     socialMedias.map(async (socialMedia) => {
-      if (!searchObject.searchData[socialMedia].enabledStatus) {
+      if (searchObject.searchData[socialMedia].enabledStatus === "DISABLED") {
         logger.info(
           `${socialMedia}: skipping as searchObject socialMedia config is disabled`
         );
@@ -39,6 +39,10 @@ export const activateSearchObject = async (
       if (isLeft(keywordDataEither)) {
         return keywordDataEither;
       }
+
+      logger.debug("controllers/activateSearchObject", {
+        keywordDataEither: (keywordDataEither as unknown) as JsonObjectEncodable,
+      });
 
       if (
         keywordDataEither.right !== "NOT_FOUND" &&

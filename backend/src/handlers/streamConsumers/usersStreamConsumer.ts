@@ -21,23 +21,10 @@ import { deactivateSearchObject } from "../../domain/controllers/deactivateSearc
 import _ from "lodash";
 import { Converter } from "aws-sdk/clients/dynamodb";
 
-/*
-  TODO:
-  - error handling
-    - checkpoints
-    - limit retries
-    - redrive to DLQ
-  - env test (two users, chanannigans)
-*/
-
 const config = getConfig();
 const logger = getLogger();
 
 export const handler = async (event: DynamoDBStreamEvent) => {
-  logger.info("got an event", {
-    event: (event as unknown) as JsonObjectEncodable,
-  });
-
   const keywordStoreClient = getKeywordStoreClient();
   const userStoreClient = getUserStoreClient();
   const deps = {
@@ -77,7 +64,8 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 newItem,
               })
-            : newItem.type === "SEARCH_OBJECT"
+            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            newItem.type === "SEARCH_OBJECT"
             ? handleSearchObject(deps, {
                 eventName: record.eventName,
                 newItem,
@@ -112,7 +100,8 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 oldItem,
               })
-            : oldItem.type === "SEARCH_OBJECT"
+            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            oldItem.type === "SEARCH_OBJECT"
             ? handleSearchObject(deps, {
                 eventName: record.eventName,
                 oldItem,
