@@ -37,6 +37,8 @@ import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywor
 import { retryUntil } from "../../lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
+import { socialMedias } from "../../../src/domain/models/socialMedia";
+import { toDocPrimaryKeys } from "../../../src/adapters/keywordStore/client";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -46,7 +48,7 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 const getKeywordDataFn = makeGetKeywordData(
   dynamoDbClient,
-  config.usersTableName
+  config.keywordsTableName
 );
 
 export const createTestUser = async (
@@ -254,5 +256,25 @@ export const checkKeyword = async ({
     }
   );
 
-  expect(isRight(res)).toBeTrue;
+  expect(isRight(res)).toBeTruthy();
+};
+
+export const deleteKeyword = async (keyword: string) => {
+  await Promise.all(
+    socialMedias.map(async (socialMedia) => {
+      return fromEither(
+        await deleteItem(
+          dynamoDbClient,
+          {
+            TableName: config.keywordsTableName,
+            Key: toDocPrimaryKeys({
+              keyword: fromEither(decode(lowerCase, keyword)),
+              socialMedia,
+            }),
+          },
+          logger
+        )
+      );
+    })
+  );
 };

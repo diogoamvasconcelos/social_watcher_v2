@@ -13,11 +13,13 @@ import { getLogger } from "../../../src/lib/logger";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
-import { createTestUser, deleteUser, getIdToken } from "./steps";
+import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
 const apiClient = getApiClient(config.apiEndpoint);
+
+const keyword = uuid();
 
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
@@ -37,7 +39,7 @@ describe("update searchObject e2e test", () => {
 
     const index = fromEither(decode(positiveInteger, 0));
     const userData: SearchObjectUserData = {
-      keyword: fromEither(decode(lowerCase, uuid())),
+      keyword: fromEither(decode(lowerCase, keyword)),
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
       },
@@ -59,5 +61,6 @@ describe("update searchObject e2e test", () => {
 
   afterAll(async () => {
     await deleteUser(testUser);
+    await deleteKeyword(keyword);
   });
 });

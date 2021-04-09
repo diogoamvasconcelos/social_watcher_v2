@@ -1,4 +1,8 @@
 import { left, right } from "fp-ts/lib/Either";
+import { getLogger } from "../../src/lib/logger";
+import { JsonObjectEncodable } from "../../src/lib/models/jsonEncodable";
+
+const logger = getLogger();
 
 export const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -8,7 +12,7 @@ export const retryUntil = async <T>(
   doFn: () => Promise<T>,
   checkFn: (res: T) => boolean,
   maxRetries = 5,
-  initialDurationMs = 1000,
+  initialDurationMs = 500,
   durationMultFactor = 2
 ) => {
   let retries = 0;
@@ -26,8 +30,9 @@ export const retryUntil = async <T>(
     sleepDurationMs *= durationMultFactor;
   }
 
-  console.log("retryUntil last failed result:");
-  console.log(res);
+  logger.error("retryUntil last failed result", {
+    res: (res as unknown) as JsonObjectEncodable,
+  });
 
   return left("RETRY_UNTILL_MAX_RETRIES_REACHED");
 };

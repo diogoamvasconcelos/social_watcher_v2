@@ -4,6 +4,7 @@ import { uuid } from "../../../src/lib/uuid";
 import {
   checkKeyword,
   createTestUser,
+  deleteKeyword,
   deleteUser,
   getIdToken,
   updateKeyword,
@@ -16,10 +17,10 @@ describe("keyword interaction between multiple users", () => {
   let userBToken: string;
 
   const theKeyword = uuid();
-  //const anotherKeyword = uuid();
+  const anotherKeyword = uuid();
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
 
     testUserA = await createTestUser({
       nofSearchObjects: fromEither(decode(positiveInteger, 1)),
@@ -81,5 +82,7 @@ describe("keyword interaction between multiple users", () => {
   afterAll(async () => {
     await deleteUser(testUserA);
     await deleteUser(testUserB);
+    await deleteKeyword(theKeyword);
+    await deleteKeyword(anotherKeyword);
   });
 });
