@@ -2,7 +2,6 @@ import { DynamoDBStreamEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { makeGetKeywordData } from "../../adapters/keywordStore/getKeywordData";
 import { unknownToUserItem } from "../../adapters/userStore/client";
-import { activateSearchObject } from "../../domain/controllers/activateSearchObject";
 import { SearchObject, UserData, UserItem } from "../../domain/models/userItem";
 import { fromEither } from "../../lib/iots";
 import { getConfig } from "../../lib/config";
@@ -17,9 +16,9 @@ import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSear
 import { GetKeywordDataFn } from "../../domain/ports/keywordStore/getKeywordData";
 import { UpdateKeywordDataFn } from "../../domain/ports/keywordStore/updateKeywordData";
 import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
-import { deactivateSearchObject } from "../../domain/controllers/deactivateSearchObject";
 import _ from "lodash";
 import { Converter } from "aws-sdk/clients/dynamodb";
+import { propagateSearchObjectUpdated } from "../../domain/controllers/propagateSearchObjectUpdated";
 
 const config = getConfig();
 const logger = getLogger();
@@ -155,64 +154,33 @@ const handleUserData: HandleUserItem<UserData> = async (logger, recordData) => {
 };
 
 const handleSearchObject: HandleUserItem<SearchObject> = async (
-  {
-    logger,
-    getKeywordDataFn,
-    updateKeywordDataFn,
-    getSearchObjectsForKeywordFn,
-  },
+  deps,
   recordData
 ) => {
   switch (recordData.eventName) {
     case "INSERT": {
-      if (recordData.newItem.lockedStatus === "UNLOCKED") {
-        return await activateSearchObject(
-          { logger, getKeywordDataFn, updateKeywordDataFn },
-          recordData.newItem
-        );
-      }
-      break;
+      return await propagateSearchObjectUpdated(deps, recordData.newItem);
     }
+
     case "MODIFY": {
-      if (recordData.oldItem.lockedStatus != recordData.newItem.lockedStatus) {
-        switch (recordData.newItem.lockedStatus) {
-          case "UNLOCKED":
-            return await activateSearchObject(
-              {
-                logger,
-                getKeywordDataFn,
-                updateKeywordDataFn,
-              },
-              recordData.oldItem
-            );
-          case "LOCKED":
-            return await deactivateSearchObject(
-              {
-                logger,
-                getKeywordDataFn,
-                updateKeywordDataFn,
-                getSearchObjectsForKeywordFn,
-              },
-              recordData.oldItem,
-              false
-            );
+      if (recordData.oldItem.keyword != recordData.newItem.keyword) {
+        const results = await Promise.all([
+          propagateSearchObjectUpdated(deps, recordData.oldItem, true),
+          propagateSearchObjectUpdated(deps, recordData.newItem),
+        ]);
+
+        if (_.some(results, (result) => isLeft(result))) {
+          return left("ERROR");
         }
+        return right("OK");
+      } else {
+        await propagateSearchObjectUpdated(deps, recordData.newItem);
       }
       break;
     }
+
     case "REMOVE": {
-      if (recordData.oldItem.lockedStatus === "UNLOCKED") {
-        return await deactivateSearchObject(
-          {
-            logger,
-            getKeywordDataFn,
-            updateKeywordDataFn,
-            getSearchObjectsForKeywordFn,
-          },
-          recordData.oldItem,
-          true
-        );
-      }
+      return await propagateSearchObjectUpdated(deps, recordData.oldItem, true);
     }
   }
 

@@ -99,12 +99,10 @@ export const deleteUser = async ({
   id: string;
   email: string;
 }) => {
-  fromEither(
-    await adminDeleteUser(
-      cognitoClient,
-      { UserPoolId: config.cognitoUserPoolId, Username: email },
-      logger
-    )
+  await adminDeleteUser(
+    cognitoClient,
+    { UserPoolId: config.cognitoUserPoolId, Username: email },
+    logger
   );
 
   const allPartitionItems = fromEither(
