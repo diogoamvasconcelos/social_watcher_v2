@@ -1,6 +1,5 @@
-import { isLeft, left, right } from "fp-ts/lib/Either";
-import _ from "lodash";
 import { PutSearchResultsFn } from "../../domain/ports/searchResultsStore/putSearchResults";
+import { eitherListToDefaultOk } from "../../domain/ports/shared";
 import { putItem } from "../../lib/dynamoDb";
 import { Client, searchResultToDocument } from "./client";
 
@@ -23,9 +22,6 @@ export const makePutSearchResults = (
       })
     );
 
-    if (_.some(putResults, (result) => isLeft(result))) {
-      return left("ERROR");
-    }
-    return right("OK");
+    return eitherListToDefaultOk(putResults);
   };
 };

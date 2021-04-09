@@ -1,8 +1,9 @@
 import { Logger } from "../../../lib/logger";
+import { UserId } from "../../models/user";
 import { SearchObject } from "../../models/userItem";
 import { CustomRightReturn } from "../shared";
 
-export type PutSearchObjectFn = (
+export type GetSearchObjectsForUserFn = (
   logger: Logger,
-  searchObject: SearchObject
-) => CustomRightReturn<SearchObject>;
+  id: UserId
+) => CustomRightReturn<SearchObject[]>;

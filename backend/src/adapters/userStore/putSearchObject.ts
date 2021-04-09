@@ -1,12 +1,12 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { putSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
+import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
 import { Client, userItemToDocument } from "./client";
 import { putItem } from "../../lib/dynamoDb";
 
 export const makePutSearchObject = (
   client: Client,
   tableName: string
-): putSearchObjectFn => {
+): PutSearchObjectFn => {
   return async (logger, searchObject) => {
     const result = await putItem(
       client,

@@ -1,5 +1,5 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
-import { Either, isLeft, left, right } from "fp-ts/lib/Either";
+import { Either, left, right } from "fp-ts/lib/Either";
 import { makeGetKeywordData } from "../../adapters/keywordStore/getKeywordData";
 import { unknownToUserItem } from "../../adapters/userStore/client";
 import { SearchObject, UserData, UserItem } from "../../domain/models/userItem";
@@ -16,9 +16,14 @@ import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSear
 import { GetKeywordDataFn } from "../../domain/ports/keywordStore/getKeywordData";
 import { UpdateKeywordDataFn } from "../../domain/ports/keywordStore/updateKeywordData";
 import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
-import _ from "lodash";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { propagateSearchObjectUpdated } from "../../domain/controllers/propagateSearchObjectUpdated";
+import { eitherListToDefaultOk } from "../../domain/ports/shared";
+import { propagateUserDataChanged } from "../../domain/controllers/propagateUserDataChanged";
+import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearchObjectsForUser";
+import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
+import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 
 const config = getConfig();
 const logger = getLogger();
@@ -37,6 +42,14 @@ export const handler = async (event: DynamoDBStreamEvent) => {
       config.keywordsTableName
     ),
     getSearchObjectsForKeywordFn: makeGetSearchObjectsForKeyword(
+      userStoreClient,
+      config.usersTableName
+    ),
+    getSearchObjectsForUserFn: makeGetSearchObjectsForUser(
+      userStoreClient,
+      config.usersTableName
+    ),
+    putSearchObjectFn: makePutSearchObject(
       userStoreClient,
       config.usersTableName
     ),
@@ -111,10 +124,7 @@ export const handler = async (event: DynamoDBStreamEvent) => {
     })
   );
 
-  if (_.some(results, (result) => isLeft(result))) {
-    return left("ERROR");
-  }
-  return right("OK");
+  return eitherListToDefaultOk(results);
 };
 
 export const lambdaHandler = defaultMiddlewareStack(handler);
@@ -130,19 +140,20 @@ type HandleUserItem<T extends UserItem> = (
     getKeywordDataFn: GetKeywordDataFn;
     updateKeywordDataFn: UpdateKeywordDataFn;
     getSearchObjectsForKeywordFn: GetSearchObjectsForKeywordFn;
+    getSearchObjectsForUserFn: GetSearchObjectsForUserFn;
+    putSearchObjectFn: PutSearchObjectFn;
   },
   recordData: UserItemRecordData<T>
 ) => Promise<Either<"ERROR", "OK">>;
 
-const handleUserData: HandleUserItem<UserData> = async (logger, recordData) => {
+const handleUserData: HandleUserItem<UserData> = async (deps, recordData) => {
   switch (recordData.eventName) {
     case "MODIFY": {
       if (
         recordData.oldItem.nofSearchObjects !=
         recordData.newItem.nofSearchObjects
       ) {
-        // await applyNofSearchObjectsChange(logger, recordData.newItem);
-        return right("OK");
+        return await propagateUserDataChanged(deps, recordData.newItem);
       }
       break;
     }
@@ -169,10 +180,7 @@ const handleSearchObject: HandleUserItem<SearchObject> = async (
           propagateSearchObjectUpdated(deps, recordData.newItem),
         ]);
 
-        if (_.some(results, (result) => isLeft(result))) {
-          return left("ERROR");
-        }
-        return right("OK");
+        return eitherListToDefaultOk(results);
       } else {
         await propagateSearchObjectUpdated(deps, recordData.newItem);
       }

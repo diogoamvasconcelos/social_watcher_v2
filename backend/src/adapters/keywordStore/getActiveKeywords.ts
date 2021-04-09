@@ -12,7 +12,8 @@ export const makeGetActiveKeywords = (
       {
         TableName: tableName,
         IndexName: "gsi1",
-        KeyConditionExpression: "gsi1pk = :gsi1pk",
+        KeyConditionExpression: "#gsi1pk = :gsi1pk",
+        ExpressionAttributeNames: { "#gsi1pk": "gsi1pk" },
         ExpressionAttributeValues: {
           ":gsi1pk": toGSI1PK(socialMedia),
         },

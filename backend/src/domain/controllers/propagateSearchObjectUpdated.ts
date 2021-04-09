@@ -1,4 +1,4 @@
-import { isLeft, left, right } from "fp-ts/lib/Either";
+import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { Logger } from "../../lib/logger";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
@@ -7,7 +7,7 @@ import { socialMedias } from "../models/socialMedia";
 import { SearchObject } from "../models/userItem";
 import { GetKeywordDataFn } from "../ports/keywordStore/getKeywordData";
 import { UpdateKeywordDataFn } from "../ports/keywordStore/updateKeywordData";
-import { DefaultOkReturn } from "../ports/shared";
+import { DefaultOkReturn, eitherListToDefaultOk } from "../ports/shared";
 import { GetSearchObjectsForKeywordFn } from "../ports/userStore/getSearchObjectsForKeyword";
 
 export const propagateSearchObjectUpdated = async (
@@ -108,8 +108,5 @@ export const propagateSearchObjectUpdated = async (
     })
   );
 
-  if (_.some(results, (result) => isLeft(result))) {
-    return left("ERROR");
-  }
-  return right("OK");
+  return eitherListToDefaultOk(results);
 };

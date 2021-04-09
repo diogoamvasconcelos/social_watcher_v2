@@ -110,7 +110,8 @@ export const deleteUser = async ({
       dynamoDbClient,
       {
         TableName: config.usersTableName,
-        KeyConditionExpression: "pk = :pk",
+        KeyConditionExpression: "#pk = :pk",
+        ExpressionAttributeNames: { "#pk": "pk" },
         ExpressionAttributeValues: {
           ":pk": id,
         },
