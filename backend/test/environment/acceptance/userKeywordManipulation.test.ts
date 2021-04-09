@@ -87,7 +87,6 @@ describe("keyword interaction between multiple users", () => {
       index: 0,
       twitterStatus: "ENABLED",
     });
-
     await updateKeyword({
       token: userBToken,
       keyword: theKeyword,
@@ -156,7 +155,6 @@ describe("keyword interaction between multiple users", () => {
       index: 0,
       twitterStatus: "ENABLED",
     });
-
     await updateKeyword({
       token: userBToken,
       keyword: theKeyword,
@@ -178,7 +176,6 @@ describe("keyword interaction between multiple users", () => {
       status: "ACTIVE",
       exists: true,
     });
-
     await checkKeyword({
       keyword: anotherKeyword,
       socialMedia: "twitter",
@@ -200,7 +197,6 @@ describe("keyword interaction between multiple users", () => {
       status: "INACTIVE",
       exists: true,
     });
-
     await checkKeyword({
       keyword: anotherKeyword,
       socialMedia: "twitter",
