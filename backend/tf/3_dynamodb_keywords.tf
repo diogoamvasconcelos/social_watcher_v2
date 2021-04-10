@@ -3,7 +3,6 @@ resource "aws_dynamodb_table" "keywords" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "pk"
   range_key    = "sk"
-
   attribute {
     name = "pk"
     type = "S"

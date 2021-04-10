@@ -1,4 +1,8 @@
+- have prod seperate AWS account
+  - prefix resources with {env} to avoid errors
+  - allow seperate config for prod (encription?, bigger ES, etc)
 - have `ci_deploy_main` and `ci_deploy_branch` scripts
+- use github actions to build?
 - have DLQ alarms
 - have DLQ tools
 - have apigw 500 alarms
@@ -6,3 +10,4 @@
 - improve the cognito hosted UI - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html
   - host in my domain
   - make it look nicer
+- add encryption-at-rest to dynamo,sqs,es,etc (might be expensive on KMS)

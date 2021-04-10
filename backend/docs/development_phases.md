@@ -56,11 +56,7 @@
 - congnito
   - auth <DONE>
   - create user <DONE>
-  - confirm user
-  - change password
-  - recover password
-  - delete user (?)
-  - login / token
+  - login / token <DONE>
     - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html
 - apigw handler
   - middlewares <DONE>
@@ -68,29 +64,23 @@
   - env tests (axios client)
     - test user credentials <DONE>
 - userDB
-  - ddbstream
-    - activate/deactivate keywords
+  - ddbstream <DONE>
+    - activate/deactivate keywords <DONE>
 - API - REST
-  - POST user/id/delete (?)
-  - POST user/id/keyword (add new keyword)
-  - GET/UPDATE user/id/keyword/id (get/update keyword data)
-  - GET user/id (user data with keyword list)
-  - POST result/search
-
-todo:
-
-- add DLQ for dbstream consumer
-- errorMiddleware throw error
-  - write test
+  - POST user/id/keyword (add new keyword) <DONE>
+  - GET user/id (user data with keyword list) <DONE>
 
 # Phase 4 - Sync searchResults to ElasticSearch (1 week)
 
-- deploy ES (on VPC)
-  - env setup
+- deploy ES (not on a VPC) <DONE>
+  - env setup <SKIP>
+- with_es_local script
 - create ES utils
   - auth and kibana access
   - add/update index (use alias!)
 - create nice ES lib
+- sync to ES
+  - stream consumer -> SQS -> syncToEs -> ES
 
 # Phase 5 - Search Results endpoint (1 week)
 
