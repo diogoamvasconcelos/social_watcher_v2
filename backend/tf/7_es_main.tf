@@ -1,3 +1,5 @@
+# https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-bp.html <- nice for prod
+
 resource "aws_elasticsearch_domain" "main" {
   domain_name = "main"
   # https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html

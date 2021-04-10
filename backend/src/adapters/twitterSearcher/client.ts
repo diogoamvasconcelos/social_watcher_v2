@@ -15,6 +15,6 @@ export const outToDomain = (
   socialMedia: "twitter",
   id: out.id,
   keyword,
-  happened_at: out.created_at,
+  happenedAt: out.created_at,
   data: out,
 });

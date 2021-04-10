@@ -23,13 +23,13 @@ export const searchResultDocCodec = t.intersection([
 export type SearchResultDoc = t.TypeOf<typeof searchResultDocCodec>;
 
 export const toDocKeys = (
-  { socialMedia, id, keyword, happened_at }: SearchResult,
+  { socialMedia, id, keyword, happenedAt }: SearchResult,
   index: number = 0
 ) => ({
   pk: `${socialMedia}|${id}`,
   sk: index.toString(),
   gsi1pk: keyword,
-  gsi1sk: happened_at.toISOString(),
+  gsi1sk: happenedAt.toISOString(),
 });
 
 export const searchResultToDocument = (domainItem: SearchResult) => {

@@ -19,3 +19,7 @@ common:
 local:
   DYNAMODB_PORT: 8000
   DYNAMODB_URL: http://localhost:8000
+  MAIN_ELASTIC_SEARCH_URL: http://localhost:9200
+
+dev:
+  MAIN_ELASTIC_SEARCH_URL: search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com

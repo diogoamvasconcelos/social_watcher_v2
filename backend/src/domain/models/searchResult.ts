@@ -6,7 +6,7 @@ import { DateFromISOString } from "io-ts-types/DateFromISOString";
 export const searchResultMetadaCodec = t.type({
   id: t.string,
   keyword: keywordCodec,
-  happened_at: DateFromISOString,
+  happenedAt: DateFromISOString,
 });
 
 export const twitterSearchResultCodec = t.intersection([
@@ -15,7 +15,7 @@ export const twitterSearchResultCodec = t.intersection([
     socialMedia: t.literal("twitter"),
     data: t.intersection([
       searchRecentResponseDataCodec,
-      t.partial({ translatedText: t.string }), // can't use optional here because the type that is created doens't do the "?"
+      t.partial({ translatedText: t.string }),
     ]),
   }),
 ]);

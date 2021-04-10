@@ -27,6 +27,7 @@ export const getConfig = () => {
     keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
     searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
     searchJobQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),
+    mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
   };
 };
 

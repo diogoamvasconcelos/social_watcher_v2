@@ -11,3 +11,4 @@
   - host in my domain
   - make it look nicer
 - add encryption-at-rest to dynamo,sqs,es,etc (might be expensive on KMS)
+- point-in-time recovery on ddb

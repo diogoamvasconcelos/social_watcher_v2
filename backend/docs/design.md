@@ -39,5 +39,5 @@
 
   - index can be used to add more aggregated data from some post-processing (not sure what yet)
 
-- gsi1pk: keyword & sk: happened_at
+- gsi1pk: keyword & sk: happenedAt
   - could be useful for getting all results for a certain keyword (no use case yet``ß)

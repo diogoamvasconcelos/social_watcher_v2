@@ -15,7 +15,9 @@
     "audit": "npm audit"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^7.12.0",
     "aws": "0.0.3-2",
+    "aws-elasticsearch-connector": "^9.0.3",
     "aws-sdk": "^2.867.0",
     "axios": "^0.21.1",
     "deepmerge": "^4.2.2",
@@ -41,6 +43,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
+    "amazon-elasticsearch-proxy": "^0.1.5",
     "babel-jest": "^26.6.3",
     "commander": "^7.2.0",
     "eslint": "^7.22.0",
