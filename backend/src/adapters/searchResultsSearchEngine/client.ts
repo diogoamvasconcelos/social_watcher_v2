@@ -13,10 +13,10 @@ import { SEARCH_RESULT_SCHEMA } from "./schemas";
 export const getClient = getElasticsearchClient;
 export type Client = ReturnType<typeof getClient>;
 
-export const searchResultIndexAlias = "search-result";
+export const searchResultIndexAlias = "search_result";
 
 export const getSearchResultIndexName = (version: PositiveInteger) =>
-  `${searchResultIndexAlias}-v${version}`;
+  `${searchResultIndexAlias}_v${version}`;
 export const getSearchResultSchema = (version: PositiveInteger) =>
   SEARCH_RESULT_SCHEMA[`v${version}`];
 

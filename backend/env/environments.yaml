@@ -15,6 +15,7 @@ common:
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
   COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
+  SEARCH_RESULT_INDEX_VERSION: 1
 
 local:
   DYNAMODB_PORT: 8000
@@ -22,4 +23,4 @@ local:
   MAIN_ELASTIC_SEARCH_URL: http://localhost:9200
 
 dev:
-  MAIN_ELASTIC_SEARCH_URL: search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com
+  MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com

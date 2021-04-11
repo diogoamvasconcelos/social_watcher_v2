@@ -1,3 +1,7 @@
+import * as t from "io-ts";
+import { isLeft } from "fp-ts/lib/Either";
+import { decode, positiveInteger } from "./iots";
+
 export const ensure = (name: string): string => {
   const value = process.env[name];
   if (value == null) {
@@ -7,8 +11,7 @@ export const ensure = (name: string): string => {
   return value;
 };
 
-/*
-const ensureAndDecode<A>(name: string, codec: t.Decoder<unknown, A>): A => {
+const ensureAndDecode = <A>(name: string, codec: t.Decoder<unknown, A>): A => {
   const value = process.env[name] ?? "";
   const decodeResult = decode(codec, JSON.parse(value));
 
@@ -16,9 +19,8 @@ const ensureAndDecode<A>(name: string, codec: t.Decoder<unknown, A>): A => {
     throw Error(`Unexpected value environment variable ${name}:\n ${value}`);
   }
 
-  return decodeResult.right
-}
-*/
+  return decodeResult.right;
+};
 
 export const getConfig = () => {
   return {
@@ -28,6 +30,10 @@ export const getConfig = () => {
     searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
     searchJobQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),
     mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
+    searchResultIndexVersion: ensureAndDecode(
+      "SEARCH_RESULT_INDEX_VERSION",
+      positiveInteger
+    ),
   };
 };
 

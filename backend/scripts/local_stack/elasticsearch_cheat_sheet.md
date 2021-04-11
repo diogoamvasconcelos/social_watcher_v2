@@ -44,3 +44,9 @@ curl -X GET "localhost:9200/customer/_search?pretty" -H 'Content-Type: applicati
 }
 ' | jq
 ```
+
+## Get index mapping
+
+```
+curl -X GET "localhost:9200/my-index-000001/_mapping?pretty" | jq
+```
