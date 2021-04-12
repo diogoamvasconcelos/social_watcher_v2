@@ -74,13 +74,14 @@
 
 - deploy ES (not on a VPC) <DONE>
   - env setup <SKIP>
-- with_es_local script
+- with_es_local script <DONE>
 - create ES utils
-  - auth and kibana access
-  - add/update index (use alias!)
-- create nice ES lib
+  - auth and kibana access <DONE>
+  - add/update index (use alias!) <HALF_DONE>
+- create nice ES lib <DONE>
 - sync to ES
-  - stream consumer -> SQS -> syncToEs -> ES
+  - stream consumer -> SQS -> syncToEs -> ES <DONE>
+  - env test (add messages to SQS, check that are in ES)
 
 # Phase 5 - Search Results endpoint (1 week)
 

@@ -31,7 +31,7 @@ resource "aws_cloudwatch_log_group" "users_stream_consumer" {
   tags = local.tags
 }
 
-resource "aws_lambda_event_source_mapping" "user_stream_consumer" {
+resource "aws_lambda_event_source_mapping" "users_stream_consumer" {
   event_source_arn  = aws_dynamodb_table.users.stream_arn
   function_name     = aws_lambda_function.users_stream_consumer.arn
   starting_position = "LATEST"

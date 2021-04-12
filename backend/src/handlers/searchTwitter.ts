@@ -25,8 +25,6 @@ const config = getConfig();
 const logger = getLogger();
 
 const handler = async (event: SQSEvent) => {
-  logger.info(`Recieved ${event.Records.length} twitter search jobs`);
-
   const twitterCredentials = await getTwitterCredentials(
     getSsmClient(),
     logger
@@ -55,7 +53,7 @@ const handler = async (event: SQSEvent) => {
       if (isLeft(searchResults)) {
         throw new Error("Failed to search Twitter");
       }
-      logger.info(
+      logger.debug(
         `Found ${searchResults.right.length} twits for: ${decodeResult.right.keyword}`
       );
 

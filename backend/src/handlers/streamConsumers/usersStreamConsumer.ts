@@ -124,7 +124,7 @@ export const handler = async (event: DynamoDBStreamEvent) => {
     })
   );
 
-  return eitherListToDefaultOk(results);
+  fromEither(await eitherListToDefaultOk(results));
 };
 
 export const lambdaHandler = defaultMiddlewareStack(handler);

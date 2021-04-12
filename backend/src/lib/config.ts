@@ -37,6 +37,9 @@ export const getConfig = () => {
       "SEARCH_RESULT_INDEX_VERSION",
       positiveInteger
     ),
+    syncSearchResultsToEsQueueUrl: ensure(
+      "SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL"
+    ),
   };
 };
 

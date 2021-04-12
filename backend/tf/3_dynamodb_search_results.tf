@@ -28,5 +28,8 @@ resource "aws_dynamodb_table" "search_results" {
     projection_type = "ALL"
   }
 
+  stream_enabled   = true
+  stream_view_type = "NEW_IMAGE"
+
   tags = local.tags
 }
