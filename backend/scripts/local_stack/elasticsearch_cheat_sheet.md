@@ -23,7 +23,7 @@ curl -X PUT "localhost:9200/customer/_doc/1?pretty" -H 'Content-Type: applicatio
 ## Get document
 
 ```
-curl -X GET "localhost:9200/customer/_doc/1?pretty" | jq
+curl -X GET "localhost:9200/search_result/_doc/1?pretty" | jq
 ```
 
 ## Check indices
@@ -35,11 +35,11 @@ curl "localhost:9200/_cat/indices?v=true"
 ## Search
 
 ```
-curl -X GET "localhost:9200/customer/_search?pretty" -H 'Content-Type: application/json' -d'
+curl -X GET "localhost:9200/search_result/_search?pretty" -H 'Content-Type: application/json' -d'
 {
   "query": { "match_all": {} },
   "sort": [
-    { "account_number": "asc" }
+    { "happenedAt": "desc" }
   ]
 }
 ' | jq
@@ -48,5 +48,11 @@ curl -X GET "localhost:9200/customer/_search?pretty" -H 'Content-Type: applicati
 ## Get index mapping
 
 ```
-curl -X GET "localhost:9200/my-index-000001/_mapping?pretty" | jq
+curl -X GET "localhost:9200/search_result/_mapping?pretty" | jq
+```
+
+## Get index stats (nof docs, etc)
+
+```
+curl -X GET "localhost:9200/search_result/_stats?pretty" | jq
 ```

@@ -1,3 +1,7 @@
+import { PartialDeep } from "type-fest";
+import { SearchResult } from "../../src/domain/models/searchResult";
+import { deepmergeSafe } from "../../src/lib/deepmerge";
+import { decode, fromEither, lowerCase } from "../../src/lib/iots";
 import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
@@ -29,4 +33,28 @@ export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {
       },
     })),
   };
+};
+
+export const buildSearchResult = (
+  partial?: PartialDeep<SearchResult>
+): SearchResult => {
+  const now = new Date();
+  const id = uuid();
+  return deepmergeSafe(
+    {
+      id,
+      keyword: fromEither(decode(lowerCase, uuid())),
+      socialMedia: "twitter",
+      happenedAt: now,
+      data: {
+        id,
+        text: "some-text",
+        created_at: now,
+        conversation_id: "conversation-id",
+        author_id: "author_id",
+        lang: "en",
+      },
+    },
+    partial ?? {}
+  );
 };

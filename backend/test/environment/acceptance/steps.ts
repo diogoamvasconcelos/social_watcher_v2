@@ -21,7 +21,6 @@ import {
 } from "../../../src/lib/dynamoDb";
 import { makeGetUser } from "../../../src/adapters/userStore/getUser";
 import { SubscriptionData, UserId } from "../../../src/domain/models/user";
-import deepmerge from "deepmerge";
 import _ from "lodash";
 import {
   toUserDataDocKeys,
@@ -39,6 +38,7 @@ import { isLeft, isRight } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
 import { toDocPrimaryKeys } from "../../../src/adapters/keywordStore/client";
+import { deepmergeSafe } from "../../../src/lib/deepmerge";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -184,7 +184,7 @@ export const updateUserSubscription = async ({
       .promise()
   ).Item;
 
-  const updatedUserItem = deepmerge(userDataItem ?? {}, updatedData);
+  const updatedUserItem = deepmergeSafe(userDataItem ?? {}, updatedData);
 
   await dynamoDbClient
     .put({

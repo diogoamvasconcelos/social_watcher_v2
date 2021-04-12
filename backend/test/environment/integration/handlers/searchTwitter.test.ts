@@ -1,6 +1,7 @@
-import deepmerge from "deepmerge";
+import { PartialDeep } from "type-fest";
 import { TwitterSearchJob } from "../../../../src/domain/models/searchJobs";
-import { fromEither } from "../../../../src/lib/iots";
+import { deepmergeSafe } from "../../../../src/lib/deepmerge";
+import { decode, fromEither, lowerCase } from "../../../../src/lib/iots";
 import { buildSQSEvent } from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";
@@ -24,11 +25,14 @@ describe("handler/searchTwitter", () => {
 });
 
 const buildTwitterSearchJobEvent = (
-  partialJob: Partial<TwitterSearchJob> = {}
+  partialJob: PartialDeep<TwitterSearchJob> = {}
 ) => {
-  const searchJob: TwitterSearchJob = deepmerge(partialJob, {
-    socialMedia: "twitter",
-    keyword: "diogo vasconcelos",
-  });
+  const searchJob: TwitterSearchJob = deepmergeSafe(
+    {
+      socialMedia: "twitter",
+      keyword: fromEither(decode(lowerCase, "diogo vasconcelos")),
+    },
+    partialJob
+  );
   return buildSQSEvent([searchJob]);
 };

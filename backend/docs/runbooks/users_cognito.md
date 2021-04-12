@@ -10,13 +10,13 @@ scripts/with_env.js 'aws cognito-idp list-users --user-pool-id $COGNITO_USER_POO
 # sign-up user
 
 ```
-scripts/with_env.js 'aws cognito-idp sign-up --client-id $COGNITO_CLIENT_ID --password socialwatcherpw --username deon09+test02@gmail.com' | jq .
+scripts/with_env.js 'aws cognito-idp sign-up --client-id $COGNITO_CLIENT_ID --password socialwatcherpw --username deon09+test01@gmail.com' | jq .
 ```
 
 # confirm user
 
 ```
-scripts/with_env.js 'aws cognito-idp confirm-sign-up --client-id $COGNITO_CLIENT_ID --username deon09+test02@gmail.com --confirmation-code 683460' | jq .
+scripts/with_env.js 'aws cognito-idp confirm-sign-up --client-id $COGNITO_CLIENT_ID --username deon09+test01@gmail.com --confirmation-code 108542' | jq .
 ```
 
 # sign in user

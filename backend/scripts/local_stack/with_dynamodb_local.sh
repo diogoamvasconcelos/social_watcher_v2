@@ -14,6 +14,7 @@ function main() {
 
   docker-compose \
     -f $DOCKER_COMPOSE_FILE \
+    -p "DYNAMODB_LOCAL" \
     up --detach
 
   echo "Running the following command: $@"

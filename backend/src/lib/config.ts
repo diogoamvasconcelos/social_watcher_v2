@@ -11,7 +11,10 @@ export const ensure = (name: string): string => {
   return value;
 };
 
-const ensureAndDecode = <A>(name: string, codec: t.Decoder<unknown, A>): A => {
+export const ensureAndDecode = <A>(
+  name: string,
+  codec: t.Decoder<unknown, A>
+): A => {
   const value = process.env[name] ?? "";
   const decodeResult = decode(codec, JSON.parse(value));
 

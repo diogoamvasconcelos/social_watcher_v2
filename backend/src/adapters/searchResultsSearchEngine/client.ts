@@ -1,5 +1,5 @@
-import { isLeft, right } from "fp-ts/lib/Either";
-import { left } from "fp-ts/lib/These";
+import * as t from "io-ts";
+import { isLeft, right, left } from "fp-ts/lib/Either";
 import {
   addAliasToIndex,
   createIndex,
@@ -9,6 +9,10 @@ import {
 import { PositiveInteger } from "../../lib/iots";
 import { Logger } from "../../lib/logger";
 import { SEARCH_RESULT_SCHEMA } from "./schemas";
+import {
+  SearchResult,
+  searchResultMetadaCodec,
+} from "../../domain/models/searchResult";
 
 export const getClient = getElasticsearchClient;
 export type Client = ReturnType<typeof getClient>;
@@ -37,7 +41,7 @@ export const createSearchResultIndex = async (
   }
 
   if (existsEither.right) {
-    return right("ALREADY_EXISTS");
+    return left("ALREADY_EXISTS");
   }
 
   const createEither = await createIndex(
@@ -58,5 +62,22 @@ export const createSearchResultIndex = async (
     return left("ERROR");
   }
 
-  return right("OK");
+  return right({ name: indexName, alias: searchResultIndexAlias });
+};
+
+export const searchResultEsDocumentCodec = t.intersection([
+  searchResultMetadaCodec,
+  t.type({ data: t.string }),
+]);
+export type SearchResultEsDocument = t.TypeOf<
+  typeof searchResultEsDocumentCodec
+>;
+
+export const searchResultToEsDocument = (
+  domainItem: SearchResult
+): SearchResultEsDocument => {
+  return {
+    ...domainItem,
+    data: JSON.stringify(domainItem.data),
+  };
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import deepmerge from "deepmerge";
+import { deepmergeSafe } from "./deepmerge";
 import { fromEither } from "./iots";
 import { Client, searchRecent, SearchRecentResponse } from "./twitter";
 
@@ -48,11 +48,11 @@ const makeTwitterResponse = ({
 } = {}) => {
   return {
     data: [
-      deepmerge(
+      deepmergeSafe(
         {
           id: "some-id",
           text: "some-text",
-          created_at: new Date(Date.now()).toISOString(),
+          created_at: (new Date().toISOString() as unknown) as Date,
           conversation_id: "conversation#0",
           author_id: "author#0",
           lang: "en",
@@ -60,7 +60,7 @@ const makeTwitterResponse = ({
         partialData ?? {}
       ),
     ],
-    meta: deepmerge(
+    meta: deepmergeSafe(
       {
         result_count: 1,
         next_token: "next-token-id",

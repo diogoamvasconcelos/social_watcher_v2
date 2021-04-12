@@ -1,8 +1,14 @@
-import { ensure } from "../../src/lib/config";
+import { ensure, ensureAndDecode } from "../../src/lib/config";
+import { positiveInteger } from "../../src/lib/iots";
 
 export const getLocalTestConfig = () => {
   return {
     dynamoDbUrl: ensure("DYNAMODB_URL"),
+    mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
+    searchResultIndexVersion: ensureAndDecode(
+      "SEARCH_RESULT_INDEX_VERSION",
+      positiveInteger
+    ),
   };
 };
 

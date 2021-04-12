@@ -2,7 +2,8 @@ import * as AWS from "aws-sdk";
 import { Client } from "@elastic/elasticsearch";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
 import { Logger } from "../logger";
-import { left, right } from "fp-ts/lib/Either";
+import { Either, left, right } from "fp-ts/lib/Either";
+import { JsonObjectEncodable } from "../models/jsonEncodable";
 
 const isLocalHost = (url?: string) => {
   return url?.includes("localhost");
@@ -47,6 +48,22 @@ export const createIndex = async (
   }
 };
 
+export const deleteIndex = async (
+  logger: Logger,
+  client: Client,
+  name: string
+) => {
+  try {
+    await client.indices.delete({
+      index: name,
+    });
+    return right("OK");
+  } catch (error) {
+    logger.error(`Failed to delete index with name=${name}`, { error });
+    return left("ERROR");
+  }
+};
+
 export const indexExists = async (
   logger: Logger,
   client: Client,
@@ -82,6 +99,52 @@ export const addAliasToIndex = async (
     return right("OK");
   } catch (error) {
     logger.error(`Failed to add alias to index (${indexName})`, {
+      error,
+    });
+    return left("ERROR");
+  }
+};
+
+export const bulkIndex = async (
+  logger: Logger,
+  client: Client,
+  {
+    indexName,
+    items,
+  }: {
+    indexName: string;
+    items: { id: string; data: JsonObjectEncodable }[];
+  }
+): Promise<Either<"ERROR", "OK">> => {
+  try {
+    const requestBody = items.flatMap((item) => [
+      {
+        index: {
+          _index: indexName,
+          _id: item.id,
+        },
+      },
+      item.data,
+    ]);
+
+    const response = await client.bulk({ body: requestBody });
+
+    logger.debug("Elasticsearch bulk index request/response", {
+      requestBody,
+      response: (response as unknown) as JsonObjectEncodable,
+    });
+
+    if (response.body.errors) {
+      logger.error("Elasticsearch bulk index failed", {
+        response: (response as unknown) as JsonObjectEncodable,
+      });
+
+      return left("ERROR");
+    }
+
+    return right("OK");
+  } catch (error) {
+    logger.error(`Failed to bulk index to index (${indexName})`, {
       error,
     });
     return left("ERROR");
