@@ -9,13 +9,14 @@ function clean_up() {
 
 function main() {
   THIS_PATH="$(dirname "$(realpath "$0")")"
-  DOCKER_COMPOSE_FILE=$THIS_PATH/elasticsearch_docker_compose.yaml
+  DOCKER_COMPOSE_FILE=$THIS_PATH/docker_compose/elasticsearch_local/docker-compose.yaml
   echo "Starting docker_compose with $DOCKER_COMPOSE_FILE"
 
   docker-compose \
     -f $DOCKER_COMPOSE_FILE \
-    -p "ELASTICSEARCH_LOCAL" \
     up --detach
+
+  $THIS_PATH/docker_compose/elasticsearch_local/es-healthy.sh elasticsearch-local
 
   echo "Running the following command: $@"
   $@

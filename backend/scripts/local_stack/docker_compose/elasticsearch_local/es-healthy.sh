@@ -9,31 +9,20 @@ print_error() {
   >&2 echo "${command}: error: ${msg}"
 }
 
-has_docker_compose() {
-  [[ -f *compose.yml || -f *compose.yaml ]]
-}
-
 docker_compose_container_id() {
   docker-compose ps -q "$1"
 }
 
 container_exists() {
-  if has_docker_compose
-  then
-    docker-compose ps --services --filter status=running | grep -q "$1"
-  else
-    container_id_exists "$1" \
-      || container_name_exists "$1"
-  fi
+  docker-compose ps --services --filter status=running | grep -q "$1"
 }
 
 wait_for_container() {
   local container container_id timeout
   container="$1"
   timeout="$2"
-  container_id="${container}"
 
-  has_docker_compose && container_id="$(docker_compose_container_id "${container}")"
+  container_id="$(docker_compose_container_id "${container}")"
 
   >&2 echo -n "Waiting for ${container} to start..."
   wait_time=0
@@ -66,9 +55,7 @@ wait_for_healthy() {
   local container container_id timeout wait_time
   container="$1"
   timeout="$2"
-  container_id="${container}"
-
-  has_docker_compose && container_id="$(docker_compose_container_id "${container}")"
+  container_id="$(docker_compose_container_id "${container}")"
 
   >&2 echo -n "Waiting for ${container} to be healthy..."
   wait_time=0
@@ -127,12 +114,15 @@ container_keeps_failing() {
 
 container_healthy() {
   local address
-  address=$(docker inspect Elasticsearch-local -f '{{range $k, $v := .NetworkSettings.Ports}}{{printf "%s\n" $v}}{{end}}' | head -n1 | sed 's/^..//' | sed 's/..$//' | sed -e 's/\s\+/:/g')
+  address=$(docker inspect elasticsearch-local -f '{{range $k, $v := .NetworkSettings.Ports}}{{printf "%s\n" $v}}{{end}}' | head -n1 | sed 's/^..//' | sed 's/..$//' | sed -e 's/\s\+/:/g')
 
   curl -s ${address} 2>&1 > /dev/null
 }
 
 main() {
+  THIS_PATH="$(dirname "$(realpath "$0")")"
+  cd $THIS_PATH
+
   local timeout wait_time
   timeout=180
 

@@ -9,12 +9,11 @@ function clean_up() {
 
 function main() {
   THIS_PATH="$(dirname "$(realpath "$0")")"
-  DOCKER_COMPOSE_FILE=$THIS_PATH/dynamodb_docker_compose.yaml
+  DOCKER_COMPOSE_FILE=$THIS_PATH/docker_compose/dynamodb_local/docker-compose.yaml
   echo "Starting docker_compose with $DOCKER_COMPOSE_FILE"
 
   docker-compose \
     -f $DOCKER_COMPOSE_FILE \
-    -p "DYNAMODB_LOCAL" \
     up --detach
 
   echo "Running the following command: $@"

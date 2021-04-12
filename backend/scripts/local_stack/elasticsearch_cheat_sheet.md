@@ -45,6 +45,19 @@ curl -X GET "localhost:9200/search_result/_search?pretty" -H 'Content-Type: appl
 ' | jq
 ```
 
+```
+curl -X GET "localhost:9200/search_result/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "query_string": {
+      "query": "Unique #0da9cd9d-bc80-4cc9-9837-5fdbea9aed3c",
+      "default_field": "data"
+    }
+  }
+}
+' | jq
+```
+
 ## Get index mapping
 
 ```

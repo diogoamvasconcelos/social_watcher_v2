@@ -3,14 +3,20 @@ import {
   getClient,
 } from "../../../../../src/adapters/searchResultsSearchEngine/client";
 import { makeIndexSearchResults } from "../../../../../src/adapters/searchResultsSearchEngine/indexSearchResults";
+import { makeSearchSearchResults } from "../../../../../src/adapters/searchResultsSearchEngine/searchSearchResults";
 import { SearchResult } from "../../../../../src/domain/models/searchResult";
-import { deleteIndex } from "../../../../../src/lib/elasticsearch/client";
+import {
+  deleteIndex,
+  refreshIndices,
+} from "../../../../../src/lib/elasticsearch/client";
 import {
   decode,
   fromEither,
+  lowerCase,
   positiveInteger,
 } from "../../../../../src/lib/iots";
 import { getLogger } from "../../../../../src/lib/logger";
+import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
 
@@ -19,6 +25,7 @@ const logger = getLogger();
 const client = getClient(config.mainElasticSearchUrl);
 
 const indexSearchResultsFn = makeIndexSearchResults(client);
+const searchSearchResultsFn = makeSearchSearchResults(client);
 
 let indexName: string;
 
@@ -33,21 +40,26 @@ describe("indexSearchResults", () => {
   });
 
   it("can index searcResults", async () => {
+    const keyword = fromEither(decode(lowerCase, uuid()));
     const searchResults: SearchResult[] = [
-      buildSearchResult(),
-      buildSearchResult(),
+      buildSearchResult({ keyword }),
+      buildSearchResult({ keyword }),
     ];
 
     const indexResult = fromEither(
       await indexSearchResultsFn(logger, searchResults)
     );
 
-    const searchResult = fromEither(await searchSearchResultsFn(logger));
+    await refreshIndices(client);
+    const searchResult = fromEither(
+      await searchSearchResultsFn(logger, keyword)
+    );
 
     expect(indexResult).toEqual("OK");
+    expect(searchResult).toEqual(searchResults);
   });
 
   afterEach(async () => {
-    fromEither(await deleteIndex(logger, client, indexName));
+    fromEither(await deleteIndex({ logger, client }, indexName));
   });
 });

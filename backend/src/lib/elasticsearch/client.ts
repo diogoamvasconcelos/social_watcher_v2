@@ -2,8 +2,9 @@ import * as AWS from "aws-sdk";
 import { Client } from "@elastic/elasticsearch";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
 import { Logger } from "../logger";
-import { Either, left, right } from "fp-ts/lib/Either";
+import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "../models/jsonEncodable";
+import { applyTransformToItem } from "../iots";
 
 const isLocalHost = (url?: string) => {
   return url?.includes("localhost");
@@ -30,50 +31,57 @@ export type IndexSchema = {
   settings?: { index: Object };
 };
 
+type dependencies = {
+  logger: Logger;
+  client: Client;
+};
+
 export const createIndex = async (
-  logger: Logger,
-  client: Client,
-  name: string,
-  schema: IndexSchema
+  { logger, client }: dependencies,
+  {
+    indexName,
+    indexSchema,
+  }: {
+    indexName: string;
+    indexSchema: IndexSchema;
+  }
 ) => {
   try {
     await client.indices.create({
-      index: name,
-      body: schema,
+      index: indexName,
+      body: indexSchema,
     });
     return right("OK");
   } catch (error) {
-    logger.error(`Failed to create index with name=${name}`, { error });
+    logger.error(`Failed to create index with name=${indexName}`, { error });
     return left("ERROR");
   }
 };
 
 export const deleteIndex = async (
-  logger: Logger,
-  client: Client,
-  name: string
+  { logger, client }: dependencies,
+  indexName: string
 ) => {
   try {
     await client.indices.delete({
-      index: name,
+      index: indexName,
     });
     return right("OK");
   } catch (error) {
-    logger.error(`Failed to delete index with name=${name}`, { error });
+    logger.error(`Failed to delete index with name=${indexName}`, { error });
     return left("ERROR");
   }
 };
 
 export const indexExists = async (
-  logger: Logger,
-  client: Client,
-  name: string
+  { logger, client }: dependencies,
+  indexName: string
 ) => {
   try {
-    const result = await client.indices.exists({ index: name });
+    const result = await client.indices.exists({ index: indexName });
     return right(result.body);
   } catch (error) {
-    logger.error(`Failed to check if exists index with name=${name}`, {
+    logger.error(`Failed to check if exists index with name=${indexName}`, {
       error,
     });
     return left("ERROR");
@@ -81,8 +89,7 @@ export const indexExists = async (
 };
 
 export const addAliasToIndex = async (
-  logger: Logger,
-  client: Client,
+  { logger, client }: dependencies,
   {
     indexName,
     aliasName,
@@ -106,8 +113,7 @@ export const addAliasToIndex = async (
 };
 
 export const bulkIndex = async (
-  logger: Logger,
-  client: Client,
+  { logger, client }: dependencies,
   {
     indexName,
     items,
@@ -149,4 +155,68 @@ export const bulkIndex = async (
     });
     return left("ERROR");
   }
+};
+
+// Extend this type as needed
+// Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html#search-search-api-request-body
+export type RequestParamsSearch = {
+  body?: {
+    query?: {
+      bool?: {
+        must?: JsonObjectEncodable[];
+      };
+    };
+    sort?: Record<string, string>[];
+  };
+  from?: number;
+  size?: number;
+};
+
+export const search = async <T>(
+  { logger, client }: dependencies,
+  {
+    indexName,
+    searchParams,
+    transformFn,
+  }: {
+    indexName: string;
+    searchParams?: RequestParamsSearch;
+    transformFn: (item: unknown) => Either<string[], T>;
+  }
+): Promise<Either<"ERROR", T[]>> => {
+  try {
+    const searchResult = await client.search(searchParams);
+    if (searchResult.statusCode != 200) {
+      logger.error(`Search failed with statusCode=${searchResult.statusCode}`);
+      return left("ERROR");
+    }
+
+    const items: unknown[] = searchResult.body.hits.hits.map(
+      (h: { _source: unknown }) => h._source
+    );
+
+    logger.debug("search results", {
+      items: (items as unknown) as JsonObjectEncodable,
+    });
+
+    const transformedItems: T[] = [];
+    for (const item of items) {
+      const transformResult = applyTransformToItem(transformFn, item, logger);
+      if (isLeft(transformResult)) {
+        return transformResult;
+      }
+      transformedItems.push(transformResult.right);
+    }
+
+    return right(transformedItems);
+  } catch (error) {
+    logger.error(`Failed to search index (${indexName})`, {
+      error,
+    });
+    return left("ERROR");
+  }
+};
+
+export const refreshIndices = async (client: Client) => {
+  await client.indices.refresh();
 };

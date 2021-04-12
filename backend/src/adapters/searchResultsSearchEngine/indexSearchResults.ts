@@ -3,19 +3,22 @@ import {
   searchResultIndexAlias,
   searchResultToEsDocument,
 } from "./client";
-import { IndexSearchResultFn as IndexSearchResultsFn } from "../../domain/ports/searchResultsSearchEngine/indexSearchResults";
+import { IndexSearchResultsFn } from "../../domain/ports/searchResultsSearchEngine/indexSearchResults";
 import { bulkIndex } from "../../lib/elasticsearch/client";
 
 export const makeIndexSearchResults = (
   client: Client
 ): IndexSearchResultsFn => {
   return async (logger, searchResults) => {
-    return await bulkIndex(logger, client, {
-      indexName: searchResultIndexAlias,
-      items: searchResults.map((searchResult) => ({
-        id: searchResult.id,
-        data: searchResultToEsDocument(searchResult),
-      })),
-    });
+    return await bulkIndex(
+      { logger, client },
+      {
+        indexName: searchResultIndexAlias,
+        items: searchResults.map((searchResult) => ({
+          id: searchResult.id,
+          data: searchResultToEsDocument(searchResult),
+        })),
+      }
+    );
   };
 };

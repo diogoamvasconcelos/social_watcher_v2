@@ -59,8 +59,7 @@ export const queryItems = async <T>(
       cursor = result.LastEvaluatedKey;
     } while (cursor);
 
-    const transformedItems = [];
-
+    const transformedItems: T[] = [];
     for (const item of items) {
       const transformResult = applyTransformToItem(transformFn, item, logger);
       if (isLeft(transformResult)) {
