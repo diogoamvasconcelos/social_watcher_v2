@@ -14,7 +14,7 @@ import { throwUnexpectedCase } from "../../lib/runtime";
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
 
-export const userItemDocCodec = t.intersection([
+export const userItemDocumentCodec = t.intersection([
   userItemCodec,
   t.type({
     pk: t.string,
@@ -25,25 +25,25 @@ export const userItemDocCodec = t.intersection([
     gsi1sk: t.string,
   }),
 ]);
-export type UserItemDoc = t.TypeOf<typeof userItemDocCodec>;
+export type UserItemDocument = t.TypeOf<typeof userItemDocumentCodec>;
 
-export const toUserItemDocKeys = (userItem: UserItem) => {
+export const toUserItemDocumentKeys = (userItem: UserItem) => {
   switch (userItem.type) {
     case "USER_DATA":
-      return toUserDataDocKeys(userItem);
+      return toUserDataDocumentKeys(userItem);
     case "SEARCH_OBJECT":
-      return toSearchObjectDocKeys(userItem);
+      return toSearchObjectDocumentKeys(userItem);
     default:
       return throwUnexpectedCase(userItem, "toUserItemDocKeys");
   }
 };
 
-export const toUserDataDocKeys = ({ id }: Pick<UserData, "id">) => ({
+export const toUserDataDocumentKeys = ({ id }: Pick<UserData, "id">) => ({
   pk: id,
   sk: "data",
 });
 
-export const toSearchObjectDocKeys = ({
+export const toSearchObjectDocumentKeys = ({
   id,
   index,
   keyword,
@@ -54,14 +54,14 @@ export const toSearchObjectDocKeys = ({
   gsi1sk: id,
 });
 
-export const userItemToDocument = (domainItem: UserItem): UserItemDoc => {
+export const userItemToDocument = (domainItem: UserItem): UserItemDocument => {
   return {
     ...domainItem,
-    ...toUserItemDocKeys(domainItem),
+    ...toUserItemDocumentKeys(domainItem),
   };
 };
 
-export const documentToUserItem = (docItem: UserItemDoc): UserItem => {
+export const documentToUserItem = (docItem: UserItemDocument): UserItem => {
   switch (docItem.type) {
     case "USER_DATA":
       return _.omit(docItem, ["pk", "sk"]);
@@ -73,7 +73,7 @@ export const documentToUserItem = (docItem: UserItemDoc): UserItem => {
 };
 
 export const unknownToUserItem = (item: unknown) => {
-  return map(documentToUserItem)(decode(userItemDocCodec, item));
+  return map(documentToUserItem)(decode(userItemDocumentCodec, item));
 };
 
 export const unknownToSearchObject = (item: unknown) => {

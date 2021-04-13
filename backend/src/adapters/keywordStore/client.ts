@@ -9,7 +9,7 @@ import { map } from "fp-ts/lib/Either";
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
 
-export const keywordDataDocCodec = t.intersection([
+export const keywordDataDocumentCodec = t.intersection([
   keywordDataCodec,
   t.type({
     pk: t.string,
@@ -18,11 +18,11 @@ export const keywordDataDocCodec = t.intersection([
     gsi1sk: t.string,
   }),
 ]);
-export type KeywordDataDoc = t.TypeOf<typeof keywordDataDocCodec>;
+export type KeywordDataDocument = t.TypeOf<typeof keywordDataDocumentCodec>;
 
 export const toGSI1PK = (socialMedia: SocialMedia) => `${socialMedia}|active`;
 
-export const toDocPrimaryKeys = ({
+export const toDocumentPrimaryKeys = ({
   socialMedia,
   keyword,
 }: Pick<KeywordData, "socialMedia" | "keyword">) => ({
@@ -30,20 +30,26 @@ export const toDocPrimaryKeys = ({
   sk: socialMedia,
 });
 
-export const toDocKeys = ({ socialMedia, keyword, status }: KeywordData) => ({
-  ...toDocPrimaryKeys({ socialMedia, keyword }),
+export const toDocumentKeys = ({
+  socialMedia,
+  keyword,
+  status,
+}: KeywordData) => ({
+  ...toDocumentPrimaryKeys({ socialMedia, keyword }),
   gsi1pk: status == "ACTIVE" ? toGSI1PK(socialMedia) : undefined,
   gsi1sk: keyword,
 });
 
 export const keywordDataToDocument = (domainItem: KeywordData) => {
-  return { ...domainItem, ...toDocKeys(domainItem) };
+  return { ...domainItem, ...toDocumentKeys(domainItem) };
 };
 
-export const documentToKeywordData = (docItem: KeywordDataDoc): KeywordData => {
+export const documentToKeywordData = (
+  docItem: KeywordDataDocument
+): KeywordData => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
 export const unknownToKeywordData = (item: unknown) => {
-  return map(documentToKeywordData)(decode(keywordDataDocCodec, item));
+  return map(documentToKeywordData)(decode(keywordDataDocumentCodec, item));
 };

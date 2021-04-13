@@ -1,6 +1,6 @@
 import { GetKeywordDataFn } from "../../domain/ports/keywordStore/getKeywordData";
 import { getItem } from "../../lib/dynamoDb";
-import { Client, toDocPrimaryKeys, unknownToKeywordData } from "./client";
+import { Client, toDocumentPrimaryKeys, unknownToKeywordData } from "./client";
 
 export const makeGetKeywordData = (
   client: Client,
@@ -11,7 +11,7 @@ export const makeGetKeywordData = (
       client,
       {
         TableName: tableName,
-        Key: toDocPrimaryKeys({ socialMedia, keyword }),
+        Key: toDocumentPrimaryKeys({ socialMedia, keyword }),
       },
       unknownToKeywordData,
       logger

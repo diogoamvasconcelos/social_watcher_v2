@@ -30,7 +30,7 @@ resource "aws_cloudwatch_log_group" "search_results_stream_consumer" {
 }
 
 resource "aws_lambda_event_source_mapping" "search_results_stream_consumer" {
-  event_source_arn  = aws_dynamodb_table.users.stream_arn
+  event_source_arn  = aws_dynamodb_table.search_results.stream_arn
   function_name     = aws_lambda_function.search_results_stream_consumer.arn
   starting_position = "LATEST"
   batch_size        = 1

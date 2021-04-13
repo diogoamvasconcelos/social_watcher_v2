@@ -31,7 +31,7 @@ const prepareTable = async (
   }
 };
 
-export const preparesKeywordsTable = async (tableName: string) => {
+export const preparesGenericTable = async (tableName: string) => {
   const params = {
     AttributeDefinitions: [
       { AttributeName: "pk", AttributeType: "S" },

@@ -11,7 +11,7 @@ import { map } from "fp-ts/lib/Either";
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
 
-export const searchResultDocCodec = t.intersection([
+export const searchResultDocumentCodec = t.intersection([
   searchResultCodec,
   t.type({
     pk: t.string,
@@ -20,9 +20,9 @@ export const searchResultDocCodec = t.intersection([
     gsi1sk: t.string,
   }),
 ]);
-export type SearchResultDoc = t.TypeOf<typeof searchResultDocCodec>;
+export type SearchResultDocument = t.TypeOf<typeof searchResultDocumentCodec>;
 
-export const toDocKeys = (
+export const toDocumentKeys = (
   { socialMedia, id, keyword, happenedAt }: SearchResult,
   index: number = 0
 ) => ({
@@ -32,16 +32,18 @@ export const toDocKeys = (
   gsi1sk: happenedAt.toISOString(),
 });
 
-export const searchResultToDocument = (domainItem: SearchResult) => {
-  return { ...domainItem, ...toDocKeys(domainItem) };
+export const searchResultToDocument = (
+  domainItem: SearchResult
+): SearchResultDocument => {
+  return { ...domainItem, ...toDocumentKeys(domainItem) };
 };
 
 export const documentToSearchResult = (
-  docItem: SearchResultDoc
+  docItem: SearchResultDocument
 ): SearchResult => {
   return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
 };
 
 export const unknownToSearchResult = (item: unknown) => {
-  return map(documentToSearchResult)(decode(searchResultDocCodec, item));
+  return map(documentToSearchResult)(decode(searchResultDocumentCodec, item));
 };

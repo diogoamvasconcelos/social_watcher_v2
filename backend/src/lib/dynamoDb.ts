@@ -1,13 +1,38 @@
 import { DocumentClient, Put } from "aws-sdk/clients/dynamodb";
 import { Either, right, left, isLeft } from "fp-ts/lib/Either";
 import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
+import _ from "lodash";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
+import { JsonEncodable, JsonObjectEncodable } from "./models/jsonEncodable";
 
 export const getClient = (endpoint: string | undefined = undefined) => {
   return new DocumentClient({ endpoint });
 };
 export type Client = ReturnType<typeof getClient>;
+
+const convertDateFieldsToISO = (
+  obj: JsonObjectEncodable
+): JsonObjectEncodable => {
+  const convertFields = (input: JsonEncodable): JsonEncodable => {
+    switch (typeof input) {
+      case "object": {
+        if (input instanceof Date) {
+          return (input as Date).toISOString();
+        } else if (Array.isArray(input)) {
+          return input.map(convertFields);
+        } else if (input != null) {
+          return _.mapValues(input, convertFields);
+        }
+        return input;
+      }
+      default:
+        return input;
+    }
+  };
+
+  return _.mapValues(obj, convertFields);
+};
 
 export type PutParams = Put;
 
@@ -83,7 +108,11 @@ export const putItem = async (
   logger: Logger
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
-    await client.put(params).promise();
+    const supportedParams: DocumentClient.PutItemInput = {
+      ...params,
+      Item: convertDateFieldsToISO(params.Item),
+    };
+    await client.put(supportedParams).promise();
     return right("OK");
   } catch (error) {
     if (
@@ -98,16 +127,27 @@ export const putItem = async (
   }
 };
 
-export const scanItems = async (
+export const scanItems = async <T>(
   client: Client,
   params: DocumentClient.ScanInput,
+  transformFn: (item: unknown) => Either<string[], T>,
   logger: Logger
 ) => {
   try {
     const scanResult: DocumentClient.QueryOutput = await client
       .scan(params)
       .promise();
-    return right(scanResult);
+
+    const transformedItems: T[] = [];
+    for (const item of scanResult.Items ?? []) {
+      const transformResult = applyTransformToItem(transformFn, item, logger);
+      if (isLeft(transformResult)) {
+        return transformResult;
+      }
+      transformedItems.push(transformResult.right);
+    }
+
+    return right(transformedItems);
   } catch (error) {
     logger.error("Call to DynamoDB scan exited with following error", {
       error,

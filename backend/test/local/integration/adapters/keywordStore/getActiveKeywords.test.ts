@@ -4,12 +4,12 @@ import { KeywordData } from "../../../../../src/domain/models/keyword";
 import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
 import { putItem } from "../../../../../src/lib/dynamoDb";
 import { decode, fromEither, lowerCase } from "../../../../../src/lib/iots";
+import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
-import { client, preparesKeywordsTable } from "../../../../lib/dynamoDb";
-import { getLoggerMock } from "../../../../lib/mocks";
+import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
 
 describe("getActiveKeywords", () => {
-  const logger = getLoggerMock();
+  const logger = getLogger();
   const tableName: string = uuid();
   const getActiveKeywordsFn = makeGetActiveKeywords(client, tableName);
 
@@ -25,8 +25,7 @@ describe("getActiveKeywords", () => {
   };
 
   beforeEach(async () => {
-    await preparesKeywordsTable(tableName);
-    jest.resetAllMocks();
+    await preparesGenericTable(tableName);
   });
 
   it("sparse global index works", async () => {

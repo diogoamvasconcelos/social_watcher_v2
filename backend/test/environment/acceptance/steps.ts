@@ -23,8 +23,8 @@ import { makeGetUser } from "../../../src/adapters/userStore/getUser";
 import { SubscriptionData, UserId } from "../../../src/domain/models/user";
 import _ from "lodash";
 import {
-  toUserDataDocKeys,
-  userItemDocCodec,
+  toUserDataDocumentKeys,
+  userItemDocumentCodec,
 } from "../../../src/adapters/userStore/client";
 import { SocialMediaSearchData } from "../../../src/domain/models/userItem";
 import {
@@ -37,7 +37,7 @@ import { retryUntil } from "../../lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
-import { toDocPrimaryKeys } from "../../../src/adapters/keywordStore/client";
+import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
 import { deepmergeSafe } from "../../../src/lib/deepmerge";
 
 const config = getEnvTestConfig();
@@ -116,7 +116,7 @@ export const deleteUser = async ({
           ":pk": id,
         },
       },
-      (item: unknown) => decode(userItemDocCodec, item),
+      (item: unknown) => decode(userItemDocumentCodec, item),
       logger
     )
   );
@@ -179,7 +179,7 @@ export const updateUserSubscription = async ({
     await dynamoDbClient
       .get({
         TableName: config.usersTableName,
-        Key: toUserDataDocKeys({ id: userId }),
+        Key: toUserDataDocumentKeys({ id: userId }),
       })
       .promise()
   ).Item;
@@ -266,7 +266,7 @@ export const deleteKeyword = async (keyword: string) => {
           dynamoDbClient,
           {
             TableName: config.keywordsTableName,
-            Key: toDocPrimaryKeys({
+            Key: toDocumentPrimaryKeys({
               keyword: fromEither(decode(lowerCase, keyword)),
               socialMedia,
             }),
