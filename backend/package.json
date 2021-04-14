@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix --ext .ts .",
     "test": "npm run with-local-stack npx \"jest -i --testPathIgnorePatterns 'test/environment'\"",
     "test:unit": "scripts/with_env.js npx \"jest test --testMatch '<rootDir>/src/**/*.test.ts?(x)'\"",
-    "test:environment": "scripts/with_env.js npx \"jest test/environment\"",
+    "test:environment": "scripts/with_env.js npx \"jest test/environment\" --env dev",
     "test:coverage": "npm run with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment' --coverage\"",
     "audit": "npm audit"
   },

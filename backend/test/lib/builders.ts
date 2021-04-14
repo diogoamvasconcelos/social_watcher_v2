@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../src/domain/models/searchResult";
 import { deepmergeSafe } from "../../src/lib/deepmerge";
@@ -57,4 +58,15 @@ export const buildSearchResult = (
     },
     partial ?? {}
   );
+};
+
+export const buildSearchResultsEvent = (
+  nofResults: number = 2,
+  partialSearchResult: PartialDeep<SearchResult> = {}
+) => {
+  const searchResults: SearchResult[] = _.range(nofResults).map((_) =>
+    buildSearchResult(partialSearchResult)
+  );
+
+  return buildSQSEvent(searchResults);
 };

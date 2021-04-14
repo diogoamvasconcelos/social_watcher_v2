@@ -185,6 +185,8 @@ export const search = async <T>(
   }
 ): Promise<Either<"ERROR", T[]>> => {
   try {
+    logger.debug("search params", { searchParams });
+
     const searchResult = await client.search(searchParams);
     if (searchResult.statusCode != 200) {
       logger.error(`Search failed with statusCode=${searchResult.statusCode}`);

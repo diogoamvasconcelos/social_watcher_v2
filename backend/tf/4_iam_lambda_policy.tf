@@ -81,6 +81,14 @@ resource "aws_iam_policy" "lambda_default" {
       ],
       "Resource": "arn:aws:sqs:*:*",
       "Effect": "Allow"
+    },
+    {
+      "Sid": "ElasticSearch",
+      "Action": [
+        "es:*"
+      ],
+      "Resource": "arn:aws:es:*:*",
+      "Effect": "Allow"
     }
   ]
 }

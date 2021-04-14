@@ -14,7 +14,7 @@ locals {
     KEYWORDS_TABLE_NAME                 = aws_dynamodb_table.keywords.name
     SEARCH_RESULTS_TABLE_NAME           = aws_dynamodb_table.search_results.name
     SEARCH_JOBS_QUEUE_TEMPLATE_NAME     = "{socialMedia}_search_jobs"
-    MAIN_ELASTIC_SEARCH_URL             = aws_elasticsearch_domain.main.endpoint
+    MAIN_ELASTIC_SEARCH_URL             = "https://${aws_elasticsearch_domain.main.endpoint}"
     SEARCH_RESULT_INDEX_VERSION         = 1
     SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL = aws_sqs_queue.sync_search_results_to_es.id
   }
