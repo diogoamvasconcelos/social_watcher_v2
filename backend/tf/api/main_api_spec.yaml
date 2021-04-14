@@ -57,6 +57,30 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${update_search_object_invoke_arn}
+  /search:
+    post:
+      description: Search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchRequestBody"
+      responses:
+        200:
+          description: Many SearchObjects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResponse"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${search_endpoint_invoke_arn}
 
 # ++++++++++++++
 # + COMPONENTS +
@@ -106,6 +130,60 @@ components:
                   enum:
                     - DISABLED
                     - ENABLED
+
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+        keyword:
+          type: string
+        happenedAt:
+          type: string
+        socialMedia:
+          type: string
+
+    SearchRequestBody:
+      type: object
+      required:
+        - keyword
+      properties:
+        keyword:
+          type: string
+        pagination:
+          $ref: "#/components/schemas/PaginationRequest"
+
+    SearchResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchResult"
+          pagination:
+            $ref: "#/components/schemas/PaginationResponse"
+
+    PaginationRequest:
+      description: pagination request object
+      type: object
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    PaginationResponse:
+      description: pagination response object
+      type: object
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        count:
+          type: integer
+        total:
+          type: integer
 
   # ++++++++++++++
   # + PARAMETERS +
