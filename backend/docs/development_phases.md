@@ -81,12 +81,17 @@
 - create nice ES lib <DONE>
 - sync to ES
   - stream consumer -> SQS -> syncToEs -> ES <DONE>
-  - env test (add messages to SQS, check that are in ES)
+  - env test (add messages to SQS, check that are in ES) <DONE>
 
 # Phase 5 - Search Results endpoint (1 week)
 
-- with Auth
+- create endpoint <DONE>
+- with Auth <DONE>
+  - check if keyword if valid <DONE>
 - with filters/queries and pagination (SSLF)
+- add envtests
+  - keyword not allowed
+  - pagination
 
 # Phase 6 - NotifyDiscord integration (1 week)
 

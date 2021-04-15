@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { isString } from "lodash";
@@ -5,7 +6,12 @@ import { User } from "../../domain/models/user";
 import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
 import { ApiErrorResponse, ApiRequestMetadata } from "./models";
-import { makeInternalErrorResponse } from "./responses";
+import {
+  makeInternalErrorResponse,
+  makeRequestMalformedResponse,
+} from "./responses";
+import { decode, positiveInteger } from "../../lib/iots";
+import { JsonEncodable } from "../../lib/models/jsonEncodable";
 
 export const apiGetUser = async ({
   logger,
@@ -44,3 +50,9 @@ export const toApigwRequestMetadata = (
 
   return right({ authData: { id, email } });
 };
+
+export const paginationRequestCodec = t.type({
+  limit: positiveInteger,
+  offset: positiveInteger,
+});
+export type PaginationRequest = t.TypeOf<typeof paginationRequestCodec>;

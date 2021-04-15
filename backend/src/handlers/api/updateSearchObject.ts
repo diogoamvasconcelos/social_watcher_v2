@@ -48,7 +48,7 @@ export const handler = async (
     config.usersTableName
   );
 
-  const requestEither = toUpdateKeywordRequest(event, logger);
+  const requestEither = toUpdateKeywordRequest(logger, event);
   if (isLeft(requestEither)) {
     return requestEither;
   }
@@ -91,12 +91,12 @@ export const handler = async (
 export const lambdaHandler = apigwMiddlewareStack(handler);
 
 const toUpdateKeywordRequest = (
-  event: APIGatewayProxyEvent,
-  logger: Logger
+  logger: Logger,
+  event: APIGatewayProxyEvent
 ): Either<ApiErrorResponse, UpdateSearchObjectRequest> => {
-  const metadata = toApigwRequestMetadata(event);
-  if (isLeft(metadata)) {
-    return metadata;
+  const metadataEither = toApigwRequestMetadata(event);
+  if (isLeft(metadataEither)) {
+    return metadataEither;
   }
 
   const bodyEither = parseSafe(event.body ?? "");
@@ -121,5 +121,9 @@ const toUpdateKeywordRequest = (
     );
   }
 
-  return right({ ...metadata.right, data: data.right, index: index.right });
+  return right({
+    ...metadataEither.right,
+    data: data.right,
+    index: index.right,
+  });
 };

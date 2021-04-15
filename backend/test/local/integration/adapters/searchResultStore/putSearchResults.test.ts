@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { unknownToSearchResult } from "../../../../../src/adapters/searchResultsStore/client";
 import { makePutSearchResults } from "../../../../../src/adapters/searchResultsStore/putSearchResults";
 import { scanItems } from "../../../../../src/lib/dynamoDb";
@@ -32,6 +33,8 @@ describe("adapters/putSearchResults", () => {
       )
     );
 
-    expect(fetchedSearchResults.sort()).toEqual(searchResults.sort());
+    expect(_.sortBy(fetchedSearchResults, (item) => item.id)).toEqual(
+      _.sortBy(searchResults, (item) => item.id)
+    );
   });
 });
