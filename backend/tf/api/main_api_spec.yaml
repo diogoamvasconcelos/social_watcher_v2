@@ -73,6 +73,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchResponse"
+        400:
+          $ref: "#/components/schemas/ErrorResponse"
+        500:
+          $ref: "#/components/schemas/ErrorResponse"
       security:
         - cognitoPool: []
       x-amazon-apigateway-integration:
@@ -82,6 +86,19 @@ paths:
         credentials: ${main_api_role_arn}
         uri: ${search_endpoint_invoke_arn}
 
+# ++++++++++++++++++
+# + Generic config +
+
+#x-amazon-apigateway-gateway-responses:
+#  $ref: "./gateway-responses.yaml"
+
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+
+x-amazon-apigateway-request-validator: all
+
 # ++++++++++++++
 # + COMPONENTS +
 # ++++++++++++++
@@ -90,6 +107,21 @@ components:
   # +++++++++++
   # + SCHEMAS +
   schemas:
+    ErrorResponse:
+      description: Error processing the Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error_code
+              - error_message
+            properties:
+              error_code:
+                type: string
+              error_message:
+                type: string
+
     UserId:
       type: string
 
