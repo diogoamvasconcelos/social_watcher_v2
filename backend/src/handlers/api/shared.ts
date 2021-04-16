@@ -6,12 +6,8 @@ import { User } from "../../domain/models/user";
 import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
 import { ApiErrorResponse, ApiRequestMetadata } from "./models";
-import {
-  makeInternalErrorResponse,
-  makeRequestMalformedResponse,
-} from "./responses";
-import { decode, positiveInteger } from "../../lib/iots";
-import { JsonEncodable } from "../../lib/models/jsonEncodable";
+import { makeInternalErrorResponse } from "./responses";
+import { positiveInteger } from "../../lib/iots";
 
 export const apiGetUser = async ({
   logger,

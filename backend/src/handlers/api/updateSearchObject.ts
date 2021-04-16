@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { getConfig } from "../../lib/config";
@@ -22,6 +23,7 @@ import { apiGetUser, toApigwRequestMetadata } from "./shared";
 import { User } from "../../domain/models/user";
 import {
   SearchObject,
+  searchObjectCodec,
   searchObjectIndexCodec,
   SearchObjectUserData,
   searchObjectUserDataCodec,
@@ -38,9 +40,16 @@ type UpdateSearchObjectRequest = ApiRequestMetadata & {
 
 type UpdateSearchObjectErrorCode = ApiBaseErrorCode;
 
+export const updateSearchObjectResponseCodec = searchObjectCodec;
+export type UpdateSearchObjectResponse = t.TypeOf<
+  typeof updateSearchObjectResponseCodec
+>;
+
 export const handler = async (
   event: APIGatewayProxyEvent
-): Promise<ApiResponse<UpdateSearchObjectErrorCode>> => {
+): Promise<
+  ApiResponse<UpdateSearchObjectErrorCode, UpdateSearchObjectResponse>
+> => {
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
   const putSearchObjectFn = makePutSearchObject(

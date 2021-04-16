@@ -19,10 +19,9 @@ const config = getEnvTestConfig();
 const logger = getLogger();
 const apiClient = getApiClient(config.apiEndpoint);
 
-const keyword = uuid();
-
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  const keyword = fromEither(decode(lowerCase, uuid()));
 
   beforeAll(async () => {
     jest.setTimeout(10000);
@@ -39,7 +38,7 @@ describe("update searchObject e2e test", () => {
 
     const index = fromEither(decode(positiveInteger, 0));
     const userData: SearchObjectUserData = {
-      keyword: fromEither(decode(lowerCase, keyword)),
+      keyword,
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
       },

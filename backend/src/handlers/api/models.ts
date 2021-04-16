@@ -6,17 +6,19 @@ export type ApiRequestMetadata = {
   authData: Pick<User, "id" | "email">;
 };
 
-export type ApiResponse<T extends string = string> = Either<
-  ApiErrorResponse<T>,
-  ApiSuccessResponse
->;
+export type ApiResponse<
+  T extends string = string,
+  B extends JsonObjectEncodable = JsonObjectEncodable
+> = Either<ApiErrorResponse<T>, ApiSuccessResponse<B>>;
 
 type ApiResponseMetadata = {
   statusCode: number;
 };
 
-export type ApiSuccessResponse = ApiResponseMetadata & {
-  body?: JsonObjectEncodable;
+export type ApiSuccessResponse<
+  B extends JsonObjectEncodable
+> = ApiResponseMetadata & {
+  body?: B;
 };
 
 export type ApiErrorResponse<

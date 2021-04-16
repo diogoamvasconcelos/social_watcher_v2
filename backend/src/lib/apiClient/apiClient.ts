@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
-import { User, userCodec } from "../../domain/models/user";
 import { decode } from "../iots";
 import { Logger } from "../logger";
 import {
@@ -8,6 +7,15 @@ import {
   searchObjectCodec,
   SearchObjectUserData,
 } from "../../domain/models/userItem";
+import {
+  GetUserResponse,
+  getUserResponseCodec,
+} from "../../handlers/api/getUser";
+import {
+  UpdateSearchObjectResponse,
+  updateSearchObjectResponseCodec,
+} from "../../handlers/api/updateSearchObject";
+import { SearchResponse } from "../../handlers/api/search";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -51,7 +59,7 @@ export type ApiError = AxiosResponse | "DECODE_ERROR";
 
 export const getUser = async (
   deps: ApiClientDeps
-): Promise<Either<ApiError, User>> => {
+): Promise<Either<ApiError, GetUserResponse>> => {
   const apiResult = await doGenericAPICall(deps, {
     method: "get",
     url: "user",
@@ -60,7 +68,7 @@ export const getUser = async (
     return left(apiResult);
   }
 
-  const decodeResult = decode(userCodec, apiResult.data);
+  const decodeResult = decode(getUserResponseCodec, apiResult.data);
   if (isLeft(decodeResult)) {
     return left("DECODE_ERROR");
   }
@@ -74,7 +82,7 @@ export const updateSearchObject = async (
     index: SearchObject["index"];
     userData: SearchObjectUserData;
   }
-): Promise<Either<ApiError, SearchObject>> => {
+): Promise<Either<ApiError, UpdateSearchObjectResponse>> => {
   const apiResult = await doGenericAPICall(deps, {
     method: "put",
     url: `user/searchObject/${data.index}`,
@@ -84,10 +92,20 @@ export const updateSearchObject = async (
     return left(apiResult);
   }
 
-  const decodeResult = decode(searchObjectCodec, apiResult.data);
+  const decodeResult = decode(updateSearchObjectResponseCodec, apiResult.data);
   if (isLeft(decodeResult)) {
     return left("DECODE_ERROR");
   }
 
   return decodeResult;
+};
+
+export const search = async (
+  deps: ApiClientDeps,
+  data: {
+    userData: SearchRequestUserData;
+  }
+): Promise<Either<ApiError, SearchResponse>> => {
+  // extract generic function to do decodeing and  return
+  // return decode(await doGenericAPICall(....))
 };

@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { getLogger } from "../../lib/logger";
 import {
@@ -13,7 +14,7 @@ import { getClient as getUsersStoreClient } from "../../adapters/userStore/clien
 import { getConfig } from "../../lib/config";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import { apiGetUser, toApigwRequestMetadata } from "./shared";
-import { User } from "../../domain/models/user";
+import { User, userCodec } from "../../domain/models/user";
 
 const config = getConfig();
 const logger = getLogger();
@@ -21,9 +22,12 @@ const logger = getLogger();
 type GetUserRequest = ApiRequestMetadata;
 type GetUserErrorCode = ApiBaseErrorCode;
 
+export const getUserResponseCodec = userCodec;
+export type GetUserResponse = t.TypeOf<typeof getUserResponseCodec>;
+
 const handler = async (
   event: APIGatewayProxyEvent
-): Promise<ApiResponse<GetUserErrorCode>> => {
+): Promise<ApiResponse<GetUserErrorCode, GetUserResponse>> => {
   const getUserFn = makeGetUser(getUsersStoreClient(), config.usersTableName);
 
   const requestEither = toGetUserRequest(event);

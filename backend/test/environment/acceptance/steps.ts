@@ -39,6 +39,10 @@ import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
 import { deepmergeSafe } from "../../../src/lib/deepmerge";
+import { PartialDeep } from "type-fest";
+import { SearchResult } from "../../../src/domain/models/searchResult";
+import { buildSearchResult } from "../../lib/builders";
+import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -49,6 +53,11 @@ const apiClient = getApiClient(config.apiEndpoint);
 const getKeywordDataFn = makeGetKeywordData(
   dynamoDbClient,
   config.keywordsTableName
+);
+
+const putSearchResultsFn = makePutSearchResults(
+  dynamoDbClient,
+  config.searchResultsTableName
 );
 
 export const createTestUser = async (
@@ -276,4 +285,12 @@ export const deleteKeyword = async (keyword: string) => {
       );
     })
   );
+};
+
+export const addSearchResultDirectly = async (
+  partial: PartialDeep<SearchResult>
+): Promise<SearchResult> => {
+  const searchResult: SearchResult = buildSearchResult(partial);
+  fromEither(await putSearchResultsFn(logger, [searchResult]));
+  return searchResult;
 };

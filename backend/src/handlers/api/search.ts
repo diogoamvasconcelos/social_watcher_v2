@@ -17,11 +17,7 @@ import {
   makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import {
-  paginationRequestCodec,
-  requestBodytoPaginationRequest,
-  toApigwRequestMetadata,
-} from "./shared";
+import { paginationRequestCodec, toApigwRequestMetadata } from "./shared";
 import { decode } from "../../lib/iots";
 import { getConfig } from "../../lib/config";
 import { isKeywordAllowed } from "../../domain/controllers/isKeywordAllowed";
@@ -29,11 +25,12 @@ import { getClient as getUsersStoreClient } from "../../adapters/userStore/clien
 import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
 import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
+import { searchObjectCodec } from "../../domain/models/userItem";
 
 const config = getConfig();
 const logger = getLogger();
 
-const searchRequestUserData = t.intersection([
+const searchRequestUserDataCodec = t.intersection([
   t.type({
     keyword: keywordCodec,
   }),
@@ -41,14 +38,19 @@ const searchRequestUserData = t.intersection([
     pagination: paginationRequestCodec,
   }),
 ]);
-type SearchRequestUserData = t.TypeOf<typeof searchRequestUserData>;
+type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
+
+export const searchResponseCodec = t.type({
+  items: t.array(searchObjectCodec),
+});
+export type SearchResponse = t.TypeOf<typeof searchResponseCodec>;
 
 type SearchRequest = ApiRequestMetadata & SearchRequestUserData;
 type SearchErrorCode = ApiBaseErrorCode;
 
 const handler = async (
   event: APIGatewayProxyEvent
-): Promise<ApiResponse<SearchErrorCode>> => {
+): Promise<ApiResponse<SearchErrorCode, SearchResponse>> => {
   const userStoreClient = getUsersStoreClient();
   const getSearchObjectsForUserFn = makeGetSearchObjectsForUser(
     userStoreClient,
@@ -111,7 +113,7 @@ const toSearchRequest = (
   }
   const body = bodyEither.right;
 
-  const userDataEither = decode(searchRequestUserData, body);
+  const userDataEither = decode(searchRequestUserDataCodec, body);
   if (isLeft(userDataEither)) {
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
