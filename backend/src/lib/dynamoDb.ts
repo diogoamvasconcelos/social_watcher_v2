@@ -59,7 +59,9 @@ export const transactPutItems = async (
       return right("CONDITION_CHECK_FAILED");
     }
 
-    logger.error("Call to DynamoDB get exited with following error", { error });
+    logger.error("Call to DynamoDB transactWrite exited with following error", {
+      error,
+    });
     return left("ERROR");
   }
 };
@@ -122,7 +124,7 @@ export const putItem = async (
       return right("CONDITION_CHECK_FAILED");
     }
 
-    logger.error("Call to DynamoDB get exited with following error", { error });
+    logger.error("Call to DynamoDB put exited with following error", { error });
     return left("ERROR");
   }
 };

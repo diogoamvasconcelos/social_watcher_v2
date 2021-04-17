@@ -1,10 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
 import { decode } from "../iots";
-import { Logger } from "../logger";
+import logger, { Logger } from "../logger";
 import {
   SearchObject,
-  searchObjectCodec,
   SearchObjectUserData,
 } from "../../domain/models/userItem";
 import {
@@ -15,7 +14,11 @@ import {
   UpdateSearchObjectResponse,
   updateSearchObjectResponseCodec,
 } from "../../handlers/api/updateSearchObject";
-import { SearchResponse } from "../../handlers/api/search";
+import {
+  SearchRequestUserData,
+  SearchResponse,
+  searchResponseCodec,
+} from "../../handlers/api/search";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -106,6 +109,21 @@ export const search = async (
     userData: SearchRequestUserData;
   }
 ): Promise<Either<ApiError, SearchResponse>> => {
-  // extract generic function to do decodeing and  return
-  // return decode(await doGenericAPICall(....))
+  const apiResult = await doGenericAPICall(deps, {
+    method: "post",
+    url: `search`,
+    data: JSON.stringify(data.userData),
+  });
+  if (apiResult.status != 200) {
+    return left(apiResult);
+  }
+
+  logger.debug("search response", { response: apiResult.data });
+
+  const decodeResult = decode(searchResponseCodec, apiResult.data);
+  if (isLeft(decodeResult)) {
+    return left("DECODE_ERROR");
+  }
+
+  return decodeResult;
 };

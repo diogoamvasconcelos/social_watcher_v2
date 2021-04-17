@@ -1,10 +1,10 @@
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
 import { ApiErrorResponse, ApiSuccessResponse } from "./models";
 
-export const makeSuccessResponse = (
+export const makeSuccessResponse = <B extends JsonObjectEncodable>(
   statusCode: number,
-  body: JsonObjectEncodable
-): ApiSuccessResponse => ({
+  body: B
+): ApiSuccessResponse<B> => ({
   statusCode,
   body,
 });

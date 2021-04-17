@@ -3,6 +3,7 @@ import { isRight, left, Either, isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
 import { Logger } from "./logger";
+import { DateFromISOString } from "io-ts-types";
 
 export const fromEither = ruins.fromEither;
 
@@ -66,3 +67,23 @@ export const positiveInteger = t.brand(
 );
 
 export type PositiveInteger = t.TypeOf<typeof positiveInteger>;
+
+// DateFromStringV2 (can convert from date as well (nice for redecoding))
+// ref: https://github.com/gcanti/io-ts-types/blob/master/src/DateFromISOString.ts
+
+export const DateFromISOStringV2 = new t.Type<Date, Date | string, unknown>(
+  "DateFromISOString",
+  (u): u is Date => u instanceof Date,
+  (u, context) => {
+    if (u instanceof Date) {
+      return t.success(u as Date);
+    }
+
+    const decodeEither = DateFromISOString.decode(u);
+    if (isLeft(decodeEither)) {
+      return t.failure(u, context);
+    }
+    return t.success(decodeEither.right);
+  },
+  (a) => a.toISOString()
+);

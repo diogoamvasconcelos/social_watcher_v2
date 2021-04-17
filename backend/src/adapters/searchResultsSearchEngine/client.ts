@@ -50,7 +50,7 @@ export const esDocumentToSearchResult = (
 ): Either<string[], SearchResult> => {
   return decode(searchResultCodec, {
     ...docItem,
-    happenedAt: docItem.happenedAt.toISOString(), //need to covert back for codec to work
+    //happenedAt: docItem.happenedAt.toISOString(), //need to covert back for codec to work
     data: JSON.parse(docItem.data),
   });
 };

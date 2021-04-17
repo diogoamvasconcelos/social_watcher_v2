@@ -17,12 +17,12 @@ common:
   COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
   SEARCH_RESULT_INDEX_VERSION: 1
   SYNC_SEARCH_RESULTS_TO_ES_LAMBDA_NAME: sync_search_results_to_es
+  SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL: sync_search_results_to_es
 
 local:
   DYNAMODB_PORT: 8000
   DYNAMODB_URL: http://localhost:8000
   MAIN_ELASTIC_SEARCH_URL: http://localhost:9200
-  SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL: sync_search_results_to_es
 
 dev:
   MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com

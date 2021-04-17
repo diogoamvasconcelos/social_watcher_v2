@@ -5,12 +5,20 @@ import {
 } from "./client";
 import { RequestParamsSearch, search } from "../../lib/elasticsearch/client";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
-import { SearchSearchResultsFn } from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
+import {
+  SearchSearchResultsFn,
+  searchSearchResultsResultCodec,
+} from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
+import { isLeft, left } from "fp-ts/lib/Either";
+import { decode } from "../../lib/iots";
+
+const DEFAULT_LIMIT = 50;
+const DEFAULT_OFFSET = 0;
 
 export const makeSearchSearchResults = (
   client: Client
 ): SearchSearchResultsFn => {
-  return async (logger, keyword, dataQuery) => {
+  return async (logger, { keyword, dataQuery, pagination }) => {
     const queriesMust: JsonObjectEncodable[] = [];
     queriesMust.push({
       constant_score: {
@@ -40,9 +48,11 @@ export const makeSearchSearchResults = (
           },
         },
       },
+      size: pagination?.limit ?? DEFAULT_LIMIT,
+      from: pagination?.offset ?? DEFAULT_OFFSET,
     };
 
-    return await search(
+    const resultEither = await search(
       { logger, client },
       {
         indexName: searchResultIndexAlias,
@@ -50,5 +60,20 @@ export const makeSearchSearchResults = (
         searchParams,
       }
     );
+    if (isLeft(resultEither)) {
+      return resultEither;
+    }
+
+    const decodedResultEither = decode(
+      searchSearchResultsResultCodec,
+      resultEither.right
+    );
+    if (isLeft(decodedResultEither)) {
+      logger.error("Fail to decode search result", {
+        errors: decodedResultEither.left,
+      });
+      return left("ERROR");
+    }
+    return decodedResultEither;
   };
 };

@@ -183,7 +183,20 @@ export const search = async <T>(
     searchParams?: RequestParamsSearch;
     transformFn: (item: unknown) => Either<string[], T>;
   }
-): Promise<Either<"ERROR", T[]>> => {
+): Promise<
+  Either<
+    "ERROR",
+    {
+      items: T[];
+      pagination: {
+        limit: number;
+        offset: number;
+        count: number;
+        total: number;
+      };
+    }
+  >
+> => {
   try {
     logger.debug("search params", { searchParams });
 
@@ -210,7 +223,15 @@ export const search = async <T>(
       transformedItems.push(transformResult.right);
     }
 
-    return right(transformedItems);
+    return right({
+      items: transformedItems,
+      pagination: {
+        limit: searchParams?.size ?? 0,
+        offset: searchParams?.from ?? 0,
+        count: transformedItems.length,
+        total: searchResult.body.hits.total.value,
+      },
+    });
   } catch (error) {
     logger.error(`Failed to search index (${indexName})`, {
       error,

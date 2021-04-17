@@ -1,10 +1,35 @@
+import * as t from "io-ts";
+import { positiveInteger } from "../../../lib/iots";
 import { Logger } from "../../../lib/logger";
 import { Keyword } from "../../models/keyword";
-import { SearchResult } from "../../models/searchResult";
+import { searchResultCodec } from "../../models/searchResult";
 import { CustomRightReturn } from "../shared";
+
+export const paginationRequestCodec = t.type({
+  limit: positiveInteger,
+  offset: positiveInteger,
+});
+export type PaginationRequest = t.TypeOf<typeof paginationRequestCodec>;
+
+// omg, this name!!
+export const searchSearchResultsResultCodec = t.type({
+  items: t.array(searchResultCodec),
+  pagination: t.type({
+    limit: positiveInteger,
+    offset: positiveInteger,
+    count: positiveInteger,
+    total: positiveInteger,
+  }),
+});
+export type SearchSearchResultsResult = t.TypeOf<
+  typeof searchSearchResultsResultCodec
+>;
 
 export type SearchSearchResultsFn = (
   logger: Logger,
-  keyword: Keyword,
-  dataQuery?: string
-) => CustomRightReturn<SearchResult[]>;
+  searchParams: {
+    keyword: Keyword;
+    dataQuery?: string;
+    pagination?: PaginationRequest;
+  }
+) => CustomRightReturn<SearchSearchResultsResult>;

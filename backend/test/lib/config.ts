@@ -21,6 +21,7 @@ export const getEnvTestConfig = () => {
     apiEndpoint: ensure("API_ENDPOINT"),
     usersTableName: ensure("USERS_TABLE_NAME"),
     keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
+    searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
     syncSearchResultsToEs: ensure("SYNC_SEARCH_RESULTS_TO_ES_LAMBDA_NAME"),
     mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
   };

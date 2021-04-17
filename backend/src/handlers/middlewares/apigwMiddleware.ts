@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayProxyResult, Callback, Context, Handler } from "aws-lambda";
 import { isLeft, left } from "fp-ts/lib/Either";
-import { ApiResponse, ApiSuccessResponse } from "../api/models";
+import { ApiResponse } from "../api/models";
 import { makeInternalErrorResponse } from "../api/responses";
 import {
   ErrorMiddlewareErrorReturnFn,
@@ -70,7 +70,7 @@ const apigwResponseToApigwResult = (
     };
   }
 
-  const success: ApiSuccessResponse = response.right;
+  const success = response.right;
   return {
     statusCode: success.statusCode,
     headers: defaultHeaders,

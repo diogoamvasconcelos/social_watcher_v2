@@ -1,12 +1,12 @@
 import * as t from "io-ts";
+import { DateFromISOStringV2 } from "../../lib/iots";
 import { searchRecentResponseDataCodec } from "../../lib/twitter";
 import { keywordCodec } from "./keyword";
-import { DateFromISOString } from "io-ts-types/DateFromISOString";
 
 export const searchResultMetadaCodec = t.type({
   id: t.string,
   keyword: keywordCodec,
-  happenedAt: DateFromISOString,
+  happenedAt: DateFromISOStringV2,
 });
 
 export const twitterSearchResultCodec = t.intersection([

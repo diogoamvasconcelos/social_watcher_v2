@@ -17,7 +17,7 @@ import {
   makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import { paginationRequestCodec, toApigwRequestMetadata } from "./shared";
+import { toApigwRequestMetadata } from "./shared";
 import { decode } from "../../lib/iots";
 import { getConfig } from "../../lib/config";
 import { isKeywordAllowed } from "../../domain/controllers/isKeywordAllowed";
@@ -25,12 +25,15 @@ import { getClient as getUsersStoreClient } from "../../adapters/userStore/clien
 import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
 import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
-import { searchObjectCodec } from "../../domain/models/userItem";
+import {
+  paginationRequestCodec,
+  searchSearchResultsResultCodec,
+} from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 
 const config = getConfig();
 const logger = getLogger();
 
-const searchRequestUserDataCodec = t.intersection([
+export const searchRequestUserDataCodec = t.intersection([
   t.type({
     keyword: keywordCodec,
   }),
@@ -38,11 +41,9 @@ const searchRequestUserDataCodec = t.intersection([
     pagination: paginationRequestCodec,
   }),
 ]);
-type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
+export type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
 
-export const searchResponseCodec = t.type({
-  items: t.array(searchObjectCodec),
-});
+export const searchResponseCodec = searchSearchResultsResultCodec;
 export type SearchResponse = t.TypeOf<typeof searchResponseCodec>;
 
 type SearchRequest = ApiRequestMetadata & SearchRequestUserData;
@@ -82,15 +83,16 @@ const handler = async (
     );
   }
 
-  const searchResultEither = await searchSearchResultsFn(
-    logger,
-    request.keyword
-  );
+  const searchResultEither = await searchSearchResultsFn(logger, {
+    keyword: request.keyword,
+    // dataQuery : implemented....
+    // pagination : {...} // fully implemented but not tested!
+  });
   if (isLeft(searchResultEither)) {
     return left(makeInternalErrorResponse("Failed to search."));
   }
 
-  return right(makeSuccessResponse(200, { items: searchResultEither.right }));
+  return right(makeSuccessResponse(200, searchResultEither.right));
 };
 
 export const lambdaHandler = apigwMiddlewareStack(handler);

@@ -35,13 +35,13 @@ describe("handlers/syncSearchResultsToEs", () => {
       await retryUntil(
         async () => {
           await refreshIndices(client);
-          return fromEither(await searchSearchResultsFn(logger, keyword));
+          return fromEither(await searchSearchResultsFn(logger, { keyword }));
         },
-        (res) => res.length == 2
+        (res) => res.items.length == 2
       )
     );
 
-    expect(searchedResults).toHaveLength(2);
-    expect(searchedResults[0].keyword).toEqual(keyword);
+    expect(searchedResults.items).toHaveLength(2);
+    expect(searchedResults.items[0].keyword).toEqual(keyword);
   });
 });
