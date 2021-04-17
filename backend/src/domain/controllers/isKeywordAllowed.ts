@@ -24,6 +24,11 @@ export const isKeywordAllowed = async (
   const userSearchObjects = userSearchObjectsEither.right;
 
   return right(
-    _.some(userSearchObjects, (searchObject) => searchObject.keyword == keyword)
+    _.some(
+      userSearchObjects,
+      (searchObject) =>
+        searchObject.keyword == keyword &&
+        searchObject.lockedStatus == "UNLOCKED"
+    )
   );
 };

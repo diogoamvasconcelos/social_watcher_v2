@@ -15,12 +15,14 @@ import {
   deleteUser,
   getIdToken,
   updateKeyword,
+  updateUserSubscription,
 } from "./steps";
 import {
   getClient as getApiClient,
   search,
 } from "../../../src/lib/apiClient/apiClient";
-import { retryUntil } from "../../lib/retry";
+import { retryUntil, sleep } from "../../lib/retry";
+import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -59,6 +61,46 @@ describe("search endpoint e2e (nearly)", () => {
     );
 
     expect(searchResponse.items).toEqual([searchResult]);
+  });
+
+  it("can't search for not allowed keywords", async () => {
+    const anotherKeyword = fromEither(decode(lowerCase, uuid()));
+    const token = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
+    });
+
+    let responseEither = await search(
+      { client: apiClient, logger, token },
+      { userData: { keyword: anotherKeyword } }
+    );
+
+    expect(
+      isLeft(responseEither) && typeof responseEither.left != "string"
+    ).toBeTruthy();
+    if (isLeft(responseEither) && typeof responseEither.left != "string") {
+      expect(responseEither.left.status).toEqual(403);
+    }
+
+    // Change user subscription to disable the keyword
+    await updateUserSubscription({
+      userId: testUser.id,
+      updatedData: { nofSearchObjects: fromEither(decode(positiveInteger, 0)) },
+    });
+
+    await sleep(1000); // wait to propagate
+
+    responseEither = await search(
+      { client: apiClient, logger, token },
+      { userData: { keyword } }
+    );
+
+    expect(
+      isLeft(responseEither) && typeof responseEither.left != "string"
+    ).toBeTruthy();
+    if (isLeft(responseEither) && typeof responseEither.left != "string") {
+      expect(responseEither.left.status).toEqual(403);
+    }
   });
 
   afterAll(async () => {
