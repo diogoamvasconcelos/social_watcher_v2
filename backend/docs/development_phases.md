@@ -88,9 +88,9 @@
 - create endpoint <DONE>
 - with Auth <DONE>
   - check if keyword if valid <DONE>
-- with filters/queries and pagination (SSLF)
-- add envtests
-  - keyword not allowed
+- with filters/queries and pagination (SSLF) <DONE>
+- add envtests <DONE>
+  - keyword not allowed <DONE>
   - pagination
 
 # Phase 6 - NotifyDiscord integration (1 week)

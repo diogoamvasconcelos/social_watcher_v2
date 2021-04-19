@@ -10,5 +10,7 @@ in nixpkgs.mkShell {
   buildInputs = with nixpkgs; [
     nodejs-14_x
     jq
+    # yarn pins the node version to 10...
+    (yarn.override { nodejs = nixpkgs.nodejs-14_x; })
   ];
 }

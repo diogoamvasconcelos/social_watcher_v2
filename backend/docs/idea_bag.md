@@ -4,3 +4,4 @@
   - inspiration: https://twitter.com/search-advanced?lang=en
 - if you want to do token based auth: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-enable-cognito-user-pool.html (4.)
 - Add to favourite search results (store user on search result ddb, search using ES (give all favourites for!!)
+- Do sentiment analysis to searchResults that could be used to filter (maybe-happy?, maybe-negative?) :)
