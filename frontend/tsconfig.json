@@ -4,7 +4,7 @@
     "jsx": "react",
     "noEmit": true,
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "test/**/*.ts", "typings/**/*.ts"],
+  "include": ["./src", "./scripts/**/*.ts", "./test", "./typings", "./assets"],
   "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**"]
 }
   
