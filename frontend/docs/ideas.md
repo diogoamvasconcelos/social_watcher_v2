@@ -1,0 +1,1 @@
+- docs like these: https://reactrouter.com/web/api/Switch
