@@ -1,8 +1,10 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Layout } from "antd";
 import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
+import { Auth } from "aws-amplify";
+import { useAppSelector } from "../store";
 
 const { Header } = Layout;
 
@@ -24,7 +26,32 @@ const NavButton = styled(Button)`
   }
 `;
 
+const NotLoggedButtons: React.FC = () => {
+  return (
+    <ButtonsContainer>
+      <NavButton type="text" onClick={() => handleLoginClicked()}>
+        Log in
+      </NavButton>
+      <NavButton type="primary" onClick={() => console.log("sign up")}>
+        Start free trial
+      </NavButton>
+    </ButtonsContainer>
+  );
+};
+
+const LoggedButtons: React.FC = () => {
+  return (
+    <ButtonsContainer>
+      <NavButton type="text" onClick={async () => await handleLogoutClicked()}>
+        Log out
+      </NavButton>
+    </ButtonsContainer>
+  );
+};
+
 export const Navbar: React.FC = () => {
+  const userID = useAppSelector((state) => state.user.id);
+
   return (
     <Header>
       <NavbarContainer>
@@ -33,27 +60,22 @@ export const Navbar: React.FC = () => {
             <img src={logo} alt="Social Watcher logo" />
           </Link>
         </LogoContainer>
-        <ButtonsContainer>
-          <NavButton type="text" onClick={() => gotoCognitoLogin()}>
-            Log in
-          </NavButton>
-          <NavButton type="primary" onClick={() => console.log("sign up")}>
-            Start free trial
-          </NavButton>
-        </ButtonsContainer>
+        {userID ? <LoggedButtons /> : <NotLoggedButtons />}
       </NavbarContainer>
     </Header>
   );
 };
 
-const gotoCognitoLogin = () => {
+const handleLoginClicked = () => {
   const cognitoDomain = process.env.COGNITO_CLIENT_DOMAIN;
   const cognitoClientId = process.env.COGNITO_CLIENT_ID;
   const appUrl = process.env.APP_URL;
 
   const loginUrl = `${cognitoDomain}/login?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
-  //const logoutUrl = `${cognitoDomain}/logout?client_id=${cognitoClientId}&logout_uri=${appUrl}`;
 
-  console.log(loginUrl);
   location.assign(loginUrl);
+};
+
+const handleLogoutClicked = async () => {
+  await Auth.signOut();
 };
