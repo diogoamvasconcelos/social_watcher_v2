@@ -1,4 +1,4 @@
-# "${}"" is replaced in 'with_env.lf' (build time)
+# "${}"" is replaced in 'with_env.js' (build time)
 # "{}" is replaced in the lambda (run time)
 
 common:

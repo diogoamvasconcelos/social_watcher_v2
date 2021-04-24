@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button, Layout } from "antd";
 import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
@@ -34,7 +34,7 @@ export const Navbar: React.FC = () => {
           </Link>
         </LogoContainer>
         <ButtonsContainer>
-          <NavButton type="text" onClick={() => console.log("Log in")}>
+          <NavButton type="text" onClick={() => gotoCognitoLogin()}>
             Log in
           </NavButton>
           <NavButton type="primary" onClick={() => console.log("sign up")}>
@@ -44,4 +44,16 @@ export const Navbar: React.FC = () => {
       </NavbarContainer>
     </Header>
   );
+};
+
+const gotoCognitoLogin = () => {
+  const cognitoDomain = process.env.COGNITO_CLIENT_DOMAIN;
+  const cognitoClientId = process.env.COGNITO_CLIENT_ID;
+  const appUrl = process.env.APP_URL;
+
+  const loginUrl = `${cognitoDomain}/login?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
+  //const logoutUrl = `${cognitoDomain}/logout?client_id=${cognitoClientId}&logout_uri=${appUrl}`;
+
+  console.log(loginUrl);
+  location.assign(loginUrl);
 };

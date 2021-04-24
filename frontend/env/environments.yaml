@@ -1,0 +1,19 @@
+# "${}"" is replaced in 'with_env.js' (build time)
+
+common:
+  OUT_DIR: "${rootPath}/.out"
+  TF_DIR: "${rootPath}/tf"
+  AWS_REGION: us-east-1
+  API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
+  COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
+  COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
+  COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
+
+local:
+  APP_URL: "http://localhost:1234"
+
+dev:
+  APP_URL: "https://some-s3-location.com"
+
+prod:
+  APP_URL: "https://thesocialwatcher.com/"
