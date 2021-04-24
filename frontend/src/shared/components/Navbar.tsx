@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Layout } from "antd";
-import logo from "../../../assets/logo-navbar.jpg";
+import logo from "url:../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import { Auth } from "aws-amplify";
 import { useAppSelector } from "../store";
+import { getConfig } from "../lib/config";
 
 const { Header } = Layout;
+
+const config = getConfig();
 
 const NavbarContainer = styled.div`
   display: flex;
@@ -67,9 +70,9 @@ export const Navbar: React.FC = () => {
 };
 
 const handleLoginClicked = () => {
-  const cognitoDomain = process.env.COGNITO_CLIENT_DOMAIN;
-  const cognitoClientId = process.env.COGNITO_CLIENT_ID;
-  const appUrl = process.env.APP_URL;
+  const cognitoDomain = config.cognitoClientDomain;
+  const cognitoClientId = config.cognitoClientId;
+  const appUrl = config.appUrl;
 
   const loginUrl = `${cognitoDomain}/login?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
 

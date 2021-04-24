@@ -1,15 +1,7 @@
 import * as t from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
 import { decode, positiveInteger } from "./iots";
-
-export const ensure = (name: string): string => {
-  const value = process.env[name];
-  if (value == null) {
-    throw new Error(`Missing environment variable ${name}`);
-  }
-
-  return value;
-};
+import { ensure } from "../../../shared/src/lib/config";
 
 export const ensureAndDecode = <A>(
   name: string,

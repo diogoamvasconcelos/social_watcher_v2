@@ -6,23 +6,26 @@ import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../store";
 import { onLogin, onLogout } from "../reducers/userState";
+import { getConfig } from "../lib/config";
+
+const config = getConfig();
 
 Amplify.configure({
   Auth: {
-    region: process.env.AWS_REGION,
-    userPoolId: process.env.COGNITO_USER_POOL_ID,
-    userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
+    region: config.region,
+    userPoolId: config.cognitoUserPoolId,
+    userPoolWebClientId: config.cognitoClientId,
     mandatorySignIn: false,
-    redirectSignIn: process.env.APP_URL,
-    redirectSignOut: process.env.APP_URL,
+    redirectSignIn: config.appUrl,
+    redirectSignOut: config.appUrl,
   },
 });
 
 Auth.configure({
   oauth: {
-    domain: (process.env.COGNITO_CLIENT_DOMAIN ?? "").replace("https://", ""),
-    redirectSignIn: process.env.APP_URL,
-    redirectSignOut: process.env.APP_URL,
+    domain: config.cognitoClientDomain.replace("https://", ""),
+    redirectSignIn: config.appUrl,
+    redirectSignOut: config.appUrl,
     responseType: "code",
   },
 });

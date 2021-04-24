@@ -1,4 +1,5 @@
-import { ensure, ensureAndDecode } from "../../src/lib/config";
+import { ensure } from "../../../shared/src/lib/config";
+import { ensureAndDecode } from "../../src/lib/config";
 import { positiveInteger } from "../../src/lib/iots";
 
 export const getLocalTestConfig = () => {

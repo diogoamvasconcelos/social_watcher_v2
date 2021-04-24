@@ -1,4 +1,6 @@
-const cognitoClientId = process.env.COGNITO_CLIENT_ID ?? "";
+import { getConfig } from "./config";
+
+const config = getConfig();
 
 export const hasUserSession = (): boolean => {
   return getUserId() != undefined;
@@ -7,7 +9,7 @@ export const hasUserSession = (): boolean => {
 export const getUserId = (): string | undefined => {
   return (
     localStorage.getItem(
-      `CognitoIdentityServiceProvider.${cognitoClientId}.LastAuthUser`
+      `CognitoIdentityServiceProvider.${config.cognitoClientId}.LastAuthUser`
     ) ?? undefined
   );
 };
@@ -20,7 +22,7 @@ export const getUserIdToken = (): string | undefined => {
 
   return (
     localStorage.getItem(
-      `CognitoIdentityServiceProvider.${cognitoClientId}.${userId}.idToken`
+      `CognitoIdentityServiceProvider.${config.cognitoClientId}.${userId}.idToken`
     ) ?? undefined
   );
 };
