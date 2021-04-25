@@ -4,7 +4,7 @@ import { isString } from "lodash";
 import { User } from "../../domain/models/user";
 import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
-import { ApiErrorResponse, ApiRequestMetadata } from "./models";
+import { ApiErrorResponse, ApiRequestMetadata } from "./models/models";
 import { makeInternalErrorResponse } from "./responses";
 
 export const apiGetUser = async ({

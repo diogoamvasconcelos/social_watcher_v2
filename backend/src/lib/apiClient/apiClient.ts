@@ -8,16 +8,16 @@ import {
 import {
   GetUserResponse,
   getUserResponseCodec,
-} from "../../handlers/api/getUser";
+} from "../../handlers/api/models/getUser";
 import {
   UpdateSearchObjectResponse,
   updateSearchObjectResponseCodec,
-} from "../../handlers/api/updateSearchObject";
+} from "../../handlers/api/models/updateSearchObject";
 import {
   SearchRequestUserData,
   SearchResponse,
   searchResponseCodec,
-} from "../../handlers/api/search";
+} from "../../handlers/api/models/search";
 
 export const getClient = (baseURL: string) => {
   return axios.create({

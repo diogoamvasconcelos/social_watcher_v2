@@ -1,5 +1,5 @@
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
-import { ApiErrorResponse, ApiSuccessResponse } from "./models";
+import { ApiErrorResponse, ApiSuccessResponse } from "./models/models";
 
 export const makeSuccessResponse = <B extends JsonObjectEncodable>(
   statusCode: number,

@@ -1,15 +1,9 @@
-import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { getConfig } from "../../lib/config";
 import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
-import {
-  ApiBaseErrorCode,
-  ApiErrorResponse,
-  ApiRequestMetadata,
-  ApiResponse,
-} from "./models";
+import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
   makeForbiddenResponse,
   makeInternalErrorResponse,
@@ -22,25 +16,16 @@ import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 import { apiGetUser, toApigwRequestMetadata } from "./shared";
 import { User } from "../../domain/models/user";
 import {
-  SearchObject,
-  searchObjectCodec,
   searchObjectIndexCodec,
-  SearchObjectUserData,
   searchObjectUserDataCodec,
 } from "../../domain/models/userItem";
 import { parseSafe } from "../../lib/json";
 import { decode } from "../../lib/iots";
-
-type UpdateSearchObjectRequest = ApiRequestMetadata & {
-  data: SearchObjectUserData;
-} & { index: SearchObject["index"] };
-
-type UpdateSearchObjectErrorCode = ApiBaseErrorCode;
-
-export const updateSearchObjectResponseCodec = searchObjectCodec;
-export type UpdateSearchObjectResponse = t.TypeOf<
-  typeof updateSearchObjectResponseCodec
->;
+import {
+  UpdateSearchObjectErrorCode,
+  UpdateSearchObjectRequest,
+  UpdateSearchObjectResponse,
+} from "./models/updateSearchObject";
 
 export const handler = async (
   event: APIGatewayProxyEvent

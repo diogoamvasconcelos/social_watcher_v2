@@ -1,16 +1,9 @@
-import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { keywordCodec } from "../../domain/models/keyword";
 import { parseSafe } from "../../lib/json";
 import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
-import {
-  ApiBaseErrorCode,
-  ApiErrorResponse,
-  ApiRequestMetadata,
-  ApiResponse,
-} from "./models";
+import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
   makeForbiddenResponse,
   makeInternalErrorResponse,
@@ -26,25 +19,11 @@ import { getClient as getSearchEngineClient } from "../../adapters/searchResults
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
 import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
 import {
-  paginationRequestCodec,
-  searchSearchResultsResultCodec,
-} from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
-
-export const searchRequestUserDataCodec = t.intersection([
-  t.type({
-    keyword: keywordCodec,
-  }),
-  t.partial({
-    pagination: paginationRequestCodec,
-  }),
-]);
-export type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
-
-export const searchResponseCodec = searchSearchResultsResultCodec;
-export type SearchResponse = t.TypeOf<typeof searchResponseCodec>;
-
-type SearchRequest = ApiRequestMetadata & SearchRequestUserData;
-type SearchErrorCode = ApiBaseErrorCode;
+  SearchErrorCode,
+  SearchRequest,
+  searchRequestUserDataCodec,
+  SearchResponse,
+} from "./models/search";
 
 const handler = async (
   event: APIGatewayProxyEvent
