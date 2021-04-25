@@ -54,6 +54,9 @@ export const lowerCase = t.brand(
 
 export type LowerCase = t.TypeOf<typeof lowerCase>;
 
+export const newLowerCase = (x: string): LowerCase =>
+  fromEither(decode(lowerCase, x));
+
 // postive integer
 interface PositiveIntegerBrand {
   readonly PositiveInteger: unique symbol;
@@ -67,6 +70,9 @@ export const positiveInteger = t.brand(
 );
 
 export type PositiveInteger = t.TypeOf<typeof positiveInteger>;
+
+export const newPositiveInteger = (x: number): PositiveInteger =>
+  fromEither(decode(positiveInteger, x));
 
 // DateFromStringV2 (can convert from date as well (nice for redecoding))
 // ref: https://github.com/gcanti/io-ts-types/blob/master/src/DateFromISOString.ts

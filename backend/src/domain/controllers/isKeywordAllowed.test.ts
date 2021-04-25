@@ -1,5 +1,5 @@
 import { right } from "fp-ts/lib/Either";
-import { decode, fromEither, lowerCase, positiveInteger } from "../../lib/iots";
+import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
 import { getLogger } from "../../lib/logger";
 import { SearchObject } from "../models/userItem";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
@@ -14,11 +14,11 @@ describe("controllers/isKeywordAllowed", () => {
   });
 
   const userId = "my-user-id";
-  const keyword = fromEither(decode(lowerCase, "my-keyword"));
+  const keyword = newLowerCase("my-keyword");
   const defaultSearchObject: SearchObject = {
     type: "SEARCH_OBJECT",
     id: userId,
-    index: fromEither(decode(positiveInteger, 0)),
+    index: newPositiveInteger(0),
     lockedStatus: "UNLOCKED",
     keyword,
     searchData: { twitter: { enabledStatus: "ENABLED" } },
@@ -37,7 +37,7 @@ describe("controllers/isKeywordAllowed", () => {
       [
         {
           ...defaultSearchObject,
-          keyword: fromEither(decode(lowerCase, "another-keyword")),
+          keyword: newLowerCase("another-keyword"),
         },
       ],
       false,

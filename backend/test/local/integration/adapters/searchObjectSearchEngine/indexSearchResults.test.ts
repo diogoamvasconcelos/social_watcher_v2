@@ -10,10 +10,9 @@ import {
   refreshIndices,
 } from "../../../../../src/lib/elasticsearch/client";
 import {
-  decode,
   fromEither,
-  lowerCase,
-  positiveInteger,
+  newLowerCase,
+  newPositiveInteger,
 } from "../../../../../src/lib/iots";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
@@ -34,13 +33,13 @@ describe("indexSearchResults", () => {
     indexName = fromEither(
       await createSearchResultIndex(
         { logger, client },
-        fromEither(decode(positiveInteger, config.searchResultIndexVersion))
+        newPositiveInteger(config.searchResultIndexVersion)
       )
     ).name;
   });
 
   it("can index searcResults", async () => {
-    const keyword = fromEither(decode(lowerCase, uuid()));
+    const keyword = newLowerCase(uuid());
     const searchResults: SearchResult[] = [
       buildSearchResult({ keyword }),
       buildSearchResult({ keyword }),

@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
 import { User } from "../../../../backend/src/domain/models/user";
-import {
-  decode,
-  fromEither,
-  positiveInteger,
-} from "../../../../backend/src/lib/iots";
+import { newPositiveInteger } from "../../../../backend/src/lib/iots";
 import { apiGetUser } from "../lib/apiClient";
 
 export type UserState = User;
@@ -19,7 +15,7 @@ const initialState: UserState = {
   email: "",
   subscriptionStatus: "INACTIVE",
   subscriptionType: "NORMAL",
-  nofSearchObjects: fromEither(decode(positiveInteger, 0)),
+  nofSearchObjects: newPositiveInteger(0),
 };
 const userStateSlice = createSlice({
   name: "userState",

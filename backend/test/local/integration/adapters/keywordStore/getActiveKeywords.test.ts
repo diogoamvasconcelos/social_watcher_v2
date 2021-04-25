@@ -3,7 +3,7 @@ import { makeGetActiveKeywords } from "../../../../../src/adapters/keywordStore/
 import { KeywordData } from "../../../../../src/domain/models/keyword";
 import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
 import { putItem } from "../../../../../src/lib/dynamoDb";
-import { decode, fromEither, lowerCase } from "../../../../../src/lib/iots";
+import { fromEither, newLowerCase } from "../../../../../src/lib/iots";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
@@ -31,12 +31,12 @@ describe("getActiveKeywords", () => {
   it("sparse global index works", async () => {
     const socialMedia: SocialMedia = "twitter";
     const activeKeyword: KeywordData = {
-      keyword: fromEither(decode(lowerCase, "active_keyword")),
+      keyword: newLowerCase("active_keyword"),
       status: "ACTIVE",
       socialMedia,
     };
     const inactiveKeyword: KeywordData = {
-      keyword: fromEither(decode(lowerCase, "inactive_keyword")),
+      keyword: newLowerCase("inactive_keyword"),
       status: "INACTIVE",
       socialMedia,
     };

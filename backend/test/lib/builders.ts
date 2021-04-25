@@ -2,7 +2,7 @@ import _ from "lodash";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../src/domain/models/searchResult";
 import { deepmergeSafe } from "../../src/lib/deepmerge";
-import { decode, fromEither, lowerCase } from "../../src/lib/iots";
+import { newLowerCase } from "../../src/lib/iots";
 import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
@@ -44,7 +44,7 @@ export const buildSearchResult = (
   return deepmergeSafe(
     {
       id,
-      keyword: fromEither(decode(lowerCase, uuid())),
+      keyword: newLowerCase(uuid()),
       socialMedia: "twitter",
       happenedAt: now,
       data: {

@@ -1,8 +1,8 @@
 import {
   decode,
   fromEither,
-  lowerCase,
-  positiveInteger,
+  newLowerCase,
+  newPositiveInteger,
 } from "../../../src/lib/iots";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
@@ -221,9 +221,9 @@ export const updateKeyword = async ({
         token,
       },
       {
-        index: fromEither(decode(positiveInteger, index)),
+        index: newPositiveInteger(index),
         userData: {
-          keyword: fromEither(decode(lowerCase, keyword)),
+          keyword: newLowerCase(keyword),
           searchData: {
             twitter: { enabledStatus: twitterStatus },
           },
@@ -241,11 +241,7 @@ export const checkKeyword = async ({
 }: Omit<KeywordData, "keyword"> & { keyword: string; exists: boolean }) => {
   const res = await retryUntil(
     async () => {
-      return await getKeywordDataFn(
-        logger,
-        socialMedia,
-        fromEither(decode(lowerCase, keyword))
-      );
+      return await getKeywordDataFn(logger, socialMedia, newLowerCase(keyword));
     },
     (res) => {
       logger.info("checkKeyword:getKeywordDataFn attempt", {
@@ -275,7 +271,7 @@ export const deleteKeyword = async (keyword: string) => {
           {
             TableName: config.keywordsTableName,
             Key: toDocumentPrimaryKeys({
-              keyword: fromEither(decode(lowerCase, keyword)),
+              keyword: newLowerCase(keyword),
               socialMedia,
             }),
           },

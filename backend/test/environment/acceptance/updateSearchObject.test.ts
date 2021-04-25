@@ -4,10 +4,9 @@ import {
   updateSearchObject,
 } from "../../../src/lib/apiClient/apiClient";
 import {
-  decode,
   fromEither,
-  lowerCase,
-  positiveInteger,
+  newLowerCase,
+  newPositiveInteger,
 } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
@@ -19,12 +18,12 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
-  const keyword = fromEither(decode(lowerCase, uuid()));
+  const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
     jest.setTimeout(10000);
     testUser = await createTestUser({
-      nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+      nofSearchObjects: newPositiveInteger(1),
     });
   });
 
@@ -34,7 +33,7 @@ describe("update searchObject e2e test", () => {
       password: testUser.password,
     });
 
-    const index = fromEither(decode(positiveInteger, 0));
+    const index = newPositiveInteger(0);
     const userData: SearchObjectUserData = {
       keyword,
       searchData: {

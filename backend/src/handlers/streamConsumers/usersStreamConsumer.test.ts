@@ -1,7 +1,7 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { userItemToDocument } from "../../adapters/userStore/client";
-import { decode, fromEither, positiveInteger } from "../../lib/iots";
+import { newPositiveInteger } from "../../lib/iots";
 import { handler } from "./usersStreamConsumer";
 
 describe("handlers/usersStreamConsumer", () => {
@@ -16,7 +16,7 @@ describe("handlers/usersStreamConsumer", () => {
               id: "some-id",
               email: "some@email.com",
               subscriptionStatus: "ACTIVE",
-              nofSearchObjects: fromEither(decode(positiveInteger, 0)),
+              nofSearchObjects: newPositiveInteger(0),
               subscriptionType: "NORMAL",
             })
           ),

@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { SearchObjectUserData } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
-import { decode, fromEither, lowerCase, positiveInteger } from "../../lib/iots";
+import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import * as putSearchObject from "../../adapters/userStore/putSearchObject";
@@ -22,11 +22,11 @@ const defaultUser: User = {
   email: "some-email",
   subscriptionStatus: "ACTIVE",
   subscriptionType: "NORMAL",
-  nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+  nofSearchObjects: newPositiveInteger(1),
 };
 
 const defaultRequestData: SearchObjectUserData = {
-  keyword: fromEither(decode(lowerCase, "some_keyword")),
+  keyword: newLowerCase("some_keyword"),
   searchData: {
     twitter: {
       enabledStatus: "ENABLED",
@@ -70,7 +70,7 @@ describe("handlers/api/updateSearchObject", () => {
   it("returns forbidden index > nofAllowed", async () => {
     const restrictedUser = {
       ...defaultUser,
-      nofSearchObjects: fromEither(decode(positiveInteger, 0)),
+      nofSearchObjects: newPositiveInteger(0),
     };
     const event = buildEvent(restrictedUser, defaultRequestData);
 

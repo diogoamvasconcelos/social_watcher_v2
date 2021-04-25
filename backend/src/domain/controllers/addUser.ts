@@ -1,4 +1,4 @@
-import { decode, fromEither, positiveInteger } from "../../lib/iots";
+import { newPositiveInteger } from "../../lib/iots";
 import { Logger } from "../../lib/logger";
 import { User, UserId } from "../models/user";
 import { PutUserFn } from "../ports/userStore/putUser";
@@ -16,7 +16,7 @@ export const addUser = async ({
     ...data,
     subscriptionType: "NORMAL",
     subscriptionStatus: "INACTIVE",
-    nofSearchObjects: fromEither(decode(positiveInteger, 0)),
+    nofSearchObjects: newPositiveInteger(0),
   };
   logger.info("Creating new user", { user });
 

@@ -1,7 +1,7 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "../../adapters/searchResultsStore/client";
-import { decode, fromEither, lowerCase } from "../../lib/iots";
+import { newLowerCase } from "../../lib/iots";
 import { handler } from "./searchResultsStreamConsumer";
 
 describe("handlers/searchResultsStreamConsumer", () => {
@@ -13,7 +13,7 @@ describe("handlers/searchResultsStreamConsumer", () => {
           NewImage: Converter.marshall(
             searchResultToDocument({
               id: "some-id",
-              keyword: fromEither(decode(lowerCase, "some-keyword")),
+              keyword: newLowerCase("some-keyword"),
               happenedAt: new Date(),
               socialMedia: "twitter",
               data: {

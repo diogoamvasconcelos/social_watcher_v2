@@ -1,8 +1,7 @@
 import {
-  decode,
   fromEither,
-  lowerCase,
-  positiveInteger,
+  newLowerCase,
+  newPositiveInteger,
 } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
@@ -28,12 +27,12 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("search endpoint e2e (nearly)", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
-  const keyword = fromEither(decode(lowerCase, uuid()));
+  const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
     jest.setTimeout(30000);
     testUser = await createTestUser({
-      nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+      nofSearchObjects: newPositiveInteger(1),
     });
   });
 
@@ -62,7 +61,7 @@ describe("search endpoint e2e (nearly)", () => {
   });
 
   it("can't search for not allowed keywords", async () => {
-    const anotherKeyword = fromEither(decode(lowerCase, uuid()));
+    const anotherKeyword = newLowerCase(uuid());
     const token = await getIdToken({
       username: testUser.email,
       password: testUser.password,
@@ -83,7 +82,7 @@ describe("search endpoint e2e (nearly)", () => {
     // Change user subscription to disable the keyword
     await updateUserSubscription({
       userId: testUser.id,
-      updatedData: { nofSearchObjects: fromEither(decode(positiveInteger, 0)) },
+      updatedData: { nofSearchObjects: newPositiveInteger(0) },
     });
 
     await sleep(1000); // wait to propagate

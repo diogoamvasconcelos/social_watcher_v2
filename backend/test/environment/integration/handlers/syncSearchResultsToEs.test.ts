@@ -1,5 +1,5 @@
 import { makeSearchSearchResults } from "../../../../src/adapters/searchResultsSearchEngine/searchSearchResults";
-import { decode, fromEither, lowerCase } from "../../../../src/lib/iots";
+import { fromEither, newLowerCase } from "../../../../src/lib/iots";
 import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
 import { buildSearchResultsEvent } from "../../../lib/builders";
@@ -22,7 +22,7 @@ describe("handlers/syncSearchResultsToEs", () => {
   });
 
   it("syncs multiple search results to es", async () => {
-    const keyword = fromEither(decode(lowerCase, uuid()));
+    const keyword = newLowerCase(uuid());
     const searchJobEvent = buildSearchResultsEvent(2, { keyword });
 
     const invokeResult = fromEither(

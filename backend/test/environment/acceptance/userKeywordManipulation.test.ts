@@ -1,4 +1,4 @@
-import { decode, fromEither, positiveInteger } from "../../../src/lib/iots";
+import { newPositiveInteger } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import {
@@ -23,10 +23,10 @@ describe("keyword interaction between multiple users", () => {
     jest.setTimeout(45000);
 
     testUserA = await createTestUser({
-      nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+      nofSearchObjects: newPositiveInteger(1),
     });
     testUserB = await createTestUser({
-      nofSearchObjects: fromEither(decode(positiveInteger, 1)),
+      nofSearchObjects: newPositiveInteger(1),
     });
 
     userAToken = await getIdToken({

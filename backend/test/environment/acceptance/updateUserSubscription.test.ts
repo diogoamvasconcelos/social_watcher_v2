@@ -1,4 +1,4 @@
-import { decode, fromEither, positiveInteger } from "../../../src/lib/iots";
+import { newPositiveInteger } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import {
@@ -22,7 +22,7 @@ describe("changes to user subscription", () => {
     jest.setTimeout(45000);
 
     testUser = await createTestUser({
-      nofSearchObjects: fromEither(decode(positiveInteger, 2)),
+      nofSearchObjects: newPositiveInteger(2),
     });
 
     userToken = await getIdToken({
@@ -76,7 +76,7 @@ describe("changes to user subscription", () => {
     // Reduced nofSearchObjects
     await updateUserSubscription({
       userId: testUser.id,
-      updatedData: { nofSearchObjects: fromEither(decode(positiveInteger, 1)) },
+      updatedData: { nofSearchObjects: newPositiveInteger(1) },
     });
 
     await checkKeyword({
@@ -95,7 +95,7 @@ describe("changes to user subscription", () => {
     // Increase nofSearchObjects
     await updateUserSubscription({
       userId: testUser.id,
-      updatedData: { nofSearchObjects: fromEither(decode(positiveInteger, 5)) },
+      updatedData: { nofSearchObjects: newPositiveInteger(5) },
     });
 
     await checkKeyword({
