@@ -5,7 +5,7 @@ import { HubCallback } from "@aws-amplify/core/lib/Hub";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../store";
-import { onLogin, onLogout } from "../reducers/userState";
+import { onLogin, onLogout } from "../reducers/userAuthState";
 import { getConfig } from "../lib/config";
 
 const config = getConfig();

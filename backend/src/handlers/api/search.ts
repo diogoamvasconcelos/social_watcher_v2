@@ -30,9 +30,6 @@ import {
   searchSearchResultsResultCodec,
 } from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 
-const config = getConfig();
-const logger = getLogger();
-
 export const searchRequestUserDataCodec = t.intersection([
   t.type({
     keyword: keywordCodec,
@@ -52,6 +49,9 @@ type SearchErrorCode = ApiBaseErrorCode;
 const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<ApiResponse<SearchErrorCode, SearchResponse>> => {
+  const config = getConfig();
+  const logger = getLogger();
+
   const userStoreClient = getUsersStoreClient();
   const getSearchObjectsForUserFn = makeGetSearchObjectsForUser(
     userStoreClient,

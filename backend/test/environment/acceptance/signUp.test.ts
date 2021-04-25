@@ -4,13 +4,11 @@ import {
   getUser as getUserApi,
 } from "../../../src/lib/apiClient/apiClient";
 import { fromEither } from "../../../src/lib/iots";
-import { getLogger } from "../../../src/lib/logger";
 import { Awaited } from "../../../src/lib/types";
 import { getEnvTestConfig } from "../../lib/config";
 import { createTestUser, deleteUser, getIdToken, getUser } from "./steps";
 
 const config = getEnvTestConfig();
-const logger = getLogger();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("signup e2e test", () => {
@@ -38,7 +36,6 @@ describe("signup e2e test", () => {
       await getUserApi({
         client: apiClient,
         token: idToken,
-        logger,
       })
     );
 

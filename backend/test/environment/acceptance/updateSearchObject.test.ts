@@ -9,14 +9,12 @@ import {
   lowerCase,
   positiveInteger,
 } from "../../../src/lib/iots";
-import { getLogger } from "../../../src/lib/logger";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 
 const config = getEnvTestConfig();
-const logger = getLogger();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("update searchObject e2e test", () => {
@@ -49,7 +47,6 @@ describe("update searchObject e2e test", () => {
         {
           client: apiClient,
           token,
-          logger,
         },
         { index, userData }
       )

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "scripts/with_env.js 'parcel src/index.html --dist-dir .build/debug'",
-    "check-all": "npm run lint:check && npm run build && npm run test",
+    "check-all": "yarn lint:check && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "lint:check": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",

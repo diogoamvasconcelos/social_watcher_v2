@@ -101,3 +101,7 @@
   "Cognito just had a big release, so there might be a better way to do this now. Here is how I did it. I created a user table in DynamoDB. Then I created a lambda trigger to update DB that fires when a user has registered. Then another lambda trigger when the user verifies their email. Finally, I created a lambda function to run the server-side of the stripe script. This server side code will also update the user table when a user pays the subscription fee."
 - stripeClient
   - create account and get keys
+
+# Misc TODO
+
+- change npm to yarn

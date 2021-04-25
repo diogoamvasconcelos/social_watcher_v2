@@ -1,13 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { reducer as userAuthStateReducer } from "../reducers/userAuthState";
 import { reducer as userStateReducer } from "../reducers/userState";
 
 // refs
 // - https://redux.js.org/recipes/usage-with-typescript
 // - https://redux-toolkit.js.org/usage/usage-guide
+// - async: https://redux-toolkit.js.org/api/createAsyncThunk
 
 export const store = configureStore({
   reducer: {
+    userAuth: userAuthStateReducer,
     user: userStateReducer,
   },
 });

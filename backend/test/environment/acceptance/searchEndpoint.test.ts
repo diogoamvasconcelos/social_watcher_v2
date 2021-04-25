@@ -4,7 +4,6 @@ import {
   lowerCase,
   positiveInteger,
 } from "../../../src/lib/iots";
-import { getLogger } from "../../../src/lib/logger";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
@@ -25,7 +24,6 @@ import { retryUntil, sleep } from "../../lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();
-const logger = getLogger();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("search endpoint e2e (nearly)", () => {
@@ -56,7 +54,7 @@ describe("search endpoint e2e (nearly)", () => {
     });
 
     const searchResponse = await trySearchUsingApi(
-      { client: apiClient, logger, token },
+      { client: apiClient, token },
       { userData: { keyword } }
     );
 
@@ -71,7 +69,7 @@ describe("search endpoint e2e (nearly)", () => {
     });
 
     let responseEither = await search(
-      { client: apiClient, logger, token },
+      { client: apiClient, token },
       { userData: { keyword: anotherKeyword } }
     );
 
@@ -91,7 +89,7 @@ describe("search endpoint e2e (nearly)", () => {
     await sleep(1000); // wait to propagate
 
     responseEither = await search(
-      { client: apiClient, logger, token },
+      { client: apiClient, token },
       { userData: { keyword } }
     );
 

@@ -53,7 +53,7 @@ const LoggedButtons: React.FC = () => {
 };
 
 export const Navbar: React.FC = () => {
-  const userID = useAppSelector((state) => state.user.id);
+  const userID = useAppSelector((state) => state.userAuth.id);
 
   return (
     <Header>

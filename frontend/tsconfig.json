@@ -7,7 +7,7 @@
     "rootDir": "../",
     "typeRoots": ["./node_modules/@types", "./typings"],
   },
-  "include": ["../shared/src", "./src", "./scripts/**/*.ts", "./test", "./typings", "./assets"],
-  "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**"]
+  "include": ["../shared/src", "./src", "./scripts/**/*.ts", "./test", "./typings", "./assets", "../backend/src"],
+  "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**", "../backend"]
 }
   

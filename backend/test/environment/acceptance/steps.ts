@@ -219,7 +219,6 @@ export const updateKeyword = async ({
       {
         client: apiClient,
         token,
-        logger,
       },
       {
         index: fromEither(decode(positiveInteger, index)),

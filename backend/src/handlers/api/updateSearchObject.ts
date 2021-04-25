@@ -31,9 +31,6 @@ import {
 import { parseSafe } from "../../lib/json";
 import { decode } from "../../lib/iots";
 
-const config = getConfig();
-const logger = getLogger();
-
 type UpdateSearchObjectRequest = ApiRequestMetadata & {
   data: SearchObjectUserData;
 } & { index: SearchObject["index"] };
@@ -50,6 +47,9 @@ export const handler = async (
 ): Promise<
   ApiResponse<UpdateSearchObjectErrorCode, UpdateSearchObjectResponse>
 > => {
+  const config = getConfig();
+  const logger = getLogger();
+
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
   const putSearchObjectFn = makePutSearchObject(

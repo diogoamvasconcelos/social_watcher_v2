@@ -16,9 +16,6 @@ import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import { apiGetUser, toApigwRequestMetadata } from "./shared";
 import { User, userCodec } from "../../domain/models/user";
 
-const config = getConfig();
-const logger = getLogger();
-
 type GetUserRequest = ApiRequestMetadata;
 type GetUserErrorCode = ApiBaseErrorCode;
 
@@ -28,6 +25,9 @@ export type GetUserResponse = t.TypeOf<typeof getUserResponseCodec>;
 const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<ApiResponse<GetUserErrorCode, GetUserResponse>> => {
+  const config = getConfig();
+  const logger = getLogger();
+
   const getUserFn = makeGetUser(getUsersStoreClient(), config.usersTableName);
 
   const requestEither = toGetUserRequest(event);

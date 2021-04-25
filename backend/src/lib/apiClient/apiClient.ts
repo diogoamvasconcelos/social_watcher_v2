@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
 import { decode } from "../iots";
-import logger, { Logger } from "../logger";
 import {
   SearchObject,
   SearchObjectUserData,
@@ -30,7 +29,6 @@ export type Client = ReturnType<typeof getClient>;
 export type ApiClientDeps = {
   client: Client;
   token: string;
-  logger: Logger;
 };
 
 const doGenericAPICall = async (
@@ -117,8 +115,6 @@ export const search = async (
   if (apiResult.status != 200) {
     return left(apiResult);
   }
-
-  logger.debug("search response", { response: apiResult.data });
 
   const decodeResult = decode(searchResponseCodec, apiResult.data);
   if (isLeft(decodeResult)) {
