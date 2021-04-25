@@ -6,8 +6,8 @@ import { apiGetUser } from "../lib/apiClient";
 
 export type UserState = User;
 
-export const getUser = createAsyncThunk("get:user", async (_thunkAPI) => {
-  return Promise.resolve({}); // await apiGetUser();
+export const getUser = createAsyncThunk("get:user", async () => {
+  return await apiGetUser();
 });
 
 const initialState: UserState = {
@@ -22,13 +22,14 @@ const userStateSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getUser.fulfilled, (state, action) => {
+    builder.addCase(getUser.fulfilled, (_state, action) => {
+      console.log(action);
       if (isLeft(action.payload)) {
         // TODO: show error?
         return initialState;
       }
 
-      return state;
+      return action.payload.right;
     });
   },
 });

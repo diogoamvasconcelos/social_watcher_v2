@@ -48,7 +48,7 @@ export const WithAuth: React.FC = () => {
         history.push("/user");
         break;
       case "signOut":
-        dispatch(onLogout);
+        dispatch(onLogout());
         history.push("/");
         break;
     }

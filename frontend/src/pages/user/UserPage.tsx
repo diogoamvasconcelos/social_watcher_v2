@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getUser } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
+import { Button } from "antd";
 
 export const UserPage: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  dispatch(getUser);
   const user = useAppSelector((state) => state.user);
 
-  console.log(user);
+  void dispatch(getUser());
 
-  return <p> ${`User: ${JSON.stringify(user)}`} </p>;
+  return (
+    <div>
+      <Button type="default" onClick={() => dispatch(getUser())}>
+        get user
+      </Button>
+      <p> ${`User: ${JSON.stringify(user)}`} </p>);
+    </div>
+  );
 };
