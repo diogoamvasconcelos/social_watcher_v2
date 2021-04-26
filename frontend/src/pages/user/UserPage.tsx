@@ -7,7 +7,9 @@ export const UserPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
 
-  void dispatch(getUser());
+  useEffect(() => {
+    void dispatch(getUser());
+  }, []);
 
   return (
     <div>
