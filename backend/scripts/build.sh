@@ -10,5 +10,5 @@ cd $THIS_PATH/..
 mkdir -p .build
 
 npm ci # required to compile with ts
-npx tsc --project tsconfig.build.json
+npx tsc --project $THIS_PATH/../tsconfig.json
 npm ci --only=prod # prune node_modules dev packages

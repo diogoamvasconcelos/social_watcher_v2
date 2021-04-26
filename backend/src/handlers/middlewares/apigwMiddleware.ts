@@ -59,6 +59,7 @@ const apigwResponseToApigwResult = (
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
+    "Access-Control-Allow-Origin": "http://localhost:1234",
   };
 
   if (isLeft(response)) {

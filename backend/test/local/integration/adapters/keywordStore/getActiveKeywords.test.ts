@@ -24,6 +24,10 @@ describe("getActiveKeywords", () => {
     );
   };
 
+  beforeAll(() => {
+    jest.setTimeout(10000);
+  });
+
   beforeEach(async () => {
     await preparesGenericTable(tableName);
   });

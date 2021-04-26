@@ -9,4 +9,7 @@ OUT_DIR=$THIS_PATH/../.out
 cd $THIS_PATH/..
 
 mkdir -p "$OUT_DIR/"
-zip -Xqr "$OUT_DIR/lambda_artifact.zip" .build node_modules
+zip -Xqr "$OUT_DIR/lambda_artifact.zip" \
+  .build/backend/src \
+  .build/shared \
+  node_modules

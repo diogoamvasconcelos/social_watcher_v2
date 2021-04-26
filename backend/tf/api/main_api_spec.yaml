@@ -31,9 +31,27 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${get_user_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:1234'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /user/searchObject/{index}:
     parameters:
       - $ref: "#/components/parameters/searchObjectIndex"
+
     put:
       description: Update SearchObject of a user
       requestBody:
@@ -57,6 +75,23 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${update_search_object_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:1234'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /search:
     post:
       description: Search
@@ -85,6 +120,22 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${search_endpoint_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:1234'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
 
 # ++++++++++++++++++
 # + Generic config +
@@ -239,3 +290,19 @@ components:
         type: cognito_user_pools
         providerARNs:
           - ${cognito_pool_auth_arn}
+
+  # +++++++++++++
+  # + RESPONSES +
+  responses:
+    cors:
+      description: Default response for CORS method
+      headers:
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"

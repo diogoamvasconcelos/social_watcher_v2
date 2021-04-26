@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "dispatch_search_jobs" {
   filename         = local.lambda_file
   function_name    = local.dispatch_search_jobs_lambda_name
-  handler          = ".build/src/handlers/dispatchSearchJobs.lambdaHandler"
+  handler          = ".build/backend/src/handlers/dispatchSearchJobs.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

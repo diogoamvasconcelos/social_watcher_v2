@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "sync_search_results_to_es" {
   filename         = local.lambda_file
   function_name    = local.sync_search_results_to_es_lambda_name
-  handler          = ".build/src/handlers/syncSearchResultsToEs.lambdaHandler"
+  handler          = ".build/backend/src/handlers/syncSearchResultsToEs.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

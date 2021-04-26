@@ -13,6 +13,10 @@ describe("adapters/putSearchResults", () => {
   const tableName: string = uuid();
   const putSearchResultsFn = makePutSearchResults(client, tableName);
 
+  beforeAll(() => {
+    jest.setTimeout(10000);
+  });
+
   beforeEach(async () => {
     await preparesGenericTable(tableName);
   });

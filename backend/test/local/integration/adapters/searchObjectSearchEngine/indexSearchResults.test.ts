@@ -29,6 +29,10 @@ const searchSearchResultsFn = makeSearchSearchResults(client);
 let indexName: string;
 
 describe("indexSearchResults", () => {
+  beforeAll(() => {
+    jest.setTimeout(10000);
+  });
+
   beforeEach(async () => {
     indexName = fromEither(
       await createSearchResultIndex(
