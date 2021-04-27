@@ -1,0 +1,42 @@
+---
+name: JSONViewer
+menu: Components
+---
+
+import { Playground, Props } from "../../docz/";
+
+# JSONViewer
+
+JSONViewer is a JSON viewer built on top of "[react-json-view](https://www.npmjs.com/package/react-json-view)".
+
+## Props
+
+```ts
+type Props = {
+  json: object | undefined;
+};
+```
+
+## Children props
+
+```ts
+type Props = {
+  children: (
+    name: string,
+    theme: object,
+    sortKeys: boolean,
+    indentWidth: number,
+    displayObjectSize: boolean,
+    displayDataTypes: boolean
+  ) => JSX.Element;
+};
+```
+
+## Basic usage
+
+```ts
+<JSONViewer
+  name="data"
+  json={{ a: 1, b: "two", c: { d: true, e: { f: 0 } } }}
+/>
+```

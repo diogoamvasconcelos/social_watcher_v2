@@ -48,6 +48,41 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
+  /user/searchObject:
+    get:
+      description: Get Search Objects
+      responses:
+        200:
+          description: Search Objects list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObjectsList"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${get_search_objects_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:1234'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /user/searchObject/{index}:
     parameters:
       - $ref: "#/components/parameters/searchObjectIndex"
@@ -191,6 +226,14 @@ components:
         index:
           $ref: "#/components/schemas/SearchObjectIndex"
 
+    SearchObjectsList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchObject"
+
     UpdateSearchObjectRequestBody:
       type: object
       required:
@@ -243,8 +286,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/SearchResult"
-          pagination:
-            $ref: "#/components/schemas/PaginationResponse"
+        pagination:
+          $ref: "#/components/schemas/PaginationResponse"
 
     PaginationRequest:
       description: pagination request object

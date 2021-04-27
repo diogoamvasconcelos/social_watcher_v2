@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { getUser } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
-import { Button } from "antd";
+import { JSONViewer } from "../../shared/components/JSONViewer";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 export const UserPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,10 +16,14 @@ export const UserPage: React.FC = () => {
 
   return (
     <div>
-      <Button type="default" onClick={() => dispatch(getUser())}>
-        get user
-      </Button>
-      <p> ${`User: ${JSON.stringify(user)}`} </p>);
+      <div>
+        <Title level={4}>User</Title>
+        <JSONViewer name="user" json={user} />
+      </div>
+      <div>
+        <Title level={4}>Keywords</Title>
+        <JSONViewer name="keywords" json={{ todo: true }} />
+      </div>
     </div>
   );
 };

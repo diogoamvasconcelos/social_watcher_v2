@@ -18,6 +18,10 @@ import {
   SearchResponse,
   searchResponseCodec,
 } from "../../handlers/api/models/search";
+import {
+  GetSearchObjectsResponse,
+  getSearchObjectsResponseCodec,
+} from "../../handlers/api/models/getSearchObjects";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -70,6 +74,25 @@ export const getUser = async (
   }
 
   const decodeResult = decode(getUserResponseCodec, apiResult.data);
+  if (isLeft(decodeResult)) {
+    return left("DECODE_ERROR");
+  }
+
+  return decodeResult;
+};
+
+export const getSearchObjects = async (
+  deps: ApiClientDeps
+): Promise<Either<ApiError, GetSearchObjectsResponse>> => {
+  const apiResult = await doGenericAPICall(deps, {
+    method: "get",
+    url: "user/searchObject",
+  });
+  if (apiResult.status != 200) {
+    return left(apiResult);
+  }
+
+  const decodeResult = decode(getSearchObjectsResponseCodec, apiResult.data);
   if (isLeft(decodeResult)) {
     return left("DECODE_ERROR");
   }

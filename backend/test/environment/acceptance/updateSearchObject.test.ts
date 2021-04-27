@@ -1,6 +1,7 @@
 import { SearchObjectUserData } from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
+  getSearchObjects,
   updateSearchObject,
 } from "../../../src/lib/apiClient/apiClient";
 import {
@@ -50,8 +51,17 @@ describe("update searchObject e2e test", () => {
         { index, userData }
       )
     );
-
     expect(response).toEqual(expect.objectContaining({ index, ...userData }));
+
+    const getSearchObejctsResponse = fromEither(
+      await getSearchObjects({
+        client: apiClient,
+        token,
+      })
+    );
+    expect(getSearchObejctsResponse).toEqual({
+      items: [expect.objectContaining({ index, ...userData })],
+    });
   });
 
   afterAll(async () => {
