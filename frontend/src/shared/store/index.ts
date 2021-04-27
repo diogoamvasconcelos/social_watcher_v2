@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { reducer as userAuthStateReducer } from "../reducers/userAuthState";
 import { reducer as userStateReducer } from "../reducers/userState";
+import { reducer as searchStateReducer } from "../../pages/user/searchState";
 
 // refs
 // - https://redux.js.org/recipes/usage-with-typescript
@@ -12,6 +13,7 @@ export const store = configureStore({
   reducer: {
     userAuth: userAuthStateReducer,
     user: userStateReducer,
+    search: searchStateReducer,
   },
 });
 

@@ -19,6 +19,7 @@ plugins:
   - prettier
   - jest
   - react
+  - react-hooks
 rules:
   prettier/prettier:
     - error
@@ -29,6 +30,10 @@ rules:
     - error
   no-unused-vars:
     - off
+  react-hooks/rules-of-hooks:
+    - error
+  react-hooks/exhaustive-deps:
+    - warn
   "@typescript-eslint/no-unused-vars":
     - error
     - argsIgnorePattern: "^_"
