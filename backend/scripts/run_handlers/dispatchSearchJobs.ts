@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lambdaHandler } from "../../src/handlers/dispatchSearchJobs";
 
-// scripts/with_env_vars.sh npx ts-node scripts/run_handlers/dispatchSearchJobs.ts
+// scripts/with_env.js yarn ts-node scripts/run_handlers/dispatchSearchJobs.ts
 const main = async () => {
   try {
     const result = await lambdaHandler({} as any, {} as any, {} as any);

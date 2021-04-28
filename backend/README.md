@@ -19,5 +19,5 @@ npm run test:environment
 ## Run single test
 
 ```
-scripts/with_env.js npx 'jest -t="some text"'
+scripts/with_env.js yarn 'jest -t="some text"'
 ```

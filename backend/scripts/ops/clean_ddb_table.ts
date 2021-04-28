@@ -1,6 +1,6 @@
 /* 
 How to run:
-- scripts/with_env.js npx ts-node scripts/ops/clean_ddb_table.ts
+- scripts/with_env.js yarn ts-node scripts/ops/clean_ddb_table.ts
 */
 
 import AWS from "aws-sdk";

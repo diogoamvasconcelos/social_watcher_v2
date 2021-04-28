@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "with-local-stack": "scripts/with_env.js scripts/local_stack/with_elasticsearch_local.sh scripts/local_stack/with_dynamodb_local.sh",
-    "check-all": "npm run lint:check && npm run build && npm run test",
+    "check-all": "yarn lint:check && yarn build && yarn test",
     "build": "tsc --noEmit",
     "build:watch": "tsc --noEmit --watch",
     "lint:check": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
-    "test": "npm run with-local-stack npx \"jest -i --testPathIgnorePatterns 'test/environment'\"",
-    "test:unit": "scripts/with_env.js npx \"jest test --testMatch '<rootDir>/src/**/*.test.ts?(x)'\"",
-    "test:environment": "scripts/with_env.js npx \"jest test/environment\" --env dev",
-    "test:coverage": "npm run with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment' --coverage\"",
-    "audit": "npm audit"
+    "test": "yarn with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment'\"",
+    "test:unit": "scripts/with_env.js \"jest test --testMatch '<rootDir>/src/**/*.test.ts?(x)'\"",
+    "test:environment": "scripts/with_env.js \"jest test/environment\" --env dev",
+    "test:coverage": "yarn with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment' --coverage\"",
+    "audit": "yarn audit"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
