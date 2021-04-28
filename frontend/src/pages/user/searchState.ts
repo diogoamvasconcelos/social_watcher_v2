@@ -36,6 +36,7 @@ const searchStateSlice = createSlice({
         return;
       }
       state = action.payload.right;
+      return state; //need to do this not sure why...
     });
   },
 });
