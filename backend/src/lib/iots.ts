@@ -48,7 +48,7 @@ interface LowerCaseBrand {
 
 export const lowerCase = t.brand(
   t.string,
-  (s): s is t.Branded<string, LowerCaseBrand> => s == s.toLocaleLowerCase(),
+  (u): u is t.Branded<string, LowerCaseBrand> => u == u.toLocaleLowerCase(),
   "LowerCase" // the name must match the readonly field in the brand);
 );
 
@@ -64,8 +64,8 @@ interface PositiveIntegerBrand {
 
 export const positiveInteger = t.brand(
   t.number,
-  (n): n is t.Branded<number, PositiveIntegerBrand> =>
-    Number.isInteger(n) && n >= 0,
+  (u): u is t.Branded<number, PositiveIntegerBrand> =>
+    Number.isInteger(u) && u >= 0,
   "PositiveInteger"
 );
 
@@ -93,3 +93,39 @@ export const DateFromISOStringV2 = new t.Type<Date, Date | string, unknown>(
   },
   (a) => a.toISOString()
 );
+
+// DateISOString
+// Good practive to store dates as strings for serialization, and only convert to Date when needed
+
+interface DateISOStringBrand {
+  readonly DateISOString: unique symbol;
+}
+
+export const dateISOString = t.brand(
+  new t.Type<string>(
+    "ISO8601 timestamp",
+    t.string.is,
+    (x, context) => {
+      try {
+        const result = DateFromISOString.decode(x);
+        if (isLeft(result)) {
+          return t.failure(x, context);
+        }
+
+        const normalizedIsoTimestamp = result.right.toISOString();
+        return t.success(normalizedIsoTimestamp);
+      } catch (_error) {
+        return t.failure(x, context);
+      }
+    },
+    String
+  ),
+  (u): u is t.Branded<string, DateISOStringBrand> =>
+    isRight(DateFromISOString.decode(u)),
+  "DateISOString"
+);
+
+export type DateISOString = t.TypeOf<typeof dateISOString>;
+
+export const newDateISOString = (x: string): DateISOString =>
+  fromEither(decode(dateISOString, x));

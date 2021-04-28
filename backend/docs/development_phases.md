@@ -104,5 +104,5 @@
 
 # Misc TODO
 
-- change npm to yarn
-- change Date to string (issues on redux side bc of serialization: https://github.com/reduxjs/redux-toolkit/issues/456)
+- change npm to yarn <DONE>
+- change Date to string (issues on redux side bc of serialization: https://github.com/reduxjs/redux-toolkit/issues/456) <DONE>

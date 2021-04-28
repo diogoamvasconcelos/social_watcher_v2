@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { getMinutesAgo } from "./date";
-import { DateFromISOStringV2, decode, optional } from "./iots";
+import { dateISOString, decode, optional } from "./iots";
 
 export const twitterCredentialsCodec = t.type({
   apiKey: t.string,
@@ -26,7 +26,7 @@ export type Client = ReturnType<typeof getClient>;
 export const searchRecentResponseDataCodec = t.type({
   id: t.string,
   text: t.string,
-  created_at: DateFromISOStringV2,
+  created_at: dateISOString,
   conversation_id: t.string,
   author_id: t.string,
   lang: t.string,

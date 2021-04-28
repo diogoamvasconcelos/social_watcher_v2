@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getNow } from "./date";
 import { deepmergeSafe } from "./deepmerge";
 import { fromEither } from "./iots";
 import { Client, searchRecent, SearchRecentResponse } from "./twitter";
@@ -33,8 +34,8 @@ describe("twitter", () => {
     );
 
     expect(searchResult).toEqual([
-      ...toTwitterResult(twitterResponse0.data),
-      ...toTwitterResult(twitterResponse1.data),
+      ...twitterResponse0.data,
+      ...twitterResponse1.data,
     ]);
   });
 });
@@ -52,7 +53,7 @@ const makeTwitterResponse = ({
         {
           id: "some-id",
           text: "some-text",
-          created_at: (new Date().toISOString() as unknown) as Date,
+          created_at: getNow(),
           conversation_id: "conversation#0",
           author_id: "author#0",
           lang: "en",
@@ -70,13 +71,4 @@ const makeTwitterResponse = ({
       partialMeta ?? {}
     ),
   };
-};
-
-const toTwitterResult = (
-  twitterResponse: ReturnType<typeof makeTwitterResponse>["data"]
-) => {
-  return twitterResponse.map((item) => ({
-    ...item,
-    created_at: new Date(item.created_at),
-  }));
 };

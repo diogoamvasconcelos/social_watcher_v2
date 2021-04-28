@@ -1,6 +1,7 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "../../adapters/searchResultsStore/client";
+import { getNow } from "../../lib/date";
 import { newLowerCase } from "../../lib/iots";
 import { handler } from "./searchResultsStreamConsumer";
 
@@ -14,12 +15,12 @@ describe("handlers/searchResultsStreamConsumer", () => {
             searchResultToDocument({
               id: "some-id",
               keyword: newLowerCase("some-keyword"),
-              happenedAt: new Date(),
+              happenedAt: getNow(),
               socialMedia: "twitter",
               data: {
                 id: "some-id",
                 text: "some-text",
-                created_at: new Date(),
+                created_at: getNow(),
                 conversation_id: "some-conversation-id",
                 author_id: "some-author-id",
                 lang: "en",

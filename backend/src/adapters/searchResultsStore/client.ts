@@ -29,7 +29,7 @@ export const toDocumentKeys = (
   pk: `${socialMedia}|${id}`,
   sk: index.toString(),
   gsi1pk: keyword,
-  gsi1sk: happenedAt.toISOString(),
+  gsi1sk: happenedAt,
 });
 
 export const searchResultToDocument = (

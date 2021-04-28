@@ -7,13 +7,13 @@ time scripts/ci_test_build_and_deploy.sh
 ## Run tests with logging
 
 ```
-LOG_LEVEL=info && npm run test
+LOG_LEVEL=info && yarn test
 ```
 
 ## Run env tests
 
 ```
-npm run test:environment
+yarn test:environment
 ```
 
 ## Run single test

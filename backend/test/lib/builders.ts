@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../src/domain/models/searchResult";
+import { getNow } from "../../src/lib/date";
 import { deepmergeSafe } from "../../src/lib/deepmerge";
 import { newLowerCase } from "../../src/lib/iots";
 import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
@@ -39,7 +40,7 @@ export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {
 export const buildSearchResult = (
   partial?: PartialDeep<SearchResult>
 ): SearchResult => {
-  const now = new Date();
+  const now = getNow();
   const id = uuid();
   return deepmergeSafe(
     {
