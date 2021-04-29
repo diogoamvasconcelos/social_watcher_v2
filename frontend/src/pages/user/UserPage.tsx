@@ -6,12 +6,13 @@ import {
 } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import { JSONViewer } from "../../shared/components/JSONViewer";
-import { Typography, Button, Input, Select, Space } from "antd";
+import { Typography, Button, Input, Select, Space, Switch } from "antd";
 import { SettingFilled } from "@ant-design/icons";
 import { SearchObject } from "../../../../backend/src/domain/models/userItem";
 import styled from "styled-components";
 import { searchKeyword } from "./searchState";
 import { newLowerCase } from "../../../../backend/src/lib/iots";
+import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
 
 const { Title, Text } = Typography;
@@ -37,13 +38,23 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
     void dispatch(
       updateUserSearchObjects([
         searchObject.index,
-        {
-          keyword: newLowerCase(val),
-          searchData: searchObject.searchData,
-        },
+        deepmergeSafe(searchObject, { keyword: newLowerCase(val) }),
       ])
     );
     setEditingKeyword(false);
+  };
+
+  const handleTwitterSwitchedChanged = (val: boolean) => {
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          searchData: {
+            twitter: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+          },
+        }),
+      ])
+    );
   };
 
   return (
@@ -68,9 +79,16 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         </Space>
       </div>
       <Text>{searchObject.lockedStatus}</Text>
-      {searchObject.searchData.twitter.enabledStatus == "ENABLED" ? (
-        <Text>twitter</Text>
-      ) : null}
+      <div>
+        <Space>
+          <Text>twitter</Text>
+          <Switch
+            defaultChecked
+            checked={searchObject.searchData.twitter.enabledStatus == "ENABLED"}
+            onChange={handleTwitterSwitchedChanged}
+          />
+        </Space>
+      </div>
     </SearchObjectItemContainer>
   );
 };
