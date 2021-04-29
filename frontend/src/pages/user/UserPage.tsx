@@ -6,14 +6,15 @@ import {
 } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import { JSONViewer } from "../../shared/components/JSONViewer";
-import { Typography, Button, Input, Select, Space, Switch } from "antd";
+import { Typography, Button, Input, Select, Space, Switch, Table } from "antd";
 import { SettingFilled } from "@ant-design/icons";
 import { SearchObject } from "../../../../backend/src/domain/models/userItem";
 import styled from "styled-components";
-import { searchKeyword } from "./searchState";
+import { searchKeyword, SearchState } from "./searchState";
 import { newLowerCase } from "../../../../backend/src/lib/iots";
 import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
+import { ColumnsType } from "antd/lib/table";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -93,6 +94,36 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   );
 };
 
+type SearchTableProps = {
+  searchResults: SearchState;
+};
+const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
+  const columns: ColumnsType<SearchState["items"][0]> = [
+    {
+      title: "Social Media",
+      dataIndex: "socialMedia",
+      key: "socialMedia",
+      render: (text, record) => <a href={record.link}>{text}</a>,
+    },
+    { title: "Happened at", dataIndex: "happenedAt", key: "happenedAt" },
+    { title: "Text", dataIndex: "text", key: "text" },
+    { title: "Language", dataIndex: "lang", key: "lang" },
+    { title: "Translated Text", dataIndex: "translatedText" },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={searchResults.items.map((result) => ({
+        ...result,
+        text: result.data.text,
+        lang: result.data.lang,
+        translatedText: result.data.translatedText ?? "n/a",
+      }))}
+    />
+  );
+};
+
 const SearchWidgetContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -143,7 +174,7 @@ const SearchWidget: React.FC<searchWidgetProps> = ({ searchObjects }) => {
           <Input placeholder="search for text" style={{ width: 400 }}></Input>
           <Button onClick={handleSearchClicked}>Search</Button>
         </SearchWidgetHeader>
-        <JSONViewer name="results" json={searchResult} />
+        <SearchTable searchResults={searchResult} />
       </SearchWidgetContainer>
     </>
   );
