@@ -48,6 +48,7 @@ export const buildSearchResult = (
       keyword: newLowerCase(uuid()),
       socialMedia: "twitter",
       happenedAt: now,
+      link: "some-link",
       data: {
         id,
         text: "some-text",

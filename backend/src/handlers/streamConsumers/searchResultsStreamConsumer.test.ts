@@ -17,6 +17,7 @@ describe("handlers/searchResultsStreamConsumer", () => {
               keyword: newLowerCase("some-keyword"),
               happenedAt: getNow(),
               socialMedia: "twitter",
+              link: "some-link",
               data: {
                 id: "some-id",
                 text: "some-text",

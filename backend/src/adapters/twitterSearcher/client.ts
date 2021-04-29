@@ -17,4 +17,5 @@ export const outToDomain = (
   keyword,
   happenedAt: out.created_at,
   data: out,
+  link: `https://twitter.com/x/status/${out.id}`,
 });

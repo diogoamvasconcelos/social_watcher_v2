@@ -7,6 +7,7 @@ export const searchResultMetadaCodec = t.type({
   id: t.string,
   keyword: keywordCodec,
   happenedAt: dateISOString,
+  link: t.string,
 });
 
 export const twitterSearchResultCodec = t.intersection([
