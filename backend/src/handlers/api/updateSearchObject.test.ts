@@ -5,7 +5,7 @@ import { User } from "../../domain/models/user";
 import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
-import * as putSearchObject from "../../adapters/userStore/putSearchObject";
+import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -13,9 +13,15 @@ jest.mock("./shared", () => ({
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
-jest
-  .spyOn(putSearchObject, "makePutSearchObject")
-  .mockReturnValue(jest.fn().mockResolvedValue(right("OK")));
+jest.mock("../../adapters/userStore/putSearchObject", () => ({
+  ...jest.requireActual("../../adapters/userStore/putSearchObject"),
+  makePutSearchObject: jest.fn(),
+}));
+const makePutSearchObjectMock = makePutSearchObject as jest.MockedFunction<
+  typeof makePutSearchObject
+>;
+const putSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
+makePutSearchObjectMock.mockReturnValue(putSearchObjectMock);
 
 const defaultUser: User = {
   id: "some-id",
@@ -81,5 +87,24 @@ describe("handlers/api/updateSearchObject", () => {
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
     }
+  });
+
+  it("removes id and other potential injections from request", async () => {
+    const event = buildEvent(defaultUser, {
+      ...defaultRequestData,
+      id: "some-other-id",
+      lockedStatus: "UNLOCKED",
+    } as SearchObjectUserData);
+    apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
+
+    fromEither(await handler((event as unknown) as APIGatewayProxyEvent));
+
+    expect(putSearchObjectMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        ...defaultRequestData,
+        id: defaultUser.id,
+      })
+    );
   });
 });

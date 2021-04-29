@@ -6,14 +6,16 @@ import {
 } from "../../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
-export const searchRequestUserDataCodec = t.intersection([
-  t.type({
-    keyword: keywordCodec,
-  }),
-  t.partial({
-    pagination: paginationRequestCodec,
-  }),
-]);
+export const searchRequestUserDataCodec = t.exact(
+  t.intersection([
+    t.type({
+      keyword: keywordCodec,
+    }),
+    t.partial({
+      pagination: paginationRequestCodec,
+    }),
+  ])
+);
 export type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
 
 export const searchResponseCodec = searchSearchResultsResultCodec;

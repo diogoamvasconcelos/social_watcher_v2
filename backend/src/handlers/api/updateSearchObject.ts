@@ -69,10 +69,10 @@ export const handler = async (
   }
 
   const putResultEither = await putSearchObjectFn(logger, {
+    ...request.data,
     type: "SEARCH_OBJECT",
     id: user.id,
     index: request.index,
-    ...request.data,
     lockedStatus: "UNLOCKED",
   });
   if (isLeft(putResultEither)) {

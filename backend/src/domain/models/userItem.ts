@@ -23,12 +23,14 @@ export type SocialMediaSearchData = t.TypeOf<typeof socialMediaSearchData>;
 
 export const twitterSearchData = socialMediaSearchData;
 
-export const searchObjectUserDataCodec = t.type({
-  keyword: keywordCodec,
-  searchData: t.type({
-    twitter: twitterSearchData,
-  }),
-});
+export const searchObjectUserDataCodec = t.exact(
+  t.type({
+    keyword: keywordCodec,
+    searchData: t.type({
+      twitter: twitterSearchData,
+    }),
+  })
+);
 export type SearchObjectUserData = t.TypeOf<typeof searchObjectUserDataCodec>;
 
 export const searchObjectIndexCodec = t.union([
