@@ -1,16 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
-import {
-  SearchRequestUserData,
-  SearchResponse,
-} from "../../../../backend/src/handlers/api/models/search";
+import { SearchResponse } from "../../../../backend/src/handlers/api/models/search";
 import { newPositiveInteger } from "../../../../backend/src/lib/iots";
 import { apiSearch } from "../../shared/lib/apiClient";
 
 export const searchKeyword = createAsyncThunk(
   "search",
-  async (userData: SearchRequestUserData) => {
-    return await apiSearch(userData);
+  async (...args: Parameters<typeof apiSearch>) => {
+    return await apiSearch(...args);
   }
 );
 

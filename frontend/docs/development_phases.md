@@ -9,8 +9,10 @@
 # Phase 1 - Simple MVP
 
 - Login <DONE>
-- DIsplay user search objects
-- search a keyword
+- DIsplay user search objects <DONE>
+  - update search object
+- search a keyword <DONE>
+  - search for text
 - add color pallet (greyscale)
 - work in the CORS issue (localhost): <DONE>
   - allow localhost:1234 <DONE

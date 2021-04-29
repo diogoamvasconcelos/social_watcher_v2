@@ -55,7 +55,7 @@ export const lowerCase = t.brand(
 export type LowerCase = t.TypeOf<typeof lowerCase>;
 
 export const newLowerCase = (x: string): LowerCase =>
-  fromEither(decode(lowerCase, x));
+  fromEither(decode(lowerCase, x.toLowerCase()));
 
 // postive integer
 interface PositiveIntegerBrand {

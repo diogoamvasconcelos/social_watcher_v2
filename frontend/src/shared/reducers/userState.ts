@@ -2,7 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
 import { User } from "../../../../backend/src/domain/models/user";
 import { SearchObject } from "../../../../backend/src/domain/models/userItem";
-import { apiGetSearchObjects, apiGetUser } from "../lib/apiClient";
+import {
+  apiGetSearchObjects,
+  apiGetUser,
+  apiUpdateSearchObject,
+} from "../lib/apiClient";
 
 export type UserState = {
   details?: User;
@@ -16,6 +20,12 @@ export const getUserSearchObjects = createAsyncThunk(
   "get:searchObjects",
   async () => {
     return await apiGetSearchObjects();
+  }
+);
+export const updateUserSearchObjects = createAsyncThunk(
+  "put:searchObject",
+  async (args: Parameters<typeof apiUpdateSearchObject>) => {
+    return await apiUpdateSearchObject(...args);
   }
 );
 
@@ -43,6 +53,19 @@ const userStateSlice = createSlice({
         }
 
         state.searchObjects = action.payload.right.items;
+      })
+      .addCase(updateUserSearchObjects.fulfilled, (state, action) => {
+        if (isLeft(action.payload)) {
+          state.searchObjects = [];
+          return;
+        }
+
+        const updatedSearchObject: SearchObject = action.payload.right;
+        state.searchObjects = state.searchObjects.map((searchObject) =>
+          searchObject.index == updatedSearchObject.index
+            ? updatedSearchObject
+            : searchObject
+        );
       });
   },
 });
