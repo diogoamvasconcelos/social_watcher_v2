@@ -11,13 +11,28 @@ import { SettingFilled } from "@ant-design/icons";
 import { SearchObject } from "../../../../backend/src/domain/models/userItem";
 import styled from "styled-components";
 import { searchKeyword, SearchState } from "./searchState";
-import { newLowerCase } from "../../../../backend/src/lib/iots";
+import {
+  newLowerCase,
+  newPositiveInteger,
+} from "../../../../backend/src/lib/iots";
 import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
 import { ColumnsType } from "antd/lib/table";
+import _ from "lodash";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+
+const createEmptySearchObject = (
+  index: SearchObject["index"]
+): SearchObject => ({
+  index,
+  id: "none",
+  type: "SEARCH_OBJECT",
+  lockedStatus: "UNLOCKED",
+  keyword: newLowerCase("empty - add one"),
+  searchData: { twitter: { enabledStatus: "DISABLED" } },
+});
 
 const SearchObjectItemContainer = styled.div`
   display: flex;
@@ -190,21 +205,27 @@ export const UserPage: React.FC = () => {
     void dispatch(getUserSearchObjects());
   }, []);
 
+  console.log(searchObjects);
+
   return (
     <div>
       <div>
         <Title level={4}>User</Title>
         {<JSONViewer name="user" json={user} />}
       </div>
-      <div>
+      <Title level={4}>Keywords</Title>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <RenderDynamicWithHooks>
           {() =>
-            searchObjects.map((searchObject) =>
-              SearchObjectItem({ searchObject })
-            )
+            _.range(user?.nofSearchObjects ?? 0).map((i) => {
+              let searchObject = searchObjects.find((so) => so.index == i);
+              if (!searchObject) {
+                searchObject = createEmptySearchObject(newPositiveInteger(i));
+              }
+              return SearchObjectItem({ searchObject });
+            })
           }
         </RenderDynamicWithHooks>
-        <Title level={4}>Keywords</Title>
       </div>
       <div>
         <Title level={4}>Search</Title>

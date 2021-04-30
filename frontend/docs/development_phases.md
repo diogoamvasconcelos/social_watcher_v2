@@ -10,20 +10,24 @@
 
 - Login <DONE>
 - DIsplay user search objects <DONE>
-  - update search object
+  - update search object <DONE>
 - search a keyword <DONE>
   - search for text
-- add color pallet (greyscale)
 - work in the CORS issue (localhost): <DONE>
   - allow localhost:1234 <DONE
 - add unit test
 - add testing framework
 
-# Phase 2 - More Features
+# Phase 2 - Subscription and Stripe
+
+# Phase 3 - More Features
 
 - Different pages
   - search objects
   - search
+    - pagination
+    - filtering
+    - sorting
 - Deploy in (dev)
 - work in the CORS issue (real page, some-cool-subdomain.thesocialwatcher.com):
   - https://www.rehanvdm.com/serverless/cloudfront-reverse-proxy-api-gateway-to-prevent-cors/index.html
