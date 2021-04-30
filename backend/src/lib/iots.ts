@@ -71,7 +71,7 @@ export const positiveInteger = t.brand(
 
 export type PositiveInteger = t.TypeOf<typeof positiveInteger>;
 
-export const newPositiveInteger = (x: number): PositiveInteger =>
+export const newPositiveInteger = (x: number | string): PositiveInteger =>
   fromEither(decode(positiveInteger, x));
 
 // DateFromStringV2 (can convert from date as well (nice for redecoding))
