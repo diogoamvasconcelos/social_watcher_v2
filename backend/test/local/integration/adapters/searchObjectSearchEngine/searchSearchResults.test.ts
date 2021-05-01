@@ -18,6 +18,7 @@ import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
+import { sortSearchResults } from "../../../../lib/sort";
 
 const config = getLocalTestConfig();
 const logger = getLogger();
@@ -88,22 +89,28 @@ describe("indexSearchResults", () => {
     );
 
     expect(
-      fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "dog" })
-      ).items.sort
-    ).toEqual([searchResultDog, searchResultDogNCat].sort);
+      sortSearchResults(
+        fromEither(
+          await searchSearchResultsFn(logger, { keyword, dataQuery: "dog" })
+        ).items
+      )
+    ).toEqual(sortSearchResults([searchResultDog, searchResultDogNCat]));
 
     expect(
-      fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "cat" })
-      ).items.sort
-    ).toEqual([searchResultCat, searchResultDogNCat].sort);
+      sortSearchResults(
+        fromEither(
+          await searchSearchResultsFn(logger, { keyword, dataQuery: "cat" })
+        ).items
+      )
+    ).toEqual(sortSearchResults([searchResultCat, searchResultDogNCat]));
 
     expect(
-      fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "human" })
-      ).items.sort
-    ).toEqual([searchResultHuman].sort);
+      sortSearchResults(
+        fromEither(
+          await searchSearchResultsFn(logger, { keyword, dataQuery: "human" })
+        ).items
+      )
+    ).toEqual(sortSearchResults([searchResultHuman]));
 
     expect(
       fromEither(

@@ -47,6 +47,7 @@ export const makeSearchSearchResults = (
             must: queriesMust,
           },
         },
+        sort: [{ _score: "desc" }, { happenedAt: "desc" }, { _id: "asc" }],
       },
       size: pagination?.limit ?? DEFAULT_LIMIT,
       from: pagination?.offset ?? DEFAULT_OFFSET,

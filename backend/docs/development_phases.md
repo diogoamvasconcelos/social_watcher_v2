@@ -91,6 +91,7 @@
 - with filters/queries and pagination (SSLF) <DONE>
 - add envtests <DONE>
   - keyword not allowed <DONE>
+  - sort by happenedAt and id <DONE>
   - pagination
 
 # Phase 6 - NotifyDiscord integration (1 week)

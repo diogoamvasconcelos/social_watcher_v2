@@ -18,6 +18,7 @@ import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
+import { sortSearchResults } from "../../../../lib/sort";
 
 const config = getLocalTestConfig();
 const logger = getLogger();
@@ -59,7 +60,9 @@ describe("indexSearchResults", () => {
     );
 
     expect(indexResult).toEqual("OK");
-    expect(searchedResults.items).toEqual(searchResults);
+    expect(sortSearchResults(searchedResults.items)).toEqual(
+      sortSearchResults(searchResults)
+    );
   });
 
   afterEach(async () => {

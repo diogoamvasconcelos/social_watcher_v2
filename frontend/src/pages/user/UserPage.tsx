@@ -19,6 +19,8 @@ import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
 import { ColumnsType } from "antd/lib/table";
 import _ from "lodash";
+import { SocialMedia } from "../../../../backend/src/domain/models/socialMedia";
+import { toLocalTimestamp } from "../../shared/lib/formatting";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -114,7 +116,19 @@ type SearchTableProps = {
   searchResults: SearchState;
 };
 const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
-  const columns: ColumnsType<SearchState["items"][0]> = [
+  const toSocialMediaLabel = (socialMedia: SocialMedia) => {
+    switch (socialMedia) {
+      case "twitter":
+        return "twitter post";
+    }
+  };
+
+  const columns: ColumnsType<
+    Omit<SearchState["items"][0], "socialMedia" | "happenedAt"> & {
+      socialMedia: string;
+      happenedAt: string;
+    }
+  > = [
     {
       title: "Social Media",
       dataIndex: "socialMedia",
@@ -136,6 +150,8 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
       columns={columns}
       dataSource={searchResults.items.map((result) => ({
         ...result,
+        socialMedia: toSocialMediaLabel(result.socialMedia),
+        happenedAt: toLocalTimestamp(result.happenedAt),
         text: result.data.text,
         lang: result.data.lang,
         translatedText: result.data.translatedText ?? "n/a",

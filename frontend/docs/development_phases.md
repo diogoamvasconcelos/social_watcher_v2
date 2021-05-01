@@ -12,7 +12,7 @@
 - Display user search objects <DONE>
   - update search object <DONE>
 - search a keyword <DONE>
-  - search for text
+  - search for text <DONE>
 - work in the CORS issue (localhost): <DONE>
   - allow localhost:1234 <DONE
 - add unit test

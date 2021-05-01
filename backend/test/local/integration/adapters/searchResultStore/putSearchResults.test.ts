@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { unknownToSearchResult } from "../../../../../src/adapters/searchResultsStore/client";
 import { makePutSearchResults } from "../../../../../src/adapters/searchResultsStore/putSearchResults";
 import { scanItems } from "../../../../../src/lib/dynamoDb";
@@ -7,6 +6,7 @@ import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
+import { sortSearchResults } from "../../../../lib/sort";
 
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();
@@ -37,8 +37,8 @@ describe("adapters/putSearchResults", () => {
       )
     );
 
-    expect(_.sortBy(fetchedSearchResults, (item) => item.id)).toEqual(
-      _.sortBy(searchResults, (item) => item.id)
+    expect(sortSearchResults(fetchedSearchResults)).toEqual(
+      sortSearchResults(searchResults)
     );
   });
 });
