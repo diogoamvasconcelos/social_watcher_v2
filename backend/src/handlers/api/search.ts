@@ -64,7 +64,7 @@ const handler = async (
 
   const searchResultEither = await searchSearchResultsFn(logger, {
     keyword: request.keyword,
-    // dataQuery : implemented....
+    dataQuery: request.dataQuery,
     // pagination : {...} // fully implemented but not tested!
   });
   if (isLeft(searchResultEither)) {

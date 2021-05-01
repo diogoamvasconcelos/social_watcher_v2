@@ -42,7 +42,7 @@ describe("indexSearchResults", () => {
     ).name;
   });
 
-  it("can index searcResults", async () => {
+  it("can index searchResults", async () => {
     const keyword = newLowerCase(uuid());
     const searchResults: SearchResult[] = [
       buildSearchResult({ keyword }),

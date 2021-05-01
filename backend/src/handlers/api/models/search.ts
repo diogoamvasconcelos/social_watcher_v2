@@ -12,6 +12,7 @@ export const searchRequestUserDataCodec = t.exact(
       keyword: keywordCodec,
     }),
     t.partial({
+      dataQuery: t.string,
       pagination: paginationRequestCodec,
     }),
   ])

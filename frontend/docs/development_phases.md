@@ -9,7 +9,7 @@
 # Phase 1 - Simple MVP
 
 - Login <DONE>
-- DIsplay user search objects <DONE>
+- Display user search objects <DONE>
   - update search object <DONE>
 - search a keyword <DONE>
   - search for text

@@ -22,6 +22,7 @@ import _ from "lodash";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const { Search } = Input;
 
 const createEmptySearchObject = (
   index: SearchObject["index"]
@@ -118,7 +119,11 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
       title: "Social Media",
       dataIndex: "socialMedia",
       key: "socialMedia",
-      render: (text, record) => <a href={record.link}>{text}</a>,
+      render: (text, record) => (
+        <a href={record.link} target="_blank">
+          {text}
+        </a>
+      ),
     },
     { title: "Happened at", dataIndex: "happenedAt", key: "happenedAt" },
     { title: "Text", dataIndex: "text", key: "text" },
@@ -157,14 +162,22 @@ const SearchWidget: React.FC<searchWidgetProps> = ({ searchObjects }) => {
   const initialKeyword = "chose a keyword";
   const [keyword, setKeyword] = useState(initialKeyword);
 
-  const handleSearchClicked = () => {
-    if (keyword == initialKeyword) {
+  const [searchInputEnabled, setSearchInputEnabled] = useState(false);
+
+  const handleSelectKeyword = (val: string) => {
+    setKeyword(val);
+    setSearchInputEnabled(val != initialKeyword);
+  };
+
+  const handleSearchClicked = (val: string) => {
+    if (!searchInputEnabled) {
       return;
     }
 
     void dispatch(
       searchKeyword({
         keyword: newLowerCase(keyword),
+        dataQuery: val.length == 0 ? undefined : val,
       })
     );
   };
@@ -175,7 +188,7 @@ const SearchWidget: React.FC<searchWidgetProps> = ({ searchObjects }) => {
         <SearchWidgetHeader>
           <Select
             defaultValue="chose a keyword"
-            onChange={setKeyword}
+            onChange={handleSelectKeyword}
             style={{ minWidth: 200 }}
           >
             {searchObjects
@@ -186,8 +199,13 @@ const SearchWidget: React.FC<searchWidgetProps> = ({ searchObjects }) => {
                 </Option>
               ))}
           </Select>
-          <Input placeholder="search for text" style={{ width: 400 }}></Input>
-          <Button onClick={handleSearchClicked}>Search</Button>
+          <Search
+            placeholder="search for text"
+            style={{ width: 400 }}
+            enterButton
+            onSearch={handleSearchClicked}
+            disabled={!searchInputEnabled}
+          ></Search>
         </SearchWidgetHeader>
         <SearchTable searchResults={searchResult} />
       </SearchWidgetContainer>
