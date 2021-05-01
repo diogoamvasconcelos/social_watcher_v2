@@ -17,7 +17,7 @@ import {
 } from "../../../../backend/src/lib/iots";
 import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
-import { ColumnsType } from "antd/lib/table";
+import { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import _ from "lodash";
 import { SocialMedia } from "../../../../backend/src/domain/models/socialMedia";
 import { toLocalTimestamp } from "../../shared/lib/formatting";
@@ -132,18 +132,29 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
     {
       title: "Social Media",
       dataIndex: "socialMedia",
-      key: "socialMedia",
       render: (text, record) => (
         <a href={record.link} target="_blank">
           {text}
         </a>
       ),
     },
-    { title: "Happened at", dataIndex: "happenedAt", key: "happenedAt" },
-    { title: "Text", dataIndex: "text", key: "text" },
-    { title: "Language", dataIndex: "lang", key: "lang" },
+    { title: "Happened at", dataIndex: "happenedAt" },
+    { title: "Text", dataIndex: "text" },
+    { title: "Language", dataIndex: "lang" },
     { title: "Translated Text", dataIndex: "translatedText" },
   ];
+
+  const paginationConfig: TablePaginationConfig = {
+    onChange: (number, pageSize) =>
+      console.log(`onChange, number:${number} | pageSize:${pageSize}`),
+    defaultPageSize: 25,
+    defaultCurrent: 1,
+    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+    pageSizeOptions: ["10", "25", "50", "100"],
+    onShowSizeChange: (current, size) =>
+      console.log(`onShowSizeChange, number:${current} | pageSize:${size}`),
+    showSizeChanger: true,
+  };
 
   return (
     <Table
@@ -156,6 +167,8 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         lang: result.data.lang,
         translatedText: result.data.translatedText ?? "n/a",
       }))}
+      pagination={paginationConfig}
+      rowKey="id"
     />
   );
 };
@@ -238,8 +251,6 @@ export const UserPage: React.FC = () => {
     void dispatch(getUserDetails());
     void dispatch(getUserSearchObjects());
   }, []);
-
-  console.log(searchObjects);
 
   return (
     <div>
