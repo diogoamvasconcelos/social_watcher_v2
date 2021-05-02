@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { getUserDetails } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
-import { JSONViewer } from "../../shared/components/JSONViewer";
+import { JSONViewer } from "../../shared/components/JSONViewer/JSONViewer";
 import { Typography } from "antd";
 
 const { Title } = Typography;

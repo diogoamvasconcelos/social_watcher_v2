@@ -15,7 +15,7 @@ export const gruvBoxDarkMediumBase16 = {
   base0C: "#8ec07c",
   base0D: "#83a598",
   base0E: "#d3869b",
-  base0F: "#d65d0e"
+  base0F: "#d65d0e",
 };
 
 export const gruvBoxDarkHardBase16 = {
@@ -35,7 +35,7 @@ export const gruvBoxDarkHardBase16 = {
   base0C: "#8ec07c",
   base0D: "#83a598",
   base0E: "#d3869b",
-  base0F: "#d65d0e"
+  base0F: "#d65d0e",
 };
 
 export const gruvBoxLightMediumBase16 = {
@@ -55,7 +55,7 @@ export const gruvBoxLightMediumBase16 = {
   base0C: "#427b58",
   base0D: "#076678",
   base0E: "#8f3f71",
-  base0F: "#d65d0e"
+  base0F: "#d65d0e",
 };
 
 export const gruvBoxLightHardBase16 = {
@@ -75,5 +75,5 @@ export const gruvBoxLightHardBase16 = {
   base0C: "#427b58",
   base0D: "#076678",
   base0E: "#8f3f71",
-  base0F: "#d65d0e"
+  base0F: "#d65d0e",
 };

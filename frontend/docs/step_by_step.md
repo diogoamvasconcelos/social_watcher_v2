@@ -101,3 +101,30 @@ yarn add cors --dev
 ## Add index.html
 
 - add index.html, index.tsx, App.css and App.tsx
+
+## Unit/Componenet testing
+
+- install testinglib dom and react
+
+```
+yarn add @testing-library/jest-dom @testing-library/react
+```
+
+[React testing library](https://testing-library.com/docs/react-testing-library/intro) is a testing library for testing React components.
+
+React testing library is used in combination with Jest DOM testing library.
+We use it for testing React Components in a DOM instance, instead of a Component instance. This makes the test to resemble more how the Components are used.
+
+[Jest DOM testing library](https://github.com/testing-library/jest-dom) is a testing library that extends Jest test framework, adding more custom matchers when asserting the state of a DOM.
+
+`Jest-DOM` or `jsdom` is the default testing environment that needs to be set in `jest.config.js`
+
+```
+  testEnvironment: "jsdom",
+```
+
+- Add transformation to `es/` and `esm/` files in node_modules, by changing the `transformIgnorePatterns` in `jest.config.js`
+
+```
+  transformIgnorePatterns: ["<rootDir>/node_modules/(?!(.*/es|.*/esm)/)"],
+```

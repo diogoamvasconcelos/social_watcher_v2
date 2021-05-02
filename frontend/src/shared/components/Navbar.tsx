@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
-import logo from "url:../../../assets/logo-navbar.jpg";
+import logo from "url../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import { Auth } from "aws-amplify";
 import { useAppSelector } from "../store";
-import { getConfig } from "../lib/config";
 import { UserState } from "../reducers/userState";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
-import _ from "lodash";
 import { useLocationPathChanged } from "../lib/react";
+import { getConfig } from "../lib/config";
+import _ from "lodash";
 
 const { Header } = Layout;
 

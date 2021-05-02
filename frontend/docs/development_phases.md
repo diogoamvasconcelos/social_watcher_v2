@@ -14,9 +14,12 @@
 - search a keyword <DONE>
   - search for text <DONE>
 - work in the CORS issue (localhost): <DONE>
-  - allow localhost:1234 <DONE
-- add unit test
-- add testing framework
+  - allow localhost:1234 <DONE>
+- add unit test <DONE>
+  - test for JSONViwer <DONE>
+- add testing framework <DONE>
+- add userIcon and submenu for account and logout to navbar
+  - add test
 
 # Phase 2 - Subscription and Stripe
 
