@@ -18,8 +18,8 @@
 - add unit test <DONE>
   - test for JSONViwer <DONE>
 - add testing framework <DONE>
-- add userIcon and submenu for account and logout to navbar
-  - add test
+- add userIcon and submenu for account and logout to navbar <DONE>
+  - add test <DONE>
 
 # Phase 2 - Subscription and Stripe
 

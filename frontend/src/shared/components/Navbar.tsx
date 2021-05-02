@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Button, Layout, Menu } from "antd";
-import logo from "url../../../assets/logo-navbar.jpg";
+import { Button, Layout, Menu, Dropdown, Typography } from "antd";
+import logo from "url:../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import { Auth } from "aws-amplify";
 import { useAppSelector } from "../store";
@@ -10,8 +10,10 @@ import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { useLocationPathChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
 import _ from "lodash";
+import { UserOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
+const { Text } = Typography;
 
 const config = getConfig();
 
@@ -81,36 +83,53 @@ const LoginButton = styled(Button)`
   }
 `;
 
-type LoginButtonsProps = {
-  user: UserState["details"];
+type UserProfileProps = {
+  user: Required<UserState>["details"];
 };
-const LoginButtons: React.FC<LoginButtonsProps> = ({ user }) => {
-  const buttons: JSX.Element[] = [];
-  if (user) {
-    buttons.push(
-      <LoginButton
-        type="text"
-        onClick={async () => await handleLogoutClicked()}
-        key="logout"
-      >
-        Log out
-      </LoginButton>
-    );
-  } else {
-    buttons.push(
-      <LoginButton type="text" onClick={() => handleLoginClicked()} key="login">
-        Log in
-      </LoginButton>,
-      <LoginButton
-        type="primary"
-        onClick={() => console.log("sign up")}
-        key="signup"
-      >
-        Start free trial
-      </LoginButton>
-    );
-  }
 
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+  const history = useHistory();
+
+  const handleItemClicked: MenuClickEventHandler = async ({ key }) => {
+    console.log(key);
+    switch (key.toString()) {
+      case "account": {
+        history.push("/user/account");
+        break;
+      }
+      case "logout": {
+        await Auth.signOut();
+        break;
+      }
+    }
+  };
+
+  const menu = (
+    <Menu onClick={handleItemClicked}>
+      <Menu.Item style={{ pointerEvents: "none" }}>
+        {/*makes it not clickable/selectable*/}
+        <Text>{user.email}</Text>
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="account">
+        <Text>Account</Text>
+      </Menu.Item>
+      <Menu.Item key="logout">
+        <Text>Log out</Text>
+      </Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <Dropdown.Button
+      overlay={menu}
+      trigger={["click"]}
+      icon={<UserOutlined />}
+    />
+  );
+};
+
+const LoginButtons: React.FC = () => {
   const handleLoginClicked = () => {
     const cognitoDomain = config.cognitoClientDomain;
     const cognitoClientId = config.cognitoClientId;
@@ -121,11 +140,21 @@ const LoginButtons: React.FC<LoginButtonsProps> = ({ user }) => {
     location.assign(loginUrl);
   };
 
-  const handleLogoutClicked = async () => {
-    await Auth.signOut();
-  };
-
-  return <ButtonsContainer>{buttons}</ButtonsContainer>;
+  return (
+    <ButtonsContainer>
+      <LoginButton type="text" onClick={() => handleLoginClicked()} key="login">
+        Log in
+      </LoginButton>
+      ,
+      <LoginButton
+        type="primary"
+        onClick={() => console.log("sign up")}
+        key="signup"
+      >
+        Start free trial
+      </LoginButton>
+    </ButtonsContainer>
+  );
 };
 
 const NavbarContainer = styled.div`
@@ -158,7 +187,7 @@ export const Navbar: React.FC = () => {
           inUserSubPage={inUserSubPage}
           userLoggedIn={user != undefined}
         />
-        <LoginButtons user={user} />
+        {user ? <UserProfile user={user} /> : <LoginButtons />}
       </NavbarContainer>
     </Header>
   );

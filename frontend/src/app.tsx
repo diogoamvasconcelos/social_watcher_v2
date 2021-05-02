@@ -8,6 +8,8 @@ import { UserPage } from "./pages/user/UserPage";
 import { Provider } from "react-redux";
 import { store } from "./shared/store";
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
+import { TodoPage } from "./pages/misc/TodoPage";
+import { NotFoundPage } from "./pages/misc/notFoundPage";
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -17,11 +19,15 @@ const App: React.FC = () => (
         <Navbar />
         <Layout.Content>
           <Switch>
-            <Route path="/user/dashboard" component={DashboardPage} />
-            <Route path="/user/account" component={UserPage} />
-            <Route path="/">
+            <Route path="/" exact>
               <p>Work in Progress</p>
             </Route>
+            <Route path="/user/dashboard" component={DashboardPage} />
+            <Route path="/user/account" component={UserPage} />
+            <Route path="/user/guides" component={TodoPage} />
+            <Route path="/pricing" component={TodoPage} />
+            <Route path="/about" component={TodoPage} />
+            <Route component={NotFoundPage} />
           </Switch>
         </Layout.Content>
         <p style={{ textAlign: "center" }}>Footer placeholder</p>
