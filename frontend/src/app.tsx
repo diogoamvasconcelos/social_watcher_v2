@@ -7,6 +7,7 @@ import { WithAuth } from "./shared/components/Auth";
 import { UserPage } from "./pages/user/UserPage";
 import { Provider } from "react-redux";
 import { store } from "./shared/store";
+import { DashboardPage } from "./pages/dashboard/DashboardPage";
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -16,9 +17,10 @@ const App: React.FC = () => (
         <Navbar />
         <Layout.Content>
           <Switch>
+            <Route path="/dashboard" component={DashboardPage} />
             <Route path="/user" component={UserPage} />
             <Route path="/">
-              <p>GONNA BE GOOD</p>
+              <p>Work in Progress</p>
             </Route>
           </Switch>
         </Layout.Content>

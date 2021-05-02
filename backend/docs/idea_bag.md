@@ -12,3 +12,5 @@
 - free trial
   - 10 days? (7 too little, 10 nice number, 14 too much that can be abused)
   - no credit card required (huge)
+- smoke tests that search social media
+  - bot posts twit with uuid and then we search for it
