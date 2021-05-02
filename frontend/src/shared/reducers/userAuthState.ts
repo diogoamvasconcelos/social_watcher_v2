@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+// Not used atm
+
 export type UserAuthState = {
   id: string;
   email: string;

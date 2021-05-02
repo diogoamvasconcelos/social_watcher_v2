@@ -2,15 +2,45 @@ import React, { useEffect } from "react";
 import {
   getUserDetails,
   getUserSearchObjects,
+  UserState,
 } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
-import { JSONViewer } from "../../shared/components/JSONViewer";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { SearchResultsTable } from "./SearchResultsTable";
 import { SearchObjectsView } from "./SearchObjectsView";
-import { newPositiveInteger } from "../../../../backend/src/lib/iots";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+
+const UserWidgetContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+type UserWidgetProps = {
+  user: Required<UserState>["details"];
+};
+const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
+  const history = useHistory();
+
+  const handleSubscriptionClicked = () => {
+    history.push("/user/account");
+  };
+
+  return (
+    <UserWidgetContainer>
+      <Text>{user.email}</Text>
+      <Button
+        type="text"
+        style={{ width: "200px" }}
+        onClick={handleSubscriptionClicked}
+      >{`Subscription: ${user.subscriptionType} ${
+        user.subscriptionStatus == "INACTIVE" ? "(inactive)" : ""
+      }`}</Button>
+    </UserWidgetContainer>
+  );
+};
 
 export const DashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,21 +52,21 @@ export const DashboardPage: React.FC = () => {
     void dispatch(getUserSearchObjects());
   }, []);
 
-  return (
+  return user ? (
     <div>
       <div>
         <Title level={4}>User</Title>
-        {<JSONViewer name="user" json={user} />}
+        {<UserWidget user={user} />}
       </div>
       <Title level={4}>Keywords</Title>
       <SearchObjectsView
         searchObjects={searchObjects}
-        userNofSearchObjects={user?.nofSearchObjects ?? newPositiveInteger(0)}
+        userNofSearchObjects={user.nofSearchObjects}
       />
       <div>
         <Title level={4}>Search</Title>
         <SearchResultsTable searchObjects={searchObjects} />
       </div>
     </div>
-  );
+  ) : null;
 };

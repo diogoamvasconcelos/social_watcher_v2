@@ -39,3 +39,7 @@
   - testing
   - building
   - deploying
+
+# Misc TODO
+
+- handle unconfirmed user

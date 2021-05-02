@@ -45,7 +45,7 @@ export const WithAuth: React.FC = () => {
           })
         );
 
-        history.push("/user");
+        history.push("/user/dashboard");
         break;
       case "signOut":
         dispatch(onLogout());

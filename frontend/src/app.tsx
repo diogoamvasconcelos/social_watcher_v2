@@ -17,8 +17,8 @@ const App: React.FC = () => (
         <Navbar />
         <Layout.Content>
           <Switch>
-            <Route path="/dashboard" component={DashboardPage} />
-            <Route path="/user" component={UserPage} />
+            <Route path="/user/dashboard" component={DashboardPage} />
+            <Route path="/user/account" component={UserPage} />
             <Route path="/">
               <p>Work in Progress</p>
             </Route>
