@@ -142,16 +142,19 @@ const LoginButtons: React.FC = () => {
 
   return (
     <ButtonsContainer>
-      <LoginButton type="text" onClick={() => handleLoginClicked()} key="login">
-        Log in
-      </LoginButton>
-      ,
       <LoginButton
-        type="primary"
+        type="text"
         onClick={() => console.log("sign up")}
         key="signup"
       >
         Start free trial
+      </LoginButton>
+      <LoginButton
+        type="primary"
+        onClick={() => handleLoginClicked()}
+        key="login"
+      >
+        Log in
       </LoginButton>
     </ButtonsContainer>
   );

@@ -23,6 +23,39 @@
 
 # Phase 2 - Subscription and Stripe
 
+- create trial account
+
+  - evaluate if should use this instead: https://stripe.com/docs/billing/subscriptions/overview#non-payment
+    - stripe might be able to do this for us
+    - more info:
+      - https://stripe.com/docs/billing/subscriptions/trials
+      - https://stackoverflow.com/a/41999174 (trial without needing payment data!! nice)
+  - all new accounts have that type
+    - lasts 10 days
+    - has 5 search words
+    - has timestamp when it expires
+  - visuaize the trial on FE and how much time left for expiration
+  - send an email when 3 days are left
+    - use this event from stripe: customer.subscription.trial_will_end
+    - use step function as fallback (only send if conditions still apply)
+  - change to invalid account after expiration
+    - rely on stripe events
+    - use step function (only send if conditions still apply) as fallback
+
+- manage subscription
+  - start 5nofsearchreaults subscription
+  - cancel subscription
+  - webhook integration (handle state changes: https://stripe.com/docs/billing/subscriptions/overview#subscription-statuses and the events)
+    - on success payment
+    - on failure
+    - on cancel
+  - change to invalid when time is up and no payment (stripe has notifications for this but nice to have a fallback like 48hour grace period)
+    - use step function for this fallback
+  - stripe can handle email notifications
+    - https://stripe.com/docs/billing/invoices/sending#overdue
+  - source of truth for subscription is in stipe -> in backend is just a eventual consist replication
+  - be able to re-activate a deactivated or cancelled account (test both cases)
+
 # Phase 3 - More Features
 
 - Different pages
