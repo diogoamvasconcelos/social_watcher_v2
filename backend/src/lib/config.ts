@@ -32,6 +32,7 @@ export const getConfig = () => {
     syncSearchResultsToEsQueueUrl: ensure(
       "SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL"
     ),
+    stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
   };
 };
 
