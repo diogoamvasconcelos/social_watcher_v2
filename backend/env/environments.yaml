@@ -23,6 +23,7 @@ local:
   DYNAMODB_PORT: 8000
   DYNAMODB_URL: http://localhost:8000
   MAIN_ELASTIC_SEARCH_URL: http://localhost:9200
+  STRIPE_PRODUCT_NORMAL_ID: dummy
 
 dev:
   MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com

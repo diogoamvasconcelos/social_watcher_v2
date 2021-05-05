@@ -85,7 +85,7 @@ const toSearchRequest = (
     return metadataEither;
   }
 
-  const bodyEither = parseSafe(event.body ?? "");
+  const bodyEither = parseSafe(event.body);
   if (isLeft(bodyEither)) {
     logger.error("Failed to parse body to json.", { error: bodyEither.left });
     return left(
