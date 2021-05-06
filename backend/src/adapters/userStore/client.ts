@@ -2,8 +2,9 @@ import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
 import { decode } from "../../lib/iots";
-import { map, left, isLeft, right } from "fp-ts/lib/Either";
+import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
+  PaymentData,
   SearchObject,
   UserData,
   UserItem,
@@ -33,6 +34,8 @@ export const toUserItemDocumentKeys = (userItem: UserItem) => {
       return toUserDataDocumentKeys(userItem);
     case "SEARCH_OBJECT":
       return toSearchObjectDocumentKeys(userItem);
+    case "PAYMENT_DATA":
+      return toPaymentDataDocumentKeys(userItem);
     default:
       return throwUnexpectedCase(userItem, "toUserItemDocKeys");
   }
@@ -54,6 +57,11 @@ export const toSearchObjectDocumentKeys = ({
   gsi1sk: id,
 });
 
+export const toPaymentDataDocumentKeys = ({ id }: Pick<PaymentData, "id">) => ({
+  pk: id,
+  sk: "payment",
+});
+
 export const userItemToDocument = (domainItem: UserItem): UserItemDocument => {
   return {
     ...domainItem,
@@ -67,41 +75,65 @@ export const documentToUserItem = (docItem: UserItemDocument): UserItem => {
       return _.omit(docItem, ["pk", "sk"]);
     case "SEARCH_OBJECT":
       return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+    case "PAYMENT_DATA":
+      return _.omit(docItem, ["pk", "sk"]);
     default:
       return throwUnexpectedCase(docItem, "documentToUserItem");
   }
 };
 
-export const unknownToUserItem = (item: unknown) => {
+export const unknownToUserItem = (
+  item: unknown
+): Either<string[], UserItem> => {
   return map(documentToUserItem)(decode(userItemDocumentCodec, item));
 };
 
-export const unknownToSearchObject = (item: unknown) => {
+export const unknownToSearchObject = (
+  item: unknown
+): Either<string[], SearchObject> => {
   const userItemEither = unknownToUserItem(item);
   if (isLeft(userItemEither)) {
     return userItemEither;
   }
   const userItem = userItemEither.right;
-  if (userItem.type === "USER_DATA") {
+  if (userItem.type !== "SEARCH_OBJECT") {
     return left([
       "ERROR",
-      "User item is of type USER_DATA",
+      `User item is of type ${userItem.type}`,
       "Expected to be SEARCH_OBJECT",
     ]);
   }
   return right(userItem);
 };
 
-export const unknownToUser = (item: unknown) => {
+export const unknownToUser = (item: unknown): Either<string[], UserData> => {
   const userItemEither = unknownToUserItem(item);
   if (isLeft(userItemEither)) {
     return userItemEither;
   }
   const userItem = userItemEither.right;
-  if (userItem.type === "SEARCH_OBJECT") {
+  if (userItem.type !== "USER_DATA") {
     return left([
       "ERROR",
-      "User item is of type SEARCH_OBJECT",
+      `User item is of type ${userItem.type}`,
+      "Expected to be USER_DATA",
+    ]);
+  }
+  return right(userItem);
+};
+
+export const unknownToPaymentData = (
+  item: unknown
+): Either<string[], PaymentData> => {
+  const userItemEither = unknownToUserItem(item);
+  if (isLeft(userItemEither)) {
+    return userItemEither;
+  }
+  const userItem = userItemEither.right;
+  if (userItem.type !== "PAYMENT_DATA") {
+    return left([
+      "ERROR",
+      `User item is of type ${userItem.type}`,
       "Expected to be USER_DATA",
     ]);
   }

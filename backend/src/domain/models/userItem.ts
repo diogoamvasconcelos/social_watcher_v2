@@ -13,6 +13,21 @@ export const userDataCodec = t.intersection([
 ]);
 export type UserData = t.TypeOf<typeof userDataCodec>;
 
+// +++++++++++++
+// + PAYMENT DATA +
+// +++++++++++++
+export const paymentDataCodec = t.exact(
+  t.type({
+    type: t.literal("PAYMENT_DATA"),
+    id: userIdCodec,
+    stripe: t.type({
+      customerId: t.string,
+      subcriptionId: t.string,
+    }),
+  })
+);
+export type PaymentData = t.TypeOf<typeof paymentDataCodec>;
+
 // +++++++++++++++++
 // + SEARCH OBJECT +
 // +++++++++++++++++
@@ -53,5 +68,9 @@ export type SearchObject = t.TypeOf<typeof searchObjectCodec>;
 // + USER ITEM +
 // +++++++++++++
 
-export const userItemCodec = t.union([userDataCodec, searchObjectCodec]);
+export const userItemCodec = t.union([
+  userDataCodec,
+  searchObjectCodec,
+  paymentDataCodec,
+]);
 export type UserItem = t.TypeOf<typeof userItemCodec>;

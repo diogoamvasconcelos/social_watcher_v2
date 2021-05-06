@@ -43,6 +43,11 @@ import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
 import { buildSearchResult } from "../../lib/builders";
 import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
+import { deleteCustomer } from "../../../src/lib/stripe/client";
+import { getClient as getPaymentsClient } from "../../../src/lib/stripe/client";
+import { getClient as getSsmClient } from "../../../src/lib/ssm";
+import { getClientCredentials as getPaymentsCredentials } from "../../../src/adapters/paymentsManager/client";
+import { makeGetPaymentData } from "../../../src/adapters/userStore/getPaymentData";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -56,6 +61,11 @@ const getKeywordDataFn = makeGetKeywordData(
 );
 
 const putSearchResultsFn = makePutSearchResults(
+  dynamoDbClient,
+  config.searchResultsTableName
+);
+
+const getPaymentDataFn = makeGetPaymentData(
   dynamoDbClient,
   config.searchResultsTableName
 );
@@ -108,12 +118,29 @@ export const deleteUser = async ({
   id: string;
   email: string;
 }) => {
+  // Delete in cognito
   await adminDeleteUser(
     cognitoClient,
     { UserPoolId: config.cognitoUserPoolId, Username: email },
     logger
   );
 
+  // Delete in stripe
+  const paymentData = fromEither(await getPaymentDataFn(logger, id));
+  if (paymentData != "NOT_FOUND") {
+    const stripeClient = getPaymentsClient(
+      await getPaymentsCredentials(getSsmClient(), logger)
+    );
+
+    fromEither(
+      await deleteCustomer(
+        { client: stripeClient, logger },
+        paymentData.stripe.customerId
+      )
+    );
+  }
+
+  // Delete in ddb
   const allPartitionItems = fromEither(
     await queryItems(
       dynamoDbClient,
