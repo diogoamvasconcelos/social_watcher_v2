@@ -5,21 +5,19 @@ import { makeSearchTwitter } from "../adapters/twitterSearcher/searchTwitter";
 import { getConfig } from "../lib/config";
 import { decode } from "../lib/iots";
 import {
-  Client as SSMClient,
-  getClient as getSsmClient,
-  getParameter,
-} from "../lib/ssm";
-import {
   getClient as getTwitterClient,
-  twitterCredentialsCodec,
-} from "../lib/twitter";
+  getClientCredentials as getTwitterCredentials,
+} from "../adapters/twitterSearcher/client";
+import { getClient as getSsmClient } from "../lib/ssm";
 import { getClient as getSearchResultStoreClient } from "../adapters/searchResultsStore/client";
 import { searchJobCodec } from "../domain/models/searchJobs";
 import { translateTwitterSearchResults } from "../domain/controllers/translateTwitterSearchResults";
 import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
-import { getLogger, Logger } from "../lib/logger";
+import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Stripe from "stripe";
 
 const config = getConfig();
 const logger = getLogger();
@@ -71,19 +69,3 @@ const handler = async (event: SQSEvent) => {
 };
 
 export const lambdaHandler = defaultMiddlewareStack(handler);
-
-const getTwitterCredentials = async (ssmClient: SSMClient, logger: Logger) => {
-  const result = await getParameter(
-    ssmClient,
-    { Name: "twitter_bot_keys", WithDecryption: true },
-    (value: string) => {
-      return decode(twitterCredentialsCodec, JSON.parse(value));
-    },
-    logger
-  );
-  if (isLeft(result) || typeof result.right == "string") {
-    throw new Error("Failed to retrieve Twitter Credentials");
-  }
-
-  return result.right;
-};

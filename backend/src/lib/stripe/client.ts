@@ -1,22 +1,19 @@
+import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import Stripe from "stripe";
+import { getClientCredentials } from "../../adapters/paymentsManager/client";
 import { getConfig } from "../config";
 import { getLogger, Logger } from "../logger";
 import { JsonObjectEncodable } from "../models/jsonEncodable";
+import { getClient as getSSMClient } from "../ssm";
 
 export const stripeCredentialsCodec = t.type({
   pk: t.string,
   sk: t.string,
+  webhookSecret: t.string,
 });
 export type StripeCredentials = t.TypeOf<typeof stripeCredentialsCodec>;
-
-const testCreds: StripeCredentials = {
-  pk:
-    "pk_test_51ImH7pDuqMWaCw56nQKSdzK3ZBCcjxrWkFFWKcwNI021woU9AAZGdwA8oh5uFMLSWaNCUnx2TVVVWsOFVhPlL5Cr00APXUflHG",
-  sk:
-    "sk_test_51ImH7pDuqMWaCw56TRbrUw9cZp5dKGr5e4RKfvexFIIDp4Gy6g4cwAUU0LV6UkGzfWKN00OcXWcQV13VTqqbnS8m00Sz9OWJ4t",
-};
 
 export const getClient = (credentials: StripeCredentials) => {
   return new Stripe(credentials.sk, {
@@ -28,6 +25,24 @@ export type Client = ReturnType<typeof getClient>;
 export type StripeDependencies = {
   client: Client;
   logger: Logger;
+};
+
+export const verifyWebhookEvent = (
+  { client, logger }: StripeDependencies,
+  credentials: StripeCredentials,
+  event: APIGatewayProxyEvent
+): Either<"ERROR", Stripe.Event> => {
+  try {
+    const stripeEvent = client.webhooks.constructEvent(
+      event.body ?? "",
+      event.headers["Stripe-Signature"] ?? "",
+      credentials.webhookSecret
+    );
+    return right(stripeEvent);
+  } catch (error) {
+    logger.error("stripe::verifyWebhookEvent failed", { error });
+    return left("ERROR");
+  }
 };
 
 export const createCustomer = async (
@@ -68,12 +83,17 @@ export const deleteCustomer = async (
     return left("ERROR");
   }
 };
+
 // TEST
 
 export const main = async () => {
-  const client = getClient(testCreds);
   const logger = getLogger();
   const config = getConfig();
+  const testCreds: StripeCredentials = await getClientCredentials(
+    getSSMClient(),
+    logger
+  );
+  const client = getClient(testCreds);
 
   const createCustomerEither = await createCustomer(
     { client, logger },
@@ -124,7 +144,7 @@ export const main = async () => {
   logger.info("customer deleted");
 };
 
-void main();
+// void main();
 
 export const responseExample = {
   id: "cus_JQKyqMh0pxrKKZ",

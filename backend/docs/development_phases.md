@@ -101,7 +101,20 @@
 - store stripe id in users table
   "Cognito just had a big release, so there might be a better way to do this now. Here is how I did it. I created a user table in DynamoDB. Then I created a lambda trigger to update DB that fires when a user has registered. Then another lambda trigger when the user verifies their email. Finally, I created a lambda function to run the server-side of the stripe script. This server side code will also update the user table when a user pays the subscription fee."
 - stripeClient
+
   - create account and get keys
+
+- the real deal
+  - on account creation:
+    - create account in stripe and store customer data
+    - start subscription (Normal -> trial 10 days):
+    - update user subscription (Active, trial)
+    - write integration test (check in stripe that user was created with subscription and 10 day trial)
+  - on subscription changed events:
+    - on paid -> convert to non-trial (good state)
+    - on cancelled -> deactivate (cancelled state)
+    - on trial expired -> deactivate (trial expired state)
+    - on subscription expired -> deactivate (expired state)
 
 # Misc TODO
 
