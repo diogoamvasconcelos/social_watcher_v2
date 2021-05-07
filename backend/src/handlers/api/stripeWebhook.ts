@@ -1,9 +1,14 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { ApiBaseErrorCode, ApiResponse } from "./models/models";
 import { isLeft, right, left } from "fp-ts/lib/Either";
-import { makeRequestMalformedResponse, makeSuccessResponse } from "./responses";
+import {
+  makeInternalErrorResponse,
+  makeRequestMalformedResponse,
+  makeSuccessResponse,
+} from "./responses";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
-import { getLogger } from "../../lib/logger";
+import { getLogger, Logger } from "../../lib/logger";
+import Stripe from "stripe";
 import {
   verifyWebhookEvent,
   getClient as getPaymentsClient,
@@ -11,6 +16,7 @@ import {
 import { getClientCredentials as getPaymentsCredentials } from "../../adapters/paymentsManager/client";
 import { getClient as getSsmClient } from "../../lib/ssm";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
+import { DefaultOkReturn } from "../../domain/ports/shared";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -34,15 +40,43 @@ export const handler = async (
   }
   const webhookEvent = webhookEventEither.right;
 
+  const handleWebhookEventEither = await handleWebhookEvent(
+    logger,
+    webhookEvent
+  );
+  if (isLeft(handleWebhookEventEither)) {
+    return left(
+      makeInternalErrorResponse(`Failed to handle '${webhookEvent.type}' event`)
+    );
+  }
+  return right(makeSuccessResponse(200, { recieved: true }));
+};
+
+export const lambdaHandler = apigwMiddlewareStack(handler);
+
+const handleWebhookEvent = async (
+  logger: Logger,
+  webhookEvent: Stripe.Event
+): DefaultOkReturn => {
   switch (webhookEvent.type) {
+    case "customer.subscription.updated":
+      return await handleSubscriptionUpdatedEvent(logger, webhookEvent);
     default:
       logger.info("Unhandled event type", {
         type: webhookEvent.type,
         event: (webhookEvent as unknown) as JsonObjectEncodable,
       });
+      return right("OK");
   }
-
-  return right(makeSuccessResponse(200, { recieved: true }));
 };
 
-export const lambdaHandler = apigwMiddlewareStack(handler);
+const handleSubscriptionUpdatedEvent = async (
+  logger: Logger,
+  event: Stripe.Event
+): DefaultOkReturn => {
+  logger.info("got a 'customer.subscription.updated' event", {
+    event: (event as unknown) as JsonObjectEncodable,
+  });
+
+  return right("OK");
+};
