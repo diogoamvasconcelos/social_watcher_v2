@@ -76,12 +76,14 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 newItem,
               })
-            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            newItem.type === "SEARCH_OBJECT"
+            : newItem.type === "SEARCH_OBJECT"
             ? handleSearchObject(deps, {
                 eventName: record.eventName,
                 newItem,
               })
+            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            newItem.type === "PAYMENT_DATA"
+            ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
 
@@ -102,6 +104,8 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 oldItem,
                 newItem,
               })
+            : newItem.type === "PAYMENT_DATA" && oldItem.type === "PAYMENT_DATA"
+            ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
         case "REMOVE": {
@@ -112,12 +116,14 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 oldItem,
               })
-            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            oldItem.type === "SEARCH_OBJECT"
+            : oldItem.type === "SEARCH_OBJECT"
             ? handleSearchObject(deps, {
                 eventName: record.eventName,
                 oldItem,
               })
+            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            oldItem.type === "PAYMENT_DATA"
+            ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
       }
