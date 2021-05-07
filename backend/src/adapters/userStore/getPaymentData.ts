@@ -13,7 +13,11 @@ export const makeGetPaymentData = (
   return async (logger, id) => {
     return await getItem(
       client,
-      { TableName: tableName, Key: toPaymentDataDocumentKeys({ id }) },
+      {
+        TableName: tableName,
+        Key: toPaymentDataDocumentKeys({ id }),
+        ConsistentRead: true,
+      },
       unknownToPaymentData,
       logger
     );

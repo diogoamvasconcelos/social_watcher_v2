@@ -6,7 +6,13 @@ import {
 import { fromEither } from "../../../src/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { getEnvTestConfig } from "../../lib/config";
-import { createTestUser, deleteUser, getIdToken, getUser } from "./steps";
+import {
+  createTestUser,
+  deleteUser,
+  getIdToken,
+  getPaymentData,
+  getUser,
+} from "./steps";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -19,10 +25,20 @@ describe("signup e2e test", () => {
     testUser = await createTestUser();
   });
 
-  it("created user in users table", async () => {
+  it("created user data is stored", async () => {
     const userData = fromEither(await getUser(testUser.id));
     expect(userData).toEqual(
       expect.objectContaining(_.omit(testUser, ["password"]))
+    );
+
+    const paymentData = fromEither(await getPaymentData(testUser.id));
+    expect(paymentData).toEqual(
+      expect.objectContaining({
+        stripe: {
+          customerId: expect.any(String),
+          subscriptionId: expect.any(String),
+        },
+      })
     );
   });
 

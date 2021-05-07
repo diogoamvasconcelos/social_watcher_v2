@@ -22,7 +22,7 @@ export const paymentDataCodec = t.exact(
     id: userIdCodec,
     stripe: t.type({
       customerId: t.string,
-      subcriptionId: t.string,
+      subscriptionId: t.string,
     }),
   })
 );

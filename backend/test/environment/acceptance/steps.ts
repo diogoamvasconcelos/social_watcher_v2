@@ -65,11 +65,6 @@ const putSearchResultsFn = makePutSearchResults(
   config.searchResultsTableName
 );
 
-const getPaymentDataFn = makeGetPaymentData(
-  dynamoDbClient,
-  config.searchResultsTableName
-);
-
 export const createTestUser = async (
   subscriptionData?: Partial<SubscriptionData>
 ) => {
@@ -126,7 +121,7 @@ export const deleteUser = async ({
   );
 
   // Delete in stripe
-  const paymentData = fromEither(await getPaymentDataFn(logger, id));
+  const paymentData = fromEither(await getPaymentData(id));
   if (paymentData != "NOT_FOUND") {
     const stripeClient = getPaymentsClient(
       await getPaymentsCredentials(getSsmClient(), logger)
@@ -173,6 +168,13 @@ export const deleteUser = async ({
 
 export const getUser = async (id: string) => {
   return await makeGetUser(dynamoDbClient, config.usersTableName)(logger, id);
+};
+
+export const getPaymentData = async (id: string) => {
+  return await makeGetPaymentData(dynamoDbClient, config.usersTableName)(
+    logger,
+    id
+  );
 };
 
 export const getIdToken = async ({

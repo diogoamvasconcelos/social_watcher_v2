@@ -106,15 +106,17 @@
 
 - the real deal
   - on account creation:
-    - create account in stripe and store customer data
-    - start subscription (Normal -> trial 10 days):
-    - update user subscription (Active, trial)
-    - write integration test (check in stripe that user was created with subscription and 10 day trial)
+    - create account in stripe and store customer data <DONE>
+    - start subscription (Normal -> trial 10 days): <DONE>
+    - update user subscription (Active, trial) <DONE>
+    - write integration test (check in stripe that user was created with subscription and 10 day trial) <DONE>
   - on subscription changed events:
     - on paid -> convert to non-trial (good state)
     - on cancelled -> deactivate (cancelled state)
     - on trial expired -> deactivate (trial expired state)
     - on subscription expired -> deactivate (expired state)
+  - add CRON function to daily check the status of accounts (check if match stripe status)
+    - on mismatch, send me email!
 
 # Misc TODO
 

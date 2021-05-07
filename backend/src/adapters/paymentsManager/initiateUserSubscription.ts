@@ -73,7 +73,7 @@ export const makeInitiateUserSubscription = (
       paymentData: {
         stripe: {
           customerId: customer.id,
-          subcriptionId: subscription.id,
+          subscriptionId: subscription.id,
         },
       },
     });
