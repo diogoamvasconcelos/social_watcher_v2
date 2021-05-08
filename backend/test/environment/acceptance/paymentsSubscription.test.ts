@@ -35,7 +35,7 @@ describe("Trial subscription", () => {
     await deleteUser(testUser);
   });
 
-  it("Trial expiration is handled", async () => {
+  it("Trial expiration is handled when payment is successful", async () => {
     const user = fromEither(
       await getUserApi({
         client: apiClient,
@@ -49,7 +49,9 @@ describe("Trial subscription", () => {
     if (paymentData == "NOT_FOUND") {
       throw new Error("Failed to get user PaymentsData");
     }
-    await updateUserPaymentsSubscription(paymentData, { trial_end: "now" });
+    await updateUserPaymentsSubscription(paymentData, "pm_card_us", {
+      trial_end: "now",
+    });
 
     const expiredTrialUser = fromEither(
       await retryUntil(
@@ -61,11 +63,10 @@ describe("Trial subscription", () => {
             })
           ),
         (res) =>
-          res.subscriptionType == "TRIAL" &&
-          res.subscriptionStatus == "PAST_DUE"
+          res.subscriptionType == "NORMAL" && res.subscriptionStatus == "ACTIVE"
       )
     );
-    expect(expiredTrialUser.subscriptionType).toEqual("TRIAL");
-    expect(expiredTrialUser.subscriptionStatus).toEqual("PAST_DUE");
+    expect(expiredTrialUser.subscriptionType).toEqual("NORMAL");
+    expect(expiredTrialUser.subscriptionStatus).toEqual("ACTIVE");
   });
 });

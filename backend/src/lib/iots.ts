@@ -39,7 +39,8 @@ export const applyTransformToItem = <T, U>(
 
 // Useful sometimes, but doens't solve all the problems, as it doesn't create the "?" field
 // more info: https://github.com/gcanti/io-ts/issues/56
-export const optional = <T extends t.Mixed>(T: T) =>
+export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);
+export const optionalNull = <T extends t.Mixed>(T: T) =>
   t.union([t.undefined, t.null, T]);
 
 // lower case: https://github.com/gcanti/io-ts/blob/master/index.md#branded-types--refinements

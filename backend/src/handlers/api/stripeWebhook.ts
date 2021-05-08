@@ -58,7 +58,9 @@ export const handler = async (
       userStoreClient,
       config.usersTableName
     ),
-    putUser: makePutUser(userStoreClient, config.usersTableName),
+    putUser: makePutUser(userStoreClient, config.usersTableName, {
+      allowOverwrite: true,
+    }),
   };
 
   // event Validation

@@ -3,14 +3,20 @@ import { Client, userItemToDocument } from "./client";
 import { putItem } from "../../lib/dynamoDb";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 
-export const makePutUser = (client: Client, tableName: string): PutUserFn => {
+export const makePutUser = (
+  client: Client,
+  tableName: string,
+  options?: { allowOverwrite: boolean }
+): PutUserFn => {
   return async (logger, user) => {
     const result = await putItem(
       client,
       {
         TableName: tableName,
         Item: userItemToDocument({ ...user, type: "USER_DATA" }),
-        ConditionExpression: "attribute_not_exists(pk)",
+        ConditionExpression: options?.allowOverwrite
+          ? undefined
+          : "attribute_not_exists(pk)",
       },
       logger
     );

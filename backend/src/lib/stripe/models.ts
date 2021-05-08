@@ -1,12 +1,12 @@
 import * as t from "io-ts";
-import { optional } from "../iots";
+import { optionalNull } from "../iots";
 
 // ref: https://stripe.com/docs/api/subscriptions/update
 export const customerSubscriptionEventDataCodec = t.type({
   object: t.type({
     id: t.string,
     customer: t.string,
-    default_payment_method: optional(t.string),
+    default_payment_method: optionalNull(t.string),
     status: t.string,
     items: t.type({
       data: t.array(

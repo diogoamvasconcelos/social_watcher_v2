@@ -330,6 +330,7 @@ export const addSearchResultDirectly = async (
 
 export const updateUserPaymentsSubscription = async (
   paymentData: PaymentData,
+  paymentMethod: string,
   params: Stripe.SubscriptionUpdateParams
 ) => {
   const stripeClient = getPaymentsClient(
@@ -341,7 +342,7 @@ export const updateUserPaymentsSubscription = async (
     await attachPaymentMethod(
       { client: stripeClient, logger },
       paymentData.stripe.customerId,
-      "pm_card_us"
+      paymentMethod
     )
   );
 
