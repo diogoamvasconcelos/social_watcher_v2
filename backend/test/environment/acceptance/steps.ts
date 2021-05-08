@@ -26,7 +26,10 @@ import {
   toUserDataDocumentKeys,
   userItemDocumentCodec,
 } from "../../../src/adapters/userStore/client";
-import { SocialMediaSearchData } from "../../../src/domain/models/userItem";
+import {
+  PaymentData,
+  SocialMediaSearchData,
+} from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
   updateSearchObject,
@@ -43,11 +46,17 @@ import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
 import { buildSearchResult } from "../../lib/builders";
 import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
-import { deleteCustomer } from "../../../src/lib/stripe/client";
+import {
+  attachPaymentMethod,
+  deleteCustomer,
+  updateCustomer,
+  updateSubscription,
+} from "../../../src/lib/stripe/client";
 import { getClient as getPaymentsClient } from "../../../src/lib/stripe/client";
 import { getClient as getSsmClient } from "../../../src/lib/ssm";
 import { getClientCredentials as getPaymentsCredentials } from "../../../src/adapters/paymentsManager/client";
 import { makeGetPaymentData } from "../../../src/adapters/userStore/getPaymentData";
+import Stripe from "stripe";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -317,4 +326,41 @@ export const addSearchResultDirectly = async (
   const searchResult: SearchResult = buildSearchResult(partial);
   fromEither(await putSearchResultsFn(logger, [searchResult]));
   return searchResult;
+};
+
+export const updateUserPaymentsSubscription = async (
+  paymentData: PaymentData,
+  params: Stripe.SubscriptionUpdateParams
+) => {
+  const stripeClient = getPaymentsClient(
+    await getPaymentsCredentials(getSsmClient(), logger)
+  );
+
+  // Need to add attached payment source or default payment method to be able to update subscription
+  const paymentMethodId = fromEither(
+    await attachPaymentMethod(
+      { client: stripeClient, logger },
+      paymentData.stripe.customerId,
+      "pm_card_us"
+    )
+  );
+
+  fromEither(
+    await updateCustomer(
+      { client: stripeClient, logger },
+      paymentData.stripe.customerId,
+      { invoice_settings: { default_payment_method: paymentMethodId } }
+    )
+  );
+
+  fromEither(
+    await updateSubscription(
+      {
+        client: stripeClient,
+        logger,
+      },
+      paymentData.stripe.subscriptionId,
+      params
+    )
+  );
 };

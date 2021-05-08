@@ -25,6 +25,10 @@ describe("signup e2e test", () => {
     testUser = await createTestUser();
   });
 
+  afterAll(async () => {
+    await deleteUser(testUser);
+  });
+
   it("created user data is stored", async () => {
     const userData = fromEither(await getUser(testUser.id));
     expect(userData).toEqual(
@@ -58,9 +62,5 @@ describe("signup e2e test", () => {
     expect(user).toEqual(
       expect.objectContaining(_.omit(testUser, ["password"]))
     );
-  });
-
-  afterAll(async () => {
-    await deleteUser(testUser);
   });
 });

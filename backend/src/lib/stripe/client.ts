@@ -67,6 +67,23 @@ export const createSubscription = async (
   }
 };
 
+export const updateSubscription = async (
+  { client, logger }: StripeDependencies,
+  subscriptionId: string,
+  params: Stripe.SubscriptionUpdateParams
+): Promise<Either<"ERROR", Stripe.Response<Stripe.Subscription>>> => {
+  try {
+    const newSubscription = await client.subscriptions.update(
+      subscriptionId,
+      params
+    );
+    return right(newSubscription);
+  } catch (error) {
+    logger.error("stripe::subscriptions.update failed", { error });
+    return left("ERROR");
+  }
+};
+
 export const deleteCustomer = async (
   { client, logger }: StripeDependencies,
   customerId: string
@@ -76,6 +93,36 @@ export const deleteCustomer = async (
     return right("OK");
   } catch (error) {
     logger.error("stripe::customers.del failed", { error });
+    return left("ERROR");
+  }
+};
+
+export const updateCustomer = async (
+  { client, logger }: StripeDependencies,
+  customerId: string,
+  params: Stripe.CustomerUpdateParams
+): Promise<Either<"ERROR", "OK">> => {
+  try {
+    await client.customers.update(customerId, params);
+    return right("OK");
+  } catch (error) {
+    logger.error("stripe::customer.update failed", { error });
+    return left("ERROR");
+  }
+};
+
+export const attachPaymentMethod = async (
+  { client, logger }: StripeDependencies,
+  customerId: string,
+  paymentMethod: string
+): Promise<Either<"ERROR", string>> => {
+  try {
+    const res = await client.paymentMethods.attach(paymentMethod, {
+      customer: customerId,
+    });
+    return right(res.id);
+  } catch (error) {
+    logger.error("stripe::paymentMethods.attach failed", { error });
     return left("ERROR");
   }
 };

@@ -39,6 +39,13 @@ describe("keyword interaction between multiple users", () => {
     });
   });
 
+  afterAll(async () => {
+    await deleteUser(testUserA);
+    await deleteUser(testUserB);
+    await deleteKeyword(theKeyword);
+    await deleteKeyword(anotherKeyword);
+  });
+
   it("both users add the same keyword", async () => {
     // Intial state: keyword doesn't exist
     await checkKeyword({
@@ -233,12 +240,5 @@ describe("keyword interaction between multiple users", () => {
       status: "INACTIVE",
       exists: true,
     });
-  });
-
-  afterAll(async () => {
-    await deleteUser(testUserA);
-    await deleteUser(testUserB);
-    await deleteKeyword(theKeyword);
-    await deleteKeyword(anotherKeyword);
   });
 });

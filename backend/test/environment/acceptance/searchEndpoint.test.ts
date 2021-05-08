@@ -36,6 +36,11 @@ describe("search endpoint e2e (nearly)", () => {
     });
   });
 
+  afterAll(async () => {
+    await deleteUser(testUser);
+    await deleteKeyword(keyword);
+  });
+
   it("can search for an allowed keyword", async () => {
     // add syntetic search result
     const searchResult = await addSearchResultDirectly({ keyword });
@@ -98,11 +103,6 @@ describe("search endpoint e2e (nearly)", () => {
     if (isLeft(responseEither) && typeof responseEither.left != "string") {
       expect(responseEither.left.status).toEqual(403);
     }
-  });
-
-  afterAll(async () => {
-    await deleteUser(testUser);
-    await deleteKeyword(keyword);
   });
 });
 

@@ -28,6 +28,11 @@ describe("update searchObject e2e test", () => {
     });
   });
 
+  afterAll(async () => {
+    await deleteUser(testUser);
+    await deleteKeyword(keyword);
+  });
+
   it("updateSearchKeyword works", async () => {
     const token = await getIdToken({
       username: testUser.email,
@@ -62,10 +67,5 @@ describe("update searchObject e2e test", () => {
     expect(getSearchObejctsResponse).toEqual({
       items: [expect.objectContaining({ index, ...userData })],
     });
-  });
-
-  afterAll(async () => {
-    await deleteUser(testUser);
-    await deleteKeyword(keyword);
   });
 });

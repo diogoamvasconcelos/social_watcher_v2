@@ -31,6 +31,12 @@ describe("changes to user subscription", () => {
     });
   });
 
+  afterAll(async () => {
+    await deleteUser(testUser);
+    await deleteKeyword(firstKeyword);
+    await deleteKeyword(secondKeyword);
+  });
+
   it("changing nofSearchObjects", async () => {
     // Intial state: keywords doesn't exist
     await checkKeyword({
@@ -110,11 +116,5 @@ describe("changes to user subscription", () => {
       status: "ACTIVE",
       exists: true,
     });
-  });
-
-  afterAll(async () => {
-    await deleteUser(testUser);
-    await deleteKeyword(firstKeyword);
-    await deleteKeyword(secondKeyword);
   });
 });
