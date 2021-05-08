@@ -103,6 +103,7 @@ const handleWebhookEvent = async (
   switch (webhookEvent.type) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
+    case "customer.subscription.deleted":
       return await handleSubscriptionUpdatedEvent(deps, webhookEvent);
     default:
       deps.logger.info("Unhandled event type", {

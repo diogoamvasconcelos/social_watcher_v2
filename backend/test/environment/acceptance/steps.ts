@@ -48,7 +48,9 @@ import { buildSearchResult } from "../../lib/builders";
 import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
 import {
   attachPaymentMethod,
+  createSubscription,
   deleteCustomer,
+  deleteSubscription,
   updateCustomer,
   updateSubscription,
 } from "../../../src/lib/stripe/client";
@@ -362,6 +364,52 @@ export const updateUserPaymentsSubscription = async (
       },
       paymentData.stripe.subscriptionId,
       params
+    )
+  );
+};
+
+export const deleteNormalSubsctiption = async (paymentData: PaymentData) => {
+  const stripeClient = getPaymentsClient(
+    await getPaymentsCredentials(getSsmClient(), logger)
+  );
+
+  fromEither(
+    await deleteSubscription(
+      { logger, client: stripeClient },
+      paymentData.stripe.subscriptionId
+    )
+  );
+};
+
+export const addNewNormalSubscription = async (
+  paymentData: PaymentData,
+  paymentMethod: string
+) => {
+  const stripeClient = getPaymentsClient(
+    await getPaymentsCredentials(getSsmClient(), logger)
+  );
+
+  const paymentMethodId = fromEither(
+    await attachPaymentMethod(
+      { client: stripeClient, logger },
+      paymentData.stripe.customerId,
+      paymentMethod
+    )
+  );
+
+  fromEither(
+    await createSubscription(
+      { logger, client: stripeClient },
+      {
+        customer: paymentData.stripe.customerId,
+        items: [
+          {
+            price: config.stripeNormalProductId,
+            quantity: 10,
+          },
+        ],
+        default_payment_method: paymentMethodId,
+      }
     )
   );
 };

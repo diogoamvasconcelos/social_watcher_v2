@@ -1,23 +1,23 @@
-import { Awaited } from "../../../src/lib/types";
-import { getEnvTestConfig } from "../../lib/config";
+import { Awaited } from "../../../../src/lib/types";
+import { getEnvTestConfig } from "../../../lib/config";
 import {
   createTestUser,
   deleteUser,
   getIdToken,
   getPaymentData,
   updateUserPaymentsSubscription,
-} from "./steps";
+} from "../steps";
 import {
   getClient as getApiClient,
   getUser as getUserApi,
-} from "../../../src/lib/apiClient/apiClient";
-import { fromEither } from "../../../src/lib/iots";
-import { retryUntil } from "../../lib/retry";
+} from "../../../../src/lib/apiClient/apiClient";
+import { fromEither } from "../../../../src/lib/iots";
+import { retryUntil } from "../../../lib/retry";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
-describe("Trial subscription", () => {
+describe("Trial expiration successful", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
   let userToken: string;
 
@@ -35,7 +35,7 @@ describe("Trial subscription", () => {
     await deleteUser(testUser);
   });
 
-  it("Trial expiration is handled when payment is successful", async () => {
+  it("is handled when payment is successful", async () => {
     const user = fromEither(
       await getUserApi({
         client: apiClient,
@@ -49,11 +49,11 @@ describe("Trial subscription", () => {
     if (paymentData == "NOT_FOUND") {
       throw new Error("Failed to get user PaymentsData");
     }
-    await updateUserPaymentsSubscription(paymentData, "pm_card_us", {
+    await updateUserPaymentsSubscription(paymentData, "pm_card_visa", {
       trial_end: "now",
     });
 
-    const expiredTrialUser = fromEither(
+    const updatedUser = fromEither(
       await retryUntil(
         async () =>
           fromEither(
@@ -66,7 +66,7 @@ describe("Trial subscription", () => {
           res.subscriptionType == "NORMAL" && res.subscriptionStatus == "ACTIVE"
       )
     );
-    expect(expiredTrialUser.subscriptionType).toEqual("NORMAL");
-    expect(expiredTrialUser.subscriptionStatus).toEqual("ACTIVE");
+    expect(updatedUser.subscriptionType).toEqual("NORMAL");
+    expect(updatedUser.subscriptionStatus).toEqual("ACTIVE");
   });
 });

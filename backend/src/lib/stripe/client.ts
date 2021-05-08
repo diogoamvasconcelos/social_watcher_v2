@@ -85,6 +85,23 @@ export const updateSubscription = async (
   }
 };
 
+export const deleteSubscription = async (
+  { client, logger }: StripeDependencies,
+  subscriptionId: string,
+  params?: Stripe.SubscriptionDeleteParams
+): Promise<Either<"ERROR", Stripe.Response<Stripe.Subscription>>> => {
+  try {
+    const newSubscription = await client.subscriptions.del(
+      subscriptionId,
+      params
+    );
+    return right(newSubscription);
+  } catch (error) {
+    logger.error("stripe::subscriptions.delete failed", { error });
+    return left("ERROR");
+  }
+};
+
 export const deleteCustomer = async (
   { client, logger }: StripeDependencies,
   customerId: string

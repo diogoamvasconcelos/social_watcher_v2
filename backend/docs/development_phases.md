@@ -112,14 +112,14 @@
     - write integration test (check in stripe that user was created with subscription and 10 day trial) <DONE>
   - on subscription changed events:
     - ref: https://stripe.com/docs/billing/subscriptions/integrating-customer-portal#webhooks
-    - on paid -> convert to non-trial (good state)
-    - on cancelled -> deactivate (cancelled state)
+    - on paid -> convert to non-trial (good state) <DONE>
+    - on cancelled -> deactivate (cancelled state) <DONE>
     - on trial expired -> deactivate (trial expired state)
     - on subscription expired -> deactivate (expired state)
       - implementation:
-        - get user by stripe customerID
-        - update paymentData on new subscription
-        - update suer on subscription update
+        - get user by stripe customerID <DONE>
+        - update paymentData on new subscription <DONE>
+        - update suer on subscription update <DONE>
   - add CRON function to daily check the status of accounts (check if match stripe status)
     - on mismatch, send me email!
 
