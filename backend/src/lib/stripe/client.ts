@@ -3,6 +3,7 @@ import { Either, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import Stripe from "stripe";
 import { Logger } from "../logger";
+import { JsonObjectEncodable } from "../models/jsonEncodable";
 
 export const stripeCredentialsCodec = t.type({
   pk: t.string,
@@ -123,6 +124,26 @@ export const attachPaymentMethod = async (
     return right(res.id);
   } catch (error) {
     logger.error("stripe::paymentMethods.attach failed", { error });
+    return left("ERROR");
+  }
+};
+
+export const getCustomerById = async (
+  { client, logger }: StripeDependencies,
+  customerId: string
+): Promise<Either<"ERROR", Stripe.Response<Stripe.Customer>>> => {
+  try {
+    const res = await client.customers.retrieve(customerId);
+    if (res.deleted) {
+      logger.error("stripe::customers.retrieve retrieved a deleted user", {
+        res: (res as unknown) as JsonObjectEncodable,
+      });
+      return left("ERROR");
+    }
+
+    return right(res);
+  } catch (error) {
+    logger.error("stripe::customers.retrieve failed", { error });
     return left("ERROR");
   }
 };

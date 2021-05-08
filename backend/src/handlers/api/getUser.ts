@@ -21,6 +21,7 @@ const handler = async (
   const config = getConfig();
   const logger = getLogger();
 
+  // TODO: make a controller for getUser that returns UserData and PaymentData and make controller/getUserByCustomerId use it
   const getUserFn = makeGetUser(getUsersStoreClient(), config.usersTableName);
 
   const requestEither = toGetUserRequest(event);

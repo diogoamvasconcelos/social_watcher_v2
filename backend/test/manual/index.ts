@@ -3,6 +3,7 @@ import { getLogger } from "../../src/lib/logger";
 import {
   attachPaymentMethod,
   getClient as getPaymentsClient,
+  getCustomerById,
 } from "../../src/lib/stripe/client";
 import { getClient as getSsmClient } from "../../src/lib/ssm";
 import { getClientCredentials as getPaymentsCredentials } from "../../src/adapters/paymentsManager/client";
@@ -15,6 +16,7 @@ import {
   deleteUser,
   getPaymentData,
 } from "../environment/acceptance/steps";
+import { JsonObjectEncodable } from "../../src/lib/models/jsonEncodable";
 
 const logger = getLogger();
 
@@ -89,9 +91,56 @@ export const manualStripeTestUser = async () => {
   // logger.info("User Deleted");
 };
 
+export const getCustomer = async () => {
+  const stripeClient = getPaymentsClient(
+    await getPaymentsCredentials(getSsmClient(), logger)
+  );
+
+  const customer = fromEither(
+    await getCustomerById(
+      { logger, client: stripeClient },
+      "cus_JRFWS7vMXn9b7O"
+    )
+  );
+
+  logger.info("customer get", {
+    customer: (customer as unknown) as JsonObjectEncodable,
+  });
+
+  /*
+  const response = {
+    id: "cus_JRFWS7vMXn9b7O",
+    object: "customer",
+    address: null,
+    balance: 0,
+    created: 1620368348,
+    currency: "usd",
+    default_source: null,
+    delinquent: false,
+    description: null,
+    discount: null,
+    email: "deon09+test-stripe-01@gmail.com",
+    invoice_prefix: "942F81AE",
+    invoice_settings: {
+      custom_fields: null,
+      default_payment_method: null,
+      footer: null,
+    },
+    livemode: false,
+    metadata: { userId: "667e6c14-0d1e-4cd1-825c-784b38d173f1" },
+    name: null,
+    phone: null,
+    preferred_locales: [],
+    shipping: null,
+    tax_exempt: "none",
+  };
+  */
+};
+
 export const main = async () => {
   //await manualCreateUser();
-  await manualStripeTestUser();
+  //await manualStripeTestUser();
+  await getCustomer();
 };
 
 //void main();

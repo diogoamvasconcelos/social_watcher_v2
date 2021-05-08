@@ -35,9 +35,8 @@ export const getConfig = () => {
     stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
   };
 };
+export type Config = ReturnType<typeof getConfig>;
 
 export const getSecret = (secretName: string): string => {
   return ensure(secretName);
 };
-
-export type Config = ReturnType<typeof getConfig>;

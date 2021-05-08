@@ -17,9 +17,7 @@ import { getClient as getSsmClient } from "../lib/ssm";
 
 const config = getConfig();
 const logger = getLogger();
-const subscriptionConfig = getSubscriptionConfig(
-  "../../../config/subscription.yaml"
-);
+const subscriptionConfig = getSubscriptionConfig();
 
 const handler = async (event: PreSignUpTriggerEvent) => {
   const paymentsCredentials = await getPaymentsCredentials(

@@ -13,7 +13,7 @@ export const subscriptionConfigCodec = t.type({
 export type SubscriptionConfig = t.TypeOf<typeof subscriptionConfigCodec>;
 
 export const getSubscriptionConfig = (
-  configFile: string
+  configFile: string = "../../../config/subscription.yaml"
 ): SubscriptionConfig => {
   return fromEither(
     decode(
