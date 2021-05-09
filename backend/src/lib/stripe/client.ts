@@ -164,3 +164,21 @@ export const getCustomerById = async (
     return left("ERROR");
   }
 };
+
+export const createBillingPortalSession = async (
+  { client, logger }: StripeDependencies,
+  customerId: string,
+  returnUrl: string
+): Promise<Either<"ERROR", Stripe.Response<Stripe.BillingPortal.Session>>> => {
+  try {
+    const res = await client.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: returnUrl,
+    });
+
+    return right(res);
+  } catch (error) {
+    logger.error("stripe::billingPortal.sessions.create failed", { error });
+    return left("ERROR");
+  }
+};

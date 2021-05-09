@@ -172,6 +172,50 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
+  /user/payments/create-portal:
+    post:
+      description: Create payments portal session and return url
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentsPortalRequestBody"
+      responses:
+        200:
+          description: Payments portal session url
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatePaymentsPortalResponse"
+        400:
+          $ref: "#/components/schemas/ErrorResponse"
+        500:
+          $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${create_payments_portal_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:1234'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
   /stripe-escondido-webhook:
     post:
       description: StripeWebhook
@@ -333,6 +377,24 @@ components:
           type: integer
         total:
           type: integer
+
+    CreatePaymentsPortalRequestBody:
+      description: portal session request object
+      type: object
+      required:
+        - returnUrl
+      properties:
+        returnUrl:
+          type: string
+
+    CreatePaymentsPortalResponse:
+      description: portal session response
+      type: object
+      required:
+        - sessionUrl
+      properties:
+        sessionUrl:
+          type: string
 
     StripeWebhookRequestBody:
       description: Event sent by Stripe

@@ -120,6 +120,8 @@
         - get user by stripe customerID <DONE>
         - update paymentData on new subscription <DONE>
         - update suer on subscription update <DONE>
+  - create "customer-portal-session" endpoint
+    - ref: https://stripe.com/docs/billing/subscriptions/integrating-customer-portal
   - add CRON function to daily check the status of accounts (check if match stripe status)
     - on mismatch, send me email!
 

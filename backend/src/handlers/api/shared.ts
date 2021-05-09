@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { isString } from "lodash";
@@ -5,7 +6,12 @@ import { User } from "../../domain/models/user";
 import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
 import { ApiErrorResponse, ApiRequestMetadata } from "./models/models";
-import { makeInternalErrorResponse } from "./responses";
+import {
+  makeInternalErrorResponse,
+  makeRequestMalformedResponse,
+} from "./responses";
+import { parseSafe } from "../../lib/json";
+import { decode } from "../../lib/iots";
 
 export const apiGetUser = async ({
   logger,
@@ -43,4 +49,34 @@ export const toApigwRequestMetadata = (
   }
 
   return right({ authData: { id, email } });
+};
+
+export const toRequestWithUserData = <U>(
+  logger: Logger,
+  event: APIGatewayProxyEvent,
+  userDataDecoder: t.Decoder<unknown, U>
+): Either<ApiErrorResponse, U & ApiRequestMetadata> => {
+  const metadataEither = toApigwRequestMetadata(event);
+  if (isLeft(metadataEither)) {
+    return metadataEither;
+  }
+
+  const bodyEither = parseSafe(event.body);
+  if (isLeft(bodyEither)) {
+    logger.error("Failed to parse body to json.", { error: bodyEither.left });
+    return left(
+      makeRequestMalformedResponse("Request body is not a json file.")
+    );
+  }
+  const body = bodyEither.right;
+
+  const userDataEither = decode(userDataDecoder, body);
+  if (isLeft(userDataEither)) {
+    return left(makeRequestMalformedResponse("Request body is invalid."));
+  }
+
+  return right({
+    ...metadataEither.right,
+    ...userDataEither.right,
+  });
 };

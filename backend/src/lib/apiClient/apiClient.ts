@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
 import { decode } from "../iots";
@@ -5,23 +6,17 @@ import {
   SearchObject,
   SearchObjectUserData,
 } from "../../domain/models/userItem";
-import {
-  GetUserResponse,
-  getUserResponseCodec,
-} from "../../handlers/api/models/getUser";
-import {
-  UpdateSearchObjectResponse,
-  updateSearchObjectResponseCodec,
-} from "../../handlers/api/models/updateSearchObject";
+import { getUserResponseCodec } from "../../handlers/api/models/getUser";
+import { updateSearchObjectResponseCodec } from "../../handlers/api/models/updateSearchObject";
 import {
   SearchRequestUserData,
-  SearchResponse,
   searchResponseCodec,
 } from "../../handlers/api/models/search";
+import { getSearchObjectsResponseCodec } from "../../handlers/api/models/getSearchObjects";
 import {
-  GetSearchObjectsResponse,
-  getSearchObjectsResponseCodec,
-} from "../../handlers/api/models/getSearchObjects";
+  createPaymentsPortalResponseCodec,
+  CreatePaymentsPortalUserData,
+} from "../../handlers/api/models/createPaymentsPortal";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -35,15 +30,14 @@ export type ApiClientDeps = {
   token: string;
 };
 
+type GenericCallParams = Pick<
+  AxiosRequestConfig,
+  "headers" | "method" | "url" | "data" | "params"
+>;
+
 const doGenericAPICall = async (
   deps: ApiClientDeps,
-  {
-    headers,
-    method,
-    url,
-    data,
-    params,
-  }: Pick<AxiosRequestConfig, "headers" | "method" | "url" | "data" | "params">
+  { headers, method, url, data, params }: GenericCallParams
 ) => {
   const request: AxiosRequestConfig = {
     method,
@@ -62,87 +56,89 @@ const doGenericAPICall = async (
 
 export type ApiError = AxiosResponse | "DECODE_ERROR";
 
-export const getUser = async (
-  deps: ApiClientDeps
-): Promise<Either<ApiError, GetUserResponse>> => {
-  const apiResult = await doGenericAPICall(deps, {
+// +++++++++++
+// + Methods +
+// +++++++++++
+
+type ClientMethod<U> = (deps: ApiClientDeps) => Promise<Either<ApiError, U>>;
+const createClientMethod = <U>(
+  params: GenericCallParams,
+  resultDecoder: t.Decoder<unknown, U>
+): ClientMethod<U> => {
+  return async (deps) => {
+    const apiResult = await doGenericAPICall(deps, params);
+    if (apiResult.status != 200) {
+      return left(apiResult);
+    }
+
+    const decodeResult = decode(resultDecoder, apiResult.data);
+    if (isLeft(decodeResult)) {
+      return left("DECODE_ERROR");
+    }
+
+    return decodeResult;
+  };
+};
+
+export const getUser = createClientMethod(
+  {
     method: "get",
     url: "user",
-  });
-  if (apiResult.status != 200) {
-    return left(apiResult);
-  }
+  },
+  getUserResponseCodec
+);
 
-  const decodeResult = decode(getUserResponseCodec, apiResult.data);
-  if (isLeft(decodeResult)) {
-    return left("DECODE_ERROR");
-  }
-
-  return decodeResult;
-};
-
-export const getSearchObjects = async (
-  deps: ApiClientDeps
-): Promise<Either<ApiError, GetSearchObjectsResponse>> => {
-  const apiResult = await doGenericAPICall(deps, {
+export const getSearchObjects = createClientMethod(
+  {
     method: "get",
     url: "user/searchObject",
-  });
-  if (apiResult.status != 200) {
-    return left(apiResult);
-  }
+  },
+  getSearchObjectsResponseCodec
+);
 
-  const decodeResult = decode(getSearchObjectsResponseCodec, apiResult.data);
-  if (isLeft(decodeResult)) {
-    return left("DECODE_ERROR");
-  }
-
-  return decodeResult;
-};
-
+// special case, don't use the helper function yet (can be done I guess)
 export const updateSearchObject = async (
   deps: ApiClientDeps,
   data: {
     index: SearchObject["index"];
     userData: SearchObjectUserData;
   }
-): Promise<Either<ApiError, UpdateSearchObjectResponse>> => {
-  const apiResult = await doGenericAPICall(deps, {
-    method: "put",
-    url: `user/searchObject/${data.index}`,
-    data: JSON.stringify(data.userData),
-  });
-  if (apiResult.status != 200) {
-    return left(apiResult);
-  }
-
-  const decodeResult = decode(updateSearchObjectResponseCodec, apiResult.data);
-  if (isLeft(decodeResult)) {
-    return left("DECODE_ERROR");
-  }
-
-  return decodeResult;
-};
+) =>
+  createClientMethod(
+    {
+      method: "put",
+      url: `user/searchObject/${data.index}`,
+      data: JSON.stringify(data.userData),
+    },
+    updateSearchObjectResponseCodec
+  )(deps);
 
 export const search = async (
   deps: ApiClientDeps,
   data: {
     userData: SearchRequestUserData;
   }
-): Promise<Either<ApiError, SearchResponse>> => {
-  const apiResult = await doGenericAPICall(deps, {
-    method: "post",
-    url: `search`,
-    data: JSON.stringify(data.userData),
-  });
-  if (apiResult.status != 200) {
-    return left(apiResult);
-  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `search`,
+      data: JSON.stringify(data.userData),
+    },
+    searchResponseCodec
+  )(deps);
 
-  const decodeResult = decode(searchResponseCodec, apiResult.data);
-  if (isLeft(decodeResult)) {
-    return left("DECODE_ERROR");
+export const createPaymentsPortal = async (
+  deps: ApiClientDeps,
+  data: {
+    userData: CreatePaymentsPortalUserData;
   }
-
-  return decodeResult;
-};
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `/user/payments/create-portal`,
+      data: JSON.stringify(data.userData),
+    },
+    createPaymentsPortalResponseCodec
+  )(deps);
