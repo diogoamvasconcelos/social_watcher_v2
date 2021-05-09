@@ -233,7 +233,9 @@ export const updateUserSubscription = async ({
       .promise()
   ).Item;
 
-  const updatedUserItem = deepmergeSafe(userDataItem ?? {}, updatedData);
+  const updatedUserItem = deepmergeSafe(userDataItem ?? {}, {
+    subscription: updatedData,
+  });
 
   await dynamoDbClient
     .put({

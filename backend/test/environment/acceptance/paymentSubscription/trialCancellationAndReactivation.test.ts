@@ -43,7 +43,7 @@ describe("Trial cancellation and re-activation", () => {
         token: userToken,
       })
     );
-    expect(user.subscriptionType).toEqual("TRIAL");
+    expect(user.subscription.type).toEqual("TRIAL");
 
     // delete subscription
     const paymentData = fromEither(await getPaymentData(user.id));
@@ -63,12 +63,13 @@ describe("Trial cancellation and re-activation", () => {
             })
           ),
         (res) =>
-          res.subscriptionType == "TRIAL" &&
-          res.subscriptionStatus == "CANCELED"
+          res.subscription.type == "TRIAL" &&
+          res.subscription.status == "CANCELED"
       )
     );
-    expect(cancelledUser.subscriptionType).toEqual("TRIAL");
-    expect(cancelledUser.subscriptionStatus).toEqual("CANCELED");
+    expect(cancelledUser.subscription.type).toEqual("TRIAL");
+    expect(cancelledUser.subscription.status).toEqual("CANCELED");
+    expect(cancelledUser.subscription.expiresAt).not.toBeUndefined();
 
     // add new subscription (re-activation)
     await addNewNormalSubscription(paymentData, "pm_card_visa");
@@ -83,11 +84,13 @@ describe("Trial cancellation and re-activation", () => {
             })
           ),
         (res) =>
-          res.subscriptionType == "NORMAL" && res.subscriptionStatus == "ACTIVE"
+          res.subscription.type == "NORMAL" &&
+          res.subscription.status == "ACTIVE"
       )
     );
-    expect(reactivatedUser.subscriptionType).toEqual("NORMAL");
-    expect(reactivatedUser.subscriptionStatus).toEqual("ACTIVE");
-    expect(reactivatedUser.nofSearchObjects).toEqual(10);
+    expect(reactivatedUser.subscription.type).toEqual("NORMAL");
+    expect(reactivatedUser.subscription.status).toEqual("ACTIVE");
+    expect(reactivatedUser.subscription.nofSearchObjects).toEqual(10);
+    expect(reactivatedUser.subscription.expiresAt).toBeUndefined();
   });
 });

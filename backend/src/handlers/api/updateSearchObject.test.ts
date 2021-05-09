@@ -6,6 +6,7 @@ import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { deepmergeSafe } from "../../lib/deepmerge";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -26,9 +27,11 @@ makePutSearchObjectMock.mockReturnValue(putSearchObjectMock);
 const defaultUser: User = {
   id: "some-id",
   email: "some-email",
-  subscriptionStatus: "ACTIVE",
-  subscriptionType: "NORMAL",
-  nofSearchObjects: newPositiveInteger(1),
+  subscription: {
+    status: "ACTIVE",
+    type: "NORMAL",
+    nofSearchObjects: newPositiveInteger(1),
+  },
 };
 
 const defaultRequestData: SearchObjectUserData = {
@@ -74,10 +77,11 @@ describe("handlers/api/updateSearchObject", () => {
   });
 
   it("returns forbidden index > nofAllowed", async () => {
-    const restrictedUser = {
-      ...defaultUser,
-      nofSearchObjects: newPositiveInteger(0),
-    };
+    const restrictedUser = deepmergeSafe(defaultUser, {
+      subscription: {
+        nofSearchObjects: newPositiveInteger(0),
+      },
+    });
     const event = buildEvent(restrictedUser, defaultRequestData);
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));

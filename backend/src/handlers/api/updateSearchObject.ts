@@ -59,9 +59,9 @@ export const handler = async (
   }
   const user: User = getUserEither.right;
 
-  if (request.index >= user.nofSearchObjects) {
+  if (request.index >= user.subscription.nofSearchObjects) {
     logger.error(
-      `Trying to update a search object with index (${request.index}) higher than user's nofSearchObjects (${user.nofSearchObjects})`
+      `Trying to update a search object with index (${request.index}) higher than user's nofSearchObjects (${user.subscription.nofSearchObjects})`
     );
     return left(
       makeForbiddenResponse("Provided Search Object index is forbidden.")

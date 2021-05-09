@@ -42,7 +42,8 @@ describe("Trial expiration successful", () => {
         token: userToken,
       })
     );
-    expect(user.subscriptionType).toEqual("TRIAL");
+    expect(user.subscription.type).toEqual("TRIAL");
+    expect(user.subscription.expiresAt).not.toBeUndefined();
 
     // update trial to force expiration
     const paymentData = fromEither(await getPaymentData(user.id));
@@ -63,10 +64,12 @@ describe("Trial expiration successful", () => {
             })
           ),
         (res) =>
-          res.subscriptionType == "NORMAL" && res.subscriptionStatus == "ACTIVE"
+          res.subscription.type == "NORMAL" &&
+          res.subscription.status == "ACTIVE"
       )
     );
-    expect(updatedUser.subscriptionType).toEqual("NORMAL");
-    expect(updatedUser.subscriptionStatus).toEqual("ACTIVE");
+    expect(updatedUser.subscription.type).toEqual("NORMAL");
+    expect(updatedUser.subscription.status).toEqual("ACTIVE");
+    expect(updatedUser.subscription.expiresAt).toBeUndefined();
   });
 });

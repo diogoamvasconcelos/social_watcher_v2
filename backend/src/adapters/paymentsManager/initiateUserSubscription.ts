@@ -1,7 +1,7 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { SubscriptionConfig } from "../../domain/models/subscriptionConfig";
 import { InitiateUserSubscriptionFn } from "../../domain/ports/paymentsManager/initiateUserSubscription";
-import { newPositiveInteger } from "../../lib/iots";
+import { dateISOString, decode, newPositiveInteger } from "../../lib/iots";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
 import { createCustomer, createSubscription } from "../../lib/stripe/client";
 import { Client } from "./client";
@@ -64,11 +64,25 @@ export const makeInitiateUserSubscription = (
       subscription: (subscription as unknown) as JsonObjectEncodable,
     });
 
+    const trialExpiresAtEither = decode(
+      dateISOString,
+      new Date(subscription.trial_end ?? 0 * 1000).toISOString()
+    );
+    if (isLeft(trialExpiresAtEither)) {
+      logger.error("createSubscription didn't return 'trail_end'", {
+        subscription: (subscription as unknown) as JsonObjectEncodable,
+      });
+      return left("ERROR");
+    }
+
     return right({
       userData: {
-        subscriptionStatus: "ACTIVE",
-        subscriptionType: "TRIAL",
-        nofSearchObjects: newPositiveInteger(subscription.items.data.length),
+        subscription: {
+          status: "ACTIVE",
+          type: "TRIAL",
+          nofSearchObjects: newPositiveInteger(subscription.items.data.length),
+          expiresAt: trialExpiresAtEither.right,
+        },
       },
       paymentData: {
         stripe: {

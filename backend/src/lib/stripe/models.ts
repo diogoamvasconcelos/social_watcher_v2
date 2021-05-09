@@ -19,6 +19,7 @@ export const customerSubscriptionEventDataCodec = t.type({
             id: t.string,
           }),
           quantity: t.number,
+          trial_end: optionalNull(t.number),
         })
       ),
     }),

@@ -15,9 +15,11 @@ describe("handlers/usersStreamConsumer", () => {
               type: "USER_DATA",
               id: "some-id",
               email: "some@email.com",
-              subscriptionStatus: "ACTIVE",
-              nofSearchObjects: newPositiveInteger(0),
-              subscriptionType: "NORMAL",
+              subscription: {
+                status: "ACTIVE",
+                type: "NORMAL",
+                nofSearchObjects: newPositiveInteger(0),
+              },
             })
           ),
         },

@@ -8,9 +8,6 @@ export type InitiateUserSubscriptionFn = (
   userId: UserId,
   userEmail: User["email"]
 ) => CustomRightReturn<{
-  userData: Pick<
-    UserData,
-    "subscriptionType" | "subscriptionStatus" | "nofSearchObjects"
-  >;
+  userData: Pick<UserData, "subscription">;
   paymentData: Pick<PaymentData, "stripe">;
 }>;

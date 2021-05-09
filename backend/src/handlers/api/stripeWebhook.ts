@@ -18,7 +18,7 @@ import { getClient as getSsmClient } from "../../lib/ssm";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
 import { DefaultOkReturn } from "../../domain/ports/shared";
 import { customerSubscriptionEventDataCodec } from "../../lib/stripe/models";
-import { decode, newPositiveInteger } from "../../lib/iots";
+import { dateISOString, decode, newPositiveInteger } from "../../lib/iots";
 import {
   getUserByCustomerId,
   GetUserByCustomerIdDeps,
@@ -167,29 +167,46 @@ const handleSubscriptionUpdatedEvent = async (
   }
 
   // Update user subscription
-  user.nofSearchObjects = newPositiveInteger(newSubscriptionPriceItem.quantity);
+  user.subscription.nofSearchObjects = newPositiveInteger(
+    newSubscriptionPriceItem.quantity
+  );
   // ref: https://stripe.com/docs/api/subscriptions/object#subscription_object-status
   switch (eventData.object.status) {
     case "trialing": {
-      user.subscriptionStatus = "ACTIVE";
-      user.subscriptionType = "TRIAL";
+      const trialExpiresAtEither = decode(
+        dateISOString,
+        new Date(newSubscriptionPriceItem.trial_end ?? 0 * 1000).toISOString()
+      );
+      if (isLeft(trialExpiresAtEither)) {
+        deps.logger.error(
+          "newSubscriptionPriceItem didn't return 'trail_end'",
+          { newSubscriptionPriceItem }
+        );
+        return left("ERROR");
+      }
+
+      user.subscription.status = "ACTIVE";
+      user.subscription.type = "TRIAL";
+      user.subscription.expiresAt = trialExpiresAtEither.right;
+
       break;
     }
     case "active": {
-      user.subscriptionStatus = "ACTIVE";
-      user.subscriptionType = "NORMAL";
+      user.subscription.status = "ACTIVE";
+      user.subscription.type = "NORMAL";
+      user.subscription.expiresAt = undefined;
       break;
     }
     case "incomplete_expired": {
-      user.subscriptionStatus = "INCOMPLETE_EXPIRED";
+      user.subscription.status = "INCOMPLETE_EXPIRED";
       break;
     }
     case "unpaid": {
-      user.subscriptionStatus = "UNPAID";
+      user.subscription.status = "UNPAID";
       break;
     }
     case "canceled": {
-      user.subscriptionStatus = "CANCELED";
+      user.subscription.status = "CANCELED";
       break;
     }
   }

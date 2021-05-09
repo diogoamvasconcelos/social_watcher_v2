@@ -37,7 +37,7 @@ export const propagateUserDataChanged = async (
 
       if (
         searchObject.lockedStatus === "UNLOCKED" &&
-        i >= userData.nofSearchObjects
+        i >= userData.subscription.nofSearchObjects
       ) {
         logger.info(`Locking searchObject with index=${i}`);
         return await putSearchObjectFn(logger, {
@@ -46,7 +46,7 @@ export const propagateUserDataChanged = async (
         });
       } else if (
         searchObject.lockedStatus === "LOCKED" &&
-        i < userData.nofSearchObjects
+        i < userData.subscription.nofSearchObjects
       ) {
         logger.info(`Unlocking searchObject with index=${i}`);
         return await putSearchObjectFn(logger, {

@@ -156,8 +156,8 @@ const handleUserData: HandleUserItem<UserData> = async (deps, recordData) => {
   switch (recordData.eventName) {
     case "MODIFY": {
       if (
-        recordData.oldItem.nofSearchObjects !=
-        recordData.newItem.nofSearchObjects
+        recordData.oldItem.subscription.nofSearchObjects !=
+        recordData.newItem.subscription.nofSearchObjects
       ) {
         return await propagateUserDataChanged(deps, recordData.newItem);
       }
