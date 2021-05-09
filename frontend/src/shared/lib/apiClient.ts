@@ -2,6 +2,7 @@ import {
   SearchObject,
   SearchObjectUserData,
 } from "../../../../backend/src/domain/models/userItem";
+import { CreatePaymentsPortalUserData } from "../../../../backend/src/handlers/api/models/createPaymentsPortal";
 import { SearchRequestUserData } from "../../../../backend/src/handlers/api/models/search";
 import {
   getClient,
@@ -9,6 +10,7 @@ import {
   getUser,
   search,
   updateSearchObject,
+  createPaymentsPortal,
 } from "../../../../backend/src/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
@@ -42,5 +44,14 @@ export const apiUpdateSearchObject = async (
   return updateSearchObject(
     { client: apiClient, token: getUserIdToken() ?? "" },
     { index, userData }
+  );
+};
+
+export const apiCreatePaymentsPortal = async (
+  userData: CreatePaymentsPortalUserData
+) => {
+  return createPaymentsPortal(
+    { client: apiClient, token: getUserIdToken() ?? "" },
+    { userData }
   );
 };
