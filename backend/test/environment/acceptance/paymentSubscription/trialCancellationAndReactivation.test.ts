@@ -14,8 +14,11 @@ import {
 } from "../../../../src/lib/apiClient/apiClient";
 import { fromEither } from "../../../../src/lib/iots";
 import { retryUntil } from "../../../lib/retry";
+import { addDays } from "../../../../src/lib/date";
+import { getSubscriptionConfig } from "../../../../src/domain/models/subscriptionConfig";
 
 const config = getEnvTestConfig();
+const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("Trial cancellation and re-activation", () => {
@@ -70,8 +73,13 @@ describe("Trial cancellation and re-activation", () => {
     expect(cancelledUser.subscription.type).toEqual("TRIAL");
     expect(cancelledUser.subscription.status).toEqual("CANCELED");
     expect(
-      new Date(cancelledUser.subscription.expiresAt ?? 0).getFullYear()
-    ).toEqual(new Date(Date.now()).getFullYear());
+      new Date(cancelledUser.subscription.expiresAt ?? 0).toDateString()
+    ).toEqual(
+      addDays(
+        new Date(Date.now()),
+        subscriptionConfig.trial.durationInDays
+      ).toDateString()
+    );
 
     // add new subscription (re-activation)
     await addNewNormalSubscription(paymentData, "pm_card_visa");

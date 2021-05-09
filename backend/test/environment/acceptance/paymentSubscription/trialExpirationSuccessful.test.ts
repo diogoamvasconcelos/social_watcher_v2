@@ -13,8 +13,11 @@ import {
 } from "../../../../src/lib/apiClient/apiClient";
 import { fromEither } from "../../../../src/lib/iots";
 import { retryUntil } from "../../../lib/retry";
+import { getSubscriptionConfig } from "../../../../src/domain/models/subscriptionConfig";
+import { addDays } from "../../../../src/lib/date";
 
 const config = getEnvTestConfig();
+const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("Trial expiration successful", () => {
@@ -42,9 +45,18 @@ describe("Trial expiration successful", () => {
         token: userToken,
       })
     );
+
+    // check trial data is correct
     expect(user.subscription.type).toEqual("TRIAL");
-    expect(new Date(user.subscription.expiresAt ?? 0).getFullYear()).toEqual(
-      new Date(Date.now()).getFullYear()
+    expect(user.subscription.status).toEqual("ACTIVE");
+    expect(user.subscription.nofSearchObjects).toEqual(
+      subscriptionConfig.trial.nofSearchWords
+    );
+    expect(new Date(user.subscription.expiresAt ?? 0).toDateString()).toEqual(
+      addDays(
+        new Date(Date.now()),
+        subscriptionConfig.trial.durationInDays
+      ).toDateString()
     );
 
     // update trial to force expiration

@@ -9,3 +9,6 @@ export const toUnixTimstamp = (date: Date) => Math.round(date.getTime() / 1000);
 
 export const fromUnix = (unixTimestamp: number) =>
   new Date(unixTimestamp * 1000).toISOString();
+
+export const addDays = (date: Date, days: number): Date =>
+  new Date(date.getTime() + 1000 * 60 * 60 * 24 * days);
