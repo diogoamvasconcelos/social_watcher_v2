@@ -43,7 +43,9 @@ describe("Trial expiration successful", () => {
       })
     );
     expect(user.subscription.type).toEqual("TRIAL");
-    expect(user.subscription.expiresAt).not.toBeUndefined();
+    expect(new Date(user.subscription.expiresAt ?? 0).getFullYear()).toEqual(
+      new Date(Date.now()).getFullYear()
+    );
 
     // update trial to force expiration
     const paymentData = fromEither(await getPaymentData(user.id));

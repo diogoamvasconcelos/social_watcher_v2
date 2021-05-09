@@ -32,6 +32,7 @@ import { PutPaymentDataFn } from "../../domain/ports/userStore/putPaymentData";
 import { PutUserFn } from "../../domain/ports/userStore/putUser";
 import { makePutPaymentData } from "../../adapters/userStore/putPayment";
 import { makePutUser } from "../../adapters/userStore/putUser";
+import { fromUnix } from "../../lib/date";
 
 const config = getConfig();
 
@@ -173,13 +174,21 @@ const handleSubscriptionUpdatedEvent = async (
   // ref: https://stripe.com/docs/api/subscriptions/object#subscription_object-status
   switch (eventData.object.status) {
     case "trialing": {
+      if (!newSubscriptionPriceItem.trial_end) {
+        deps.logger.error(
+          "newSubscriptionPriceItem didn't return 'trial_end'",
+          { newSubscriptionPriceItem }
+        );
+        return left("ERROR");
+      }
+
       const trialExpiresAtEither = decode(
         dateISOString,
-        new Date(newSubscriptionPriceItem.trial_end ?? 0 * 1000).toISOString()
+        fromUnix(newSubscriptionPriceItem.trial_end)
       );
       if (isLeft(trialExpiresAtEither)) {
         deps.logger.error(
-          "newSubscriptionPriceItem didn't return 'trail_end'",
+          "newSubscriptionPriceItem 'trial_end' failed to be decoded",
           { newSubscriptionPriceItem }
         );
         return left("ERROR");
@@ -188,7 +197,6 @@ const handleSubscriptionUpdatedEvent = async (
       user.subscription.status = "ACTIVE";
       user.subscription.type = "TRIAL";
       user.subscription.expiresAt = trialExpiresAtEither.right;
-
       break;
     }
     case "active": {

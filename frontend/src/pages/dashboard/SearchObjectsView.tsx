@@ -103,7 +103,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 };
 
 type SearchObjectsViewProps = {
-  userNofSearchObjects: User["nofSearchObjects"];
+  userNofSearchObjects: User["subscription"]["nofSearchObjects"];
   searchObjects: SearchObject[];
 };
 export const SearchObjectsView: React.FC<SearchObjectsViewProps> = ({

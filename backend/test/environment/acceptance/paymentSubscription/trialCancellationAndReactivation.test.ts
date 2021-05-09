@@ -69,7 +69,9 @@ describe("Trial cancellation and re-activation", () => {
     );
     expect(cancelledUser.subscription.type).toEqual("TRIAL");
     expect(cancelledUser.subscription.status).toEqual("CANCELED");
-    expect(cancelledUser.subscription.expiresAt).not.toBeUndefined();
+    expect(
+      new Date(cancelledUser.subscription.expiresAt ?? 0).getFullYear()
+    ).toEqual(new Date(Date.now()).getFullYear());
 
     // add new subscription (re-activation)
     await addNewNormalSubscription(paymentData, "pm_card_visa");

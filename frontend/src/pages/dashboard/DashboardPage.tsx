@@ -35,9 +35,9 @@ const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
         type="text"
         style={{ width: "200px" }}
         onClick={handleSubscriptionClicked}
-      >{`Subscription: ${user.subscriptionType} ${
-        user.subscriptionStatus == "INACTIVE" ? "(inactive)" : ""
-      }`}</Button>
+      >
+        {`Subscription: ${user.subscription.type} - ${user.subscription.status}`}
+      </Button>
     </UserWidgetContainer>
   );
 };
@@ -61,7 +61,7 @@ export const DashboardPage: React.FC = () => {
       <Title level={4}>Keywords</Title>
       <SearchObjectsView
         searchObjects={searchObjects}
-        userNofSearchObjects={user.nofSearchObjects}
+        userNofSearchObjects={user.subscription.nofSearchObjects}
       />
       <div>
         <Title level={4}>Search</Title>

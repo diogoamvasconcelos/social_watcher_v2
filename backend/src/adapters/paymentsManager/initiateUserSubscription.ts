@@ -1,6 +1,7 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { SubscriptionConfig } from "../../domain/models/subscriptionConfig";
 import { InitiateUserSubscriptionFn } from "../../domain/ports/paymentsManager/initiateUserSubscription";
+import { fromUnix } from "../../lib/date";
 import { dateISOString, decode, newPositiveInteger } from "../../lib/iots";
 import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
 import { createCustomer, createSubscription } from "../../lib/stripe/client";
@@ -66,10 +67,17 @@ export const makeInitiateUserSubscription = (
 
     const trialExpiresAtEither = decode(
       dateISOString,
-      new Date(subscription.trial_end ?? 0 * 1000).toISOString()
+      fromUnix(subscription.trial_end ?? 0)
     );
     if (isLeft(trialExpiresAtEither)) {
       logger.error("createSubscription didn't return 'trail_end'", {
+        subscription: (subscription as unknown) as JsonObjectEncodable,
+      });
+      return left("ERROR");
+    }
+
+    if (!subscription.items.data[0].quantity) {
+      logger.error("createSubscription didn't a quantity", {
         subscription: (subscription as unknown) as JsonObjectEncodable,
       });
       return left("ERROR");
@@ -80,7 +88,9 @@ export const makeInitiateUserSubscription = (
         subscription: {
           status: "ACTIVE",
           type: "TRIAL",
-          nofSearchObjects: newPositiveInteger(subscription.items.data.length),
+          nofSearchObjects: newPositiveInteger(
+            subscription.items.data[0].quantity
+          ),
           expiresAt: trialExpiresAtEither.right,
         },
       },
