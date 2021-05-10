@@ -16,8 +16,6 @@ import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Stripe from "stripe";
 
 const config = getConfig();
 const logger = getLogger();

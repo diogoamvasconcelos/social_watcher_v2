@@ -33,6 +33,9 @@ export const getConfig = () => {
       "SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL"
     ),
     stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
+    searchResultsToNotificationMediumQueueTemplateName: ensure(
+      "SEARCH_RESULTS_TO_NOTIFICATION_MEDIUM_QUEUE_TEMPLATE_NAME"
+    ),
   };
 };
 export type Config = ReturnType<typeof getConfig>;
