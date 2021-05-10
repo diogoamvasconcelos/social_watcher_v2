@@ -14,7 +14,7 @@ describe("adapters/putSearchResults", () => {
   const putSearchResultsFn = makePutSearchResults(client, tableName);
 
   beforeAll(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
   });
 
   beforeEach(async () => {

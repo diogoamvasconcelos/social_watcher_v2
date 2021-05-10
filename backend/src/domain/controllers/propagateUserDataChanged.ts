@@ -26,7 +26,8 @@ export const propagateUserDataChanged = async (
   if (isLeft(searchObjectsEither)) {
     return searchObjectsEither;
   }
-  const searchObjects = searchObjectsEither.right;
+  // sort by index
+  const searchObjects = _.orderBy(searchObjectsEither.right, ["index"]);
 
   const updateSearchObjectsResults = await Promise.all(
     _.range(searchObjects.length).map(async (i) => {

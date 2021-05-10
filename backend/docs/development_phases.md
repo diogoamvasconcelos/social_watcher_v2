@@ -92,17 +92,34 @@
 - add envtests <DONE>
   - keyword not allowed <DONE>
   - sort by happenedAt and id <DONE>
-  - pagination
+  - pagination <TODO>
 
 # Phase 6 - NotifyDiscord integration (1 week)
+
+- add SQS->DispatchNotifyDiscordJobs (Lambda)
+
+  - gets the keyword data (on new searchResult)
+  - lambda creates notifyDiscordJobs (checks users table, gets channel, bot and messageFormat data)
+  - integration tests
+
+- add SQS->notifyDiscord (lambda)
+
+  - gets the notifyDiscordJobs, and writes to Discord
+  - integration tests (not sure if possible)
+
+- frontend API endpoints to config discordNotification
+
+  - channel, bot and messageformat
+  - get and put endpoints
+  - env tests
+
+- do frontend part :)
 
 # Phase 7 - Stripe integration (maybe after FE)
 
 - store stripe id in users table
   "Cognito just had a big release, so there might be a better way to do this now. Here is how I did it. I created a user table in DynamoDB. Then I created a lambda trigger to update DB that fires when a user has registered. Then another lambda trigger when the user verifies their email. Finally, I created a lambda function to run the server-side of the stripe script. This server side code will also update the user table when a user pays the subscription fee."
 - stripeClient
-
-  - create account and get keys
 
 - the real deal
   - on account creation:
@@ -114,18 +131,13 @@
     - ref: https://stripe.com/docs/billing/subscriptions/integrating-customer-portal#webhooks
     - on paid -> convert to non-trial (good state) <DONE>
     - on cancelled -> deactivate (cancelled state) <DONE>
-    - on trial expired -> deactivate (trial expired state)
-    - on subscription expired -> deactivate (expired state)
+    - on trial expired -> deactivate (trial expired state) <DONE>
+    - on subscription expired -> deactivate (expired state) <DONE>
       - implementation:
         - get user by stripe customerID <DONE>
         - update paymentData on new subscription <DONE>
         - update suer on subscription update <DONE>
-  - create "customer-portal-session" endpoint
+  - create "customer-portal-session" endpoint <DONE>
     - ref: https://stripe.com/docs/billing/subscriptions/integrating-customer-portal
   - add CRON function to daily check the status of accounts (check if match stripe status)
-    - on mismatch, send me email!
-
-# Misc TODO
-
-- change npm to yarn <DONE>
-- change Date to string (issues on redux side bc of serialization: https://github.com/reduxjs/redux-toolkit/issues/456) <DONE>
+    - on mismatch, send me email! <TODO>
