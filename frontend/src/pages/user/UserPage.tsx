@@ -32,17 +32,17 @@ export const UserPage: React.FC = () => {
 
   useEffect(() => {
     if (portalSessionUrl != "") {
-      window.location.assign(portalSessionUrl);
+      location.assign(portalSessionUrl);
     }
   }, [portalSessionUrl]);
 
   return (
-    <div>
+    <>
       <Title level={4}>User</Title>
       {<JSONViewer name="user" json={user} />}
       <Button type="primary" onClick={handleManageSubscriptionClicked}>
         Manage Subscription
       </Button>
-    </div>
+    </>
   );
 };

@@ -129,31 +129,43 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   );
 };
 
+export const gotoCognitoLogin = () => {
+  const cognitoDomain = config.cognitoClientDomain;
+  const cognitoClientId = config.cognitoClientId;
+  const appUrl = config.appUrl;
+
+  const loginUrl = `${cognitoDomain}/login?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
+
+  location.assign(loginUrl);
+};
+
+export const gotoCognitoSignup = () => {
+  const cognitoDomain = config.cognitoClientDomain;
+  const cognitoClientId = config.cognitoClientId;
+  const appUrl = config.appUrl;
+
+  const loginUrl = `${cognitoDomain}/signup?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
+
+  location.assign(loginUrl);
+};
+
 const LoginButtons: React.FC = () => {
+  const history = useHistory();
+
   const handleLoginClicked = () => {
-    const cognitoDomain = config.cognitoClientDomain;
-    const cognitoClientId = config.cognitoClientId;
-    const appUrl = config.appUrl;
+    gotoCognitoLogin();
+  };
 
-    const loginUrl = `${cognitoDomain}/login?client_id=${cognitoClientId}&redirect_uri=${appUrl}&response_type=code`;
-
-    location.assign(loginUrl);
+  const handleSignupClicked = () => {
+    history.push("/signup");
   };
 
   return (
     <ButtonsContainer>
-      <LoginButton
-        type="text"
-        onClick={() => console.log("sign up")}
-        key="signup"
-      >
+      <LoginButton type="text" onClick={handleSignupClicked} key="signup">
         Start free trial
       </LoginButton>
-      <LoginButton
-        type="primary"
-        onClick={() => handleLoginClicked()}
-        key="login"
-      >
+      <LoginButton type="primary" onClick={handleLoginClicked} key="login">
         Log in
       </LoginButton>
     </ButtonsContainer>

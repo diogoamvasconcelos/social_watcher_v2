@@ -10,6 +10,7 @@ import { store } from "./shared/store";
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
 import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
+import { SignupPage } from "./pages/signup/SignupPage";
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -27,6 +28,7 @@ const App: React.FC = () => (
             <Route path="/user/guides" component={TodoPage} />
             <Route path="/pricing" component={TodoPage} />
             <Route path="/about" component={TodoPage} />
+            <Route path="/signup" component={SignupPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </Layout.Content>
