@@ -130,35 +130,37 @@ const handleSubscriptionUpdatedEvent = async (
   }
   const eventData = eventDataEither.right;
 
-  if (eventData.object.items.data.length != 1) {
+  const newSubsctiption = eventData.object;
+
+  if (newSubsctiption.items.data.length != 1) {
     deps.logger.error(
       "stripe's event data doesn't have exaclty one subscriprion item"
     );
     return left("ERROR");
   }
 
-  const newSubscriptionPriceItem = eventData.object.items.data[0];
-  if (newSubscriptionPriceItem.price.id != config.stripeNormalProductId) {
+  const newPriceItem = newSubsctiption.items.data[0];
+  if (newPriceItem.price.id != config.stripeNormalProductId) {
     deps.logger.error(
-      `stripe's event data price id (${newSubscriptionPriceItem.price.id}) doesn't match expected one (${config.stripeNormalProductId})`
+      `stripe's event data price id (${newPriceItem.price.id}) doesn't match expected one (${config.stripeNormalProductId})`
     );
     return left("ERROR");
   }
 
-  const userEither = await getUserByCustomerId(deps, eventData.object.customer);
+  const userEither = await getUserByCustomerId(deps, newSubsctiption.customer);
   if (isLeft(userEither)) {
     return userEither;
   }
   if (userEither.right === "NOT_FOUND") {
     deps.logger.error("Failed to find the user that matches the customer id", {
-      customer: eventData.object.customer,
+      customer: newSubsctiption.customer,
     });
     return left("ERROR");
   }
   const { user, paymentData } = userEither.right;
 
   // Update paymentData
-  paymentData.stripe.subscriptionId = eventData.object.id;
+  paymentData.stripe.subscriptionId = newSubsctiption.id;
   const putPaymentDataEither = await deps.putPaymentDataFn(
     deps.logger,
     paymentData
@@ -169,28 +171,26 @@ const handleSubscriptionUpdatedEvent = async (
 
   // Update user subscription
   user.subscription.nofSearchObjects = newPositiveInteger(
-    newSubscriptionPriceItem.quantity
+    newPriceItem.quantity
   );
   // ref: https://stripe.com/docs/api/subscriptions/object#subscription_object-status
-  switch (eventData.object.status) {
+  switch (newSubsctiption.status) {
     case "trialing": {
-      if (!newSubscriptionPriceItem.trial_end) {
-        deps.logger.error(
-          "newSubscriptionPriceItem didn't return 'trial_end'",
-          { newSubscriptionPriceItem }
-        );
+      if (!newSubsctiption.trial_end) {
+        deps.logger.error("newSubsctiption didn't return 'trial_end'", {
+          newSubsctiption,
+        });
         return left("ERROR");
       }
 
       const trialExpiresAtEither = decode(
         dateISOString,
-        fromUnix(newSubscriptionPriceItem.trial_end)
+        fromUnix(newSubsctiption.trial_end)
       );
       if (isLeft(trialExpiresAtEither)) {
-        deps.logger.error(
-          "newSubscriptionPriceItem 'trial_end' failed to be decoded",
-          { newSubscriptionPriceItem }
-        );
+        deps.logger.error("newSubsctiption 'trial_end' failed to be decoded", {
+          newSubsctiption,
+        });
         return left("ERROR");
       }
 

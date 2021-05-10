@@ -8,6 +8,7 @@ export const customerSubscriptionEventDataCodec = t.type({
     customer: t.string,
     default_payment_method: optionalNull(t.string),
     status: t.string,
+    trial_end: optionalNull(t.number),
     items: t.type({
       data: t.array(
         t.type({
@@ -19,7 +20,6 @@ export const customerSubscriptionEventDataCodec = t.type({
             id: t.string,
           }),
           quantity: t.number,
-          trial_end: optionalNull(t.number),
         })
       ),
     }),
