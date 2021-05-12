@@ -1,5 +1,5 @@
 import { Logger } from "../../../lib/logger";
-import { SearchJob } from "../../models/searchJobs";
+import { SearchJob } from "../../models/searchJob";
 import { SocialMedia } from "../../models/socialMedia";
 import { DefaultOkReturn } from "../shared";
 

@@ -8,8 +8,6 @@ import { fromEither } from "../../lib/iots";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { getClient as getSearchResultsQueueClient } from "../../adapters/searchResultsQueue/client";
-import { notificationMediums } from "../../domain/models/notificationMedium";
-import { getQueueUrlFromName } from "../../lib/sqs";
 
 const config = getConfig();
 const logger = getLogger();
@@ -17,21 +15,9 @@ const logger = getLogger();
 export const handler = async (event: DynamoDBStreamEvent) => {
   const searchResultsQueueClient = getSearchResultsQueueClient();
 
-  const notificationMediumQueues = await Promise.all(
-    notificationMediums.map(async (notificationMedium) => {
-      const queueName = config.searchResultsToNotificationMediumQueueTemplateName.replace(
-        "{notificationMedium}",
-        notificationMedium
-      );
-      return fromEither(
-        await getQueueUrlFromName(searchResultsQueueClient, queueName, logger)
-      );
-    })
-  );
-
   const queueFns = [
     config.syncSearchResultsToEsQueueUrl,
-    ...notificationMediumQueues,
+    config.searchResultsNotificationsQueueUrl,
   ].map((queueUrl) =>
     makeQueueSearchResults(searchResultsQueueClient, queueUrl)
   );

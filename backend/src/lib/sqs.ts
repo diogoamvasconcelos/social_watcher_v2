@@ -11,6 +11,7 @@ import { decode } from "./iots";
 import AWS from "aws-sdk";
 import { Logger } from "./logger";
 import { uuid } from "./uuid";
+import { JsonEncodable } from "./models/jsonEncodable";
 
 export const getClient = () => {
   return new AWS.SQS();
@@ -98,7 +99,11 @@ export const sendMessages = async (
 
     return right(result);
   } catch (error) {
-    logger.error("sqs/sendMessageBatch failed", { error: error });
+    logger.error("sqs/sendMessageBatch failed", {
+      messages: messages as JsonEncodable,
+      queueUrl,
+      error,
+    });
     return left("ERROR");
   }
 };

@@ -23,7 +23,7 @@ export const getConfig = () => {
     usersTableName: ensure("USERS_TABLE_NAME"),
     keywordsTableName: ensure("KEYWORDS_TABLE_NAME"),
     searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
-    searchJobQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),
+    searchJobsQueueTemplateName: ensure("SEARCH_JOBS_QUEUE_TEMPLATE_NAME"),
     mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
     searchResultIndexVersion: ensureAndDecode(
       "SEARCH_RESULT_INDEX_VERSION",
@@ -33,8 +33,11 @@ export const getConfig = () => {
       "SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL"
     ),
     stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
-    searchResultsToNotificationMediumQueueTemplateName: ensure(
-      "SEARCH_RESULTS_TO_NOTIFICATION_MEDIUM_QUEUE_TEMPLATE_NAME"
+    searchResultsNotificationsQueueUrl: ensure(
+      "SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL"
+    ),
+    notificationJosbQueueTemplateName: ensure(
+      "NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME"
     ),
   };
 };

@@ -2,6 +2,7 @@ import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
 import { positiveInteger } from "../../lib/iots";
 import { keywordCodec } from "./keyword";
+import { discordNotificationConfigCodec } from "./notificationJob";
 import { userCodec, userIdCodec } from "./user";
 
 // +++++++++++++
@@ -54,12 +55,17 @@ export const searchObjectIndexCodec = t.union([
 ]);
 
 export const searchObjectCodec = t.intersection([
-  t.type({
-    type: t.literal("SEARCH_OBJECT"),
-    id: userIdCodec,
-    index: searchObjectIndexCodec,
-    lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
-  }),
+  t.intersection([
+    t.type({
+      type: t.literal("SEARCH_OBJECT"),
+      id: userIdCodec,
+      index: searchObjectIndexCodec,
+      lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+    }),
+    t.partial({
+      discordNotification: discordNotificationConfigCodec,
+    }),
+  ]),
   searchObjectUserDataCodec,
 ]);
 export type SearchObject = t.TypeOf<typeof searchObjectCodec>;

@@ -22,9 +22,10 @@ const handler = async () => {
   );
   const queueSearchJobsFn = makeQueueSearchJobs(
     searchJobsQueueClient,
-    config.searchJobQueueTemplateName
+    config.searchJobsQueueTemplateName
   );
 
+  // TODO: run this in parallel with Promise.all ... cmon!!!
   for (const socialMedia of socialMedias) {
     logger.info(`Handling ${socialMedia}...`);
 

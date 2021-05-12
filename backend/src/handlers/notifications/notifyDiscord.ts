@@ -1,8 +1,8 @@
 import { SQSEvent } from "aws-lambda";
 import {
-  SearchResult,
-  searchResultCodec,
-} from "../../domain/models/searchResult";
+  discordNotificationJobCodec,
+  DiscordNotificatonJob,
+} from "../../domain/models/notificationJob";
 import { decode, fromEither } from "../../lib/iots";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
@@ -11,10 +11,14 @@ import { defaultMiddlewareStack } from "../middlewares/common";
 const logger = getLogger();
 
 const handler = async (event: SQSEvent) => {
-  const searchResults: SearchResult[] = event.Records.map((record) => {
-    return fromEither(decode(searchResultCodec, JSON.parse(record.body)));
-  });
+  const discordNotifyJobs: DiscordNotificatonJob[] = event.Records.map(
+    (record) => {
+      return fromEither(
+        decode(discordNotificationJobCodec, JSON.parse(record.body))
+      );
+    }
+  );
 
-  logger.info("got searchResults", { searchResults });
+  logger.info("got discordNotifyJobs", { discordNotifyJobs });
 };
 export const lambdaHandler = defaultMiddlewareStack(handler);

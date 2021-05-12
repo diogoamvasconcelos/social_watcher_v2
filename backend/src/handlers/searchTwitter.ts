@@ -10,7 +10,7 @@ import {
 } from "../adapters/twitterSearcher/client";
 import { getClient as getSsmClient } from "../lib/ssm";
 import { getClient as getSearchResultStoreClient } from "../adapters/searchResultsStore/client";
-import { searchJobCodec } from "../domain/models/searchJobs";
+import { searchJobCodec } from "../domain/models/searchJob";
 import { translateTwitterSearchResults } from "../domain/controllers/translateTwitterSearchResults";
 import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";

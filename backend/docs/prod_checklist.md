@@ -12,3 +12,7 @@
   - make it look nicer
 - add encryption-at-rest to dynamo,sqs,es,etc (might be expensive on KMS)
 - point-in-time recovery on ddb
+- full acceptance tests (that are also smoke tests maybe)
+  - twitte, and check notification to test discord channel
+- load tests
+  - add some heavy keywords (tesla, bitcoin, trump, etc)

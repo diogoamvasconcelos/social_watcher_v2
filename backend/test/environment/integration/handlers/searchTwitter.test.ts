@@ -1,5 +1,5 @@
 import { PartialDeep } from "type-fest";
-import { TwitterSearchJob } from "../../../../src/domain/models/searchJobs";
+import { TwitterSearchJob } from "../../../../src/domain/models/searchJob";
 import { deepmergeSafe } from "../../../../src/lib/deepmerge";
 import { fromEither, newLowerCase } from "../../../../src/lib/iots";
 import { buildSQSEvent } from "../../../lib/builders";
