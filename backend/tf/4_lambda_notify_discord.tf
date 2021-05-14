@@ -32,5 +32,5 @@ resource "aws_cloudwatch_log_group" "notify_discord" {
 resource "aws_lambda_event_source_mapping" "notify_discord_mapping" {
   event_source_arn = aws_sqs_queue.discord_notification_jobs.arn
   function_name    = aws_lambda_function.notify_discord.arn
-  batch_size       = 10
+  batch_size       = 1
 }

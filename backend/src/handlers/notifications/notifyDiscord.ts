@@ -1,24 +1,47 @@
 import { SQSEvent } from "aws-lambda";
-import {
-  discordNotificationJobCodec,
-  DiscordNotificatonJob,
-} from "../../domain/models/notificationJob";
+import { isLeft } from "fp-ts/lib/Either";
+import { getClient as getDiscordNotifierClient } from "../../adapters/discordNotifier/client";
+import { makeSendMessageToChannel } from "../../adapters/discordNotifier/sendMessageToChannel";
+import { notifySearchResultToDiscord } from "../../domain/controllers/notifySearchResultToDiscord";
+import { discordNotificationJobCodec } from "../../domain/models/notificationJob";
 import { decode, fromEither } from "../../lib/iots";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 
-//const config = getConfig();
 const logger = getLogger();
 
 const handler = async (event: SQSEvent) => {
-  const discordNotifyJobs: DiscordNotificatonJob[] = event.Records.map(
-    (record) => {
-      return fromEither(
-        decode(discordNotificationJobCodec, JSON.parse(record.body))
-      );
-    }
-  );
+  for (const record of event.Records) {
+    const discordNotificationJob = fromEither(
+      decode(discordNotificationJobCodec, JSON.parse(record.body))
+    );
 
-  logger.info("got discordNotifyJobs", { discordNotifyJobs });
+    if (!discordNotificationJob.config.enabled) {
+      logger.info("Skipping as Discord notification is disabled");
+      return;
+    }
+
+    const discordNotifierClientEither = await getDiscordNotifierClient(
+      logger,
+      discordNotificationJob.config.bot.credentials
+    );
+    if (isLeft(discordNotifierClientEither)) {
+      logger.error("Failed to login on the Discord Client. Probably bad token");
+      throw new Error("Failed to login to Discord Client");
+    }
+
+    fromEither(
+      await notifySearchResultToDiscord(
+        {
+          logger,
+          sendMessageToChannel: makeSendMessageToChannel(
+            discordNotifierClientEither.right
+          ),
+        },
+        discordNotificationJob.config.channel,
+        discordNotificationJob.searchResult
+      )
+    );
+  }
 };
 export const lambdaHandler = defaultMiddlewareStack(handler);

@@ -15,10 +15,14 @@ const sendMessage = async () => {
   }
   const client = discordClientEither.right;
 
+  let message = "> New Diogo Twitter message (author followers: 1)";
+  message += "\n";
+  message += "https://twitter.com/x/status/1393107464522928132";
+
   const res = await messageToChannel(
     { logger, client },
     "805202695639400499",
-    "test!!!"
+    message
   );
   if (isLeft(res)) {
     logger.error("Discord client message failed", { err: res.left });

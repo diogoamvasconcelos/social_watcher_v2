@@ -33,7 +33,7 @@ export const messageToChannel = async (
   { logger, client }: DiscordDependencies,
   channelId: string,
   message: string
-) => {
+): Promise<Either<"ERROR", Discord.Message>> => {
   try {
     const channel = client.channels.cache.get(channelId);
 
