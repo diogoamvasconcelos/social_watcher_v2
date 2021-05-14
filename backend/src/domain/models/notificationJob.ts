@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { discordCredentialsCodec } from "../../lib/discord";
 import { searchResultCodec } from "./searchResult";
 
 const notificationConfigBaseCodec = t.type({
@@ -14,7 +15,7 @@ export const discordNotificationConfigCodec = t.intersection([
   t.type({
     channel: t.string,
     bot: t.type({
-      token: t.string,
+      credentials: discordCredentialsCodec,
     }),
   }),
 ]);

@@ -99,11 +99,13 @@
 - add SQS->DispatchNotifyDiscordJobs (Lambda)
 
   - gets the keyword data (on new searchResult) <DONE>
-  - lambda creates notifyDiscordJobs (checks users table, gets channel, bot and messageFormat data)
+  - lambda creates notifyDiscordJobs (checks users table, gets channel, bot and messageFormat data) <DONE>
   - integration tests
 
 - add SQS->notifyDiscord (lambda)
 
+  - discord client
+    - tests for bad credentials
   - gets the notifyDiscordJobs, and writes to Discord
   - integration tests (not sure if possible)
 

@@ -91,7 +91,7 @@ describe("update searchObject e2e test", () => {
     const discordNotificationConfig: DiscordNotificationConfig = {
       enabled: true,
       channel: "a-channel",
-      bot: { token: "a-token" },
+      bot: { credentials: { token: "a-token" } },
     };
 
     const response = fromEither(

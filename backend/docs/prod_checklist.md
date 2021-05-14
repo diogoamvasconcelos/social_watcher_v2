@@ -16,3 +16,5 @@
   - twitte, and check notification to test discord channel
 - load tests
   - add some heavy keywords (tesla, bitcoin, trump, etc)
+- give feedback if notification credentials (discord token) is not valid or fails
+  - alert if notification failed...
