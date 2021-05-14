@@ -40,12 +40,17 @@ export type SocialMediaSearchData = t.TypeOf<typeof socialMediaSearchData>;
 export const twitterSearchData = socialMediaSearchData;
 
 export const searchObjectUserDataCodec = t.exact(
-  t.type({
-    keyword: keywordCodec,
-    searchData: t.type({
-      twitter: twitterSearchData,
+  t.intersection([
+    t.type({
+      keyword: keywordCodec,
+      searchData: t.type({
+        twitter: twitterSearchData,
+      }),
     }),
-  })
+    t.partial({
+      discordNotification: discordNotificationConfigCodec,
+    }),
+  ])
 );
 export type SearchObjectUserData = t.TypeOf<typeof searchObjectUserDataCodec>;
 
@@ -55,17 +60,12 @@ export const searchObjectIndexCodec = t.union([
 ]);
 
 export const searchObjectCodec = t.intersection([
-  t.intersection([
-    t.type({
-      type: t.literal("SEARCH_OBJECT"),
-      id: userIdCodec,
-      index: searchObjectIndexCodec,
-      lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
-    }),
-    t.partial({
-      discordNotification: discordNotificationConfigCodec,
-    }),
-  ]),
+  t.type({
+    type: t.literal("SEARCH_OBJECT"),
+    id: userIdCodec,
+    index: searchObjectIndexCodec,
+    lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+  }),
   searchObjectUserDataCodec,
 ]);
 export type SearchObject = t.TypeOf<typeof searchObjectCodec>;

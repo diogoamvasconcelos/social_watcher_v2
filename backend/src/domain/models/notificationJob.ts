@@ -19,7 +19,7 @@ export const discordNotificationConfigCodec = t.intersection([
   }),
 ]);
 export type DiscordNotificationConfig = t.TypeOf<
-  typeof discordNotificationJobCodec
+  typeof discordNotificationConfigCodec
 >;
 
 export const discordNotificationJobCodec = t.intersection([

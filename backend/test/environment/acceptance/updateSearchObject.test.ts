@@ -1,3 +1,4 @@
+import { DiscordNotificationConfig } from "../../../src/domain/models/notificationJob";
 import { SearchObjectUserData } from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
@@ -58,14 +59,76 @@ describe("update searchObject e2e test", () => {
     );
     expect(response).toEqual(expect.objectContaining({ index, ...userData }));
 
-    const getSearchObejctsResponse = fromEither(
+    const getSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
         token,
       })
     );
-    expect(getSearchObejctsResponse).toEqual({
+    expect(getSearchObjectsResponse).toEqual({
       items: [expect.objectContaining({ index, ...userData })],
+    });
+  });
+
+  it("can update discord notification config", async () => {
+    const token = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
+    });
+
+    const index = newPositiveInteger(0);
+
+    const initialGetSearchObjectsResponse = fromEither(
+      await getSearchObjects({
+        client: apiClient,
+        token,
+      })
+    );
+    expect(
+      initialGetSearchObjectsResponse.items[0].discordNotification
+    ).toBeUndefined();
+
+    const discordNotificationConfig: DiscordNotificationConfig = {
+      enabled: true,
+      channel: "a-channel",
+      bot: { token: "a-token" },
+    };
+
+    const response = fromEither(
+      await updateSearchObject(
+        {
+          client: apiClient,
+          token,
+        },
+        {
+          index,
+          userData: {
+            ...initialGetSearchObjectsResponse.items[0],
+            discordNotification: discordNotificationConfig,
+          },
+        }
+      )
+    );
+    expect(response).toEqual(
+      expect.objectContaining({
+        index,
+        discordNotification: discordNotificationConfig,
+      })
+    );
+
+    const getSearchObjectsResponse = fromEither(
+      await getSearchObjects({
+        client: apiClient,
+        token,
+      })
+    );
+    expect(getSearchObjectsResponse).toEqual({
+      items: [
+        expect.objectContaining({
+          index,
+          discordNotification: discordNotificationConfig,
+        }),
+      ],
     });
   });
 });
