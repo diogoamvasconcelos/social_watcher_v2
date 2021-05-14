@@ -41,7 +41,9 @@ const buildTwitterMessage = (searchResult: SearchResult): string => {
     searchResult.data.translatedText
       ? [
           `Translated message (lang: ${searchResult.data.lang})`,
+          "```",
           searchResult.data.translatedText,
+          "```",
         ]
       : undefined,
   ];

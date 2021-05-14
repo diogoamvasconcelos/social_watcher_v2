@@ -7,7 +7,7 @@ export const makeSearchTwitter = (client: Client): SearchTwitterFn => {
   return async (logger, keyword) => {
     const results = await searchRecent(client, keyword, {
       maxResults: 100,
-      minutesAgo: 200,
+      minutesAgo: 20,
     });
 
     if (isLeft(results)) {
