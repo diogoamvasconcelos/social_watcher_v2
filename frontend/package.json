@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "scripts/with_env.js 'parcel build src/index.html --dist-dir .build/prod'",
     "dev": "scripts/with_env.js 'parcel src/index.html --dist-dir .build/debug'",
     "check-all": "yarn lint:check && yarn typecheck && yarn test",
     "typecheck": "tsc --noEmit",

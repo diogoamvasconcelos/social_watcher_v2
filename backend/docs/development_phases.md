@@ -104,18 +104,12 @@
 
 - add SQS->notifyDiscord (lambda)
 
-  - discord client
+  - discord client <DONE>
     - tests for bad credentials
-  - gets the notifyDiscordJobs, and writes to Discord
+  - gets the notifyDiscordJobs, and writes to Discord <DONE>
   - integration tests (not sure if possible)
 
-- frontend API endpoints to config discordNotification
-
-  - channel, bot and messageformat
-  - get and put endpoints
-  - env tests
-
-- do frontend part :)
+- do frontend part :) <DONE>
 
 # Phase 7 - Stripe integration (maybe after FE)
 
