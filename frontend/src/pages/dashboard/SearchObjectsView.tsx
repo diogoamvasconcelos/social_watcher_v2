@@ -1,5 +1,5 @@
 import { SettingFilled } from "@ant-design/icons";
-import { Button, Space, Switch, Typography, Modal } from "antd";
+import { Button, Switch, Typography, Modal } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";

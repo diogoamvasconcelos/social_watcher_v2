@@ -8,12 +8,13 @@ common:
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
   COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
+  S3_BUCKET_NAME: fe-page
 
 local:
   APP_URL: "http://localhost:1234"
 
 dev:
-  APP_URL: "https://some-s3-location.com"
+  APP_URL: "https://d2r5id69pzx1ip.cloudfront.net"
 
 prod:
-  APP_URL: "https://thesocialwatcher.com/"
+  APP_URL: "https://thesocialwatcher.com"
