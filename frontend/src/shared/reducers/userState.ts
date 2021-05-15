@@ -11,6 +11,7 @@ import {
 export type UserState = {
   details?: User;
   searchObjects: SearchObject[];
+  fetchStatus: "idle" | "loading";
 };
 
 export const getUserDetails = createAsyncThunk("get:user", async () => {
@@ -31,6 +32,7 @@ export const updateUserSearchObjects = createAsyncThunk(
 
 const initialState: UserState = {
   searchObjects: [],
+  fetchStatus: "idle",
 };
 const userStateSlice = createSlice({
   name: "userState",
@@ -54,7 +56,11 @@ const userStateSlice = createSlice({
 
         state.searchObjects = action.payload.right.items;
       })
+      .addCase(updateUserSearchObjects.pending, (state, _action) => {
+        state.fetchStatus = "loading";
+      })
       .addCase(updateUserSearchObjects.fulfilled, (state, action) => {
+        state.fetchStatus = "idle";
         if (isLeft(action.payload)) {
           state.searchObjects = [];
           return;
