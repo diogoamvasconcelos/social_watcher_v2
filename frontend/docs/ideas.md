@@ -1,1 +1,3 @@
 - docs like these: https://reactrouter.com/web/api/Switch
+- landing page images: https://blog.roastmylandingpage.com/landing-page-image/
+  - https://encharge.io looks nice

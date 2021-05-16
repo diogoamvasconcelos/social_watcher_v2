@@ -44,22 +44,22 @@ const apigwResponseToApigwResult = (
 ): APIGatewayProxyResult => {
   const defaultHeaders = {
     "Strict-Transport-Security": [
-      "max-age=63072000;",
-      "includeSubdomains;",
+      "max-age=63072000",
+      "includeSubdomains",
       "preload",
-    ].join(),
+    ].join(";"),
     "Content-Security-Policy": [
-      "default-src 'none';",
-      "img-src 'self';",
-      "script-src 'self';",
-      "style-src 'self';",
+      "default-src 'none'",
+      "img-src 'self'",
+      "script-src 'self'",
+      "style-src 'self'",
       "object-src 'none'",
-    ].join(),
+    ].join(";"),
     "Referrer-Policy": "same-origin",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
-    "Access-Control-Allow-Origin": "http://localhost:1234",
+    "Access-Control-Allow-Origin": "*",
   };
 
   if (isLeft(response)) {
