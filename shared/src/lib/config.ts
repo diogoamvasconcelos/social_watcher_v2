@@ -8,7 +8,7 @@ export const ensure = (name: string): string => {
 };
 
 export const ensureString = (value?: string): string => {
-  if (value == undefined || value == null) {
+  if (value == undefined) {
     throw new Error(`Not a string, instead: ${value}`);
   }
   return value;

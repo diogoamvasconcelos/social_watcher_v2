@@ -2,9 +2,9 @@
   "extends": "../shared/tsconfig.build.json",
   "compilerOptions": {
     "outDir": ".build",
-    "rootDir": "../",
+    "rootDir": ".",
     "typeRoots": ["./node_modules/@types", "./typings"],
   },
-  "include": ["src/", "scripts/**/*.ts", "test/", "typings/", "../shared/src"],
+  "include": ["src/", "scripts/**/*.ts", "test/", "typings/"],
   "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**"]
 }

@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
 import { decode, positiveInteger } from "./iots";
-import { ensure } from "../../../shared/src/lib/config";
+import { ensure } from "./shared/config";
 
 export const ensureAndDecode = <A>(
   name: string,
