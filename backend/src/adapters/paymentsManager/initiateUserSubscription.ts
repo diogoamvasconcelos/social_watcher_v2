@@ -2,8 +2,12 @@ import { isLeft, left, right } from "fp-ts/lib/Either";
 import { SubscriptionConfig } from "../../domain/models/subscriptionConfig";
 import { InitiateUserSubscriptionFn } from "../../domain/ports/paymentsManager/initiateUserSubscription";
 import { fromUnix } from "../../lib/date";
-import { dateISOString, decode, newPositiveInteger } from "../../lib/iots";
-import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
+import {
+  dateISOString,
+  decode,
+  newPositiveInteger,
+} from "@shared/lib/src/lib/iots";
+import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
 import { createCustomer, createSubscription } from "../../lib/stripe/client";
 import { Client } from "./client";
 

@@ -1,7 +1,7 @@
 import { isLeft } from "fp-ts/lib/Either";
 import { getClient, messageToChannel } from "../../src/lib/discord";
 import { getLogger } from "../../src/lib/logger";
-import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonEncodable } from "@shared/lib/src/models/jsonEncodable";
 
 const logger = getLogger();
 

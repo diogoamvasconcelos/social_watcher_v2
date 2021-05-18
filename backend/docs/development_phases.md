@@ -137,3 +137,11 @@
     - ref: https://stripe.com/docs/billing/subscriptions/integrating-customer-portal
   - add CRON function to daily check the status of accounts (check if match stripe status)
     - on mismatch, send me email! <TODO>
+
+# Phase 8 - consolidation and more features
+
+- fix code sharing
+  - use yarn-link for @shared/lib
+  - share APIClient and types with frontend
+- add reddit search
+- add slack notifier

@@ -1,21 +1,5 @@
-import * as t from "io-ts";
-import { isLeft } from "fp-ts/lib/Either";
-import { decode, positiveInteger } from "./iots";
-import { ensure } from "./shared/config";
-
-export const ensureAndDecode = <A>(
-  name: string,
-  codec: t.Decoder<unknown, A>
-): A => {
-  const value = process.env[name] ?? "";
-  const decodeResult = decode(codec, JSON.parse(value));
-
-  if (isLeft(decodeResult)) {
-    throw Error(`Unexpected value environment variable ${name}:\n ${value}`);
-  }
-
-  return decodeResult.right;
-};
+import { positiveInteger } from "@shared/lib/src/lib/iots";
+import { ensure, ensureAndDecode } from "@shared/lib/src/lib/config";
 
 export const getConfig = () => {
   return {

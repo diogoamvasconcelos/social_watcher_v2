@@ -4,10 +4,17 @@
     "jsx": "react",
     "noEmit": true,
     "outDir": ".build",
-    "rootDir": "../",
-    "typeRoots": ["./node_modules/@types", "./typings"],
+    "rootDir": ".",
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
-  "include": ["../shared/src", "./src", "./scripts/**/*.ts", "./test", "./typings", "./assets", "../backend/src"],
+  "include": [
+    "./src",
+    "./scripts/**/*.ts",
+    "./test",
+    "./typings",
+    "./assets",
+    "../backend/src"
+  ],
   "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**", "../backend"]
 }
-  

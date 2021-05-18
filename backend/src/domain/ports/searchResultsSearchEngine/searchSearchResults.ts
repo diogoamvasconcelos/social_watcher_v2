@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { positiveInteger } from "../../../lib/iots";
+import { positiveInteger } from "@shared/lib/src/lib/iots";
 import { Logger } from "../../../lib/logger";
 import { Keyword } from "../../models/keyword";
 import { searchResultCodec } from "../../models/searchResult";

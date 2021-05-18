@@ -7,11 +7,11 @@ import {
   DeleteMessageBatchRequestEntry,
 } from "aws-sdk/clients/sqs";
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
-import { decode } from "./iots";
+import { decode } from "@shared/lib/src/lib/iots";
 import AWS from "aws-sdk";
 import { Logger } from "./logger";
 import { uuid } from "./uuid";
-import { JsonEncodable } from "./models/jsonEncodable";
+import { JsonEncodable } from "@shared/lib/src/models/jsonEncodable";
 
 export const getClient = () => {
   return new AWS.SQS();

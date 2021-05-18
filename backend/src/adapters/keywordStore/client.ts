@@ -3,7 +3,7 @@ import { SocialMedia } from "../../domain/models/socialMedia";
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode, optional } from "../../lib/iots";
+import { decode, optional } from "@shared/lib/src/lib/iots";
 import { map } from "fp-ts/lib/Either";
 
 export const getClient = getDynamodbClient;

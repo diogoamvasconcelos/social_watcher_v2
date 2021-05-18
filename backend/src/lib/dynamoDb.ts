@@ -4,7 +4,10 @@ import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
 import _ from "lodash";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
-import { JsonEncodable, JsonObjectEncodable } from "./models/jsonEncodable";
+import {
+  JsonEncodable,
+  JsonObjectEncodable,
+} from "@shared/lib/src/models/jsonEncodable";
 
 export const getClient = (endpoint: string | undefined = undefined) => {
   return new DocumentClient({ endpoint });

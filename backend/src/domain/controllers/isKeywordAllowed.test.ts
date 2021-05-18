@@ -1,5 +1,9 @@
 import { right } from "fp-ts/lib/Either";
-import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@shared/lib/src/lib/iots";
 import { getLogger } from "../../lib/logger";
 import { SearchObject } from "../models/userItem";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";

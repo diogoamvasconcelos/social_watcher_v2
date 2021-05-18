@@ -9,7 +9,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "../../../src/lib/iots";
+} from "@shared/lib/src//lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";

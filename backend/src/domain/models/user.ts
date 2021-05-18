@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { dateISOString, positiveInteger } from "../../lib/iots";
+import { dateISOString, positiveInteger } from "@shared/lib/src/lib/iots";
 
 export const userIdCodec = t.string;
 export type UserId = t.TypeOf<typeof userIdCodec>;

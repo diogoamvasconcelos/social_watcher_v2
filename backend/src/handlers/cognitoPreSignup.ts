@@ -7,7 +7,7 @@ import { getConfig } from "../lib/config";
 import { isLeft } from "fp-ts/lib/Either";
 import { makePutUser } from "../adapters/userStore/putUser";
 import { UUIDCodec } from "../lib/uuid";
-import { decode } from "../lib/iots";
+import { decode } from "@shared/lib/src/lib/iots";
 import { makePutPaymentData } from "../adapters/userStore/putPayment";
 import { makeInitiateUserSubscription } from "../adapters/paymentsManager/initiateUserSubscription";
 import { getClientCredentials as getPaymentsCredentials } from "../adapters/paymentsManager/client";

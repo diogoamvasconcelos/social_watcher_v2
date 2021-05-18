@@ -2,11 +2,15 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { SearchObjectUserData } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
-import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@shared/lib/src/lib/iots";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
-import { deepmergeSafe } from "../../lib/deepmerge";
+import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)

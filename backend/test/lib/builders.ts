@@ -2,9 +2,9 @@ import _ from "lodash";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../src/domain/models/searchResult";
 import { getNow } from "../../src/lib/date";
-import { deepmergeSafe } from "../../src/lib/deepmerge";
-import { newLowerCase } from "../../src/lib/iots";
-import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
+import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
+import { newLowerCase } from "@shared/lib/src//lib/iots";
+import { JsonEncodable } from "@shared/lib/src/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
 export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {

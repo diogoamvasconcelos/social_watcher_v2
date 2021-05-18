@@ -1,4 +1,4 @@
-import { ensureString } from "../../../../shared/src/lib/config";
+import { ensureString } from "../../@shared/lib/config";
 
 export const getConfig = () => {
   return {

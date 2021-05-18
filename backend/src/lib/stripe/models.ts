@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { optionalNull } from "../iots";
+import { optionalNull } from "@shared/lib/src/lib/iots";
 
 // ref: https://stripe.com/docs/api/subscriptions/update
 export const customerSubscriptionEventDataCodec = t.type({

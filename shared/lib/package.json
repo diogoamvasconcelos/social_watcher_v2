@@ -1,0 +1,19 @@
+{
+  "name": "@shared/lib",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "deepmerge": "^4.2.2",
+    "fp-ts": "^2.10.5",
+    "io-ts": "^2.2.16",
+    "ruins-ts": "^0.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^15.3.0",
+    "io-ts-types": "^0.5.16",
+    "monocle-ts": "^2.3.10",
+    "newtype-ts": "^0.3.4",
+    "type-fest": "^1.1.2"
+  }
+}

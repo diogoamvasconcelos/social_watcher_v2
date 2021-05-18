@@ -1,5 +1,5 @@
 import { isLeft } from "fp-ts/lib/Either";
-import { deepmergeSafe } from "../../lib/deepmerge";
+import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
 import { Logger } from "../../lib/logger";
 import { TwitterSearchResult } from "../models/searchResult";
 import { TranslateToEnglishFn } from "../ports/translater/translateToEnglish";

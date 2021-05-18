@@ -1,6 +1,6 @@
 import { SQSEvent } from "aws-lambda";
 import { getConfig } from "../lib/config";
-import { decode, fromEither } from "../lib/iots";
+import { decode, fromEither } from "@shared/lib/src/lib/iots";
 import { getClient as getSearchResultSearchEngineClient } from "../adapters/searchResultsSearchEngine/client";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";

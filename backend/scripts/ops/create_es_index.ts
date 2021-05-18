@@ -9,7 +9,7 @@ import {
 } from "../../src/adapters/searchResultsSearchEngine/client";
 import { getConfig } from "../../src/lib/config";
 import { getLogger } from "../../src/lib/logger";
-import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonEncodable } from "@shared/lib/src/models/jsonEncodable";
 
 const config = getConfig();
 const logger = getLogger();

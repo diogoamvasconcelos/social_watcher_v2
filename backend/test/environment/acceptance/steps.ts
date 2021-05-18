@@ -3,7 +3,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "../../../src/lib/iots";
+} from "@shared/lib/src//lib/iots";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { getLogger } from "../../../src/lib/logger";
@@ -38,10 +38,10 @@ import { KeywordData } from "../../../src/domain/models/keyword";
 import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
 import { retryUntil } from "../../lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
-import { JsonObjectEncodable } from "../../../src/lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
-import { deepmergeSafe } from "../../../src/lib/deepmerge";
+import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
 import { buildSearchResult } from "../../lib/builders";

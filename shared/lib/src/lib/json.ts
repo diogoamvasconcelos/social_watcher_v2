@@ -1,4 +1,4 @@
-import { JsonEncodable } from "./models/jsonEncodable";
+import { JsonEncodable } from "../models/jsonEncodable";
 import { Either, left, right } from "fp-ts/lib/Either";
 
 export function parseSafe<T extends JsonEncodable>(
