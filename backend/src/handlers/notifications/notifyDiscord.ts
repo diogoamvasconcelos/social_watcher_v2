@@ -4,7 +4,7 @@ import { getClient as getDiscordNotifierClient } from "../../adapters/discordNot
 import { makeSendMessageToChannel } from "../../adapters/discordNotifier/sendMessageToChannel";
 import { notifySearchResultToDiscord } from "../../domain/controllers/notifySearchResultToDiscord";
 import { discordNotificationJobCodec } from "../../domain/models/notificationJob";
-import { decode, fromEither } from "@shared/lib/src/lib/iots";
+import { decode, fromEither } from "@shared/lib/src/iots";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 

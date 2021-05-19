@@ -10,7 +10,7 @@ import {
   searchSearchResultsResultCodec,
 } from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { isLeft, left } from "fp-ts/lib/Either";
-import { decode } from "@shared/lib/src/lib/iots";
+import { decode } from "@shared/lib/src/iots";
 
 const DEFAULT_LIMIT = 50;
 const DEFAULT_OFFSET = 0;

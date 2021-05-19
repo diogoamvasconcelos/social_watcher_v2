@@ -3,7 +3,7 @@ import { Either, left, right } from "fp-ts/lib/Either";
 import { makeGetKeywordData } from "../../adapters/keywordStore/getKeywordData";
 import { unknownToUserItem } from "../../adapters/userStore/client";
 import { SearchObject, UserData, UserItem } from "../../domain/models/userItem";
-import { fromEither } from "@shared/lib/src/lib/iots";
+import { fromEither } from "@shared/lib/src/iots";
 import { getConfig } from "../../lib/config";
 import { getLogger, Logger } from "../../lib/logger";
 import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";

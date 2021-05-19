@@ -1,5 +1,5 @@
-import { positiveInteger } from "@shared/lib/src/lib/iots";
-import { ensure, ensureAndDecode } from "@shared/lib/src/lib/config";
+import { positiveInteger } from "@shared/lib/src/iots";
+import { ensure, ensureAndDecode } from "@shared/lib/src/config";
 
 export const getConfig = () => {
   return {

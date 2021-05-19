@@ -2,7 +2,7 @@ import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "../../adapters/searchResultsStore/client";
 import { getNow } from "../../lib/date";
-import { newLowerCase } from "@shared/lib/src/lib/iots";
+import { newLowerCase } from "@shared/lib/src/iots";
 import { handler } from "./searchResultsStreamConsumer";
 
 describe("handlers/searchResultsStreamConsumer", () => {

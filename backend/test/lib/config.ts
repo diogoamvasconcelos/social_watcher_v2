@@ -1,6 +1,6 @@
-import { ensure } from "@shared/lib/src/lib/config";
-import { ensureAndDecode } from "@shared/lib/src/lib/config";
-import { positiveInteger } from "@shared/lib/src//lib/iots";
+import { ensure } from "@shared/lib/src/config";
+import { ensureAndDecode } from "@shared/lib/src/config";
+import { positiveInteger } from "@shared/lib/src/iots";
 
 export const getLocalTestConfig = () => {
   return {

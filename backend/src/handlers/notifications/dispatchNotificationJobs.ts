@@ -3,7 +3,7 @@ import {
   SearchResult,
   searchResultCodec,
 } from "../../domain/models/searchResult";
-import { decode, fromEither } from "@shared/lib/src/lib/iots";
+import { decode, fromEither } from "@shared/lib/src/iots";
 import { getLogger, Logger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";

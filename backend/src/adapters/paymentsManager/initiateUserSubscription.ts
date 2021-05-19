@@ -6,7 +6,7 @@ import {
   dateISOString,
   decode,
   newPositiveInteger,
-} from "@shared/lib/src/lib/iots";
+} from "@shared/lib/src/iots";
 import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
 import { createCustomer, createSubscription } from "../../lib/stripe/client";
 import { Client } from "./client";

@@ -8,12 +8,11 @@ OUT_DIR=$THIS_PATH/../.out
 
 cd $THIS_PATH/..
 
-# Copy config to backend so it keeps the relative paths
-cp -r config .build/backend
+# Copy config to build
+cp -r config .build
 
 mkdir -p "$OUT_DIR/"
 zip -Xqr "$OUT_DIR/lambda_artifact.zip" \
-  .build/backend/src \
-  .build/backend/config \
-  .build/shared \
+  .build/src \
+  .build/config \
   node_modules 

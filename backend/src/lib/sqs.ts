@@ -7,7 +7,7 @@ import {
   DeleteMessageBatchRequestEntry,
 } from "aws-sdk/clients/sqs";
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
-import { decode } from "@shared/lib/src/lib/iots";
+import { decode } from "@shared/lib/src/iots";
 import AWS from "aws-sdk";
 import { Logger } from "./logger";
 import { uuid } from "./uuid";

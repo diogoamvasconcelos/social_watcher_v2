@@ -3,7 +3,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@shared/lib/src//lib/iots";
+} from "@shared/lib/src/iots";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { getLogger } from "../../../src/lib/logger";
@@ -41,7 +41,7 @@ import { isLeft, isRight } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
-import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
+import { deepmergeSafe } from "@shared/lib/src/deepmerge";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
 import { buildSearchResult } from "../../lib/builders";

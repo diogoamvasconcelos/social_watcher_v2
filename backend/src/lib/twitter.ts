@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { getMinutesAgo } from "./date";
-import { dateISOString, decode, optional } from "@shared/lib/src/lib/iots";
+import { dateISOString, decode, optional } from "@shared/lib/src/iots";
 
 export const twitterCredentialsCodec = t.type({
   apiKey: t.string,

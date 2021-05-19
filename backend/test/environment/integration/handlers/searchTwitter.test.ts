@@ -1,7 +1,7 @@
 import { PartialDeep } from "type-fest";
 import { TwitterSearchJob } from "../../../../src/domain/models/searchJob";
-import { deepmergeSafe } from "@shared/lib/src/lib/deepmerge";
-import { fromEither, newLowerCase } from "@shared/lib/src//lib/iots";
+import { deepmergeSafe } from "@shared/lib/src/deepmerge";
+import { fromEither, newLowerCase } from "@shared/lib/src/iots";
 import { buildSQSEvent } from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";

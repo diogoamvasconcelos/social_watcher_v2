@@ -22,7 +22,7 @@ import {
   dateISOString,
   decode,
   newPositiveInteger,
-} from "@shared/lib/src/lib/iots";
+} from "@shared/lib/src/iots";
 import {
   getUserByCustomerId,
   GetUserByCustomerIdDeps,

@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "dispatch_notification_jobs" {
   filename         = local.lambda_file
   function_name    = local.dispatch_notification_jobs_lambda_name
-  handler          = ".build/backend/src/handlers/notifications/dispatchNotificationJobs.lambdaHandler"
+  handler          = ".build/src/handlers/notifications/dispatchNotificationJobs.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

@@ -1,4 +1,4 @@
-import { fromEither, newPositiveInteger } from "@shared/lib/src//lib/iots";
+import { fromEither, newPositiveInteger } from "@shared/lib/src/iots";
 import { getLogger } from "../../src/lib/logger";
 import {
   attachPaymentMethod,
@@ -143,4 +143,4 @@ export const main = async () => {
   await getCustomer();
 };
 
-//void main();
+void main();
