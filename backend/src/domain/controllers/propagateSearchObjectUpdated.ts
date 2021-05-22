@@ -55,7 +55,7 @@ export const propagateSearchObjectUpdated = async (
       }
 
       logger.debug("controllers/onSearchObjectUpdated", {
-        keywordDataEither: (keywordDataEither as unknown) as JsonObjectEncodable,
+        keywordDataEither: keywordDataEither as unknown as JsonObjectEncodable,
       });
 
       // Skip if already has the new status
@@ -101,7 +101,7 @@ export const propagateSearchObjectUpdated = async (
         status: newKeywordStatus,
       });
       logger.info(`${socialMedia}: updateKeyword completed with result.`, {
-        updateKeywordResult: (updateResult as unknown) as JsonObjectEncodable,
+        updateKeywordResult: updateResult as unknown as JsonObjectEncodable,
       });
 
       return updateResult;

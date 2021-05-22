@@ -10,7 +10,8 @@ import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsFo
 import { isKeywordAllowed } from "./isKeywordAllowed";
 
 const logger = getLogger();
-const getSearchObjectsForUserFnMocked = jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
+const getSearchObjectsForUserFnMocked =
+  jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
 
 describe("controllers/isKeywordAllowed", () => {
   beforeEach(() => {

@@ -137,12 +137,12 @@ export const bulkIndex = async (
 
     logger.debug("Elasticsearch bulk index request/response", {
       requestBody,
-      response: (response as unknown) as JsonObjectEncodable,
+      response: response as unknown as JsonObjectEncodable,
     });
 
     if (response.body.errors) {
       logger.error("Elasticsearch bulk index failed", {
-        response: (response as unknown) as JsonObjectEncodable,
+        response: response as unknown as JsonObjectEncodable,
       });
 
       return left("ERROR");
@@ -211,7 +211,7 @@ export const search = async <T>(
     );
 
     logger.debug("search results", {
-      items: (items as unknown) as JsonObjectEncodable,
+      items: items as unknown as JsonObjectEncodable,
     });
 
     const transformedItems: T[] = [];

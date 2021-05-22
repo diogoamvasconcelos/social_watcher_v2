@@ -74,7 +74,7 @@ describe("handlers/api/updateSearchObject", () => {
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
     const response = fromEither(
-      await handler((event as unknown) as APIGatewayProxyEvent)
+      await handler(event as unknown as APIGatewayProxyEvent)
     );
 
     expect(response.statusCode).toEqual(200);
@@ -90,7 +90,7 @@ describe("handlers/api/updateSearchObject", () => {
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));
 
-    const response = await handler((event as unknown) as APIGatewayProxyEvent);
+    const response = await handler(event as unknown as APIGatewayProxyEvent);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
@@ -105,7 +105,7 @@ describe("handlers/api/updateSearchObject", () => {
     } as SearchObjectUserData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
-    fromEither(await handler((event as unknown) as APIGatewayProxyEvent));
+    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
     expect(putSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),

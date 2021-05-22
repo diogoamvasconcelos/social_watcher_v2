@@ -15,18 +15,16 @@ type ApiResponseMetadata = {
   statusCode: number;
 };
 
-export type ApiSuccessResponse<
-  B extends JsonObjectEncodable
-> = ApiResponseMetadata & {
-  body?: B;
-};
+export type ApiSuccessResponse<B extends JsonObjectEncodable> =
+  ApiResponseMetadata & {
+    body?: B;
+  };
 
-export type ApiErrorResponse<
-  T extends string = ApiBaseErrorCode
-> = ApiResponseMetadata & {
-  errorCode: T;
-  errorMessage: string;
-};
+export type ApiErrorResponse<T extends string = ApiBaseErrorCode> =
+  ApiResponseMetadata & {
+    errorCode: T;
+    errorMessage: string;
+  };
 
 export type ApiBaseErrorCode =
   | "INTERNAL_ERROR"

@@ -113,7 +113,7 @@ const handleWebhookEvent = async (
     default:
       deps.logger.info("Unhandled event type", {
         type: webhookEvent.type,
-        event: (webhookEvent as unknown) as JsonObjectEncodable,
+        event: webhookEvent as unknown as JsonObjectEncodable,
       });
       return right("OK");
   }

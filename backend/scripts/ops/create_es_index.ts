@@ -21,7 +21,7 @@ const main = async () => {
     config.searchResultIndexVersion
   );
   logger.info("createSearchResultIndex completed", {
-    res: (res as unknown) as JsonEncodable,
+    res: res as unknown as JsonEncodable,
   });
 };
 

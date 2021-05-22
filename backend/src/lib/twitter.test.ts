@@ -5,7 +5,7 @@ import { fromEither } from "@diogovasconcelos/lib";
 import { Client, searchRecent, SearchRecentResponse } from "./twitter";
 
 describe("twitter", () => {
-  const twitterClient = ({ request: jest.fn() } as unknown) as Client;
+  const twitterClient = { request: jest.fn() } as unknown as Client;
 
   it("can paginate", async () => {
     const twitterResponse0 = makeTwitterResponse();

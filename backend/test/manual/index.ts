@@ -104,7 +104,7 @@ export const getCustomer = async () => {
   );
 
   logger.info("customer get", {
-    customer: (customer as unknown) as JsonObjectEncodable,
+    customer: customer as unknown as JsonObjectEncodable,
   });
 
   /*

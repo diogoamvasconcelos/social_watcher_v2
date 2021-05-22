@@ -20,7 +20,7 @@ export const makeGetUserIdByCustomerId = (
     const userId = customer.metadata.userId;
     if (!userId) {
       logger.error("couldn't find userId in metadata", {
-        customer: (customer as unknown) as JsonObjectEncodable,
+        customer: customer as unknown as JsonObjectEncodable,
       });
     }
 

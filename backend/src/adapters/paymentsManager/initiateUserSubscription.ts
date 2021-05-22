@@ -33,7 +33,7 @@ export const makeInitiateUserSubscription = (
     const customer = createCustomerEither.right;
 
     logger.info("customer created", {
-      customer: (customer as unknown) as JsonObjectEncodable,
+      customer: customer as unknown as JsonObjectEncodable,
     });
 
     const createSubscriptionEither = await createSubscription(
@@ -60,13 +60,13 @@ export const makeInitiateUserSubscription = (
 
     if (subscription.status != "trialing") {
       logger.error("createSubscription didn't create a trial", {
-        subscription: (subscription as unknown) as JsonObjectEncodable,
+        subscription: subscription as unknown as JsonObjectEncodable,
       });
       return left("ERROR");
     }
 
     logger.info("subscription created", {
-      subscription: (subscription as unknown) as JsonObjectEncodable,
+      subscription: subscription as unknown as JsonObjectEncodable,
     });
 
     const trialExpiresAtEither = decode(
@@ -75,14 +75,14 @@ export const makeInitiateUserSubscription = (
     );
     if (isLeft(trialExpiresAtEither)) {
       logger.error("createSubscription didn't return 'trail_end'", {
-        subscription: (subscription as unknown) as JsonObjectEncodable,
+        subscription: subscription as unknown as JsonObjectEncodable,
       });
       return left("ERROR");
     }
 
     if (!subscription.items.data[0].quantity) {
       logger.error("createSubscription didn't a quantity", {
-        subscription: (subscription as unknown) as JsonObjectEncodable,
+        subscription: subscription as unknown as JsonObjectEncodable,
       });
       return left("ERROR");
     }

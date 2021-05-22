@@ -287,7 +287,7 @@ export const checkKeyword = async ({
     },
     (res) => {
       logger.info("checkKeyword:getKeywordDataFn attempt", {
-        res: (res as unknown) as JsonObjectEncodable,
+        res: res as unknown as JsonObjectEncodable,
       });
       if (isLeft(res)) {
         return false;

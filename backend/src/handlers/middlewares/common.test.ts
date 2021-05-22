@@ -14,27 +14,21 @@ describe("stackMiddlewares", () => {
   it("applies from left to right", async () => {
     const mockBefore1 = jest.fn();
     const mockAfter1 = jest.fn();
-    const middleware1: Middleware = (handler) => async (
-      event,
-      context,
-      callback
-    ) => {
-      mockBefore1();
-      await handler(event, context, callback);
-      mockAfter1();
-    };
+    const middleware1: Middleware =
+      (handler) => async (event, context, callback) => {
+        mockBefore1();
+        await handler(event, context, callback);
+        mockAfter1();
+      };
 
     const mockBefore2 = jest.fn();
     const mockAfter2 = jest.fn();
-    const middleware2: Middleware = (handler) => async (
-      event,
-      context,
-      callback
-    ) => {
-      mockBefore2();
-      await handler(event, context, callback);
-      mockAfter2();
-    };
+    const middleware2: Middleware =
+      (handler) => async (event, context, callback) => {
+        mockBefore2();
+        await handler(event, context, callback);
+        mockAfter2();
+      };
 
     const mockHandler = jest.fn();
     const stack = stackMiddlewares([middleware1, middleware2], mockHandler);
