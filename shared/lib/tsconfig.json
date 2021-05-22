@@ -4,8 +4,9 @@
     "outDir": ".build",
     "rootDir": ".",
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./typings"]
+    "typeRoots": ["./node_modules/@types", "./typings"],
+    "declaration": true
   },
   "include": ["src/"],
-  "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**"]
+  "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**"]
 }

@@ -889,6 +889,16 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@diogovasconcelos/lib@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@diogovasconcelos/lib/-/lib-0.1.4.tgz#79ac41abe8883202f368951cedfbfd8539d31e78"
+  integrity sha512-cYHHMPqJOcs2vVDo1YwSnjI4YLD0l5zyUW33ovamASH5GdILXxVdA5hAiwoxcxTu7QD9tHpCRLK1Rpwj0xT6iA==
+  dependencies:
+    deepmerge "^4.2.2"
+    fp-ts "^2.10.5"
+    io-ts "^2.2.16"
+    ruins-ts "^0.0.3"
+
 "@discordjs/collection@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.6.tgz#9e9a7637f4e4e0688fd8b2b5c63133c91607682c"
@@ -2881,6 +2891,11 @@ forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
+
+fp-ts@^2.10.5:
+  version "2.10.5"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.10.5.tgz#7c77868fe8bd9b229743303c1bec505b959f631b"
+  integrity sha512-X2KfTIV0cxIk3d7/2Pvp/pxL/xr2MV1WooyEzKtTWYSc1+52VF4YzjBTXqeOlSiZsPCxIBpDGfT9Dyo7WEY0DQ==
 
 fp-ts@^2.9.5:
   version "2.10.4"
@@ -4976,6 +4991,11 @@ rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
   integrity sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==
+
+ruins-ts@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ruins-ts/-/ruins-ts-0.0.3.tgz#531f7b8edfdf851c5e00eccd9c65c2f388f3ea11"
+  integrity sha512-0paiCmy4MwqTPfFHk8bMARQgB02YvtoK+DBtBrgDU5s7dm1OKLKZ6M7ThGRaA6mEu8grhLqJ/ai1ZVeD8vuSCA==
 
 run-parallel@^1.1.9:
   version "1.2.0"

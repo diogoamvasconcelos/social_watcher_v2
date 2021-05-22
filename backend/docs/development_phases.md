@@ -142,6 +142,7 @@
 
 - fix code sharing
   - use yarn-link for @shared/lib
+    - create a private npm package instead - @diogovasconcelos/lib
   - share APIClient and types with frontend
 - add reddit search
 - add slack notifier
