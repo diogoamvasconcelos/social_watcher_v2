@@ -10,7 +10,7 @@ const prod = env === "prod";
 
 const config = {
   entry: ["./src/index.tsx"],
-  devtool: prod ? "" : "eval-source-map",
+  devtool: prod ? undefined : "eval-source-map",
   mode: prod ? "production" : "development",
   devServer: {
     host: "0.0.0.0",
@@ -74,8 +74,10 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       title: "the Social Watcher",
+      lang: "en",
       favicon: "./assets/favicon.ico",
       filename: "index.html",
+      template: "./src/index.ejs",
     }),
     new webpack.EnvironmentPlugin([
       "ENV",
