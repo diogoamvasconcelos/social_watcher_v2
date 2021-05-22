@@ -26,7 +26,7 @@ export const optionalNull = <T extends t.Mixed>(T: T) =>
   t.union([t.undefined, t.null, T]);
 
 // lower case: https://github.com/gcanti/io-ts/blob/master/index.md#branded-types--refinements
-interface LowerCaseBrand {
+export interface LowerCaseBrand {
   readonly LowerCase: unique symbol;
 }
 
@@ -42,7 +42,7 @@ export const newLowerCase = (x: string): LowerCase =>
   fromEither(decode(lowerCase, x.toLowerCase()));
 
 // postive integer
-interface PositiveIntegerBrand {
+export interface PositiveIntegerBrand {
   readonly PositiveInteger: unique symbol;
 }
 
@@ -81,7 +81,7 @@ export const DateFromISOStringV2 = new t.Type<Date, Date | string, unknown>(
 // DateISOString
 // Good practive to store dates as strings for serialization, and only convert to Date when needed
 
-interface DateISOStringBrand {
+export interface DateISOStringBrand {
   readonly DateISOString: unique symbol;
 }
 
