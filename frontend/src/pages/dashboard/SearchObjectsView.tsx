@@ -3,13 +3,10 @@ import { Button, Switch, Typography, Modal } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { User } from "../../../../backend/src/domain/models/user";
-import { SearchObject } from "../../../../backend/src/domain/models/userItem";
-import { deepmergeSafe } from "../../../../backend/src/lib/deepmerge";
-import {
-  newLowerCase,
-  newPositiveInteger,
-} from "../../../../backend/src/lib/iots";
+import { User } from "@backend/domain/models/user";
+import { SearchObject } from "@backend/domain/models/userItem";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
 import { updateUserSearchObjects } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";

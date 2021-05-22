@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
-import { CreatePaymentsPortalResponse } from "../../../../backend/src/handlers/api/models/createPaymentsPortal";
+import { CreatePaymentsPortalResponse } from "@backend/handlers/api/models/createPaymentsPortal";
 import { apiCreatePaymentsPortal } from "../../shared/lib/apiClient";
 
 export const createPaymentPortal = createAsyncThunk(

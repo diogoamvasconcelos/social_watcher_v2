@@ -1,11 +1,11 @@
-import { SocialMedia } from "../../../../backend/src/domain/models/socialMedia";
+import { SocialMedia } from "@backend/domain/models/socialMedia";
 import { searchKeyword, SearchState } from "./searchState";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import styled from "styled-components";
-import { SearchObject } from "../../../../backend/src/domain/models/userItem";
+import { SearchObject } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import React, { useState } from "react";
-import { newLowerCase } from "../../../../backend/src/lib/iots";
+import { newLowerCase } from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../shared/lib/formatting";
 import { Input, Select } from "antd";
 

@@ -2347,10 +2347,10 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@diogovasconcelos/lib@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@diogovasconcelos/lib/-/lib-0.1.5.tgz#03f5f3ee0ec4569b66181e8feb553d58d3a764dc"
-  integrity sha512-hvHWENMbFrcaB+kBnkYFqhJnbV5sXbbn2YCHWTSTyub9zeR6g9lX2KhJsR9ZuDbKUzEpOxjvVvylOO0uT+YTDg==
+"@diogovasconcelos/lib@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@diogovasconcelos/lib/-/lib-0.1.6.tgz#ab27d5d399651223870f52945d7794330f34d68b"
+  integrity sha512-b5ltdyJIxiBXylsybQQ2U5hqzNEk72eUtZSUyKdvIce2KzqnRE4jZIFnpVwwiwfPk8uB4gBLBSosV3JHKTNHmA==
   dependencies:
     deepmerge "^4.2.2"
     fp-ts "^2.10.5"

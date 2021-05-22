@@ -6,7 +6,11 @@
     "outDir": ".build",
     "rootDir": ".",
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./typings"]
+    "typeRoots": ["./node_modules/@types", "./typings"],
+    "paths": {
+      "@backend": ["../backend/src"],
+      "@backend/*": ["../backend/src/*"]
+    }
   },
   "include": ["./src", "./scripts/**/*.ts", "./test", "./typings", "./assets"],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**", "../backend"],

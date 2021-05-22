@@ -1,9 +1,9 @@
 import {
   SearchObject,
   SearchObjectUserData,
-} from "../../../../backend/src/domain/models/userItem";
-import { CreatePaymentsPortalUserData } from "../../../../backend/src/handlers/api/models/createPaymentsPortal";
-import { SearchRequestUserData } from "../../../../backend/src/handlers/api/models/search";
+} from "@backend/domain/models/userItem";
+import { CreatePaymentsPortalUserData } from "@backend/handlers/api/models/createPaymentsPortal";
+import { SearchRequestUserData } from "@backend/handlers/api/models/search";
 import {
   getClient,
   getSearchObjects,
@@ -11,7 +11,7 @@ import {
   search,
   updateSearchObject,
   createPaymentsPortal,
-} from "../../../../backend/src/lib/apiClient/apiClient";
+} from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
 

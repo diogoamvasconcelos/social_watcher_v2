@@ -17,7 +17,7 @@
     "audit": "yarn audit"
   },
   "dependencies": {
-    "@diogovasconcelos/lib": "^0.1.5",
+    "@diogovasconcelos/lib": "^0.1.6",
     "@elastic/elasticsearch": "^7.12.0",
     "aws": "0.0.3-2",
     "aws-elasticsearch-connector": "^9.0.3",
