@@ -11,8 +11,8 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "@backend": ["../backend"],
-      "@frontend": ["../frontend"]
+      "@backend": ["./backend"],
+      "@frontend": ["./frontend"]
     }
   }
 }
