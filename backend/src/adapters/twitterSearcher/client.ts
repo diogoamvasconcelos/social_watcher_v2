@@ -7,7 +7,7 @@ import {
   twitterCredentialsCodec,
 } from "../../lib/twitter";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { decode } from "@shared/lib/src/iots";
+import { decode } from "@diogovasconcelos/lib";
 import { isLeft } from "fp-ts/lib/Either";
 
 export const getClient = getTwitterClient;

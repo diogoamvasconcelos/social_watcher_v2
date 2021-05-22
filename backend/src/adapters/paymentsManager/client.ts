@@ -3,7 +3,7 @@ import {
   stripeCredentialsCodec,
 } from "../../lib/stripe/client";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { decode } from "@shared/lib/src/iots";
+import { decode } from "@diogovasconcelos/lib";
 import { isLeft } from "fp-ts/lib/Either";
 import { Logger } from "../../lib/logger";
 

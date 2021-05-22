@@ -3,7 +3,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@shared/lib/src/iots";
+} from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
 import { SearchObject } from "../models/userItem";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";

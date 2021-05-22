@@ -3,7 +3,7 @@ import {
   getClient as getApiClient,
   getUser as getUserApi,
 } from "../../../src/lib/apiClient/apiClient";
-import { fromEither } from "@shared/lib/src/iots";
+import { fromEither } from "@diogovasconcelos/lib";
 import { Awaited } from "../../../src/lib/types";
 import { getEnvTestConfig } from "../../lib/config";
 import {

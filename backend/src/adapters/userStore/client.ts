@@ -1,7 +1,7 @@
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode } from "@shared/lib/src/iots";
+import { decode } from "@diogovasconcelos/lib";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
   PaymentData,

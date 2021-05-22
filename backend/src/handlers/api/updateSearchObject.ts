@@ -19,8 +19,8 @@ import {
   searchObjectIndexCodec,
   searchObjectUserDataCodec,
 } from "../../domain/models/userItem";
-import { parseSafe } from "@shared/lib/src/json";
-import { decode } from "@shared/lib/src/iots";
+import { parseSafe } from "@diogovasconcelos/lib";
+import { decode } from "@diogovasconcelos/lib";
 import {
   UpdateSearchObjectErrorCode,
   UpdateSearchObjectRequest,

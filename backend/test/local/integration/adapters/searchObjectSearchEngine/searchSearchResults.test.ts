@@ -13,7 +13,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@shared/lib/src/iots";
+} from "@diogovasconcelos/lib";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";

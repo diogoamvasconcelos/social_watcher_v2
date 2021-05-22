@@ -3,7 +3,7 @@ import { Either, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import Stripe from "stripe";
 import { Logger } from "../logger";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 export const stripeCredentialsCodec = t.type({
   pk: t.string,

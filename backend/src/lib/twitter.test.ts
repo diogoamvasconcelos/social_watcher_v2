@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getNow } from "./date";
-import { deepmergeSafe } from "@shared/lib/src/deepmerge";
-import { fromEither } from "@shared/lib/src/iots";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { fromEither } from "@diogovasconcelos/lib";
 import { Client, searchRecent, SearchRecentResponse } from "./twitter";
 
 describe("twitter", () => {

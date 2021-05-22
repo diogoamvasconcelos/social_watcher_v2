@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { lowerCase } from "@shared/lib/src/iots";
+import { lowerCase } from "@diogovasconcelos/lib";
 import { socialMediaCodec } from "./socialMedia";
 
 export const keywordCodec = lowerCase;

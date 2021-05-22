@@ -5,7 +5,7 @@ import {
   createPaymentsPortal,
 } from "../../../src/lib/apiClient/apiClient";
 import { getEnvTestConfig } from "../../lib/config";
-import { fromEither } from "@shared/lib/src/iots";
+import { fromEither } from "@diogovasconcelos/lib";
 import logger from "../../../src/lib/logger";
 
 const config = getEnvTestConfig();

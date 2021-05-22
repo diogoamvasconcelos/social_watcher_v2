@@ -1,4 +1,4 @@
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { ApiErrorResponse, ApiSuccessResponse } from "./models/models";
 
 export const makeSuccessResponse = <B extends JsonObjectEncodable>(

@@ -1,7 +1,7 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { userItemToDocument } from "../../adapters/userStore/client";
-import { newPositiveInteger } from "@shared/lib/src/iots";
+import { newPositiveInteger } from "@diogovasconcelos/lib";
 import { handler } from "./usersStreamConsumer";
 
 describe("handlers/usersStreamConsumer", () => {

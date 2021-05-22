@@ -6,7 +6,7 @@ import {
   getClient as getElasticsearchClient,
   indexExists,
 } from "../../lib/elasticsearch/client";
-import { decode, PositiveInteger } from "@shared/lib/src/iots";
+import { decode, PositiveInteger } from "@diogovasconcelos/lib";
 import { Logger } from "../../lib/logger";
 import { SEARCH_RESULT_SCHEMA } from "./schemas";
 import {

@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { GetUserIdByCustomerIdFn } from "../../domain/ports/paymentsManager/getUserIdByCustomerId";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { getCustomerById } from "../../lib/stripe/client";
 import { Client } from "./client";
 

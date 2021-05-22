@@ -1,6 +1,6 @@
 import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
-import { positiveInteger } from "@shared/lib/src/iots";
+import { positiveInteger } from "@diogovasconcelos/lib";
 import { keywordCodec } from "./keyword";
 import { discordNotificationConfigCodec } from "./notificationJob";
 import { userCodec, userIdCodec } from "./user";

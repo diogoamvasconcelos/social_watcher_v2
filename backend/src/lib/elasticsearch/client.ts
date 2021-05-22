@@ -3,7 +3,7 @@ import { Client } from "@elastic/elasticsearch";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
 import { Logger } from "../logger";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { applyTransformToItem } from "../iots";
 
 const isLocalHost = (url?: string) => {

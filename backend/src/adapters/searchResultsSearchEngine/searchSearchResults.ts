@@ -4,13 +4,13 @@ import {
   searchResultIndexAlias,
 } from "./client";
 import { RequestParamsSearch, search } from "../../lib/elasticsearch/client";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import {
   SearchSearchResultsFn,
   searchSearchResultsResultCodec,
 } from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { isLeft, left } from "fp-ts/lib/Either";
-import { decode } from "@shared/lib/src/iots";
+import { decode } from "@diogovasconcelos/lib";
 
 const DEFAULT_LIMIT = 50;
 const DEFAULT_OFFSET = 0;

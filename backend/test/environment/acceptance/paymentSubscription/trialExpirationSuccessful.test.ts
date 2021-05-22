@@ -11,7 +11,7 @@ import {
   getClient as getApiClient,
   getUser as getUserApi,
 } from "../../../../src/lib/apiClient/apiClient";
-import { fromEither } from "@shared/lib/src/iots";
+import { fromEither } from "@diogovasconcelos/lib";
 import { retryUntil } from "../../../lib/retry";
 import { getSubscriptionConfig } from "../../../../src/domain/models/subscriptionConfig";
 import { addDays } from "../../../../src/lib/date";

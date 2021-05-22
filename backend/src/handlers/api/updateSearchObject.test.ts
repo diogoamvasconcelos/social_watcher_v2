@@ -6,11 +6,11 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@shared/lib/src/iots";
+} from "@diogovasconcelos/lib";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
-import { deepmergeSafe } from "@shared/lib/src/deepmerge";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)

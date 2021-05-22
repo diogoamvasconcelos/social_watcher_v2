@@ -1,7 +1,7 @@
 import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { Logger } from "../../lib/logger";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { KeywordData } from "../models/keyword";
 import { socialMedias } from "../models/socialMedia";
 import { SearchObject } from "../models/userItem";

@@ -15,14 +15,14 @@ import {
 } from "../../lib/stripe/client";
 import { getClientCredentials as getPaymentsCredentials } from "../../adapters/paymentsManager/client";
 import { getClient as getSsmClient } from "../../lib/ssm";
-import { JsonObjectEncodable } from "@shared/lib/src/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { DefaultOkReturn } from "../../domain/ports/shared";
 import { customerSubscriptionEventDataCodec } from "../../lib/stripe/models";
 import {
   dateISOString,
   decode,
   newPositiveInteger,
-} from "@shared/lib/src/iots";
+} from "@diogovasconcelos/lib";
 import {
   getUserByCustomerId,
   GetUserByCustomerIdDeps,
