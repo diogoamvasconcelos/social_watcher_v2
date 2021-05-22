@@ -1,4 +1,4 @@
-//const webpack = require("webpack");
+const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin =
@@ -67,13 +67,8 @@ const config = {
     extensions: [".mjs", ".js", ".tsx", ".ts", ".json", ".yaml"],
     plugins: [new TsconfigPathsPlugin()],
     fallback: {
-      path: false,
       stream: false,
       crypto: require.resolve("crypto-browserify"),
-      // needed because of backend/**/discord.js (should this even be built?)
-      fs: require.resolve("browserify-fs"),
-      util: require.resolve("util/"),
-      process: require.resolve("process/"),
     },
   },
   plugins: [
@@ -82,6 +77,15 @@ const config = {
       favicon: "./assets/favicon.ico",
       filename: "index.html",
     }),
+    new webpack.EnvironmentPlugin([
+      "ENV",
+      "AWS_REGION",
+      "COGNITO_CLIENT_ID",
+      "COGNITO_USER_POOL_ID",
+      "COGNITO_CLIENT_DOMAIN",
+      "API_ENDPOINT",
+      "APP_URL",
+    ]),
   ].concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : []),
 };
 

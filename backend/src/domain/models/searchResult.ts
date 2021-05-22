@@ -1,7 +1,7 @@
 import * as t from "io-ts";
-import { searchRecentResponseDataCodec } from "../../lib/twitter";
 import { keywordCodec } from "./keyword";
 import { dateISOString } from "@diogovasconcelos/lib";
+import { searchRecentResponseDataCodec } from "../../lib/twitter/client";
 
 export const searchResultMetadaCodec = t.type({
   id: t.string,

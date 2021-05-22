@@ -4,11 +4,11 @@ import { Logger } from "../../lib/logger";
 import {
   getClient as getTwitterClient,
   SearchRecentResponse,
-  twitterCredentialsCodec,
-} from "../../lib/twitter";
+} from "../../lib/twitter/client";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
 import { decode } from "@diogovasconcelos/lib";
 import { isLeft } from "fp-ts/lib/Either";
+import { twitterCredentialsCodec } from "../../lib/twitter/models";
 
 export const getClient = getTwitterClient;
 export type Client = ReturnType<typeof getClient>;

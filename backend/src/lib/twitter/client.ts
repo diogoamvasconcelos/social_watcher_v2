@@ -1,15 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import * as t from "io-ts";
-import { getMinutesAgo } from "./date";
 import { dateISOString, decode, optional } from "@diogovasconcelos/lib";
-
-export const twitterCredentialsCodec = t.type({
-  apiKey: t.string,
-  apiSecretKey: t.string,
-  bearerToken: t.string,
-});
-export type TwitterCredentials = t.TypeOf<typeof twitterCredentialsCodec>;
+import { TwitterCredentials } from "./models";
+import { getMinutesAgo } from "../date";
 
 export const getClient = (credentials: TwitterCredentials) => {
   // Look into https://www.npmjs.com/package/oauth if we want to use the key/secret to fetch the token

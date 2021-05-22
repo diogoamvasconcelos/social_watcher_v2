@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getNow } from "./date";
+import { getNow } from "../date";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { fromEither } from "@diogovasconcelos/lib";
-import { Client, searchRecent, SearchRecentResponse } from "./twitter";
+import { Client, searchRecent, SearchRecentResponse } from "./client";
 
 describe("twitter", () => {
   const twitterClient = { request: jest.fn() } as unknown as Client;
