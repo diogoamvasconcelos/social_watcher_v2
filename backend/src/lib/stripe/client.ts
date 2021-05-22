@@ -153,7 +153,7 @@ export const getCustomerById = async (
     const res = await client.customers.retrieve(customerId);
     if (res.deleted) {
       logger.error("stripe::customers.retrieve retrieved a deleted user", {
-        res: (res as unknown) as JsonObjectEncodable,
+        res: res as unknown as JsonObjectEncodable,
       });
       return left("ERROR");
     }
