@@ -1,8 +1,8 @@
 // ref: https://gist.github.com/groundedSAGE/995dc2e14845980fdc547c8ba510169c
 
-import { Amplify } from "@aws-amplify/core";
+import { Amplify, Hub } from "@aws-amplify/core";
 import { Auth } from "@aws-amplify/auth";
-import { HubCallback, Hub } from "@aws-amplify/core/lib/Hub";
+import { HubCallback } from "@aws-amplify/core/lib/Hub";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../store";

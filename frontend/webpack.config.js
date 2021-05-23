@@ -13,12 +13,14 @@ const config = {
   devtool: prod ? undefined : "eval-source-map",
   mode: prod ? "production" : "development",
   devServer: {
+    historyApiFallback: true,
     host: "0.0.0.0",
     hot: true,
   },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle-[chunkhash].js",
+    publicPath: "/",
   },
   module: {
     rules: [
