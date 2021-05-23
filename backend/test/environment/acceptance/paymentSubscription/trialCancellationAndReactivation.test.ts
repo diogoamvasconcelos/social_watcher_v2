@@ -26,7 +26,7 @@ describe("Trial cancellation and re-activation", () => {
   let userToken: string;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
     testUser = await createTestUser();
 
     userToken = await getIdToken({

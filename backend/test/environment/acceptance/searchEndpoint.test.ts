@@ -30,7 +30,7 @@ describe("search endpoint e2e (nearly)", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

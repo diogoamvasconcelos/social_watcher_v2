@@ -33,7 +33,7 @@ describe("e2e/createPaymentPortal", () => {
     const res = fromEither(
       await createPaymentsPortal(
         { client: apiClient, token: userToken },
-        { userData: { returnUrl: "http://localhost.com/1234/account" } }
+        { userData: { returnUrl: "http://localhost.com/8080/account" } }
       )
     );
 
