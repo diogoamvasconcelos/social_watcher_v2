@@ -1,6 +1,6 @@
 import React from "react";
 import ReactJson from "react-json-view";
-import { JsonObjectEncodable } from "../../../../../backend/src/lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { gruvBoxDarkHardBase16, gruvBoxLightHardBase16 } from "./base16Themes";
 
 type JSONViewerProps = {

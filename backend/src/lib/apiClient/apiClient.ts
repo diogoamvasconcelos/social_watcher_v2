@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
-import { decode } from "../iots";
+import { decode } from "@diogovasconcelos/lib";
 import {
   SearchObject,
   SearchObjectUserData,

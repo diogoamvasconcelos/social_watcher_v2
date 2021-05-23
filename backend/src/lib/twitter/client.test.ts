@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getNow } from "./date";
-import { deepmergeSafe } from "./deepmerge";
-import { fromEither } from "./iots";
-import { Client, searchRecent, SearchRecentResponse } from "./twitter";
+import { getNow } from "../date";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { fromEither } from "@diogovasconcelos/lib";
+import { Client, searchRecent, SearchRecentResponse } from "./client";
 
 describe("twitter", () => {
-  const twitterClient = ({ request: jest.fn() } as unknown) as Client;
+  const twitterClient = { request: jest.fn() } as unknown as Client;
 
   it("can paginate", async () => {
     const twitterResponse0 = makeTwitterResponse();

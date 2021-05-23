@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button, Layout, Menu, Dropdown, Typography } from "antd";
-import logo from "url:../../../assets/logo-navbar.jpg";
+import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import { Auth } from "aws-amplify";
 import { useAppSelector } from "../store";

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
-import { User } from "../../../../backend/src/domain/models/user";
-import { SearchObject } from "../../../../backend/src/domain/models/userItem";
+import { User } from "@backend/domain/models/user";
+import { SearchObject } from "@backend/domain/models/userItem";
 import {
   apiGetSearchObjects,
   apiGetUser,

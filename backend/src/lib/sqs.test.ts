@@ -52,8 +52,9 @@ describe("sendMessage", () => {
   });
 
   it("throws when result.MessageID is empty", async () => {
-    (client.sendMessage()
-      .promise as jest.MockedFunction<any>).mockReturnValueOnce({});
+    (
+      client.sendMessage().promise as jest.MockedFunction<any>
+    ).mockReturnValueOnce({});
 
     expect(await sendMessage(client, sendMessageRequest, logger)).toEqual(
       left("ERROR")
@@ -63,8 +64,9 @@ describe("sendMessage", () => {
   it("succeeds when result.MessageId is returned", async () => {
     const messageId = "dummyId";
 
-    (client.sendMessage()
-      .promise as jest.MockedFunction<any>).mockReturnValueOnce({
+    (
+      client.sendMessage().promise as jest.MockedFunction<any>
+    ).mockReturnValueOnce({
       MessageId: messageId,
     });
 
@@ -157,8 +159,9 @@ describe("getQueueUrlFromName", () => {
 
 describe("deleteMessageBatch", () => {
   beforeEach(() => {
-    (client.deleteMessageBatch()
-      .promise as jest.MockedFunction<any>).mockReset();
+    (
+      client.deleteMessageBatch().promise as jest.MockedFunction<any>
+    ).mockReset();
   });
 
   it("returns error when client throws", async () => {

@@ -3,7 +3,7 @@ import { isLeft } from "fp-ts/lib/Either";
 import { makePutSearchResults } from "../adapters/searchResultsStore/putSearchResults";
 import { makeSearchTwitter } from "../adapters/twitterSearcher/searchTwitter";
 import { getConfig } from "../lib/config";
-import { decode } from "../lib/iots";
+import { decode } from "@diogovasconcelos/lib";
 import {
   getClient as getTwitterClient,
   getClientCredentials as getTwitterCredentials,

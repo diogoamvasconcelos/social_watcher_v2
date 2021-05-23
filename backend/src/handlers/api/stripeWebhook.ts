@@ -15,10 +15,14 @@ import {
 } from "../../lib/stripe/client";
 import { getClientCredentials as getPaymentsCredentials } from "../../adapters/paymentsManager/client";
 import { getClient as getSsmClient } from "../../lib/ssm";
-import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { DefaultOkReturn } from "../../domain/ports/shared";
 import { customerSubscriptionEventDataCodec } from "../../lib/stripe/models";
-import { dateISOString, decode, newPositiveInteger } from "../../lib/iots";
+import {
+  dateISOString,
+  decode,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib";
 import {
   getUserByCustomerId,
   GetUserByCustomerIdDeps,
@@ -109,7 +113,7 @@ const handleWebhookEvent = async (
     default:
       deps.logger.info("Unhandled event type", {
         type: webhookEvent.type,
-        event: (webhookEvent as unknown) as JsonObjectEncodable,
+        event: webhookEvent as unknown as JsonObjectEncodable,
       });
       return right("OK");
   }

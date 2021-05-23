@@ -2,11 +2,15 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { SearchObjectUserData } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
-import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
-import { deepmergeSafe } from "../../lib/deepmerge";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -70,7 +74,7 @@ describe("handlers/api/updateSearchObject", () => {
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
     const response = fromEither(
-      await handler((event as unknown) as APIGatewayProxyEvent)
+      await handler(event as unknown as APIGatewayProxyEvent)
     );
 
     expect(response.statusCode).toEqual(200);
@@ -86,7 +90,7 @@ describe("handlers/api/updateSearchObject", () => {
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));
 
-    const response = await handler((event as unknown) as APIGatewayProxyEvent);
+    const response = await handler(event as unknown as APIGatewayProxyEvent);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
@@ -101,7 +105,7 @@ describe("handlers/api/updateSearchObject", () => {
     } as SearchObjectUserData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
-    fromEither(await handler((event as unknown) as APIGatewayProxyEvent));
+    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
     expect(putSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),

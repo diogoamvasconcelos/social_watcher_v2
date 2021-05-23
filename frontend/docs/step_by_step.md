@@ -128,3 +128,9 @@ We use it for testing React Components in a DOM instance, instead of a Component
 ```
   transformIgnorePatterns: ["<rootDir>/node_modules/(?!(.*/es|.*/esm)/)"],
 ```
+
+## Parcel -> Webpack
+
+- why? Parcel can't support typscript reference projects
+
+- webpack-config helper: https://createapp.dev/

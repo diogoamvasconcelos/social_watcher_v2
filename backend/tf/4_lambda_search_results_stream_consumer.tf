@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "search_results_stream_consumer" {
   filename         = local.lambda_file
   function_name    = local.search_results_stream_consumer_lambda_name
-  handler          = ".build/backend/src/handlers/streamConsumers/searchResultsStreamConsumer.lambdaHandler"
+  handler          = ".build/src/handlers/streamConsumers/searchResultsStreamConsumer.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

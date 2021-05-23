@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { GetUserIdByCustomerIdFn } from "../../domain/ports/paymentsManager/getUserIdByCustomerId";
-import { JsonObjectEncodable } from "../../lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { getCustomerById } from "../../lib/stripe/client";
 import { Client } from "./client";
 
@@ -20,7 +20,7 @@ export const makeGetUserIdByCustomerId = (
     const userId = customer.metadata.userId;
     if (!userId) {
       logger.error("couldn't find userId in metadata", {
-        customer: (customer as unknown) as JsonObjectEncodable,
+        customer: customer as unknown as JsonObjectEncodable,
       });
     }
 

@@ -12,7 +12,7 @@ import {
   getClient as getApiClient,
   getUser as getUserApi,
 } from "../../../../src/lib/apiClient/apiClient";
-import { fromEither } from "../../../../src/lib/iots";
+import { fromEither } from "@diogovasconcelos/lib";
 import { retryUntil } from "../../../lib/retry";
 import { addDays } from "../../../../src/lib/date";
 import { getSubscriptionConfig } from "../../../../src/domain/models/subscriptionConfig";
@@ -26,7 +26,7 @@ describe("Trial cancellation and re-activation", () => {
   let userToken: string;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
     testUser = await createTestUser();
 
     userToken = await getIdToken({

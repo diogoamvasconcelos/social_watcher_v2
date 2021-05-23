@@ -5,7 +5,7 @@ import {
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode } from "../../lib/iots";
+import { decode } from "@diogovasconcelos/lib";
 import { map } from "fp-ts/lib/Either";
 
 export const getClient = getDynamodbClient;

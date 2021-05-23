@@ -1,7 +1,7 @@
 import { isLeft } from "fp-ts/lib/Either";
-import { getClient, messageToChannel } from "../../src/lib/discord";
+import { getClient, messageToChannel } from "../../src/lib/discord/client";
 import { getLogger } from "../../src/lib/logger";
-import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonEncodable } from "@diogovasconcelos/lib";
 
 const logger = getLogger();
 
@@ -29,7 +29,7 @@ const sendMessage = async () => {
     return;
   }
 
-  logger.info("success", { res: (res.right as unknown) as JsonEncodable });
+  logger.info("success", { res: res.right as unknown as JsonEncodable });
 };
 
 export const main = async () => {

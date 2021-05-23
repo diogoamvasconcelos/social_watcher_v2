@@ -1,16 +1,9 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, left, right } from "fp-ts/lib/Either";
-import * as t from "io-ts";
 import Stripe from "stripe";
 import { Logger } from "../logger";
-import { JsonObjectEncodable } from "../models/jsonEncodable";
-
-export const stripeCredentialsCodec = t.type({
-  pk: t.string,
-  sk: t.string,
-  webhookSecret: t.string,
-});
-export type StripeCredentials = t.TypeOf<typeof stripeCredentialsCodec>;
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
+import { StripeCredentials } from "./models";
 
 export const getClient = (credentials: StripeCredentials) => {
   return new Stripe(credentials.sk, {
@@ -153,7 +146,7 @@ export const getCustomerById = async (
     const res = await client.customers.retrieve(customerId);
     if (res.deleted) {
       logger.error("stripe::customers.retrieve retrieved a deleted user", {
-        res: (res as unknown) as JsonObjectEncodable,
+        res: res as unknown as JsonObjectEncodable,
       });
       return left("ERROR");
     }

@@ -1,4 +1,4 @@
-import { fromEither, newPositiveInteger } from "../../src/lib/iots";
+import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib";
 import { getLogger } from "../../src/lib/logger";
 import {
   attachPaymentMethod,
@@ -16,7 +16,7 @@ import {
   deleteUser,
   getPaymentData,
 } from "../environment/acceptance/steps";
-import { JsonObjectEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 const logger = getLogger();
 
@@ -104,7 +104,7 @@ export const getCustomer = async () => {
   );
 
   logger.info("customer get", {
-    customer: (customer as unknown) as JsonObjectEncodable,
+    customer: customer as unknown as JsonObjectEncodable,
   });
 
   /*
@@ -143,4 +143,4 @@ export const main = async () => {
   await getCustomer();
 };
 
-//void main();
+void main();

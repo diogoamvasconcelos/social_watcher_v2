@@ -1,6 +1,6 @@
 import { Either } from "fp-ts/lib/Either";
 import { User } from "../../../domain/models/user";
-import { JsonObjectEncodable } from "../../../lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 export type ApiRequestMetadata = {
   authData: Pick<User, "id" | "email">;
@@ -15,18 +15,16 @@ type ApiResponseMetadata = {
   statusCode: number;
 };
 
-export type ApiSuccessResponse<
-  B extends JsonObjectEncodable
-> = ApiResponseMetadata & {
-  body?: B;
-};
+export type ApiSuccessResponse<B extends JsonObjectEncodable> =
+  ApiResponseMetadata & {
+    body?: B;
+  };
 
-export type ApiErrorResponse<
-  T extends string = ApiBaseErrorCode
-> = ApiResponseMetadata & {
-  errorCode: T;
-  errorMessage: string;
-};
+export type ApiErrorResponse<T extends string = ApiBaseErrorCode> =
+  ApiResponseMetadata & {
+    errorCode: T;
+    errorMessage: string;
+  };
 
 export type ApiBaseErrorCode =
   | "INTERNAL_ERROR"

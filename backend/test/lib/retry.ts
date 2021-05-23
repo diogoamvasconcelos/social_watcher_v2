@@ -1,6 +1,6 @@
 import { left, right } from "fp-ts/lib/Either";
 import { getLogger } from "../../src/lib/logger";
-import { JsonObjectEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 const logger = getLogger();
 
@@ -31,7 +31,7 @@ export const retryUntil = async <T>(
   }
 
   logger.error("retryUntil last failed result", {
-    res: (res as unknown) as JsonObjectEncodable,
+    res: res as unknown as JsonObjectEncodable,
   });
 
   return left("RETRY_UNTILL_MAX_RETRIES_REACHED");

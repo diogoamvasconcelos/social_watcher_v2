@@ -1,5 +1,5 @@
 import pino from "pino";
-import { JsonObjectEncodable } from "./models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 const options = {
   level: process.env.LOG_LEVEL ?? "info",

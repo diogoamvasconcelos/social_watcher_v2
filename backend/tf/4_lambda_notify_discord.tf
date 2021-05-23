@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "notify_discord" {
   filename         = local.lambda_file
   function_name    = local.notify_discord_lambda_name
-  handler          = ".build/backend/src/handlers/notifications/notifyDiscord.lambdaHandler"
+  handler          = ".build/src/handlers/notifications/notifyDiscord.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

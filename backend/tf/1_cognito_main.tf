@@ -52,8 +52,8 @@ resource "aws_cognito_user_pool_client" "main_pool_client" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["openid", "email", "aws.cognito.signin.user.admin", "profile"]
-  callback_urls                        = ["https://thesocialwatcher.com", "http://localhost:1234", "https://d2r5id69pzx1ip.cloudfront.net"]
-  logout_urls                          = ["https://thesocialwatcher.com", "http://localhost:1234", "https://d2r5id69pzx1ip.cloudfront.net"]
+  callback_urls                        = ["https://thesocialwatcher.com", "http://localhost:8080", "https://d2r5id69pzx1ip.cloudfront.net"]
+  logout_urls                          = ["https://thesocialwatcher.com", "http://localhost:8080", "https://d2r5id69pzx1ip.cloudfront.net"]
 }
 
 resource "aws_cognito_user_pool_domain" "main_pool" {

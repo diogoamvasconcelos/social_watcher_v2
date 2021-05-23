@@ -1,5 +1,12 @@
 import * as t from "io-ts";
-import { optionalNull } from "../iots";
+import { optionalNull } from "@diogovasconcelos/lib";
+
+export const stripeCredentialsCodec = t.type({
+  pk: t.string,
+  sk: t.string,
+  webhookSecret: t.string,
+});
+export type StripeCredentials = t.TypeOf<typeof stripeCredentialsCodec>;
 
 // ref: https://stripe.com/docs/api/subscriptions/update
 export const customerSubscriptionEventDataCodec = t.type({

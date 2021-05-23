@@ -16,9 +16,9 @@ describe("handlers/api/stripeWebhook", () => {
       .spyOn(stripeClient, "verifyWebhookEvent")
       .mockReturnValueOnce(right(JSON.parse(eventBody)));
 
-    const event: APIGatewayProxyEvent = ({
+    const event: APIGatewayProxyEvent = {
       body: eventBody,
-    } as unknown) as APIGatewayProxyEvent;
+    } as unknown as APIGatewayProxyEvent;
 
     const response = await handler(event);
     expect(isLeft(response)).toBeTruthy();

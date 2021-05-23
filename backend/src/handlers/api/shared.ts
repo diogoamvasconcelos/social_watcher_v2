@@ -10,8 +10,8 @@ import {
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
 } from "./responses";
-import { parseSafe } from "../../lib/json";
-import { decode } from "../../lib/iots";
+import { parseSafe } from "@diogovasconcelos/lib";
+import { decode } from "@diogovasconcelos/lib";
 
 export const apiGetUser = async ({
   logger,

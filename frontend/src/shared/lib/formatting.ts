@@ -1,4 +1,4 @@
-import { DateISOString } from "../../../../backend/src/lib/iots";
+import { DateISOString } from "@diogovasconcelos/lib";
 
 export const toLocalTimestamp = (
   timestamp: DateISOString,

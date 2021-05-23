@@ -11,7 +11,7 @@ common:
   S3_BUCKET_NAME: fe-page
 
 local:
-  APP_URL: "http://localhost:1234"
+  APP_URL: "http://localhost:8080"
 
 dev:
   APP_URL: "https://d2r5id69pzx1ip.cloudfront.net"

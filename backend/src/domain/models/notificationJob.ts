@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { discordCredentialsCodec } from "../../lib/discord";
+import { discordCredentialsCodec } from "../../lib/discord/models";
 import { searchResultCodec } from "./searchResult";
 
 const notificationConfigBaseCodec = t.type({

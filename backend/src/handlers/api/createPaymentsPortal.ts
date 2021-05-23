@@ -37,9 +37,8 @@ const handler = async (
     userStoreClient,
     config.usersTableName
   );
-  const createPaymentsPortalSessionFn = makeCreatePaymentsPortalSession(
-    paymentsClient
-  );
+  const createPaymentsPortalSessionFn =
+    makeCreatePaymentsPortalSession(paymentsClient);
 
   const requestEither = toRequestWithUserData(
     logger,

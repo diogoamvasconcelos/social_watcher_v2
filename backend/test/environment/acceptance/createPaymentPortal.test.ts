@@ -5,7 +5,7 @@ import {
   createPaymentsPortal,
 } from "../../../src/lib/apiClient/apiClient";
 import { getEnvTestConfig } from "../../lib/config";
-import { fromEither } from "../../../src/lib/iots";
+import { fromEither } from "@diogovasconcelos/lib";
 import logger from "../../../src/lib/logger";
 
 const config = getEnvTestConfig();
@@ -33,7 +33,7 @@ describe("e2e/createPaymentPortal", () => {
     const res = fromEither(
       await createPaymentsPortal(
         { client: apiClient, token: userToken },
-        { userData: { returnUrl: "http://localhost.com/1234/account" } }
+        { userData: { returnUrl: "http://localhost.com/8080/account" } }
       )
     );
 

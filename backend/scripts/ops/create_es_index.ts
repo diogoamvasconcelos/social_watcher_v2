@@ -9,7 +9,7 @@ import {
 } from "../../src/adapters/searchResultsSearchEngine/client";
 import { getConfig } from "../../src/lib/config";
 import { getLogger } from "../../src/lib/logger";
-import { JsonEncodable } from "../../src/lib/models/jsonEncodable";
+import { JsonEncodable } from "@diogovasconcelos/lib";
 
 const config = getConfig();
 const logger = getLogger();
@@ -21,7 +21,7 @@ const main = async () => {
     config.searchResultIndexVersion
   );
   logger.info("createSearchResultIndex completed", {
-    res: (res as unknown) as JsonEncodable,
+    res: res as unknown as JsonEncodable,
   });
 };
 

@@ -2,7 +2,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "../../../src/lib/iots";
+} from "@diogovasconcelos/lib";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
@@ -30,7 +30,7 @@ describe("search endpoint e2e (nearly)", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

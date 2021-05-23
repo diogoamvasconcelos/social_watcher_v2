@@ -1,12 +1,17 @@
 import { right } from "fp-ts/lib/Either";
-import { fromEither, newLowerCase, newPositiveInteger } from "../../lib/iots";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
 import { SearchObject } from "../models/userItem";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
 import { isKeywordAllowed } from "./isKeywordAllowed";
 
 const logger = getLogger();
-const getSearchObjectsForUserFnMocked = jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
+const getSearchObjectsForUserFnMocked =
+  jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
 
 describe("controllers/isKeywordAllowed", () => {
   beforeEach(() => {

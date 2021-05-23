@@ -1,13 +1,17 @@
 {
-  "extends": "../shared/tsconfig.build.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react",
-    "noEmit": true,
     "outDir": ".build",
-    "rootDir": "../",
+    "rootDir": ".",
+    "baseUrl": ".",
     "typeRoots": ["./node_modules/@types", "./typings"],
+    "paths": {
+      "@backend": ["../backend/src"],
+      "@backend/*": ["../backend/src/*"]
+    }
   },
-  "include": ["../shared/src", "./src", "./scripts/**/*.ts", "./test", "./typings", "./assets", "../backend/src"],
-  "exclude": ["**/node_modules", "build/*", "**/.*/", "tmp/**", "../backend"]
+  "include": ["./src", "./scripts/**/*.ts", "./test", "./typings", "./assets"],
+  "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**", "../backend"],
+  "references": [{ "path": "../backend" }]
 }
-  

@@ -1,11 +1,9 @@
-import {
-  getClient as getStripeClient,
-  stripeCredentialsCodec,
-} from "../../lib/stripe/client";
+import { getClient as getStripeClient } from "../../lib/stripe/client";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { decode } from "../../lib/iots";
+import { decode } from "@diogovasconcelos/lib";
 import { isLeft } from "fp-ts/lib/Either";
 import { Logger } from "../../lib/logger";
+import { stripeCredentialsCodec } from "../../lib/stripe/models";
 
 // This for some reason doesn't work, so use direclty the client from the lib:
 // `TypeError: client_2.getClient is not a function`

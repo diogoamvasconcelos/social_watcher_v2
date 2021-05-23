@@ -1,12 +1,7 @@
 import Discord from "discord.js";
 import { Either, left, right } from "fp-ts/lib/Either";
-import * as t from "io-ts";
-import { Logger } from "./logger";
-
-export const discordCredentialsCodec = t.type({
-  token: t.string,
-});
-export type DiscordCredentials = t.TypeOf<typeof discordCredentialsCodec>;
+import { Logger } from "../logger";
+import { DiscordCredentials } from "./models";
 
 export const getClient = async (
   logger: Logger,

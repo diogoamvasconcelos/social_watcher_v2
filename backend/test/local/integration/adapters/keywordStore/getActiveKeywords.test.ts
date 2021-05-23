@@ -3,7 +3,7 @@ import { makeGetActiveKeywords } from "../../../../../src/adapters/keywordStore/
 import { KeywordData } from "../../../../../src/domain/models/keyword";
 import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
 import { putItem } from "../../../../../src/lib/dynamoDb";
-import { fromEither, newLowerCase } from "../../../../../src/lib/iots";
+import { fromEither, newLowerCase } from "@diogovasconcelos/lib";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
