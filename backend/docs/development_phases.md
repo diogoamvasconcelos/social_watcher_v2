@@ -141,8 +141,12 @@
 # Phase 8 - consolidation and more features
 
 - fix code sharing
-  - use yarn-link for @shared/lib
-    - create a private npm package instead - @diogovasconcelos/lib
-  - share APIClient and types with frontend
+  - use yarn-link for @shared/lib <DONE>
+    - create a private npm package instead - @diogovasconcelos/lib <DONE>
+  - share APIClient and types with frontend <DONE>
 - add reddit search
+  - oauth guide: https://github.com/reddit-archive/reddit/wiki/OAuth2
+    - better: https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example
+  - search endpoint: https://www.reddit.com/dev/api/#GET_search
+  - add over_18 filter: https://www.reddit.com/r/redditdev/comments/8ow901/the_search_api_endpoint_ignores_the_include_over/
 - add slack notifier

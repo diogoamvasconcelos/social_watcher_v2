@@ -14,3 +14,4 @@
   - no credit card required (huge)
 - smoke tests that search social media
   - bot posts twit with uuid and then we search for it
+- create official ms teams bot: https://support.atlassian.com/opsgenie/docs/integrate-opsgenie-with-microsoft-teams/ (that can be downloaded and sideloaded)

@@ -143,4 +143,4 @@ export const main = async () => {
   await getCustomer();
 };
 
-void main();
+//void main();

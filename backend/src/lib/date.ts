@@ -5,6 +5,9 @@ export const getNow = () => newDateISOString(new Date().toISOString());
 export const getMinutesAgo = (minutes: number = 0) =>
   newDateISOString(new Date(Date.now() - minutes * 60 * 1000).toISOString());
 
+export const getSecondsAfter = (seconds: number = 0) =>
+  newDateISOString(new Date(Date.now() + seconds * 1000).toISOString());
+
 export const toUnixTimstamp = (date: Date) => Math.round(date.getTime() / 1000);
 
 export const fromUnix = (unixTimestamp: number) =>
