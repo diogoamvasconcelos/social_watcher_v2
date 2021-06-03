@@ -1,7 +1,10 @@
-import _ from "lodash";
 import { PartialDeep } from "type-fest";
-import { SearchResult } from "../../src/domain/models/searchResult";
-import { getNow } from "../../src/lib/date";
+import {
+  RedditSearchResult,
+  SearchResult,
+  TwitterSearchResult,
+} from "../../src/domain/models/searchResult";
+import { getNow, toUnixTimstamp } from "../../src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase } from "@diogovasconcelos/lib";
 import { JsonEncodable } from "@diogovasconcelos/lib";
@@ -40,8 +43,21 @@ export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {
 export const buildSearchResult = (
   partial?: PartialDeep<SearchResult>
 ): SearchResult => {
+  switch (partial?.socialMedia) {
+    case undefined: // default
+    case "twitter":
+      return buildTwitterSearchResult({ ...partial, socialMedia: "twitter" });
+    case "reddit":
+      return buildRedditSearchResult(partial);
+  }
+};
+
+export const buildTwitterSearchResult = (
+  partial?: PartialDeep<TwitterSearchResult>
+): TwitterSearchResult => {
   const now = getNow();
   const id = uuid();
+
   return deepmergeSafe(
     {
       id,
@@ -61,14 +77,34 @@ export const buildSearchResult = (
     partial ?? {}
   );
 };
+export const buildRedditSearchResult = (
+  partial?: PartialDeep<RedditSearchResult>
+): RedditSearchResult => {
+  const now = getNow();
+  const id = uuid();
 
-export const buildSearchResultsEvent = (
-  nofResults: number = 2,
-  partialSearchResult: PartialDeep<SearchResult> = {}
-) => {
-  const searchResults: SearchResult[] = _.range(nofResults).map((_) =>
-    buildSearchResult(partialSearchResult)
+  return deepmergeSafe(
+    {
+      id,
+      keyword: newLowerCase(uuid()),
+      socialMedia: "reddit",
+      happenedAt: now,
+      link: "some-link",
+      data: {
+        id,
+        author: "author",
+        selftext: "some-text",
+        title: "some-title",
+        permalink: "link",
+        created_utc: toUnixTimstamp(new Date()),
+        num_comments: 0,
+        num_crossposts: 0,
+        ups: 0,
+        subreddit: "some-subreddit",
+        subreddit_subscribers: 0,
+        over_18: false as boolean,
+      },
+    },
+    partial ?? {}
   );
-
-  return buildSQSEvent(searchResults);
 };

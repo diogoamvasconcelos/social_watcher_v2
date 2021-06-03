@@ -44,6 +44,10 @@ const defaultRequestData: SearchObjectUserData = {
     twitter: {
       enabledStatus: "ENABLED",
     },
+    reddit: {
+      enabledStatus: "DISABLED",
+      over18: false,
+    },
   },
 };
 

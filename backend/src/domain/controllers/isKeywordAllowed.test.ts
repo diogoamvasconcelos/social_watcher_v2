@@ -26,7 +26,10 @@ describe("controllers/isKeywordAllowed", () => {
     index: newPositiveInteger(0),
     lockedStatus: "UNLOCKED",
     keyword,
-    searchData: { twitter: { enabledStatus: "ENABLED" } },
+    searchData: {
+      twitter: { enabledStatus: "ENABLED" },
+      reddit: { enabledStatus: "DISABLED", over18: false },
+    },
   };
 
   const testCases: [string, SearchObject[], boolean][] = [

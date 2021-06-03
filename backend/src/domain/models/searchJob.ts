@@ -14,5 +14,16 @@ export const twitterSearchJobCodec = t.intersection([
 ]);
 export type TwitterSearchJob = t.TypeOf<typeof twitterSearchJobCodec>;
 
-export const searchJobCodec = twitterSearchJobCodec; // t.intersection([twitterSearchJobCodec]);
+export const redditSearchJobCodec = t.intersection([
+  searchJobBaseCodec,
+  t.type({
+    socialMedia: t.literal("reddit"),
+  }),
+]);
+export type RedditSearchJob = t.TypeOf<typeof redditSearchJobCodec>;
+
+export const searchJobCodec = t.union([
+  twitterSearchJobCodec,
+  redditSearchJobCodec,
+]);
 export type SearchJob = t.TypeOf<typeof searchJobCodec>;

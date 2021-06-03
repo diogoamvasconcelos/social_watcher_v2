@@ -44,7 +44,6 @@ import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
-import { buildSearchResult } from "../../lib/builders";
 import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
 import {
   attachPaymentMethod,
@@ -59,6 +58,7 @@ import { getClient as getSsmClient } from "../../../src/lib/ssm";
 import { getClientCredentials as getPaymentsCredentials } from "../../../src/adapters/paymentsManager/client";
 import { makeGetPaymentData } from "../../../src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
+import { buildSearchResult } from "../../lib/builders";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -250,11 +250,13 @@ export const updateKeyword = async ({
   keyword,
   index,
   twitterStatus,
+  redditStatus,
 }: {
   token: string;
   keyword: string;
   index: number;
   twitterStatus: SocialMediaSearchData["enabledStatus"];
+  redditStatus?: SocialMediaSearchData["enabledStatus"];
 }) => {
   return fromEither(
     await updateSearchObject(
@@ -268,6 +270,10 @@ export const updateKeyword = async ({
           keyword: newLowerCase(keyword),
           searchData: {
             twitter: { enabledStatus: twitterStatus },
+            reddit: {
+              enabledStatus: redditStatus ?? "DISABLED",
+              over18: false,
+            },
           },
         },
       }

@@ -16,7 +16,10 @@ import {
 } from "@diogovasconcelos/lib";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
-import { buildSearchResult } from "../../../../lib/builders";
+import {
+  buildRedditSearchResult,
+  buildTwitterSearchResult,
+} from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
 import { sortSearchResults } from "../../../../lib/sort";
 
@@ -46,8 +49,8 @@ describe("indexSearchResults", () => {
   it("can index searchResults", async () => {
     const keyword = newLowerCase(uuid());
     const searchResults: SearchResult[] = [
-      buildSearchResult({ keyword }),
-      buildSearchResult({ keyword }),
+      buildTwitterSearchResult({ keyword }),
+      buildRedditSearchResult({ keyword }),
     ];
 
     const indexResult = fromEither(

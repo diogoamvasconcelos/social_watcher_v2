@@ -2,7 +2,8 @@
 import { getNow } from "../date";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { fromEither } from "@diogovasconcelos/lib";
-import { Client, searchRecent, SearchRecentResponse } from "./client";
+import { Client, searchRecent } from "./client";
+import { SearchRecentResponse, SearchRecentResponseItem } from "./models";
 
 describe("twitter", () => {
   const twitterClient = { request: jest.fn() } as unknown as Client;
@@ -44,7 +45,7 @@ const makeTwitterResponse = ({
   partialData,
   partialMeta,
 }: {
-  partialData?: Partial<SearchRecentResponse["data"][0]>;
+  partialData?: Partial<SearchRecentResponseItem>;
   partialMeta?: Partial<SearchRecentResponse["meta"]>;
 } = {}) => {
   return {

@@ -7,6 +7,7 @@ import * as t from "io-ts";
 import _ from "lodash";
 import { decode } from "@diogovasconcelos/lib";
 import { map } from "fp-ts/lib/Either";
+import { throwUnexpectedCase } from "../../lib/runtime";
 
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
@@ -41,7 +42,15 @@ export const searchResultToDocument = (
 export const documentToSearchResult = (
   docItem: SearchResultDocument
 ): SearchResult => {
-  return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+  // not sure why, but need to do this to fix the typing
+  switch (docItem.socialMedia) {
+    case "twitter":
+      return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+    case "reddit":
+      return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+    default:
+      return throwUnexpectedCase(docItem, "documentToSearchResult");
+  }
 };
 
 export const unknownToSearchResult = (item: unknown) => {

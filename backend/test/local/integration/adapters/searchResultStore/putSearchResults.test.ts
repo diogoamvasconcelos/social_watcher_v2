@@ -4,7 +4,10 @@ import { scanItems } from "../../../../../src/lib/dynamoDb";
 import { fromEither } from "@diogovasconcelos/lib";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
-import { buildSearchResult } from "../../../../lib/builders";
+import {
+  buildRedditSearchResult,
+  buildTwitterSearchResult,
+} from "../../../../lib/builders";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
 import { sortSearchResults } from "../../../../lib/sort";
 
@@ -22,7 +25,10 @@ describe("adapters/putSearchResults", () => {
   });
 
   it("converts and stores document correctly", async () => {
-    const searchResults = [buildSearchResult(), buildSearchResult()];
+    const searchResults = [
+      buildTwitterSearchResult(),
+      buildRedditSearchResult(),
+    ];
 
     fromEither(await putSearchResultsFn(logger, searchResults));
 

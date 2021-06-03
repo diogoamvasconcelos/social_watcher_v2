@@ -2,7 +2,10 @@ import { makeSearchSearchResults } from "../../../../src/adapters/searchResultsS
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib";
 import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
-import { buildSearchResultsEvent } from "../../../lib/builders";
+import {
+  buildRedditSearchResult,
+  buildTwitterSearchResult,
+} from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";
 import { retryUntil } from "../../../lib/retry";
@@ -23,7 +26,10 @@ describe("handlers/syncSearchResultsToEs", () => {
 
   it("syncs multiple search results to es", async () => {
     const keyword = newLowerCase(uuid());
-    const searchJobEvent = buildSearchResultsEvent(2, { keyword });
+    const searchJobEvent = [
+      buildTwitterSearchResult({ keyword }),
+      buildRedditSearchResult({ keyword }),
+    ];
 
     const invokeResult = fromEither(
       await invokeLambda(lambdaName, searchJobEvent)

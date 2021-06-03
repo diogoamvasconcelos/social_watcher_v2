@@ -43,7 +43,10 @@ describe("search endpoint e2e (nearly)", () => {
 
   it("can search for an allowed keyword", async () => {
     // add syntetic search result
-    const searchResult = await addSearchResultDirectly({ keyword });
+    const searchResult = await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+    });
 
     // add keyword to user
     const token = await getIdToken({

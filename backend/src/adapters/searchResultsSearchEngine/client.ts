@@ -14,6 +14,7 @@ import {
   searchResultCodec,
   searchResultMetadaCodec,
 } from "../../domain/models/searchResult";
+import { socialMediaCodec } from "../../domain/models/socialMedia";
 
 export const getClient = getElasticsearchClient;
 export type Client = ReturnType<typeof getClient>;
@@ -28,7 +29,7 @@ export const getSearchResultSchema = (version: PositiveInteger) =>
 export const searchResultEsDocumentCodec = t.intersection([
   searchResultMetadaCodec,
   t.type({
-    socialMedia: t.literal("twitter"),
+    socialMedia: socialMediaCodec,
     data: t.string,
   }),
 ]);

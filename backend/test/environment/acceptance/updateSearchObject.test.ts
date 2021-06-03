@@ -45,6 +45,7 @@ describe("update searchObject e2e test", () => {
       keyword,
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
+        reddit: { enabledStatus: "ENABLED", over18: false },
       },
     };
 

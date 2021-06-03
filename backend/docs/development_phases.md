@@ -145,8 +145,14 @@
     - create a private npm package instead - @diogovasconcelos/lib <DONE>
   - share APIClient and types with frontend <DONE>
 - add reddit search
+
   - oauth guide: https://github.com/reddit-archive/reddit/wiki/OAuth2
     - better: https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example
   - search endpoint: https://www.reddit.com/dev/api/#GET_search
   - add over_18 filter: https://www.reddit.com/r/redditdev/comments/8ow901/the_search_api_endpoint_ignores_the_include_over/
+
+  - add "add new social media" guide
+  - add version to database structs (eg: reddit:enabled status should be patched when reading from db)
+    - add a test where we store an old version, without reddit
+
 - add slack notifier

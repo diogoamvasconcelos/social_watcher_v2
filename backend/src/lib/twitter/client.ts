@@ -1,8 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import * as t from "io-ts";
-import { dateISOString, decode, optional } from "@diogovasconcelos/lib";
-import { TwitterCredentials } from "./models";
+import { decode } from "@diogovasconcelos/lib";
+import {
+  SearchRecentOptions,
+  SearchRecentResponse,
+  searchRecentResponseCodec,
+  TwitterCredentials,
+} from "./models";
 import { getMinutesAgo } from "../date";
 
 export const getClient = (credentials: TwitterCredentials) => {
@@ -16,31 +20,6 @@ export const getClient = (credentials: TwitterCredentials) => {
   });
 };
 export type Client = ReturnType<typeof getClient>;
-
-export const searchRecentResponseDataCodec = t.type({
-  id: t.string,
-  text: t.string,
-  created_at: dateISOString,
-  conversation_id: t.string,
-  author_id: t.string,
-  lang: t.string,
-});
-export const searchRecentResponseMetaCodec = t.type({
-  result_count: t.number,
-  newest_id: optional(t.string),
-  oldest_id: optional(t.string),
-  next_token: optional(t.string),
-});
-export const searchRecentResponseCodec = t.type({
-  data: t.array(searchRecentResponseDataCodec),
-  meta: searchRecentResponseMetaCodec,
-});
-export type SearchRecentResponse = t.TypeOf<typeof searchRecentResponseCodec>;
-
-export type SearchRecentOptions = {
-  maxResults: number;
-  minutesAgo: number;
-};
 
 // https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
 export const searchRecent = async (

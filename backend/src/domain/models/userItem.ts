@@ -32,19 +32,26 @@ export type PaymentData = t.TypeOf<typeof paymentDataCodec>;
 // +++++++++++++++++
 // + SEARCH OBJECT +
 // +++++++++++++++++
-export const socialMediaSearchData = t.type({
+export const socialMediaSearchDataCodec = t.type({
   enabledStatus: t.union([t.literal("DISABLED"), t.literal("ENABLED")]),
 });
-export type SocialMediaSearchData = t.TypeOf<typeof socialMediaSearchData>;
+export type SocialMediaSearchData = t.TypeOf<typeof socialMediaSearchDataCodec>;
 
-export const twitterSearchData = socialMediaSearchData;
+export const twitterSearchDataCodec = socialMediaSearchDataCodec;
+export const redditSearchDataCodec = t.intersection([
+  socialMediaSearchDataCodec,
+  t.type({
+    over18: t.boolean,
+  }),
+]);
 
 export const searchObjectUserDataCodec = t.exact(
   t.intersection([
     t.type({
       keyword: keywordCodec,
       searchData: t.type({
-        twitter: twitterSearchData,
+        twitter: twitterSearchDataCodec,
+        reddit: redditSearchDataCodec,
       }),
     }),
     t.partial({
