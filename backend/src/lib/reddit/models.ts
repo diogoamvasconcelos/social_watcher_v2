@@ -28,13 +28,19 @@ export type SearchListingItem = t.TypeOf<typeof searchListingItemCodec>;
 
 export const searchListingCodec = t.type({
   kind: t.literal("Listing"),
-  data: t.type({
-    dist: t.number,
-    children: t.array(
-      t.type({
-        data: searchListingItemCodec,
-      })
-    ),
-  }),
+  data: t.intersection([
+    t.type({
+      dist: t.number,
+      children: t.array(
+        t.type({
+          data: searchListingItemCodec,
+        })
+      ),
+    }),
+    t.partial({
+      before: t.string,
+      after: t.string,
+    }),
+  ]),
 });
 export type SearchListing = t.TypeOf<typeof searchListingCodec>;

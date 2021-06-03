@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { getNow } from "../date";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { fromEither } from "@diogovasconcelos/lib";
 import { Client, searchRecent } from "./client";
 import { SearchRecentResponse, SearchRecentResponseItem } from "./models";
+import { PartialDeep } from "type-fest";
+import { buildTwitterSearchResult } from "../../../test/lib/builders";
 
 describe("twitter", () => {
   const twitterClient = { request: jest.fn() } as unknown as Client;
@@ -20,6 +20,7 @@ describe("twitter", () => {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (twitterClient.request as jest.MockedFunction<any>)
       .mockResolvedValueOnce({
         status: 200,
@@ -45,23 +46,11 @@ const makeTwitterResponse = ({
   partialData,
   partialMeta,
 }: {
-  partialData?: Partial<SearchRecentResponseItem>;
-  partialMeta?: Partial<SearchRecentResponse["meta"]>;
-} = {}) => {
+  partialData?: PartialDeep<SearchRecentResponseItem>;
+  partialMeta?: PartialDeep<SearchRecentResponse["meta"]>;
+} = {}): SearchRecentResponse => {
   return {
-    data: [
-      deepmergeSafe(
-        {
-          id: "some-id",
-          text: "some-text",
-          created_at: getNow(),
-          conversation_id: "conversation#0",
-          author_id: "author#0",
-          lang: "en",
-        },
-        partialData ?? {}
-      ),
-    ],
+    data: [deepmergeSafe(buildTwitterSearchResult().data, partialData ?? {})],
     meta: deepmergeSafe(
       {
         result_count: 1,

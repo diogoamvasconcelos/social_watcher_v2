@@ -25,7 +25,7 @@ const searchReddit = async () => {
 
   const client = getClient(credentials);
   const result = fromEither(await searchAll({ client, logger }, "pureref"));
-  console.log(result.data.children);
+  console.log(result);
 };
 
 export const main = async () => {

@@ -1,5 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { RedditCredentials, SearchListing, searchListingCodec } from "./models";
+import {
+  RedditCredentials,
+  SearchListing,
+  searchListingCodec,
+  SearchListingItem,
+} from "./models";
 import { Logger } from "../logger";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { DefaultOkReturn } from "src/domain/ports/shared";
@@ -138,18 +143,37 @@ export const searchAll = async (
   { client, logger }: RedditDependencies,
   keyword: string,
   params?: Partial<SearchParams>
-): Promise<ReturnType<typeof handleSearchResponse>> => {
-  const request: AxiosRequestConfig = {
-    baseURL: "https://www.reddit.com/search.json",
-    method: "GET",
-    params: {
-      ...deepmergeSafe(defaultSearchRequestParams, params ?? {}),
-      q: keyword,
-    },
-  };
+): Promise<Either<"ERROR", SearchListingItem[]>> => {
+  let results: SearchListingItem[] = [];
+  let after: string | undefined = undefined;
 
-  const response = await doRequest(client, request);
-  return handleSearchResponse(logger, response);
+  const mergedParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
+
+  do {
+    const request: AxiosRequestConfig = {
+      baseURL: "https://www.reddit.com/search.json",
+      method: "GET",
+      params: {
+        ...mergedParams,
+        limit: Math.min(mergedParams.limit, 100),
+        q: keyword,
+      },
+    };
+
+    const responseRaw = await doRequest(client, request);
+    const responseEither = handleSearchResponse(logger, responseRaw);
+    if (isLeft(responseEither)) {
+      return responseEither;
+    }
+
+    after = responseEither.right.data.after;
+    results = [
+      ...results,
+      ...responseEither.right.data.children.map((children) => children.data),
+    ];
+  } while (after != undefined && results.length < mergedParams.limit);
+
+  return right(results);
 };
 
 const handleSearchResponse = (
