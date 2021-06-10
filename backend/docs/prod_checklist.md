@@ -21,3 +21,8 @@
 - enablw XRAY and use it on all lambdas and such
   - wrap sqs, dynamodb, es, etc clients with xray instrumentation
     - add segments and such
+- Monitoring:
+  - cloudwatch dashboards
+  - cloudwatch alarms
+    - sns send alerts
+  - ref: https://aws.amazon.com/blogs/aws/new-use-cloudwatch-synthetics-to-monitor-sites-api-endpoints-web-workflows-and-more/

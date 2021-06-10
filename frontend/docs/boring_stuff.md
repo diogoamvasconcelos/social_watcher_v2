@@ -10,3 +10,9 @@
   - https://stripe.com/en-se/privacy
 
 ## Cookies
+
+## SEO
+
+- tools:
+  - https://ahrefs.com/
+    - seems like a nice way to track the current inbounds refs

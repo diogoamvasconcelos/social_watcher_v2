@@ -4,6 +4,7 @@ import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
 import {
   buildRedditSearchResult,
+  buildSQSEvent,
   buildTwitterSearchResult,
 } from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
@@ -26,10 +27,10 @@ describe("handlers/syncSearchResultsToEs", () => {
 
   it("syncs multiple search results to es", async () => {
     const keyword = newLowerCase(uuid());
-    const searchJobEvent = [
+    const searchJobEvent = buildSQSEvent([
       buildTwitterSearchResult({ keyword }),
       buildRedditSearchResult({ keyword }),
-    ];
+    ]);
 
     const invokeResult = fromEither(
       await invokeLambda(lambdaName, searchJobEvent)
