@@ -2,7 +2,11 @@ import { DynamoDBStreamEvent } from "aws-lambda";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { makeGetKeywordData } from "../../adapters/keywordStore/getKeywordData";
 import { unknownToUserItem } from "../../adapters/userStore/client";
-import { SearchObject, UserData, UserItem } from "../../domain/models/userItem";
+import {
+  SearchObjectDomain,
+  UserData,
+  UserItemDomain,
+} from "../../domain/models/userItem";
 import { fromEither } from "@diogovasconcelos/lib";
 import { getConfig } from "../../lib/config";
 import { getLogger, Logger } from "../../lib/logger";
@@ -22,7 +26,7 @@ import { eitherListToDefaultOk } from "../../domain/ports/shared";
 import { propagateUserDataChanged } from "../../domain/controllers/propagateUserDataChanged";
 import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearchObjectsForUser";
 import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 
 const config = getConfig();
@@ -135,12 +139,12 @@ export const handler = async (event: DynamoDBStreamEvent) => {
 
 export const lambdaHandler = defaultMiddlewareStack(handler);
 
-type UserItemRecordData<T extends UserItem> =
+type UserItemRecordData<T extends UserItemDomain> =
   | { eventName: "INSERT"; newItem: T }
   | { eventName: "MODIFY"; oldItem: T; newItem: T }
   | { eventName: "REMOVE"; oldItem: T };
 
-type HandleUserItem<T extends UserItem> = (
+type HandleUserItem<T extends UserItemDomain> = (
   deps: {
     logger: Logger;
     getKeywordDataFn: GetKeywordDataFn;
@@ -170,7 +174,7 @@ const handleUserData: HandleUserItem<UserData> = async (deps, recordData) => {
   return right("OK");
 };
 
-const handleSearchObject: HandleUserItem<SearchObject> = async (
+const handleSearchObject: HandleUserItem<SearchObjectDomain> = async (
   deps,
   recordData
 ) => {

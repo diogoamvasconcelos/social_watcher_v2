@@ -32,6 +32,11 @@ export type PaymentData = t.TypeOf<typeof paymentDataCodec>;
 // +++++++++++++++++
 // + SEARCH OBJECT +
 // +++++++++++++++++
+
+// - Io types and codecs are used at the interfaces, and are less restrictive
+//  - this allows for having different versions in the database/api
+// - Domain types ensure all fields of the latest version exists
+
 export const socialMediaSearchDataCodec = t.type({
   enabledStatus: t.union([t.literal("DISABLED"), t.literal("ENABLED")]),
 });
@@ -45,51 +50,109 @@ export const redditSearchDataCodec = t.intersection([
   }),
 ]);
 
-// TODO:
-// - use codec for partial model: api data, and database data (where IO happens and io-ts decode is required)
-// - make more strict domain model and a transfor function (no io-ts, pure TS type)
-
 const searchObjectSearchData = {
   twitter: twitterSearchDataCodec,
   reddit: redditSearchDataCodec,
 };
-
 const searchObjectNotificationData = {
   discordNotification: discordNotificationConfigCodec,
 };
 
-export const searchObjectUserDataCodec = t.exact(
+export const searchObjectUserDataIoCodec = t.exact(
   t.type({
     keyword: keywordCodec,
-    searchData: t.type(searchObjectSearchData),
+    searchData: t.partial(searchObjectSearchData),
     notificationData: t.partial(searchObjectNotificationData),
   })
 );
-export type SearchObjectUserData = t.TypeOf<typeof searchObjectUserDataCodec>;
+export type SearchObjectUserDataIo = t.TypeOf<
+  typeof searchObjectUserDataIoCodec
+>;
+// TODO: Try to make a fn to do this automatically
+export type SearchObjectUserDataDomain = Omit<
+  SearchObjectUserDataIo,
+  "searchData" | "notificationData"
+> & {
+  searchData: Required<SearchObjectUserDataIo["searchData"]>;
+  notificationData: Required<SearchObjectUserDataIo["notificationData"]>;
+};
+export const searchObjectUserDataIoToDomain = (
+  io: SearchObjectUserDataIo,
+  defaultData?: Omit<SearchObjectUserDataDomain, "keyword">
+): SearchObjectUserDataDomain => {
+  // adds defaults do Io
+  if (!defaultData) {
+    defaultData = {
+      searchData: {
+        twitter: { enabledStatus: "DISABLED" },
+        reddit: {
+          enabledStatus: "DISABLED",
+          over18: false,
+        },
+      },
+      notificationData: {
+        discordNotification: {
+          enabledStatus: "DISABLED",
+          channel: "",
+          bot: {
+            credentials: { token: "" },
+          },
+        },
+      },
+    };
+  }
+
+  return {
+    ...io,
+    searchData: {
+      twitter: io.searchData.twitter ?? defaultData.searchData.twitter,
+      reddit: io.searchData.reddit ?? defaultData.searchData.reddit,
+    },
+    notificationData: {
+      discordNotification:
+        io.notificationData.discordNotification ??
+        defaultData.notificationData.discordNotification,
+    },
+  };
+};
 
 export const searchObjectIndexCodec = t.union([
   NumberFromString.pipe(positiveInteger),
   positiveInteger,
 ]);
+const searchObjectBaseCodec = t.type({
+  type: t.literal("SEARCH_OBJECT"),
+  id: userIdCodec,
+  index: searchObjectIndexCodec,
+  lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+});
 
-export const searchObjectCodec = t.intersection([
-  t.type({
-    type: t.literal("SEARCH_OBJECT"),
-    id: userIdCodec,
-    index: searchObjectIndexCodec,
-    lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
-  }),
-  searchObjectUserDataCodec,
+export const searchObjectIoCodec = t.intersection([
+  searchObjectBaseCodec,
+  searchObjectUserDataIoCodec,
 ]);
-export type SearchObject = t.TypeOf<typeof searchObjectCodec>;
+export type SearchObjectIo = t.TypeOf<typeof searchObjectIoCodec>;
+export type SearchObjectDomain = t.TypeOf<typeof searchObjectBaseCodec> &
+  SearchObjectUserDataDomain;
+export const searchObjectIoToDomain = (
+  io: SearchObjectIo
+): SearchObjectDomain => {
+  return {
+    ...io,
+    ...searchObjectUserDataIoToDomain(io),
+  };
+};
 
 // +++++++++++++
 // + USER ITEM +
 // +++++++++++++
 
-export const userItemCodec = t.union([
+export const userItemIoCodec = t.union([
   userDataCodec,
-  searchObjectCodec,
+  searchObjectIoCodec,
   paymentDataCodec,
 ]);
-export type UserItem = t.TypeOf<typeof userItemCodec>;
+export type UserItemDomain =
+  | t.TypeOf<typeof userDataCodec>
+  | SearchObjectDomain
+  | t.TypeOf<typeof paymentDataCodec>;

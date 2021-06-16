@@ -3,7 +3,8 @@ import { UserId } from "../../models/user";
 import { SearchObjectDomain } from "../../models/userItem";
 import { CustomRightReturn } from "../shared";
 
-export type GetSearchObjectsForUserFn = (
+export type GetSearchObjectFn = (
   logger: Logger,
-  id: UserId
-) => CustomRightReturn<SearchObjectDomain[]>;
+  id: UserId,
+  index: SearchObjectDomain["index"]
+) => CustomRightReturn<SearchObjectDomain | "NOT_FOUND">;

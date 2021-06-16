@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
 import { decode } from "@diogovasconcelos/lib";
 import {
-  SearchObject,
-  SearchObjectUserData,
+  SearchObjectIo,
+  SearchObjectUserDataIo,
 } from "../../domain/models/userItem";
 import { getUserResponseCodec } from "../../handlers/api/models/getUser";
 import { updateSearchObjectResponseCodec } from "../../handlers/api/models/updateSearchObject";
@@ -100,8 +100,8 @@ export const getSearchObjects = createClientMethod(
 export const updateSearchObject = async (
   deps: ApiClientDeps,
   data: {
-    index: SearchObject["index"];
-    userData: SearchObjectUserData;
+    index: SearchObjectIo["index"];
+    userData: SearchObjectUserDataIo;
   }
 ) =>
   createClientMethod(

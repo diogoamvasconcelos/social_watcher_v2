@@ -16,8 +16,8 @@ const handler = async (event: SQSEvent) => {
       decode(discordNotificationJobCodec, JSON.parse(record.body))
     );
 
-    if (!discordNotificationJob.config.enabled) {
-      logger.info("Skipping as Discord notification is disabled");
+    if (discordNotificationJob.config.enabledStatus !== "ENABLED") {
+      logger.info("Skipping as Discord notification is not enabled");
       return;
     }
 

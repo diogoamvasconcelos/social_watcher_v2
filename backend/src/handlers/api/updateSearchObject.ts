@@ -17,7 +17,8 @@ import { apiGetUser, toApigwRequestMetadata } from "./shared";
 import { User } from "../../domain/models/user";
 import {
   searchObjectIndexCodec,
-  searchObjectUserDataCodec,
+  searchObjectUserDataIoCodec,
+  searchObjectUserDataIoToDomain,
 } from "../../domain/models/userItem";
 import { parseSafe } from "@diogovasconcelos/lib";
 import { decode } from "@diogovasconcelos/lib";
@@ -26,6 +27,7 @@ import {
   UpdateSearchObjectRequest,
   UpdateSearchObjectResponse,
 } from "./models/updateSearchObject";
+import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -38,6 +40,10 @@ export const handler = async (
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
   const putSearchObjectFn = makePutSearchObject(
+    userStoreClient,
+    config.usersTableName
+  );
+  const getSearchObjectFn = makeGetSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -68,8 +74,24 @@ export const handler = async (
     );
   }
 
+  const currentSearchObjectEither = await getSearchObjectFn(
+    logger,
+    user.id,
+    request.index
+  );
+  if (isLeft(currentSearchObjectEither)) {
+    return left(
+      makeInternalErrorResponse("Failed to get current SearchObject.")
+    );
+  }
+
+  const currentSearchObject =
+    currentSearchObjectEither.right !== "NOT_FOUND"
+      ? currentSearchObjectEither.right
+      : undefined;
+
   const putResultEither = await putSearchObjectFn(logger, {
-    ...request.data,
+    ...searchObjectUserDataIoToDomain(request.data, currentSearchObject),
     type: "SEARCH_OBJECT",
     id: user.id,
     index: request.index,
@@ -101,7 +123,7 @@ const toUpdateKeywordRequest = (
     );
   }
   const body = bodyEither.right;
-  const data = decode(searchObjectUserDataCodec, body);
+  const data = decode(searchObjectUserDataIoCodec, body);
   if (isLeft(data)) {
     logger.error("Failed to decode body.", { error: data.left });
     return left(makeRequestMalformedResponse("Request body is invalid."));

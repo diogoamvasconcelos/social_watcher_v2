@@ -5,9 +5,9 @@ import {
   newPositiveInteger,
 } from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
-import { SearchObject } from "../models/userItem";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
 import { isKeywordAllowed } from "./isKeywordAllowed";
+import { SearchObjectDomain } from "../models/userItem";
 
 const logger = getLogger();
 const getSearchObjectsForUserFnMocked =
@@ -20,7 +20,7 @@ describe("controllers/isKeywordAllowed", () => {
 
   const userId = "my-user-id";
   const keyword = newLowerCase("my-keyword");
-  const defaultSearchObject: SearchObject = {
+  const defaultSearchObject: SearchObjectDomain = {
     type: "SEARCH_OBJECT",
     id: userId,
     index: newPositiveInteger(0),
@@ -30,9 +30,20 @@ describe("controllers/isKeywordAllowed", () => {
       twitter: { enabledStatus: "ENABLED" },
       reddit: { enabledStatus: "DISABLED", over18: false },
     },
+    notificationData: {
+      discordNotification: {
+        enabledStatus: "ENABLED",
+        channel: "discord-channel",
+        bot: {
+          credentials: {
+            token: "discord-bot-token",
+          },
+        },
+      },
+    },
   };
 
-  const testCases: [string, SearchObject[], boolean][] = [
+  const testCases: [string, SearchObjectDomain[], boolean][] = [
     ["unlocked search object", [defaultSearchObject], true],
     [
       "locked search object",
@@ -61,7 +72,7 @@ describe("controllers/isKeywordAllowed", () => {
     "%p isKeyAllowed test",
     async (
       _title: string,
-      returnedSearchObjects: SearchObject[],
+      returnedSearchObjects: SearchObjectDomain[],
       expectsAllowed: boolean
     ) => {
       getSearchObjectsForUserFnMocked.mockResolvedValueOnce(

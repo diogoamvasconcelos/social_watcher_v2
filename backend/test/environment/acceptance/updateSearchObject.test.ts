@@ -1,5 +1,4 @@
 import { DiscordNotificationConfig } from "../../../src/domain/models/notificationJob";
-import { SearchObjectUserData } from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
   getSearchObjects,
@@ -14,6 +13,7 @@ import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import { SearchObjectUserDataIo } from "src/domain/models/userItem";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -41,12 +41,13 @@ describe("update searchObject e2e test", () => {
     });
 
     const index = newPositiveInteger(0);
-    const userData: SearchObjectUserData = {
+    const userData: SearchObjectUserDataIo = {
       keyword,
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
         reddit: { enabledStatus: "ENABLED", over18: false },
       },
+      notificationData: {},
     };
 
     const response = fromEither(
@@ -86,11 +87,12 @@ describe("update searchObject e2e test", () => {
       })
     );
     expect(
-      initialGetSearchObjectsResponse.items[0].discordNotification
+      initialGetSearchObjectsResponse.items[0].notificationData
+        .discordNotification
     ).toBeUndefined();
 
     const discordNotificationConfig: DiscordNotificationConfig = {
-      enabled: true,
+      enabledStatus: "ENABLED",
       channel: "a-channel",
       bot: { credentials: { token: "a-token" } },
     };
@@ -105,7 +107,9 @@ describe("update searchObject e2e test", () => {
           index,
           userData: {
             ...initialGetSearchObjectsResponse.items[0],
-            discordNotification: discordNotificationConfig,
+            notificationData: {
+              discordNotification: discordNotificationConfig,
+            },
           },
         }
       )

@@ -5,10 +5,11 @@ import { decode } from "@diogovasconcelos/lib";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
   PaymentData,
-  SearchObject,
+  SearchObjectDomain,
+  searchObjectIoToDomain,
   UserData,
-  UserItem,
-  userItemCodec,
+  UserItemDomain,
+  userItemIoCodec,
 } from "../../domain/models/userItem";
 import { throwUnexpectedCase } from "../../lib/runtime";
 
@@ -16,7 +17,7 @@ export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;
 
 export const userItemDocumentCodec = t.intersection([
-  userItemCodec,
+  userItemIoCodec,
   t.type({
     pk: t.string,
     sk: t.string,
@@ -28,7 +29,7 @@ export const userItemDocumentCodec = t.intersection([
 ]);
 export type UserItemDocument = t.TypeOf<typeof userItemDocumentCodec>;
 
-export const toUserItemDocumentKeys = (userItem: UserItem) => {
+export const toUserItemDocumentKeys = (userItem: UserItemDomain) => {
   switch (userItem.type) {
     case "USER_DATA":
       return toUserDataDocumentKeys(userItem);
@@ -46,13 +47,19 @@ export const toUserDataDocumentKeys = ({ id }: Pick<UserData, "id">) => ({
   sk: "data",
 });
 
+export const toSearchObjectDocumentPartitionKeys = ({
+  id,
+  index,
+}: Pick<SearchObjectDomain, "id" | "index">) => ({
+  pk: id,
+  sk: `keyword#${index}`,
+});
 export const toSearchObjectDocumentKeys = ({
   id,
   index,
   keyword,
-}: Pick<SearchObject, "id" | "index" | "keyword">) => ({
-  pk: id,
-  sk: `keyword#${index}`,
+}: Pick<SearchObjectDomain, "id" | "index" | "keyword">) => ({
+  ...toSearchObjectDocumentPartitionKeys({ id, index }),
   gsi1pk: keyword,
   gsi1sk: id,
 });
@@ -62,19 +69,25 @@ export const toPaymentDataDocumentKeys = ({ id }: Pick<PaymentData, "id">) => ({
   sk: "payment",
 });
 
-export const userItemToDocument = (domainItem: UserItem): UserItemDocument => {
+export const userItemToDocument = (
+  domainItem: UserItemDomain
+): UserItemDocument => {
   return {
     ...domainItem,
     ...toUserItemDocumentKeys(domainItem),
   };
 };
 
-export const documentToUserItem = (docItem: UserItemDocument): UserItem => {
+export const documentToUserItem = (
+  docItem: UserItemDocument
+): UserItemDomain => {
   switch (docItem.type) {
     case "USER_DATA":
       return _.omit(docItem, ["pk", "sk"]);
     case "SEARCH_OBJECT":
-      return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+      return searchObjectIoToDomain(
+        _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"])
+      );
     case "PAYMENT_DATA":
       return _.omit(docItem, ["pk", "sk"]);
     default:
@@ -84,13 +97,13 @@ export const documentToUserItem = (docItem: UserItemDocument): UserItem => {
 
 export const unknownToUserItem = (
   item: unknown
-): Either<string[], UserItem> => {
+): Either<string[], UserItemDomain> => {
   return map(documentToUserItem)(decode(userItemDocumentCodec, item));
 };
 
 export const unknownToSearchObject = (
   item: unknown
-): Either<string[], SearchObject> => {
+): Either<string[], SearchObjectDomain> => {
   const userItemEither = unknownToUserItem(item);
   if (isLeft(userItemEither)) {
     return userItemEither;

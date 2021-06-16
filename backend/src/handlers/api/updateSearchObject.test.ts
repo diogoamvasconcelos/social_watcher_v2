@@ -1,6 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
-import { SearchObjectUserData } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
 import {
   fromEither,
@@ -10,7 +9,9 @@ import {
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { SearchObjectUserDataIo } from "../../domain/models/userItem";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -28,6 +29,16 @@ const makePutSearchObjectMock = makePutSearchObject as jest.MockedFunction<
 const putSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
 makePutSearchObjectMock.mockReturnValue(putSearchObjectMock);
 
+jest.mock("../../adapters/userStore/getSearchObject", () => ({
+  ...jest.requireActual("../../adapters/userStore/getSearchObject"),
+  makeGetSearchObject: jest.fn(),
+}));
+const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<
+  typeof makeGetSearchObject
+>;
+const getSearchObjectMock = jest.fn();
+makeGetSearchObjectMock.mockReturnValue(getSearchObjectMock);
+
 const defaultUser: User = {
   id: "some-id",
   email: "some-email",
@@ -38,7 +49,7 @@ const defaultUser: User = {
   },
 };
 
-const defaultRequestData: SearchObjectUserData = {
+const defaultRequestData: SearchObjectUserDataIo = {
   keyword: newLowerCase("some_keyword"),
   searchData: {
     twitter: {
@@ -49,9 +60,20 @@ const defaultRequestData: SearchObjectUserData = {
       over18: false,
     },
   },
+  notificationData: {
+    discordNotification: {
+      enabledStatus: "ENABLED",
+      channel: "some-channel",
+      bot: {
+        credentials: {
+          token: "some-token",
+        },
+      },
+    },
+  },
 };
 
-const buildEvent = (user: User, requestData: SearchObjectUserData) => {
+const buildEvent = (user: User, requestData: SearchObjectUserDataIo) => {
   return {
     requestContext: {
       authorizer: {
@@ -71,11 +93,13 @@ const buildEvent = (user: User, requestData: SearchObjectUserData) => {
 describe("handlers/api/updateSearchObject", () => {
   beforeEach(() => {
     apiGetUserdMock.mockReset();
+    getSearchObjectMock.mockReset();
   });
 
   it("handles happy flow", async () => {
     const event = buildEvent(defaultUser, defaultRequestData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
+    getSearchObjectMock.mockResolvedValueOnce(right("NOT_FOUND"));
 
     const response = fromEither(
       await handler(event as unknown as APIGatewayProxyEvent)
@@ -93,6 +117,7 @@ describe("handlers/api/updateSearchObject", () => {
     const event = buildEvent(restrictedUser, defaultRequestData);
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));
+    getSearchObjectMock.mockResolvedValueOnce(right("NOT_FOUND"));
 
     const response = await handler(event as unknown as APIGatewayProxyEvent);
     expect(isLeft(response)).toBeTruthy();
@@ -106,8 +131,9 @@ describe("handlers/api/updateSearchObject", () => {
       ...defaultRequestData,
       id: "some-other-id",
       lockedStatus: "UNLOCKED",
-    } as SearchObjectUserData);
+    } as SearchObjectUserDataIo);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
+    getSearchObjectMock.mockResolvedValueOnce(right("NOT_FOUND"));
 
     fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
@@ -116,6 +142,49 @@ describe("handlers/api/updateSearchObject", () => {
       expect.objectContaining({
         ...defaultRequestData,
         id: defaultUser.id,
+      })
+    );
+  });
+
+  it("can handle requests with partial data", async () => {
+    const event = buildEvent(defaultUser, {
+      ...defaultRequestData,
+      notificationData: {},
+    } as SearchObjectUserDataIo);
+    apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
+
+    const existingSearchObjct = {
+      keyword: defaultRequestData.keyword,
+      searchData: {
+        twitter: {
+          enabledStatus: "DISABLED",
+        },
+        reddit: {
+          enabledStatus: "DISABLED",
+          over18: false,
+        },
+      },
+      notificationData: {
+        discordNotification: {
+          enabledStatus: "DISABLED",
+          channel: "existing-channel",
+          bot: {
+            credentials: {
+              token: "existing-token",
+            },
+          },
+        },
+      },
+    };
+    getSearchObjectMock.mockResolvedValueOnce(right(existingSearchObjct));
+
+    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
+
+    expect(putSearchObjectMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        ...defaultRequestData,
+        notificationData: existingSearchObjct.notificationData,
       })
     );
   });
