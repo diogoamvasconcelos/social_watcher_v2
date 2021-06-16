@@ -27,7 +27,10 @@ const createEmptySearchObject = (
   type: "SEARCH_OBJECT",
   lockedStatus: "UNLOCKED",
   keyword: newLowerCase("empty - add one"),
-  searchData: { twitter: { enabledStatus: "DISABLED" } },
+  searchData: {
+    twitter: { enabledStatus: "DISABLED" },
+    reddit: { enabledStatus: "DISABLED", over18: true },
+  },
 });
 
 const SearchObjectItemContainer = styled.div`
@@ -75,6 +78,20 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         deepmergeSafe(searchObject, {
           searchData: {
             twitter: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+          },
+        }),
+      ])
+    );
+  };
+
+  const handleRedditSwitchedChanged = (val: boolean) => {
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          searchData: {
+            // TODO: add over18
+            reddit: { enabledStatus: val ? "ENABLED" : "DISABLED" },
           },
         }),
       ])
@@ -154,6 +171,14 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           defaultChecked
           checked={searchObject.searchData.twitter.enabledStatus == "ENABLED"}
           onChange={handleTwitterSwitchedChanged}
+        />
+      </RowDiv>
+      <RowDiv>
+        <Text>reddit</Text>
+        <Switch
+          defaultChecked
+          checked={searchObject.searchData.reddit.enabledStatus == "ENABLED"}
+          onChange={handleRedditSwitchedChanged}
         />
       </RowDiv>
       <RowDiv>

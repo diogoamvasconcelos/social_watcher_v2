@@ -12,10 +12,13 @@ export const translateText = async (
   client: Client,
   request: TranslateTextRequest,
   logger: Logger
-): Promise<Either<"ERROR", string>> => {
+): Promise<Either<"ERROR", { text: string; lang: string }>> => {
   try {
     const result = await client.translateText(request).promise();
-    return right(result.TranslatedText);
+    return right({
+      text: result.TranslatedText,
+      lang: result.SourceLanguageCode,
+    });
   } catch (error) {
     logger.error("translateText failed", { error });
     return left("ERROR");

@@ -10,15 +10,19 @@ export const makeTranslateToEnglish = (
   client: Client
 ): TranslateToEnglishFn => {
   return async (logger, text, sourceLanguage) => {
+    if (
+      sourceLanguage === undefined ||
+      unsupportedLanguages.includes(sourceLanguage)
+    ) {
+      sourceLanguage = "auto";
+    }
+
     if (languageMap[sourceLanguage]) {
       sourceLanguage = languageMap[sourceLanguage];
     }
 
-    if (
-      sourceLanguage == "en" ||
-      unsupportedLanguages.includes(sourceLanguage)
-    ) {
-      return right(text);
+    if (sourceLanguage == "en") {
+      return right({ text, lang: sourceLanguage });
     }
 
     return await translateText(

@@ -45,19 +45,25 @@ export const redditSearchDataCodec = t.intersection([
   }),
 ]);
 
+// TODO:
+// - use codec for partial model: api data, and database data (where IO happens and io-ts decode is required)
+// - make more strict domain model and a transfor function (no io-ts, pure TS type)
+
+const searchObjectSearchData = {
+  twitter: twitterSearchDataCodec,
+  reddit: redditSearchDataCodec,
+};
+
+const searchObjectNotificationData = {
+  discordNotification: discordNotificationConfigCodec,
+};
+
 export const searchObjectUserDataCodec = t.exact(
-  t.intersection([
-    t.type({
-      keyword: keywordCodec,
-      searchData: t.type({
-        twitter: twitterSearchDataCodec,
-        reddit: redditSearchDataCodec,
-      }),
-    }),
-    t.partial({
-      discordNotification: discordNotificationConfigCodec,
-    }),
-  ])
+  t.type({
+    keyword: keywordCodec,
+    searchData: t.type(searchObjectSearchData),
+    notificationData: t.partial(searchObjectNotificationData),
+  })
 );
 export type SearchObjectUserData = t.TypeOf<typeof searchObjectUserDataCodec>;
 

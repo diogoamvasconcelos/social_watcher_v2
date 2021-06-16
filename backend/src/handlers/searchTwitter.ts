@@ -11,11 +11,12 @@ import {
 import { getClient as getSsmClient } from "../lib/ssm";
 import { getClient as getSearchResultStoreClient } from "../adapters/searchResultsStore/client";
 import { searchJobCodec } from "../domain/models/searchJob";
-import { translateTwitterSearchResults } from "../domain/controllers/translateTwitterSearchResults";
 import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
+import { translateSearchResults } from "src/domain/controllers/translateSearchResults";
+import { TwitterSearchResult } from "src/domain/models/searchResult";
 
 const config = getConfig();
 const logger = getLogger();
@@ -50,13 +51,14 @@ const handler = async (event: SQSEvent) => {
         throw new Error("Failed to search Twitter");
       }
       logger.debug(
-        `Found ${searchResults.right.length} twits for: ${decodeResult.right.keyword}`
+        `Found ${searchResults.right.length} tweets for: ${decodeResult.right.keyword}`
       );
 
-      const twitterSearchResults = await translateTwitterSearchResults(
-        { translateToEnglishFn, logger },
-        searchResults.right
-      );
+      const twitterSearchResults: TwitterSearchResult[] =
+        await translateSearchResults(
+          { translateToEnglishFn, logger },
+          searchResults.right
+        );
 
       const putResult = await putSearchResultFn(logger, twitterSearchResults);
       if (isLeft(putResult)) {

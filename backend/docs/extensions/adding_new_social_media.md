@@ -22,4 +22,8 @@
 ## Phase 2:
 
 - Allow the FE to enable this socialMedia on a keyword
--
+
+  - fix typings (run yarn check-all)
+
+- make sure userObject in dynamodb has optional the new socialMedia
+  - write tests for this:

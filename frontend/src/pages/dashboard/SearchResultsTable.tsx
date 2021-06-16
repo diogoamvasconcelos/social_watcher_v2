@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { newLowerCase } from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../shared/lib/formatting";
 import { Input, Select } from "antd";
+import { SearchResult } from "@backend/domain/models/searchResult";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -20,6 +21,17 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
     switch (socialMedia) {
       case "twitter":
         return "twitter post";
+      case "reddit":
+        return "reddit post";
+    }
+  };
+
+  const getTextFromSearchResult = (searchResult: SearchResult) => {
+    switch (searchResult.socialMedia) {
+      case "twitter":
+        return searchResult.data.text;
+      case "reddit":
+        return searchResult.data.selftext;
     }
   };
 
@@ -63,7 +75,7 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         ...result,
         socialMedia: toSocialMediaLabel(result.socialMedia),
         happenedAt: toLocalTimestamp(result.happenedAt),
-        text: result.data.text,
+        text: getTextFromSearchResult(result),
         lang: result.data.lang,
         translatedText: result.data.translatedText ?? "n/a",
       }))}
