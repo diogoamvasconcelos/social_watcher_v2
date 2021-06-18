@@ -17,7 +17,11 @@
 
   - TODO: extend this part to be more specific
 
+- add `<newSocialMedia>search_jobs` SQS queue to tf
+
 - deploy
+
+-
 
 ## Phase 2:
 

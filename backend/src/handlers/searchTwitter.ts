@@ -15,8 +15,8 @@ import { getClient as getTranslateClient } from "../lib/translate";
 import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
-import { translateSearchResults } from "src/domain/controllers/translateSearchResults";
-import { TwitterSearchResult } from "src/domain/models/searchResult";
+import { translateSearchResults } from "../domain/controllers/translateSearchResults";
+import { TwitterSearchResult } from "../domain/models/searchResult";
 
 const config = getConfig();
 const logger = getLogger();

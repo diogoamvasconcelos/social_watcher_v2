@@ -9,7 +9,7 @@ import { KeywordData } from "../domain/models/keyword";
 import { makeQueueSearchJobs } from "../adapters/searchJobsQueue/queueSearchJobs";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
-import { eitherListToDefaultOk } from "src/domain/ports/shared";
+import { eitherListToDefaultOk } from "../domain/ports/shared";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();

@@ -13,7 +13,7 @@ import {
   GetSearchObjectsResponse,
 } from "./models/getSearchObjects";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { SearchObjectDomain } from "src/domain/models/userItem";
+import { SearchObjectDomain } from "../../domain/models/userItem";
 
 const handler = async (
   event: APIGatewayProxyEvent

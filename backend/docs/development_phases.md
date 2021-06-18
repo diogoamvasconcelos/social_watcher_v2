@@ -156,3 +156,8 @@
     - add a test where we store an old version, without reddit
 
 - add slack notifier
+
+# Phase 9 - tech debt improvs
+
+- upgrade to terraform v1.0.0
+- add cypress tests (FE)

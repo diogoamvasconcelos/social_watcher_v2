@@ -8,6 +8,13 @@ export const makeQueueNotificationJobs = (
   notificationJobQueueTemplateName: string
 ): QueueNotificationJobsFn => {
   return async (logger, notificationMedium, notificationJobs) => {
+    if (notificationJobs.length == 0) {
+      logger.info(
+        `Skipping queueing notificationJobs for ${notificationMedium}: empty list.`
+      );
+      return right("OK");
+    }
+
     const queueName = notificationJobQueueTemplateName.replace(
       "{notificationMedium}",
       notificationMedium
