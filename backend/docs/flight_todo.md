@@ -1,5 +1,0 @@
-- src/domain/models/userItem.ts improvs on types
-- add "add new social media" guide
-- add version to database structs (eg: reddit:enabled status should be patched when reading from db)
-  - add a test where we store an old version, without reddit
-- fix // TODO:

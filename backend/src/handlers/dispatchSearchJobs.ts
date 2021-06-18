@@ -1,4 +1,4 @@
-import { isLeft } from "fp-ts/lib/Either";
+import { isLeft, left } from "fp-ts/lib/Either";
 import { getClient as getKeywordStoreClient } from "../adapters/keywordStore/client";
 import { getClient as getSearchJobsQueueClient } from "../adapters/searchJobsQueue/client";
 import { makeGetActiveKeywords } from "../adapters/keywordStore/getActiveKeywords";
@@ -9,6 +9,8 @@ import { KeywordData } from "../domain/models/keyword";
 import { makeQueueSearchJobs } from "../adapters/searchJobsQueue/queueSearchJobs";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
+import { eitherListToDefaultOk } from "src/domain/ports/shared";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();
@@ -25,29 +27,25 @@ const handler = async () => {
     config.searchJobsQueueTemplateName
   );
 
-  // TODO: run this in parallel with Promise.all ... cmon!!!
-  for (const socialMedia of socialMedias) {
-    logger.info(`Handling ${socialMedia}...`);
+  const results = await Promise.all(
+    socialMedias.map(async (socialMedia) => {
+      const activeKeywordsResult = await getActiveKeywordsFn(
+        logger,
+        socialMedia
+      );
+      if (isLeft(activeKeywordsResult)) {
+        logger.error(
+          `Failed to getActiveKeywords: ${activeKeywordsResult.left}`
+        );
+        return left("ERROR");
+      }
 
-    const activeKeywordsResult = await getActiveKeywordsFn(logger, socialMedia);
-    if (isLeft(activeKeywordsResult)) {
-      logger.error(`Failed to getActiveKeywords: ${activeKeywordsResult.left}`);
-      return;
-    }
+      const searchJobs = activeKeywordsResult.right.map(keywordDataToSearchJob);
+      return await queueSearchJobsFn(logger, socialMedia, searchJobs);
+    })
+  );
 
-    const searchJobs = activeKeywordsResult.right.map(keywordDataToSearchJob);
-    const queueSearchJobsResult = await queueSearchJobsFn(
-      logger,
-      socialMedia,
-      searchJobs
-    );
-    if (isLeft(queueSearchJobsResult)) {
-      logger.error(`Failed to queueSearchJobs: ${queueSearchJobsResult.left}`);
-      return;
-    }
-
-    logger.info(`Dispatched ${searchJobs.length} for ${socialMedia}`);
-  }
+  fromEither(await eitherListToDefaultOk(results));
 };
 
 export const lambdaHandler = defaultMiddlewareStack(handler);
