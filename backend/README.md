@@ -21,3 +21,9 @@ yarn test:environment
 ```
 scripts/with_env.js yarn 'jest -t="some text"'
 ```
+
+## Update ts for frontend
+
+```
+yarn tsc -b
+```

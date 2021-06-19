@@ -2,7 +2,7 @@ import { SocialMedia } from "@backend/domain/models/socialMedia";
 import { searchKeyword, SearchState } from "./searchState";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import styled from "styled-components";
-import { SearchObject } from "@backend/domain/models/userItem";
+import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import React, { useState } from "react";
 import { newLowerCase } from "@diogovasconcelos/lib";
@@ -94,7 +94,7 @@ const ComponentHeader = styled.div`
   flex-direction: row;
 `;
 type SearchResultsTableProps = {
-  searchObjects: SearchObject[];
+  searchObjects: SearchObjectDomain[];
 };
 export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   searchObjects,

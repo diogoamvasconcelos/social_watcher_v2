@@ -4,7 +4,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { User } from "@backend/domain/models/user";
-import { SearchObject } from "@backend/domain/models/userItem";
+import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
 import { RenderDynamicWithHooks } from "../../shared/lib/react";
@@ -20,8 +20,8 @@ const RowDiv = styled.div`
 `;
 
 const createEmptySearchObject = (
-  index: SearchObject["index"]
-): SearchObject => ({
+  index: SearchObjectDomain["index"]
+): SearchObjectDomain => ({
   index,
   id: "none",
   type: "SEARCH_OBJECT",
@@ -30,6 +30,17 @@ const createEmptySearchObject = (
   searchData: {
     twitter: { enabledStatus: "DISABLED" },
     reddit: { enabledStatus: "DISABLED", over18: true },
+  },
+  notificationData: {
+    discordNotification: {
+      enabledStatus: "DISABLED",
+      channel: "add channel id",
+      bot: {
+        credentials: {
+          token: "add bot token",
+        },
+      },
+    },
   },
 });
 
@@ -41,7 +52,7 @@ const SearchObjectItemContainer = styled.div`
   text-align: center;
 `;
 type SearchObjectItemProps = {
-  searchObject: SearchObject;
+  searchObject: SearchObjectDomain;
 };
 const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   searchObject,
@@ -51,14 +62,8 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const [configModalVisible, setConfigModalVisible] = useState(false);
   const [configModalLoading, setConfigModalLoading] = useState(false);
   const [updatedDiscordConfig, setUpdatedDiscordConfig] = useState<
-    Required<SearchObject["discordNotification"]>
-  >(
-    searchObject.discordNotification ?? {
-      enabled: false,
-      channel: "",
-      bot: { credentials: { token: "" } },
-    }
-  );
+    SearchObjectDomain["notificationData"]["discordNotification"]
+  >(searchObject.notificationData.discordNotification);
   const userFetchStatus = useAppSelector((state) => state.user.fetchStatus);
 
   const handleKeywordChanged = (val: string) => {
@@ -104,7 +109,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
       updateUserSearchObjects([
         searchObject.index,
         deepmergeSafe(searchObject, {
-          discordNotification: updatedDiscordConfig,
+          notificationData: { discordNotification: updatedDiscordConfig },
         }),
       ])
     );
@@ -115,7 +120,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const handleDiscordNotificationEnabledChanged = (val: boolean) => {
     setUpdatedDiscordConfig(
       deepmergeSafe(updatedDiscordConfig, {
-        enabled: val,
+        enabledStatus: val ? "ENABLED" : "DISABLED",
       })
     );
   };
@@ -142,7 +147,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   }, [userFetchStatus]);
 
   useEffect(() => {
-    setUpdatedDiscordConfig(searchObject.discordNotification);
+    setUpdatedDiscordConfig(searchObject.notificationData.discordNotification);
   }, [searchObject]);
 
   return (
@@ -169,7 +174,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         <Text>twitter</Text>
         <Switch
           defaultChecked
-          checked={searchObject.searchData.twitter.enabledStatus == "ENABLED"}
+          checked={searchObject.searchData.twitter.enabledStatus === "ENABLED"}
           onChange={handleTwitterSwitchedChanged}
         />
       </RowDiv>
@@ -177,14 +182,17 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         <Text>reddit</Text>
         <Switch
           defaultChecked
-          checked={searchObject.searchData.reddit.enabledStatus == "ENABLED"}
+          checked={searchObject.searchData.reddit.enabledStatus === "ENABLED"}
           onChange={handleRedditSwitchedChanged}
         />
       </RowDiv>
       <RowDiv>
         <Text>Notifications:</Text>
         <Text>
-          {searchObject.discordNotification?.enabled ? "Discord" : "None"}
+          {searchObject.notificationData.discordNotification.enabledStatus ===
+          "ENABLED"
+            ? "Discord"
+            : "None"}
         </Text>
         <Button
           type="default"
@@ -202,10 +210,10 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         onCancel={handleDiscordNotificationConfigCancel}
       >
         <RowDiv>
-          <p>Enabled?</p>
+          <p>Enabled</p>
           <Switch
             defaultChecked
-            checked={updatedDiscordConfig?.enabled}
+            checked={updatedDiscordConfig.enabledStatus === "ENABLED"}
             onChange={handleDiscordNotificationEnabledChanged}
           />
         </RowDiv>
@@ -215,7 +223,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
             strong={true}
             editable={{ onChange: handleDiscordNotificationChannelChanged }}
           >
-            {updatedDiscordConfig?.channel}
+            {updatedDiscordConfig.channel}
           </Text>
         </RowDiv>
         <RowDiv>
@@ -226,7 +234,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
             strong={true}
             editable={{ onChange: handleDiscordNotificationBotTokenChanged }}
           >
-            {updatedDiscordConfig?.bot.credentials.token}
+            {updatedDiscordConfig.bot.credentials.token}
           </Text>
         </RowDiv>
       </Modal>
@@ -236,7 +244,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
 type SearchObjectsViewProps = {
   userNofSearchObjects: User["subscription"]["nofSearchObjects"];
-  searchObjects: SearchObject[];
+  searchObjects: SearchObjectDomain[];
 };
 export const SearchObjectsView: React.FC<SearchObjectsViewProps> = ({
   userNofSearchObjects,

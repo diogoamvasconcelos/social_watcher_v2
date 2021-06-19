@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
 import { User } from "@backend/domain/models/user";
-import { SearchObject } from "@backend/domain/models/userItem";
+import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import {
   apiGetSearchObjects,
   apiGetUser,
@@ -10,7 +10,7 @@ import {
 
 export type UserState = {
   details?: User;
-  searchObjects: SearchObject[];
+  searchObjects: SearchObjectDomain[];
   fetchStatus: "idle" | "loading";
 };
 
@@ -66,7 +66,7 @@ const userStateSlice = createSlice({
           return;
         }
 
-        const updatedSearchObject: SearchObject = action.payload.right;
+        const updatedSearchObject: SearchObjectDomain = action.payload.right;
         state.searchObjects = state.searchObjects.map((searchObject) =>
           searchObject.index == updatedSearchObject.index
             ? updatedSearchObject

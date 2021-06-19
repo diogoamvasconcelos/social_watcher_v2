@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import {
+  searchObjectDomainCodec,
   SearchObjectIo,
-  searchObjectIoCodec,
   SearchObjectUserDataIo,
 } from "../../../domain/models/userItem";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
@@ -12,7 +12,7 @@ export type UpdateSearchObjectRequest = ApiRequestMetadata & {
 
 export type UpdateSearchObjectErrorCode = ApiBaseErrorCode;
 
-export const updateSearchObjectResponseCodec = searchObjectIoCodec;
+export const updateSearchObjectResponseCodec = searchObjectDomainCodec;
 export type UpdateSearchObjectResponse = t.TypeOf<
   typeof updateSearchObjectResponseCodec
 >;

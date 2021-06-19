@@ -1,6 +1,6 @@
 import {
-  SearchObject,
-  SearchObjectUserData,
+  SearchObjectIo,
+  SearchObjectUserDataIo,
 } from "@backend/domain/models/userItem";
 import { CreatePaymentsPortalUserData } from "@backend/handlers/api/models/createPaymentsPortal";
 import { SearchRequestUserData } from "@backend/handlers/api/models/search";
@@ -38,8 +38,8 @@ export const apiSearch = async (userData: SearchRequestUserData) => {
 };
 
 export const apiUpdateSearchObject = async (
-  index: SearchObject["index"],
-  userData: SearchObjectUserData
+  index: SearchObjectIo["index"],
+  userData: SearchObjectUserDataIo
 ) => {
   return updateSearchObject(
     { client: apiClient, token: getUserIdToken() ?? "" },

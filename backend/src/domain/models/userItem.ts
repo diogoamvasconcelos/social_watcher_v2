@@ -68,14 +68,17 @@ export const searchObjectUserDataIoCodec = t.exact(
 export type SearchObjectUserDataIo = t.TypeOf<
   typeof searchObjectUserDataIoCodec
 >;
-// TODO: Try to make a fn to do this automatically
-export type SearchObjectUserDataDomain = Omit<
-  SearchObjectUserDataIo,
-  "searchData" | "notificationData"
-> & {
-  searchData: Required<SearchObjectUserDataIo["searchData"]>;
-  notificationData: Required<SearchObjectUserDataIo["notificationData"]>;
-};
+
+export const searchObjectUserDataDomainCodec = t.exact(
+  t.type({
+    keyword: keywordCodec,
+    searchData: t.type(searchObjectSearchData),
+    notificationData: t.type(searchObjectNotificationData),
+  })
+);
+export type SearchObjectUserDataDomain = t.TypeOf<
+  typeof searchObjectUserDataDomainCodec
+>;
 export const searchObjectUserDataIoToDomain = (
   io: SearchObjectUserDataIo,
   defaultData?: Omit<SearchObjectUserDataDomain, "keyword">
@@ -132,8 +135,12 @@ export const searchObjectIoCodec = t.intersection([
   searchObjectUserDataIoCodec,
 ]);
 export type SearchObjectIo = t.TypeOf<typeof searchObjectIoCodec>;
-export type SearchObjectDomain = t.TypeOf<typeof searchObjectBaseCodec> &
-  SearchObjectUserDataDomain;
+
+export const searchObjectDomainCodec = t.intersection([
+  searchObjectBaseCodec,
+  searchObjectUserDataDomainCodec,
+]);
+export type SearchObjectDomain = t.TypeOf<typeof searchObjectDomainCodec>;
 export const searchObjectIoToDomain = (
   io: SearchObjectIo
 ): SearchObjectDomain => {
