@@ -275,6 +275,7 @@ export const updateKeyword = async ({
               over18: false,
             },
           },
+          notificationData: {},
         },
       }
     )

@@ -12,8 +12,8 @@ import {
   GetSearchObjectsRequest,
   GetSearchObjectsResponse,
 } from "./models/getSearchObjects";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
-import { SearchObject } from "../../domain/models/userItem";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
+import { SearchObjectDomain } from "../../domain/models/userItem";
 
 const handler = async (
   event: APIGatewayProxyEvent
@@ -43,7 +43,7 @@ const handler = async (
       makeInternalErrorResponse("Error trying to get user's search objects.")
     );
   }
-  const searchObjects: SearchObject[] = searchObjectsEither.right;
+  const searchObjects: SearchObjectDomain[] = searchObjectsEither.right;
 
   return right(makeSuccessResponse(200, { items: searchObjects }));
 };

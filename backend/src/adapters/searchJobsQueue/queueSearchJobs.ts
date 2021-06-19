@@ -8,6 +8,13 @@ export const makeQueueSearchJobs = (
   searchJobQueueTemplateName: string
 ): QueueSearchJobsFn => {
   return async (logger, socialMedia, searchJobs) => {
+    if (searchJobs.length == 0) {
+      logger.info(
+        `Skipping queueing searchJobs for ${socialMedia}: empty list.`
+      );
+      return right("OK");
+    }
+
     const queueName = searchJobQueueTemplateName.replace(
       "{socialMedia}",
       socialMedia

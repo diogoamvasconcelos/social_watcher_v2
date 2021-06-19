@@ -13,7 +13,7 @@ import {
   NotificationMedium,
   notificationMediums,
 } from "../../domain/models/notificationMedium";
-import { SearchObject } from "../../domain/models/userItem";
+import { SearchObjectDomain } from "../../domain/models/userItem";
 import { isLeft, right } from "fp-ts/lib/Either";
 import {
   DefaultOkReturn,
@@ -27,7 +27,6 @@ import { DiscordNotificatonJob } from "../../domain/models/notificationJob";
 const config = getConfig();
 const logger = getLogger();
 
-// TODO: make this lambda generic. No need for one lambda per medium as they all do very similar things
 const handler = async (event: SQSEvent) => {
   const userStoreClient = getUserStoreClient();
   const searchJobsQueueClient = getNotificationJobsQueueClient();
@@ -87,7 +86,7 @@ type DispatchJobs = (
   deps: DispatchJobsDeps,
   notificationMedium: NotificationMedium,
   searchResult: SearchResult,
-  searchObjects: SearchObject[]
+  searchObjects: SearchObjectDomain[]
 ) => DefaultOkReturn;
 
 const dispatchNotificationJobs: DispatchJobs = async (
@@ -103,7 +102,7 @@ const dispatchNotificationJobs: DispatchJobs = async (
       searchObject,
       notificationMedium
     );
-    if (!config?.enabled) {
+    if (config.enabledStatus !== "ENABLED") {
       continue;
     }
 
@@ -122,11 +121,11 @@ const dispatchNotificationJobs: DispatchJobs = async (
 };
 
 const getConfigForNotificationMedium = (
-  searchObject: SearchObject,
+  searchObject: SearchObjectDomain,
   notificationMedium: NotificationMedium
 ) => {
   switch (notificationMedium) {
     case "discord":
-      return searchObject.discordNotification;
+      return searchObject.notificationData.discordNotification;
   }
 };

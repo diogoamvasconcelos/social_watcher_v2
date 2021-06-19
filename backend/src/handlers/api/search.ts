@@ -13,7 +13,7 @@ import { getConfig } from "../../lib/config";
 import { isKeywordAllowed } from "../../domain/controllers/isKeywordAllowed";
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjetcsForUser";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
 import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
 import {
   SearchErrorCode,

@@ -10,9 +10,9 @@ import {
   Client as RedditClient,
 } from "../../lib/reddit/client";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { Keyword } from "src/domain/models/keyword";
-import { RedditSearchResult } from "src/domain/models/searchResult";
-import { fromUnix } from "src/lib/date";
+import { Keyword } from "../../domain/models/keyword";
+import { RedditSearchResult } from "../../domain/models/searchResult";
+import { fromUnix } from "../../lib/date";
 
 export const getClient = getRedditClient;
 export type Client = RedditClient;

@@ -1,5 +1,4 @@
 import { DiscordNotificationConfig } from "../../../src/domain/models/notificationJob";
-import { SearchObjectUserData } from "../../../src/domain/models/userItem";
 import {
   getClient as getApiClient,
   getSearchObjects,
@@ -14,6 +13,7 @@ import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import { SearchObjectUserDataIo } from "../../../src/domain/models/userItem";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -41,13 +41,19 @@ describe("update searchObject e2e test", () => {
     });
 
     const index = newPositiveInteger(0);
-    const userData: SearchObjectUserData = {
+    const userData: SearchObjectUserDataIo = {
       keyword,
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
         reddit: { enabledStatus: "ENABLED", over18: false },
       },
+      notificationData: {},
     };
+
+    const expectedResponse = expect.objectContaining({
+      index,
+      ...{ ...userData, notificationData: expect.any(Object) },
+    });
 
     const response = fromEither(
       await updateSearchObject(
@@ -58,7 +64,7 @@ describe("update searchObject e2e test", () => {
         { index, userData }
       )
     );
-    expect(response).toEqual(expect.objectContaining({ index, ...userData }));
+    expect(response).toEqual(expectedResponse);
 
     const getSearchObjectsResponse = fromEither(
       await getSearchObjects({
@@ -67,7 +73,7 @@ describe("update searchObject e2e test", () => {
       })
     );
     expect(getSearchObjectsResponse).toEqual({
-      items: [expect.objectContaining({ index, ...userData })],
+      items: [expectedResponse],
     });
   });
 
@@ -86,11 +92,12 @@ describe("update searchObject e2e test", () => {
       })
     );
     expect(
-      initialGetSearchObjectsResponse.items[0].discordNotification
-    ).toBeUndefined();
+      initialGetSearchObjectsResponse.items[0].notificationData
+        .discordNotification?.enabledStatus
+    ).toEqual("DISABLED");
 
     const discordNotificationConfig: DiscordNotificationConfig = {
-      enabled: true,
+      enabledStatus: "ENABLED",
       channel: "a-channel",
       bot: { credentials: { token: "a-token" } },
     };
@@ -105,7 +112,9 @@ describe("update searchObject e2e test", () => {
           index,
           userData: {
             ...initialGetSearchObjectsResponse.items[0],
-            discordNotification: discordNotificationConfig,
+            notificationData: {
+              discordNotification: discordNotificationConfig,
+            },
           },
         }
       )
@@ -113,7 +122,7 @@ describe("update searchObject e2e test", () => {
     expect(response).toEqual(
       expect.objectContaining({
         index,
-        discordNotification: discordNotificationConfig,
+        notificationData: { discordNotification: discordNotificationConfig },
       })
     );
 
@@ -127,7 +136,7 @@ describe("update searchObject e2e test", () => {
       items: [
         expect.objectContaining({
           index,
-          discordNotification: discordNotificationConfig,
+          notificationData: { discordNotification: discordNotificationConfig },
         }),
       ],
     });

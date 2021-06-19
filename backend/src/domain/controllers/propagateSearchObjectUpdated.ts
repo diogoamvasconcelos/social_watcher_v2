@@ -4,7 +4,7 @@ import { Logger } from "../../lib/logger";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { KeywordData } from "../models/keyword";
 import { socialMedias } from "../models/socialMedia";
-import { SearchObject } from "../models/userItem";
+import { SearchObjectDomain } from "../models/userItem";
 import { GetKeywordDataFn } from "../ports/keywordStore/getKeywordData";
 import { UpdateKeywordDataFn } from "../ports/keywordStore/updateKeywordData";
 import { DefaultOkReturn, eitherListToDefaultOk } from "../ports/shared";
@@ -22,7 +22,7 @@ export const propagateSearchObjectUpdated = async (
     updateKeywordDataFn: UpdateKeywordDataFn;
     getSearchObjectsForKeywordFn: GetSearchObjectsForKeywordFn;
   },
-  searchObject: SearchObject,
+  searchObject: SearchObjectDomain,
   forceDeactivation: boolean = false
 ): DefaultOkReturn => {
   forceDeactivation ||= searchObject.lockedStatus === "LOCKED";
@@ -34,7 +34,7 @@ export const propagateSearchObjectUpdated = async (
   if (isLeft(allSearchObjectsForKeywordEither)) {
     return allSearchObjectsForKeywordEither;
   }
-  const allSearchObjectsForKeyword: SearchObject[] =
+  const allSearchObjectsForKeyword: SearchObjectDomain[] =
     allSearchObjectsForKeywordEither.right;
 
   const results = await Promise.all(
