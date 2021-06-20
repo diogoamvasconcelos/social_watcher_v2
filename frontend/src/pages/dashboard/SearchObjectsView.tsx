@@ -7,7 +7,6 @@ import { User } from "@backend/domain/models/user";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
-import { RenderDynamicWithHooks } from "../../shared/lib/react";
 import { updateUserSearchObjects } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 
@@ -58,7 +57,6 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   searchObject,
 }) => {
   const dispatch = useAppDispatch();
-  const [editingKeyword, setEditingKeyword] = useState(false);
   const [configModalVisible, setConfigModalVisible] = useState(false);
   const [configModalLoading, setConfigModalLoading] = useState(false);
   const [updatedDiscordConfig, setUpdatedDiscordConfig] = useState<
@@ -67,13 +65,13 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const userFetchStatus = useAppSelector((state) => state.user.fetchStatus);
 
   const handleKeywordChanged = (val: string) => {
+    console.log(`handleKeywordChanged: ${val}`);
     void dispatch(
       updateUserSearchObjects([
         searchObject.index,
         deepmergeSafe(searchObject, { keyword: newLowerCase(val) }),
       ])
     );
-    setEditingKeyword(false);
   };
 
   const handleTwitterSwitchedChanged = (val: boolean) => {
@@ -153,19 +151,9 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   return (
     <SearchObjectItemContainer key={searchObject.index}>
       <RowDiv>
-        <Text
-          strong={true}
-          editable={editingKeyword ? { onChange: handleKeywordChanged } : false}
-        >
+        <Text strong={true} editable={{ onChange: handleKeywordChanged }}>
           {searchObject.keyword}
         </Text>
-        <Button
-          type="default"
-          shape="circle"
-          icon={<SettingFilled />}
-          size="small"
-          onClick={() => setEditingKeyword(true)}
-        />
       </RowDiv>
       <RowDiv>
         <Text>{searchObject.lockedStatus}</Text>
@@ -252,17 +240,13 @@ export const SearchObjectsView: React.FC<SearchObjectsViewProps> = ({
 }) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <RenderDynamicWithHooks>
-        {() =>
-          _.range(userNofSearchObjects).map((i) => {
-            let searchObject = searchObjects.find((so) => so.index == i);
-            if (!searchObject) {
-              searchObject = createEmptySearchObject(newPositiveInteger(i));
-            }
-            return SearchObjectItem({ searchObject });
-          })
+      {_.range(userNofSearchObjects).map((i) => {
+        let searchObject = searchObjects.find((so) => so.index == i);
+        if (!searchObject) {
+          searchObject = createEmptySearchObject(newPositiveInteger(i));
         }
-      </RenderDynamicWithHooks>
+        return SearchObjectItem({ searchObject });
+      })}
     </div>
   );
 };
