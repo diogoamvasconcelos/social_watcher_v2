@@ -1,3 +1,4 @@
+import { optionalNull } from "@diogovasconcelos/lib";
 import * as t from "io-ts";
 
 export const redditCredentialsCodec = t.type({
@@ -38,8 +39,8 @@ export const searchListingCodec = t.type({
       ),
     }),
     t.partial({
-      before: t.string,
-      after: t.string,
+      before: optionalNull(t.string),
+      after: optionalNull(t.string),
     }),
   ]),
 });

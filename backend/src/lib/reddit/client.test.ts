@@ -13,8 +13,40 @@ describe("reddit", () => {
     instance: { request: jest.fn() },
   } as unknown as Client;
 
+  it("can handle empty listings", async () => {
+    const redditResponse = {
+      kind: "Listing",
+      data: {
+        after: null,
+        dist: 0,
+        children: [],
+        before: null,
+      },
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type AnyType = any;
+
+    (
+      redditClient.instance.request as jest.MockedFunction<AnyType>
+    ).mockResolvedValueOnce({
+      status: 200,
+      data: redditResponse,
+    });
+
+    const searchResult = fromEither(
+      await searchAll({ client: redditClient, logger }, "keyword")
+    );
+
+    expect(searchResult).toEqual([]);
+  });
+
   it("can paginate", async () => {
-    const redditResponse0 = makeRedditResponse();
+    const redditResponse0 = makeRedditResponse({
+      data: {
+        after: "after-some",
+      },
+    });
     const redditResponse1 = makeRedditResponse({
       data: {
         after: undefined,
@@ -52,7 +84,6 @@ const makeRedditResponse = (
       data: {
         dist: 0,
         children: [{ data: buildRedditSearchResult().data }],
-        after: "some-after",
       },
     },
     params ?? {}

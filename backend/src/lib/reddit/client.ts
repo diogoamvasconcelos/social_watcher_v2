@@ -11,7 +11,7 @@ import { DefaultOkReturn } from "../../domain/ports/shared";
 import qs from "qs";
 import { DateISOString, decode } from "@diogovasconcelos/lib/iots";
 import { getSecondsAfter } from "../date";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { deepmergeSafe, JsonEncodable } from "@diogovasconcelos/lib";
 
 export const getClient = (
   credentials: RedditCredentials
@@ -145,7 +145,7 @@ export const searchAll = async (
   params?: Partial<SearchParams>
 ): Promise<Either<"ERROR", SearchListingItem[]>> => {
   let results: SearchListingItem[] = [];
-  let after: string | undefined = undefined;
+  let after: string | undefined | null = undefined;
 
   const mergedParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
 
@@ -161,6 +161,10 @@ export const searchAll = async (
     };
 
     const responseRaw = await doRequest(client, request);
+    logger.debug("reddit searchAll response", {
+      responseRaw: responseRaw as unknown as JsonEncodable,
+      keyword,
+    });
     const responseEither = handleSearchResponse(logger, responseRaw);
     if (isLeft(responseEither)) {
       return responseEither;
