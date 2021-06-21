@@ -1,22 +1,22 @@
 import { SQSEvent } from "aws-lambda";
 import { isLeft } from "fp-ts/lib/Either";
-import { makePutSearchResults } from "../adapters/searchResultsStore/putSearchResults";
-import { makeSearchTwitter } from "../adapters/twitterSearcher/searchTwitter";
-import { getConfig } from "../lib/config";
+import { makePutSearchResults } from "../../adapters/searchResultsStore/putSearchResults";
+import { makeSearchTwitter } from "../../adapters/twitterSearcher/searchTwitter";
+import { getConfig } from "../../lib/config";
 import { decode } from "@diogovasconcelos/lib";
 import {
   getClient as getTwitterClient,
   getClientCredentials as getTwitterCredentials,
-} from "../adapters/twitterSearcher/client";
-import { getClient as getSsmClient } from "../lib/ssm";
-import { getClient as getSearchResultStoreClient } from "../adapters/searchResultsStore/client";
-import { searchJobCodec } from "../domain/models/searchJob";
-import { getClient as getTranslateClient } from "../lib/translate";
-import { makeTranslateToEnglish } from "../adapters/translater/translateToEnglish";
-import { getLogger } from "../lib/logger";
-import { defaultMiddlewareStack } from "./middlewares/common";
-import { translateSearchResults } from "../domain/controllers/translateSearchResults";
-import { TwitterSearchResult } from "../domain/models/searchResult";
+} from "../../adapters/twitterSearcher/client";
+import { getClient as getSsmClient } from "../../lib/ssm";
+import { getClient as getSearchResultStoreClient } from "../../adapters/searchResultsStore/client";
+import { searchJobCodec } from "../../domain/models/searchJob";
+import { getClient as getTranslateClient } from "../../lib/translate";
+import { makeTranslateToEnglish } from "../../adapters/translater/translateToEnglish";
+import { getLogger } from "../../lib/logger";
+import { defaultMiddlewareStack } from "../middlewares/common";
+import { translateSearchResults } from "../../domain/controllers/translateSearchResults";
+import { TwitterSearchResult } from "../../domain/models/searchResult";
 
 const config = getConfig();
 const logger = getLogger();

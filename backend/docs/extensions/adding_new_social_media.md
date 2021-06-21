@@ -21,8 +21,6 @@
 
 - deploy
 
--
-
 ## Phase 2:
 
 - Allow the FE to enable this socialMedia on a keyword
@@ -31,3 +29,11 @@
 
 - make sure userObject in dynamodb has optional the new socialMedia
   - write tests for this:
+
+## Phase 3:
+
+- add `lambda_search_<socialmedia>` lambda
+- add `handlers/searchers/search<socialMedia>` handler
+  - add ports
+  - add adapters
+- add `test/environment/integration/handlers/search<socialMedia>.ts` env test

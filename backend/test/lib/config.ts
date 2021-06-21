@@ -17,6 +17,7 @@ export const getEnvTestConfig = () => {
   return {
     dispatchSearchJobsLambdaName: ensure("DISPATCH_SEARCH_JOBS_LAMBDA_NAME"),
     searchTwitterLambdaName: ensure("SEARCH_TWITTER_LAMBDA_NAME"),
+    searchRedditLambdaName: ensure("SEARCH_REDDIT_LAMBDA_NAME"),
     cognitoClientId: ensure("COGNITO_CLIENT_ID"),
     cognitoUserPoolId: ensure("COGNITO_USER_POOL_ID"),
     apiEndpoint: ensure("API_ENDPOINT"),

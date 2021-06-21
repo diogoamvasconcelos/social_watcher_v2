@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "search_twitter" {
   filename         = local.lambda_file
   function_name    = local.search_twitter_lambda_name
-  handler          = ".build/src/handlers/searchTwitter.lambdaHandler"
+  handler          = ".build/src/handlers/searchers/searchTwitter.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
