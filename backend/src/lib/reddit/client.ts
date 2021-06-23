@@ -11,7 +11,8 @@ import { DefaultOkReturn } from "../../domain/ports/shared";
 import qs from "qs";
 import { DateISOString, decode } from "@diogovasconcelos/lib/iots";
 import { getSecondsAfter } from "../date";
-import { deepmergeSafe, JsonEncodable } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { doRequest } from "../axios";
 
 export const getClient = (
   credentials: RedditCredentials
@@ -70,7 +71,7 @@ const ensureToken = async ({
     },
   };
 
-  const response = await doRequest(client, request);
+  const response = await doRequest(client.instance, request);
   if (response.status != 200) {
     logger.error(
       "reddit::ensureToken/access_token response returned failed status code",
@@ -135,7 +136,7 @@ export const searchOnUser = async (
     },
   };
 
-  const response = await doRequest(client, request);
+  const response = await doRequest(client.instance, request);
   return handleSearchResponse(logger, response);
 };
 
@@ -160,9 +161,9 @@ export const searchAll = async (
       },
     };
 
-    const responseRaw = await doRequest(client, request);
+    const responseRaw = await doRequest(client.instance, request);
     logger.debug("reddit searchAll response", {
-      responseRaw: responseRaw as unknown as JsonEncodable,
+      data: responseRaw.data,
       keyword,
     });
     const responseEither = handleSearchResponse(logger, responseRaw);
@@ -209,13 +210,4 @@ const handleSearchResponse = (
   }
 
   return right(decodeEither.right);
-};
-
-const doRequest = async (client: Client, request: AxiosRequestConfig) => {
-  return await client.instance.request({
-    validateStatus: (status: number) => {
-      return status >= 100 && status <= 600;
-    },
-    ...request,
-  });
 };

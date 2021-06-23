@@ -8,6 +8,7 @@ import {
   TwitterCredentials,
 } from "./models";
 import { getMinutesAgo } from "../date";
+import { doRequest } from "../axios";
 
 export const getClient = (credentials: TwitterCredentials) => {
   // Look into https://www.npmjs.com/package/oauth if we want to use the key/secret to fetch the token
@@ -70,13 +71,4 @@ export const searchRecent = async (
   } while (token != undefined && results.length < maxResults);
 
   return right(results);
-};
-
-const doRequest = async (client: Client, request: AxiosRequestConfig) => {
-  return await client.request({
-    validateStatus: (status: number) => {
-      return status >= 100 && status <= 600;
-    },
-    ...request,
-  });
 };

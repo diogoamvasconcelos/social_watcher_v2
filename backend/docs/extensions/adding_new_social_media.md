@@ -6,6 +6,7 @@
   - how the client will be
 
 - add a client and it's types to the `src/lib`
+  - test using `test/manual/*`
 
 ## Phase 1:
 
