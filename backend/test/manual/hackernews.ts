@@ -1,5 +1,5 @@
 import { getLogger } from "../../src/lib/logger";
-import { getClient, search } from "../../src/lib/hackernews/client";
+import { getClient, getItem, search } from "../../src/lib/hackernews/client";
 import { fromEither } from "@diogovasconcelos/lib";
 
 const logger = getLogger();
@@ -7,13 +7,20 @@ const logger = getLogger();
 const searchHN = async () => {
   const client = getClient();
   const result = fromEither(
-    await search({ client, logger }, "ADA", { minutesAgo: 100 })
+    await search({ client, logger }, "skim", { minutesAgo: 10 })
   );
+  console.log(result);
+};
+
+const getItemHn = async () => {
+  const client = getClient();
+  const result = fromEither(await getItem({ client, logger }, "276060990"));
   console.log(result);
 };
 
 export const main = async () => {
   await searchHN();
+  await getItemHn();
 };
 
 void main();

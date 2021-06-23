@@ -1,3 +1,6 @@
+import { Keyword } from "src/domain/models/keyword";
+import { HackernewsSearchResult } from "src/domain/models/searchResult";
+import { SearchHNResponseItem } from "src/lib/hackernews/models";
 import {
   getClient as getHNClient,
   Client as HNClient,
@@ -6,20 +9,28 @@ import {
 export const getClient = getHNClient;
 export type Client = HNClient;
 
-/*
+//link: https://news.ycombinator.com/item?id=<objectID>
+//storylink: https://news.ycombinator.com/item?id=<storyID> (if comment)
 
-link: https://news.ycombinator.com/item?id=<objectID>
-storylink: https://news.ycombinator.com/item?id=<storyID> (if comment)
+// remove all "@diogovasconcelos/lib" (make them relative)
 
 export const outToDomain = (
   keyword: Keyword,
-  out: SearchListingItem
-): RedditSearchResult => ({
-  socialMedia: "reddit",
-  id: out.id,
+  out: SearchHNResponseItem
+): HackernewsSearchResult => ({
+  socialMedia: "hackernews",
+  id: out.objectID,
   keyword,
-  happenedAt: fromUnix(out.created_utc),
-  data: out,
-  link: `https://reddit/${out.permalink}`,
+  happenedAt: out.created_at,
+  data: {
+    text: out.comment_text ?? out.title ?? "missing text",
+    author: out.author,
+    objectId: out.objectID,
+    storyId: out.story_id?.toString(),
+    numComments: out.num_comments ?? 0,
+    storyLink: `https://news.ycombinator.com/item?id=${
+      out.story_id ?? out.objectID
+    }`,
+  },
+  link: `https://news.ycombinator.com/item?id=${out.objectID}`,
 });
-*/

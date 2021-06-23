@@ -5,10 +5,14 @@
   - how the data will look like (search result)
   - how the client will be
 
-- add a client and it's types to the `src/lib`
+- add a client and it's types to the `src/lib` (use exact for the item type)
   - test using `test/manual/*`
 
 ## Phase 1:
+
+- add new searchResult type
+
+  - `src/domain/models/searchResult.ts`
 
 - Add new social media to: `src/domain/models/socialMedia.ts`
 - propagate all types fixes required for this

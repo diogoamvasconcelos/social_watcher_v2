@@ -5,13 +5,18 @@
 
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode } from "@diogovasconcelos/lib/iots";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { PartialDeep } from "type-fest";
 import { doRequest } from "../axios";
 import { getMinutesAgo, toUnixTimstamp } from "../date";
 import { Logger } from "../logger";
-import { SearchHNResponse, searchHNResponseCodec } from "./models";
+import {
+  GetItemHNResponse,
+  getItemHNResponseCodec,
+  searchHNResponseCodec,
+  SearchHNResponseItem,
+} from "./models";
 
 export const getClient = () => {
   return axios.create({
@@ -44,8 +49,8 @@ export const search = async (
   { client, logger }: HNDependencies,
   keyword: string,
   params?: PartialDeep<SearchParams>
-): Promise<Either<string[], SearchHNResponse["hits"]>> => {
-  let results: SearchHNResponse["hits"] = [];
+): Promise<Either<string[], SearchHNResponseItem[]>> => {
+  let results: SearchHNResponseItem[] = [];
   let page = 0;
 
   const mergedParams = deepmergeSafe(defaultSearchParams, params ?? {});
@@ -82,10 +87,78 @@ export const search = async (
     }
     const response = responseEither.right;
 
-    page = response.page < response.nbPages ? response.page + 1 : -1;
+    const patchedItemsEither = await Promise.all(
+      response.hits.map(async (item) => {
+        if (item.num_comments) {
+          return right(item);
+        }
 
-    results = [...results, ...response.hits];
+        const fetchedItemEither = await getItem(
+          { client, logger },
+          item.objectID
+        );
+        if (isLeft(fetchedItemEither)) {
+          return fetchedItemEither;
+        }
+
+        return right({
+          ...item,
+          num_comments: fetchedItemEither.right.numComments,
+        });
+      })
+    );
+
+    let patchedItems: SearchHNResponseItem[] = [];
+    for (const itemEither of patchedItemsEither) {
+      if (isLeft(itemEither)) {
+        return itemEither;
+      }
+      patchedItems = [...patchedItems, itemEither.right];
+    }
+
+    results = [...results, ...patchedItems];
+
+    page = response.page < response.nbPages ? response.page + 1 : -1;
   } while (page > -1 && results.length < mergedParams.maxResults);
 
   return right(results);
+};
+
+export const getItem = async (
+  { client, logger }: HNDependencies,
+  id: string
+): Promise<Either<string[], GetItemHNResponse & { numComments: number }>> => {
+  const request: AxiosRequestConfig = {
+    url: `v1/items/${id}`,
+    method: "GET",
+  };
+
+  const responseRaw = await doRequest(client, request);
+  logger.debug("hackernews getItem response", {
+    data: responseRaw.data,
+    id,
+  });
+  if (responseRaw.status != 200) {
+    return left([`${responseRaw.status} : ${responseRaw.data}`]);
+  }
+
+  const responseEither = decode(getItemHNResponseCodec, responseRaw.data);
+  if (isLeft(responseEither)) {
+    return responseEither;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const countComments = (rawObj: AxiosResponse<any>["data"]): number => {
+    return rawObj.children.reduce(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (acc: number, currChild: AxiosResponse<any>["data"]) =>
+        acc + countComments(currChild),
+      (rawObj.children?.length ?? 0) as number
+    );
+  };
+
+  return right({
+    ...responseEither.right,
+    numComments: countComments(responseRaw.data),
+  });
 };
