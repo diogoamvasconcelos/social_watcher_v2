@@ -1,7 +1,7 @@
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { PartialDeep } from "type-fest";
 import { RedditSearchJob } from "../../../../src/domain/models/searchJob";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
-import { fromEither, newLowerCase } from "@diogovasconcelos/lib";
 import { buildSQSEvent } from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";

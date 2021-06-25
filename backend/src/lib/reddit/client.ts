@@ -11,7 +11,7 @@ import { DefaultOkReturn } from "../../domain/ports/shared";
 import qs from "qs";
 import { DateISOString, decode } from "@diogovasconcelos/lib/iots";
 import { getSecondsAfter } from "../date";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { doRequest } from "../axios";
 
 export const getClient = (

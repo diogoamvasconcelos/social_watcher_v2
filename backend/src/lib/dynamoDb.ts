@@ -1,10 +1,13 @@
+import {
+  JsonEncodable,
+  JsonObjectEncodable,
+} from "@diogovasconcelos/lib/models/jsonEncodable";
 import { DocumentClient, Put } from "aws-sdk/clients/dynamodb";
 import { Either, right, left, isLeft } from "fp-ts/lib/Either";
 import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
 import _ from "lodash";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
-import { JsonEncodable, JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 export const getClient = (endpoint: string | undefined = undefined) => {
   return new DocumentClient({ endpoint });

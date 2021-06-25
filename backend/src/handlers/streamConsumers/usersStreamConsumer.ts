@@ -7,10 +7,8 @@ import {
   UserData,
   UserItemDomain,
 } from "../../domain/models/userItem";
-import { fromEither } from "@diogovasconcelos/lib";
 import { getConfig } from "../../lib/config";
 import { getLogger, Logger } from "../../lib/logger";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { throwUnexpectedCase } from "../../lib/runtime";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { getClient as getKeywordStoreClient } from "../../adapters/keywordStore/client";
@@ -28,6 +26,8 @@ import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearc
 import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

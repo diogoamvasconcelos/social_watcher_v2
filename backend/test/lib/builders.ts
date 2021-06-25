@@ -5,9 +5,9 @@ import {
   TwitterSearchResult,
 } from "../../src/domain/models/searchResult";
 import { getNow, toUnixTimstamp } from "../../src/lib/date";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
-import { newLowerCase } from "@diogovasconcelos/lib";
-import { JsonEncodable } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { newLowerCase } from "@diogovasconcelos/lib/iots";
+import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
 export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {

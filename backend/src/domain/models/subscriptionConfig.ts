@@ -2,7 +2,11 @@ import * as t from "io-ts";
 import yaml from "js-yaml";
 import fs from "fs";
 import path from "path";
-import { decode, fromEither, positiveInteger } from "@diogovasconcelos/lib";
+import {
+  decode,
+  fromEither,
+  positiveInteger,
+} from "@diogovasconcelos/lib/iots";
 
 export const subscriptionConfigCodec = t.type({
   trial: t.type({

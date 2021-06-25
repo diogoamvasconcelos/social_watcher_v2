@@ -1,8 +1,8 @@
+import { newLowerCase } from "@diogovasconcelos/lib/iots";
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "../../adapters/searchResultsStore/client";
 import { getNow } from "../../lib/date";
-import { newLowerCase } from "@diogovasconcelos/lib";
 import { handler } from "./searchResultsStreamConsumer";
 
 describe("handlers/searchResultsStreamConsumer", () => {

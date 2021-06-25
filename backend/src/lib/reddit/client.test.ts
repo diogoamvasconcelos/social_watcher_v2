@@ -1,4 +1,4 @@
-import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { buildRedditSearchResult } from "../../../test/lib/builders";
 import { PartialDeep } from "type-fest";

@@ -3,7 +3,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@diogovasconcelos/lib";
+} from "@diogovasconcelos/lib/iots";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { getLogger } from "../../../src/lib/logger";
@@ -38,10 +38,8 @@ import { KeywordData } from "../../../src/domain/models/keyword";
 import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
 import { retryUntil } from "../../lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { socialMedias } from "../../../src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { PartialDeep } from "type-fest";
 import { SearchResult } from "../../../src/domain/models/searchResult";
 import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
@@ -59,6 +57,8 @@ import { getClientCredentials as getPaymentsCredentials } from "../../../src/ada
 import { makeGetPaymentData } from "../../../src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
 import { buildSearchResult } from "../../lib/builders";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 const config = getEnvTestConfig();
 const logger = getLogger();

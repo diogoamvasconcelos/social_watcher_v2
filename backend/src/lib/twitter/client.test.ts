@@ -1,9 +1,9 @@
-import { deepmergeSafe } from "@diogovasconcelos/lib";
-import { fromEither } from "@diogovasconcelos/lib";
 import { Client, searchRecent } from "./client";
 import { SearchRecentResponse, SearchRecentResponseItem } from "./models";
 import { PartialDeep } from "type-fest";
 import { buildTwitterSearchResult } from "../../../test/lib/builders";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 
 describe("twitter", () => {
   const twitterClient = { request: jest.fn() } as unknown as Client;

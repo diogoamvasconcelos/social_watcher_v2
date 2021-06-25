@@ -1,4 +1,4 @@
-import { newPositiveInteger } from "@diogovasconcelos/lib";
+import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import {

@@ -1,10 +1,10 @@
 import { isLeft } from "fp-ts/lib/Either";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { Logger } from "../../lib/logger";
 import { SearchResult } from "../models/searchResult";
 import { TranslateToEnglishFn } from "../ports/translater/translateToEnglish";
 import { throwUnexpectedCase } from "../../lib/runtime";
 import { PartialDeep } from "type-fest";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 export const translateSearchResults = async <T extends SearchResult>(
   {

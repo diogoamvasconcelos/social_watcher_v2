@@ -1,7 +1,6 @@
 import * as t from "io-ts";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Either, isLeft, left } from "fp-ts/lib/Either";
-import { decode } from "@diogovasconcelos/lib";
 import {
   SearchObjectIo,
   SearchObjectUserDataIo,
@@ -17,6 +16,7 @@ import {
   createPaymentsPortalResponseCodec,
   CreatePaymentsPortalUserData,
 } from "../../handlers/api/models/createPaymentsPortal";
+import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = (baseURL: string) => {
   return axios.create({

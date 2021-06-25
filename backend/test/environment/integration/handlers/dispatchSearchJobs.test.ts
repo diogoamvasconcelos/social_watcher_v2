@@ -1,4 +1,4 @@
-import { fromEither } from "@diogovasconcelos/lib";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";
 

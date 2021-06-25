@@ -1,4 +1,4 @@
-import { newDateISOString } from "@diogovasconcelos/lib";
+import { newDateISOString } from "@diogovasconcelos/lib/iots";
 
 export const getNow = () => newDateISOString(new Date().toISOString());
 

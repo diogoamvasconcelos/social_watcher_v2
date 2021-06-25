@@ -1,13 +1,13 @@
 import { right } from "fp-ts/lib/Either";
-import {
-  fromEither,
-  newLowerCase,
-  newPositiveInteger,
-} from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
 import { isKeywordAllowed } from "./isKeywordAllowed";
 import { SearchObjectDomain } from "../models/userItem";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib/iots";
 
 const logger = getLogger();
 const getSearchObjectsForUserFnMocked =

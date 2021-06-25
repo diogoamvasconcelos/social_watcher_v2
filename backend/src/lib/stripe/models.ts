@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { optionalNull } from "@diogovasconcelos/lib";
+import { optionalNull } from "@diogovasconcelos/lib/iots";
 
 export const stripeCredentialsCodec = t.type({
   pk: t.string,

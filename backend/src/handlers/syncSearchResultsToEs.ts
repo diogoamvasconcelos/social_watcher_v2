@@ -1,11 +1,11 @@
 import { SQSEvent } from "aws-lambda";
 import { getConfig } from "../lib/config";
-import { decode, fromEither } from "@diogovasconcelos/lib";
 import { getClient as getSearchResultSearchEngineClient } from "../adapters/searchResultsSearchEngine/client";
 import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
 import { makeIndexSearchResults } from "../adapters/searchResultsSearchEngine/indexSearchResults";
 import { SearchResult, searchResultCodec } from "../domain/models/searchResult";
+import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

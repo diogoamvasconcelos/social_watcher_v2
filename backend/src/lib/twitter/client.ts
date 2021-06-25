@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { decode } from "@diogovasconcelos/lib";
+import { decode } from "@diogovasconcelos/lib/iots";
 import {
   SearchRecentOptions,
   SearchRecentResponse,

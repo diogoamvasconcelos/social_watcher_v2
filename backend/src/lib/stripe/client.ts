@@ -1,8 +1,8 @@
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, left, right } from "fp-ts/lib/Either";
 import Stripe from "stripe";
 import { Logger } from "../logger";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { StripeCredentials } from "./models";
 
 export const getClient = (credentials: StripeCredentials) => {

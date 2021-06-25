@@ -1,6 +1,6 @@
 import * as aws from "aws-sdk";
 import util from "util";
-import { JsonEncodable } from "@diogovasconcelos/lib";
+import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { PromiseResult } from "aws-sdk/lib/request";
 import { right, left } from "fp-ts/lib/Either";
 

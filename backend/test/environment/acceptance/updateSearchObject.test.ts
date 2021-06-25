@@ -8,7 +8,7 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
-} from "@diogovasconcelos/lib";
+} from "@diogovasconcelos/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";

@@ -3,7 +3,6 @@ import {
   SearchResult,
   searchResultCodec,
 } from "../../domain/models/searchResult";
-import { decode, fromEither } from "@diogovasconcelos/lib";
 import { getLogger, Logger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
@@ -23,6 +22,7 @@ import { makeQueueNotificationJobs } from "../../adapters/notificationJobsQueue/
 import { getClient as getNotificationJobsQueueClient } from "../../adapters/notificationJobsQueue/client";
 import { QueueNotificationJobsFn } from "../../domain/ports/notificationJobsQueue/queueNotificationJobs";
 import { DiscordNotificatonJob } from "../../domain/models/notificationJob";
+import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

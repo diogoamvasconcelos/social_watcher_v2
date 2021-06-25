@@ -1,4 +1,3 @@
-import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib";
 import { getLogger } from "../../src/lib/logger";
 import {
   attachPaymentMethod,
@@ -16,7 +15,8 @@ import {
   deleteUser,
   getPaymentData,
 } from "../environment/acceptance/steps";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
+import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 const logger = getLogger();
 

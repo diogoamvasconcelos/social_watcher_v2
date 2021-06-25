@@ -4,10 +4,10 @@ import { makeQueueSearchResults } from "../../adapters/searchResultsQueue/queueS
 import { unknownToSearchResult } from "../../adapters/searchResultsStore/client";
 import { eitherListToDefaultOk } from "../../domain/ports/shared";
 import { getConfig } from "../../lib/config";
-import { fromEither } from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { getClient as getSearchResultsQueueClient } from "../../adapters/searchResultsQueue/client";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

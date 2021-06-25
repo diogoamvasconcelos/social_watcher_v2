@@ -9,11 +9,6 @@ import {
 export const getClient = getHNClient;
 export type Client = HNClient;
 
-//link: https://news.ycombinator.com/item?id=<objectID>
-//storylink: https://news.ycombinator.com/item?id=<storyID> (if comment)
-
-// remove all "@diogovasconcelos/lib" (make them relative)
-
 export const outToDomain = (
   keyword: Keyword,
   out: SearchHNResponseItem
@@ -23,7 +18,7 @@ export const outToDomain = (
   keyword,
   happenedAt: out.created_at,
   data: {
-    text: out.comment_text ?? out.title ?? "missing text",
+    text: out.comment_text ?? out.title ?? "missing text", // TODO: this should be guaranteed, to have comment or title (union type!)
     author: out.author,
     objectId: out.objectID,
     storyId: out.story_id?.toString(),

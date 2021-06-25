@@ -20,14 +20,14 @@ import {
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
 } from "../../domain/models/userItem";
-import { parseSafe } from "@diogovasconcelos/lib";
-import { decode } from "@diogovasconcelos/lib";
 import {
   UpdateSearchObjectErrorCode,
   UpdateSearchObjectRequest,
   UpdateSearchObjectResponse,
 } from "./models/updateSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
+import { decode } from "@diogovasconcelos/lib/iots";
+import { parseSafe } from "@diogovasconcelos/lib/json";
 
 export const handler = async (
   event: APIGatewayProxyEvent

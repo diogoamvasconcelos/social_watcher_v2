@@ -2,7 +2,6 @@ import { SQSEvent } from "aws-lambda";
 import { isLeft } from "fp-ts/lib/Either";
 import { makePutSearchResults } from "../../adapters/searchResultsStore/putSearchResults";
 import { getConfig } from "../../lib/config";
-import { decode } from "@diogovasconcelos/lib";
 import {
   getClient as getRedditClient,
   getClientCredentials as getRedditCredentials,
@@ -17,6 +16,7 @@ import { defaultMiddlewareStack } from "../middlewares/common";
 import { translateSearchResults } from "../../domain/controllers/translateSearchResults";
 import { RedditSearchResult } from "../../domain/models/searchResult";
 import { makeSearchReddit } from "../../adapters/redditSearcher/searchReddit";
+import { decode } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

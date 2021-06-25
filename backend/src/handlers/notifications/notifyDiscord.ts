@@ -1,10 +1,10 @@
+import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 import { SQSEvent } from "aws-lambda";
 import { isLeft } from "fp-ts/lib/Either";
 import { getClient as getDiscordNotifierClient } from "../../adapters/discordNotifier/client";
 import { makeSendMessageToChannel } from "../../adapters/discordNotifier/sendMessageToChannel";
 import { notifySearchResultToDiscord } from "../../domain/controllers/notifySearchResultToDiscord";
 import { discordNotificationJobCodec } from "../../domain/models/notificationJob";
-import { decode, fromEither } from "@diogovasconcelos/lib";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 

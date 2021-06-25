@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Callback, Context, Handler } from "aws-lambda";
 import logger from "../../lib/logger";
-import { JsonEncodable } from "@diogovasconcelos/lib";
+import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export type Middleware = <T, U>(handler: Handler<T, U>) => Handler;
 export const stackMiddlewares = (

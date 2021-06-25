@@ -1,6 +1,6 @@
 import { getLogger } from "../../src/lib/logger";
 import { getClient, getItem, search } from "../../src/lib/hackernews/client";
-import { fromEither } from "@diogovasconcelos/lib";
+import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const logger = getLogger();
 

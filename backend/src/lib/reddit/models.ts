@@ -1,4 +1,4 @@
-import { optionalNull } from "@diogovasconcelos/lib";
+import { optionalNull } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 
 export const redditCredentialsCodec = t.type({

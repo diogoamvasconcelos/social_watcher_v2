@@ -1,7 +1,6 @@
 import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
-import { decode } from "@diogovasconcelos/lib";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
   PaymentData,
@@ -12,6 +11,7 @@ import {
   userItemIoCodec,
 } from "../../domain/models/userItem";
 import { throwUnexpectedCase } from "../../lib/runtime";
+import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getDynamodbClient;
 export type Client = ReturnType<typeof getClient>;

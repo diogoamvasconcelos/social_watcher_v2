@@ -1,6 +1,6 @@
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { Either } from "fp-ts/lib/Either";
 import { User } from "../../../domain/models/user";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 
 export type ApiRequestMetadata = {
   authData: Pick<User, "id" | "email">;

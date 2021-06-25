@@ -3,7 +3,6 @@ import { isLeft } from "fp-ts/lib/Either";
 import { makePutSearchResults } from "../../adapters/searchResultsStore/putSearchResults";
 import { makeSearchTwitter } from "../../adapters/twitterSearcher/searchTwitter";
 import { getConfig } from "../../lib/config";
-import { decode } from "@diogovasconcelos/lib";
 import {
   getClient as getTwitterClient,
   getClientCredentials as getTwitterCredentials,
@@ -17,6 +16,7 @@ import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { translateSearchResults } from "../../domain/controllers/translateSearchResults";
 import { TwitterSearchResult } from "../../domain/models/searchResult";
+import { decode } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
 const logger = getLogger();

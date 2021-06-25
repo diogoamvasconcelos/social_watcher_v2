@@ -6,7 +6,6 @@ import {
   getClient as getElasticsearchClient,
   indexExists,
 } from "../../lib/elasticsearch/client";
-import { decode, PositiveInteger } from "@diogovasconcelos/lib";
 import { Logger } from "../../lib/logger";
 import { SEARCH_RESULT_SCHEMA } from "./schemas";
 import {
@@ -15,6 +14,7 @@ import {
   searchResultMetadaCodec,
 } from "../../domain/models/searchResult";
 import { socialMediaCodec } from "../../domain/models/socialMedia";
+import { decode, PositiveInteger } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getElasticsearchClient;
 export type Client = ReturnType<typeof getClient>;

@@ -1,5 +1,5 @@
 import { makeSearchSearchResults } from "../../../../src/adapters/searchResultsSearchEngine/searchSearchResults";
-import { fromEither, newLowerCase } from "@diogovasconcelos/lib";
+import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
 import {

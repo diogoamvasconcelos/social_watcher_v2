@@ -6,12 +6,12 @@ import {
   Client as TwitterClient,
 } from "../../lib/twitter/client";
 import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { decode } from "@diogovasconcelos/lib";
 import { isLeft } from "fp-ts/lib/Either";
 import {
   SearchRecentResponseItem,
   twitterCredentialsCodec,
 } from "../../lib/twitter/models";
+import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getTwitterClient;
 export type Client = TwitterClient;
