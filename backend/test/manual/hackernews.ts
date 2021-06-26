@@ -7,7 +7,7 @@ const logger = getLogger();
 const searchHN = async () => {
   const client = getClient();
   const result = fromEither(
-    await search({ client, logger }, "skim", { minutesAgo: 10 })
+    await search({ client, logger }, "pureref", { minutesAgo: 20 })
   );
   console.log(result);
 };

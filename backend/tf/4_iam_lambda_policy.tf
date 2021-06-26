@@ -62,7 +62,8 @@ resource "aws_iam_policy" "lambda_default" {
     {
       "Sid": "Translate",
       "Action": [
-        "translate:TranslateText"
+        "translate:TranslateText",
+        "comprehend:DetectDominantLanguage"
       ],
       "Resource": "*",
       "Effect": "Allow"
