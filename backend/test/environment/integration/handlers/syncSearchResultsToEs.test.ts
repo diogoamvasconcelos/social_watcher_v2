@@ -3,6 +3,7 @@ import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
 import {
+  buildHackernewsSearchResult,
   buildRedditSearchResult,
   buildSQSEvent,
   buildTwitterSearchResult,
@@ -27,10 +28,12 @@ describe("handlers/syncSearchResultsToEs", () => {
 
   it("syncs multiple search results to es", async () => {
     const keyword = newLowerCase(uuid());
-    const searchJobEvent = buildSQSEvent([
+    const searchResults = [
       buildTwitterSearchResult({ keyword }),
       buildRedditSearchResult({ keyword }),
-    ]);
+      buildHackernewsSearchResult({ keyword }),
+    ];
+    const searchJobEvent = buildSQSEvent(searchResults);
 
     const invokeResult = fromEither(
       await invokeLambda(lambdaName, searchJobEvent)
@@ -44,11 +47,11 @@ describe("handlers/syncSearchResultsToEs", () => {
           await refreshIndices(client);
           return fromEither(await searchSearchResultsFn(logger, { keyword }));
         },
-        (res) => res.items.length == 2
+        (res) => res.items.length == searchResults.length
       )
     );
 
-    expect(searchedResults.items).toHaveLength(2);
+    expect(searchedResults.items).toHaveLength(searchResults.length);
     expect(searchedResults.items[0].keyword).toEqual(keyword);
   });
 });

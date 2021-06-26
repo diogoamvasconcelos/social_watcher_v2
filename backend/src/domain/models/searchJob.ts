@@ -28,7 +28,7 @@ export const hackernewsSearchJobCodec = t.intersection([
     socialMedia: t.literal("hackernews"),
   }),
 ]);
-export type HackerNewsSearchJob = t.TypeOf<typeof hackernewsSearchJobCodec>;
+export type HackernewsSearchJob = t.TypeOf<typeof hackernewsSearchJobCodec>;
 
 export const searchJobCodec = t.union([
   twitterSearchJobCodec,

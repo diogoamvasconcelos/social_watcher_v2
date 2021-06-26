@@ -5,6 +5,7 @@ import { fromEither } from "@diogovasconcelos/lib/iots";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import {
+  buildHackernewsSearchResult,
   buildRedditSearchResult,
   buildTwitterSearchResult,
 } from "../../../../lib/builders";
@@ -28,6 +29,7 @@ describe("adapters/putSearchResults", () => {
     const searchResults = [
       buildTwitterSearchResult(),
       buildRedditSearchResult(),
+      buildHackernewsSearchResult(),
     ];
 
     fromEither(await putSearchResultsFn(logger, searchResults));

@@ -12,6 +12,7 @@ common:
   DISPATCH_SEARCH_JOBS_LAMBDA_NAME: dispatch_search_jobs
   SEARCH_TWITTER_LAMBDA_NAME: search_twitter
   SEARCH_REDDIT_LAMBDA_NAME: search_reddit
+  SEARCH_HACKERNEWS_LAMBDA_NAME: search_hackernews
   API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9

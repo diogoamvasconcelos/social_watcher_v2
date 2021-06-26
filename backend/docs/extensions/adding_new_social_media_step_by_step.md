@@ -22,7 +22,7 @@
 - add `build<newSocialMedia>SearchResult` to `test/lib/builders`
 - use this to builder on some tests
 
-  - TODO: extend this part to be more specific
+  - search for `buildRedditSearchResult` and add the new socialMedia in the tests
 
 - add `<newSocialMedia>search_jobs` SQS queue to tf
 

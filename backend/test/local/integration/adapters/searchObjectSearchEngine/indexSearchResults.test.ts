@@ -19,6 +19,7 @@ import { uuid } from "../../../../../src/lib/uuid";
 import {
   buildRedditSearchResult,
   buildTwitterSearchResult,
+  buildHackernewsSearchResult,
 } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
 import { sortSearchResults } from "../../../../lib/sort";
@@ -51,6 +52,7 @@ describe("indexSearchResults", () => {
     const searchResults: SearchResult[] = [
       buildTwitterSearchResult({ keyword }),
       buildRedditSearchResult({ keyword }),
+      buildHackernewsSearchResult({ keyword }),
     ];
 
     const indexResult = fromEither(
