@@ -20,9 +20,11 @@ export const UserPage: React.FC = () => {
 
   const handleManageSubscriptionClicked = () => {
     void dispatch(
-      createPaymentPortal({
-        returnUrl: `${config.appUrl}${history.location.pathname}`,
-      })
+      createPaymentPortal([
+        {
+          returnUrl: `${config.appUrl}${history.location.pathname}`,
+        },
+      ])
     );
   };
 

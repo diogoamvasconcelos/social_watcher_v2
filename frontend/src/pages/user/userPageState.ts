@@ -5,8 +5,15 @@ import { apiCreatePaymentsPortal } from "../../shared/lib/apiClient";
 
 export const createPaymentPortal = createAsyncThunk(
   "post:user/payments/create-portal",
-  async (...args: Parameters<typeof apiCreatePaymentsPortal>) => {
-    return await apiCreatePaymentsPortal(...args);
+  async (
+    args: Parameters<typeof apiCreatePaymentsPortal>,
+    { rejectWithValue }
+  ) => {
+    const res = await apiCreatePaymentsPortal(...args);
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
   }
 );
 
@@ -21,11 +28,7 @@ const searchStateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createPaymentPortal.fulfilled, (state, action) => {
-      if (isLeft(action.payload)) {
-        state = initialState;
-        return;
-      }
-      state = action.payload.right;
+      state = action.payload;
       return state; //need to do this not sure why...
     });
   },

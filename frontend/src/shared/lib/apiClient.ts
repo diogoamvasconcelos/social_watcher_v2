@@ -11,13 +11,14 @@ import {
   search,
   updateSearchObject,
   createPaymentsPortal,
+  Client,
 } from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
 
 const config = getConfig();
 
-export const apiClient = getClient(config.apiEndpoint);
+export const apiClient: Client = getClient(config.apiEndpoint);
 
 export const apiGetUser = async () => {
   return await getUser({ client: apiClient, token: getUserIdToken() ?? "" });

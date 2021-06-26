@@ -29,6 +29,7 @@ const createEmptySearchObject = (
   searchData: {
     twitter: { enabledStatus: "DISABLED" },
     reddit: { enabledStatus: "DISABLED", over18: true },
+    hackernews: { enabledStatus: "DISABLED" },
   },
   notificationData: {
     discordNotification: {
@@ -95,6 +96,19 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           searchData: {
             // TODO: add over18
             reddit: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+          },
+        }),
+      ])
+    );
+  };
+
+  const handleHackernewsSwitchedChanged = (val: boolean) => {
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          searchData: {
+            hackernews: { enabledStatus: val ? "ENABLED" : "DISABLED" },
           },
         }),
       ])
@@ -172,6 +186,16 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           defaultChecked
           checked={searchObject.searchData.reddit.enabledStatus === "ENABLED"}
           onChange={handleRedditSwitchedChanged}
+        />
+      </RowDiv>
+      <RowDiv>
+        <Text>hackernews</Text>
+        <Switch
+          defaultChecked
+          checked={
+            searchObject.searchData.hackernews.enabledStatus === "ENABLED"
+          }
+          onChange={handleHackernewsSwitchedChanged}
         />
       </RowDiv>
       <RowDiv>

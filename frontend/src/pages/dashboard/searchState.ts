@@ -6,8 +6,12 @@ import { apiSearch } from "../../shared/lib/apiClient";
 
 export const searchKeyword = createAsyncThunk(
   "search",
-  async (...args: Parameters<typeof apiSearch>) => {
-    return await apiSearch(...args);
+  async (args: Parameters<typeof apiSearch>, { rejectWithValue }) => {
+    const res = await apiSearch(...args);
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
   }
 );
 
@@ -28,11 +32,7 @@ const searchStateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(searchKeyword.fulfilled, (state, action) => {
-      if (isLeft(action.payload)) {
-        state = initialState;
-        return;
-      }
-      state = action.payload.right;
+      state = action.payload;
       return state; //need to do this not sure why...
     });
   },

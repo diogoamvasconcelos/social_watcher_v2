@@ -14,19 +14,37 @@ export type UserState = {
   fetchStatus: "idle" | "loading";
 };
 
-export const getUserDetails = createAsyncThunk("get:user", async () => {
-  return await apiGetUser();
-});
+export const getUserDetails = createAsyncThunk(
+  "get:user",
+  async (_, { rejectWithValue }) => {
+    const res = await apiGetUser();
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
+  }
+);
 export const getUserSearchObjects = createAsyncThunk(
   "get:searchObjects",
-  async () => {
-    return await apiGetSearchObjects();
+  async (_, { rejectWithValue }) => {
+    const res = await apiGetSearchObjects();
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
   }
 );
 export const updateUserSearchObjects = createAsyncThunk(
   "put:searchObject",
-  async (args: Parameters<typeof apiUpdateSearchObject>) => {
-    return await apiUpdateSearchObject(...args);
+  async (
+    args: Parameters<typeof apiUpdateSearchObject>,
+    { rejectWithValue }
+  ) => {
+    const res = await apiUpdateSearchObject(...args);
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
   }
 );
 
@@ -40,33 +58,20 @@ const userStateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // TODO: add `.addCase(xxxxxx.rejected, ...)
       .addCase(getUserDetails.fulfilled, (state, action) => {
-        if (isLeft(action.payload)) {
-          state.details = undefined;
-          return;
-        }
-
-        state.details = action.payload.right;
+        state.details = action.payload;
       })
       .addCase(getUserSearchObjects.fulfilled, (state, action) => {
-        if (isLeft(action.payload)) {
-          state.searchObjects = [];
-          return;
-        }
-
-        state.searchObjects = action.payload.right.items;
+        state.searchObjects = action.payload.items;
       })
       .addCase(updateUserSearchObjects.pending, (state, _action) => {
         state.fetchStatus = "loading";
       })
       .addCase(updateUserSearchObjects.fulfilled, (state, action) => {
         state.fetchStatus = "idle";
-        if (isLeft(action.payload)) {
-          state.searchObjects = [];
-          return;
-        }
 
-        const updatedSearchObject: SearchObjectDomain = action.payload.right;
+        const updatedSearchObject: SearchObjectDomain = action.payload;
         state.searchObjects = state.searchObjects.map((searchObject) =>
           searchObject.index == updatedSearchObject.index
             ? updatedSearchObject

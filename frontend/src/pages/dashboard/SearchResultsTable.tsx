@@ -23,6 +23,8 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         return "twitter post";
       case "reddit":
         return "reddit post";
+      case "hackernews":
+        return "hackernews post";
     }
   };
 
@@ -32,6 +34,8 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         return searchResult.data.text;
       case "reddit":
         return searchResult.data.selftext;
+      case "hackernews":
+        return searchResult.data.text;
     }
   };
 
@@ -118,10 +122,12 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
     }
 
     void dispatch(
-      searchKeyword({
-        keyword: newLowerCase(keyword),
-        dataQuery: val.length == 0 ? undefined : val,
-      })
+      searchKeyword([
+        {
+          keyword: newLowerCase(keyword),
+          dataQuery: val.length == 0 ? undefined : val,
+        },
+      ])
     );
   };
 

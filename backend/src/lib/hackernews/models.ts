@@ -29,7 +29,7 @@ export const getItemHNResponseCodec = t.exact(
   t.type({
     id: t.number,
     created_at: dateISOString,
-    points: t.number,
+    points: optionalNull(t.number),
   })
 );
 export type GetItemHNResponse = t.TypeOf<typeof getItemHNResponseCodec>;
