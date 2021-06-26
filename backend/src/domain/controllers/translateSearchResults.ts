@@ -15,11 +15,12 @@ export const translateSearchResults = async <T extends SearchResult>(
 ): Promise<T[]> => {
   const getText = (item: SearchResult) => {
     switch (item.socialMedia) {
-      case "twitter": {
+      case "twitter":
         return item.data.text;
-      }
       case "reddit":
         return item.data.selftext;
+      case "hackernews":
+        return item.data.text;
       default:
         return throwUnexpectedCase(item, "translateSearchResults");
     }

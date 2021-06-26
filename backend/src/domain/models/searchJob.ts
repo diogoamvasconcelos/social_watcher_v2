@@ -22,8 +22,17 @@ export const redditSearchJobCodec = t.intersection([
 ]);
 export type RedditSearchJob = t.TypeOf<typeof redditSearchJobCodec>;
 
+export const hackernewsSearchJobCodec = t.intersection([
+  searchJobBaseCodec,
+  t.type({
+    socialMedia: t.literal("hackernews"),
+  }),
+]);
+export type HackerNewsSearchJob = t.TypeOf<typeof hackernewsSearchJobCodec>;
+
 export const searchJobCodec = t.union([
   twitterSearchJobCodec,
   redditSearchJobCodec,
+  hackernewsSearchJobCodec,
 ]);
 export type SearchJob = t.TypeOf<typeof searchJobCodec>;

@@ -2,7 +2,7 @@ import * as t from "io-ts";
 import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
-import { dateISOString, optionalNull } from "@diogovasconcelos/lib/iots";
+import { dateISOString } from "@diogovasconcelos/lib/iots";
 
 export const searchResultMetadaCodec = t.type({
   id: t.string,
@@ -44,11 +44,11 @@ export const hackernewsSearchResultCodec = t.intersection([
         text: t.string,
         author: t.string,
         objectId: t.string,
-        storyId: optionalNull(t.string),
         storyLink: t.string,
         numComments: t.number,
       }),
       t.partial({
+        storyId: t.string,
         translatedText: t.string,
         lang: t.string,
       }),

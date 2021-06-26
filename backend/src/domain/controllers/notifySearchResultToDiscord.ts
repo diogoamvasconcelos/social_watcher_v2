@@ -3,6 +3,7 @@ import { Logger } from "../../lib/logger";
 import { throwUnexpectedCase } from "../../lib/runtime";
 import { DiscordNotificationConfig } from "../models/notificationJob";
 import {
+  HackernewsSearchResult,
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
@@ -33,6 +34,9 @@ const buildMessage = (searchResult: SearchResult): string => {
     case "reddit": {
       return buildRedditMessage(searchResult);
     }
+    case "hackernews": {
+      return buildHackernewsMessage(searchResult);
+    }
     default:
       return throwUnexpectedCase(searchResult, "discordBuildMessage");
   }
@@ -61,6 +65,30 @@ const buildRedditMessage = (searchResult: RedditSearchResult): string => {
   const messages = [
     `New '${searchResult.keyword}' Reddit message`,
     searchResult.link,
+    searchResult.data.translatedText
+      ? [
+          `Translated message (lang: ${searchResult.data.lang})`,
+          "```",
+          searchResult.data.translatedText,
+          "```",
+        ]
+      : undefined,
+  ];
+
+  return _.flatten(messages)
+    .filter((message) => message != undefined)
+    .join("\n");
+};
+
+const buildHackernewsMessage = (
+  searchResult: HackernewsSearchResult
+): string => {
+  const messages = [
+    `New '${searchResult.keyword}' Hackernews message (${searchResult.data.numComments} comments)`,
+    searchResult.link,
+    searchResult.data.storyId
+      ? [`parent: ${searchResult.data.storyLink}`]
+      : undefined,
     searchResult.data.translatedText
       ? [
           `Translated message (lang: ${searchResult.data.lang})`,

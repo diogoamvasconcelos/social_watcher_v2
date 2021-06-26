@@ -35,7 +35,7 @@ export const getUserByCustomerId = async (
     return userEither;
   }
   if (userEither.right === "NOT_FOUND") {
-    return right(userEither.right);
+    return right("NOT_FOUND");
   }
 
   const paymentDataEither = await getPaymentDataFn(logger, userId);
@@ -43,7 +43,7 @@ export const getUserByCustomerId = async (
     return paymentDataEither;
   }
   if (paymentDataEither.right === "NOT_FOUND") {
-    return right(paymentDataEither.right);
+    return right("NOT_FOUND");
   }
 
   return right({

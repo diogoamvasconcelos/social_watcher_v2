@@ -22,6 +22,7 @@ export const decode = <A>(
 // Useful sometimes, but doens't solve all the problems, as it doesn't create the "?" field
 // more info: https://github.com/gcanti/io-ts/issues/56
 export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);
+export const nullable = <T extends t.Mixed>(T: T) => t.union([t.null, T]);
 export const optionalNull = <T extends t.Mixed>(T: T) =>
   t.union([t.undefined, t.null, T]);
 

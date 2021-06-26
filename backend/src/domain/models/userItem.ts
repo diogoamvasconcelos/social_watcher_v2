@@ -49,10 +49,12 @@ export const redditSearchDataCodec = t.intersection([
     over18: t.boolean,
   }),
 ]);
+export const hackernewsSearchDataCodec = socialMediaSearchDataCodec;
 
 const searchObjectSearchData = {
   twitter: twitterSearchDataCodec,
   reddit: redditSearchDataCodec,
+  hackernews: hackernewsSearchDataCodec,
 };
 const searchObjectNotificationData = {
   discordNotification: discordNotificationConfigCodec,
@@ -92,6 +94,7 @@ export const searchObjectUserDataIoToDomain = (
           enabledStatus: "DISABLED",
           over18: false,
         },
+        hackernews: { enabledStatus: "DISABLED" },
       },
       notificationData: {
         discordNotification: {
@@ -110,6 +113,7 @@ export const searchObjectUserDataIoToDomain = (
     searchData: {
       twitter: io.searchData.twitter ?? defaultData.searchData.twitter,
       reddit: io.searchData.reddit ?? defaultData.searchData.reddit,
+      hackernews: io.searchData.hackernews ?? defaultData.searchData.hackernews,
     },
     notificationData: {
       discordNotification:

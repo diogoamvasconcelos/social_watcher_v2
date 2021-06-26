@@ -17,6 +17,8 @@
 - Add new social media to: `src/domain/models/socialMedia.ts`
 - propagate all types fixes required for this
 
+  - also to `src/domain/models/searchJob.ts`
+
 - add `build<newSocialMedia>SearchResult` to `test/lib/builders`
 - use this to builder on some tests
 

@@ -59,6 +59,9 @@ const defaultRequestData: SearchObjectUserDataIo = {
       enabledStatus: "DISABLED",
       over18: false,
     },
+    hackernews: {
+      enabledStatus: "DISABLED",
+    },
   },
   notificationData: {
     discordNotification: {

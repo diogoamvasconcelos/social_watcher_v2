@@ -1,5 +1,6 @@
 import { PartialDeep } from "type-fest";
 import {
+  HackernewsSearchResult,
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
@@ -49,6 +50,8 @@ export const buildSearchResult = (
       return buildTwitterSearchResult({ ...partial, socialMedia: "twitter" });
     case "reddit":
       return buildRedditSearchResult(partial);
+    case "hackernews":
+      return buildHackernewsSearchResult(partial);
   }
 };
 
@@ -103,6 +106,32 @@ export const buildRedditSearchResult = (
         subreddit: "some-subreddit",
         subreddit_subscribers: 0,
         over_18: false as boolean,
+      },
+    },
+    partial ?? {}
+  );
+};
+export const buildHackernewsSearchResult = (
+  partial?: PartialDeep<HackernewsSearchResult>
+): HackernewsSearchResult => {
+  const now = getNow();
+  const id = uuid();
+
+  return deepmergeSafe(
+    {
+      id,
+      keyword: newLowerCase(uuid()),
+      socialMedia: "hackernews",
+      happenedAt: now,
+      link: "some-link",
+      data: {
+        id,
+        text: "some-text",
+        author: "author",
+        objectId: "objectId",
+        storyId: "storyId",
+        storyLink: "some-story-link",
+        numComments: 0,
       },
     },
     partial ?? {}
