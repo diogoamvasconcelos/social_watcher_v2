@@ -1,6 +1,6 @@
-import { Keyword } from "src/domain/models/keyword";
-import { HackernewsSearchResult } from "src/domain/models/searchResult";
-import { SearchHNResponseItem } from "src/lib/hackernews/models";
+import { Keyword } from "../../domain/models/keyword";
+import { HackernewsSearchResult } from "../../domain/models/searchResult";
+import { SearchHNResponseItem } from "../../lib/hackernews/models";
 import {
   getClient as getHNClient,
   Client as HNClient,
