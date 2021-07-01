@@ -93,9 +93,10 @@ export const search = async (
           return right(item);
         }
 
+        // try to get the item of the parent to check it's num_comments
         const fetchedItemEither = await getItem(
           { client, logger },
-          item.objectID
+          item.parent_id ? item.parent_id.toString() : item.objectID
         );
         if (isLeft(fetchedItemEither)) {
           return fetchedItemEither;
