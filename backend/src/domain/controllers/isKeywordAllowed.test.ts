@@ -41,6 +41,10 @@ describe("controllers/isKeywordAllowed", () => {
           },
         },
       },
+      slackNotification: {
+        enabledStatus: "DISABLED",
+        channel: "",
+      },
     },
   };
 

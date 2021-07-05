@@ -2,7 +2,10 @@ import { positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
 import { keywordCodec } from "./keyword";
-import { discordNotificationConfigCodec } from "./notificationJob";
+import {
+  discordNotificationConfigCodec,
+  slackNotificationConfigCodec,
+} from "./notificationJob";
 import { userCodec, userIdCodec } from "./user";
 
 // +++++++++++++
@@ -58,6 +61,7 @@ const searchObjectSearchData = {
 };
 const searchObjectNotificationData = {
   discordNotification: discordNotificationConfigCodec,
+  slackNotification: slackNotificationConfigCodec,
 };
 
 export const searchObjectUserDataIoCodec = t.exact(
@@ -104,6 +108,10 @@ export const searchObjectUserDataIoToDomain = (
             credentials: { token: "" },
           },
         },
+        slackNotification: {
+          enabledStatus: "DISABLED",
+          channel: "",
+        },
       },
     };
   }
@@ -119,6 +127,9 @@ export const searchObjectUserDataIoToDomain = (
       discordNotification:
         io.notificationData.discordNotification ??
         defaultData.notificationData.discordNotification,
+      slackNotification:
+        io.notificationData.slackNotification ??
+        defaultData.notificationData.slackNotification,
     },
   };
 };

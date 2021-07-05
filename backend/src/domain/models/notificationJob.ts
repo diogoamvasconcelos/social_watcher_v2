@@ -10,6 +10,9 @@ const notificationJobBaseCodec = t.type({
   searchResult: searchResultCodec,
 });
 
+// +++++++++++
+// + Discord +
+// +++++++++++
 export const discordNotificationConfigCodec = t.intersection([
   notificationConfigBaseCodec,
   t.type({
@@ -34,5 +37,35 @@ export type DiscordNotificatonJob = t.TypeOf<
   typeof discordNotificationJobCodec
 >;
 
-export const notificationJobCodec = discordNotificationJobCodec; // t.intersection([iscordNotificationJobCodec);
+// +++++++++++
+// + Slack +
+// +++++++++++
+
+// TODO: fix this with actual required fields
+export const slackNotificationConfigCodec = t.intersection([
+  notificationConfigBaseCodec,
+  t.type({
+    channel: t.string,
+  }),
+]);
+export type SlackNotificationConfig = t.TypeOf<
+  typeof slackNotificationConfigCodec
+>;
+
+export const slackNotificationJobCodec = t.intersection([
+  notificationJobBaseCodec,
+  t.type({
+    notificationMedium: t.literal("slack"),
+    config: slackNotificationConfigCodec,
+  }),
+]);
+export type SlackNotificatonJob = t.TypeOf<typeof slackNotificationJobCodec>;
+
+// +++++++
+// + All +
+// +++++++
+export const notificationJobCodec = t.union([
+  discordNotificationJobCodec,
+  slackNotificationJobCodec,
+]);
 export type NotificationJob = t.TypeOf<typeof notificationJobCodec>;

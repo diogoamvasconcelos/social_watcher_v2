@@ -73,6 +73,10 @@ const defaultRequestData: SearchObjectUserDataIo = {
         },
       },
     },
+    slackNotification: {
+      enabledStatus: "ENABLED",
+      channel: "some-channel",
+    },
   },
 };
 
