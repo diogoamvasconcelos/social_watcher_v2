@@ -19,6 +19,7 @@
   "dependencies": {
     "@diogovasconcelos/lib": "^0.1.7",
     "@elastic/elasticsearch": "^7.13.0",
+    "@slack/web-api": "^6.3.0",
     "aws": "0.0.3-2",
     "aws-elasticsearch-connector": "^9.0.3",
     "aws-sdk": "^2.935.0",
