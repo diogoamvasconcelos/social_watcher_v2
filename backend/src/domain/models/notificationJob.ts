@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { slackCredentialsCodec } from "../../lib/slack/models";
 import { discordCredentialsCodec } from "../../lib/discord/models";
 import { searchResultCodec } from "./searchResult";
 
@@ -46,6 +47,9 @@ export const slackNotificationConfigCodec = t.intersection([
   notificationConfigBaseCodec,
   t.type({
     channel: t.string,
+    bot: t.type({
+      credentials: slackCredentialsCodec,
+    }),
   }),
 ]);
 export type SlackNotificationConfig = t.TypeOf<

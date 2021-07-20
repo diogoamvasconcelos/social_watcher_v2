@@ -111,6 +111,9 @@ export const searchObjectUserDataIoToDomain = (
         slackNotification: {
           enabledStatus: "DISABLED",
           channel: "",
+          bot: {
+            credentials: { token: "" },
+          },
         },
       },
     };

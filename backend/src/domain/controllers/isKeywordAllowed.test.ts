@@ -44,6 +44,11 @@ describe("controllers/isKeywordAllowed", () => {
       slackNotification: {
         enabledStatus: "DISABLED",
         channel: "",
+        bot: {
+          credentials: {
+            token: "slack-bot-token",
+          },
+        },
       },
     },
   };
