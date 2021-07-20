@@ -17,3 +17,9 @@
 # Phase 3:
 
 - add `Notify<new_notifier>` lambda handler
+
+- add tf files (lambda, sqs)
+
+# Phase 4:
+
+- add `notifySearchREsultsTo<new_notifier>` controller

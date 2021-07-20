@@ -2,14 +2,14 @@
 import _ from "lodash";
 import { Logger } from "../../lib/logger";
 import { throwUnexpectedCase } from "../../lib/runtime";
-import { DiscordNotificationConfig } from "../models/notificationJob";
+import { SlackNotificationConfig } from "../models/notificationJob";
 import {
   HackernewsSearchResult,
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
 } from "../models/searchResult";
-import { SendMessageToChannelFn } from "../ports/discordNotifier/sendMessageToChannel";
+import { SendMessageToChannelFn } from "../ports/slackNotifier/sendMessageToChannel";
 import { DefaultOkReturn } from "../ports/shared";
 
 export const notifySearchResultToSlack = async (
@@ -20,7 +20,7 @@ export const notifySearchResultToSlack = async (
     logger: Logger;
     sendMessageToChannel: SendMessageToChannelFn;
   },
-  channel: DiscordNotificationConfig["channel"],
+  channel: SlackNotificationConfig["channel"],
   searchResult: SearchResult
 ): DefaultOkReturn => {
   const message = buildMessage(searchResult);
@@ -39,7 +39,7 @@ const buildMessage = (searchResult: SearchResult): string => {
       return buildHackernewsMessage(searchResult);
     }
     default:
-      return throwUnexpectedCase(searchResult, "discordBuildMessage");
+      return throwUnexpectedCase(searchResult, "slackBuildMessage");
   }
 };
 
