@@ -93,7 +93,7 @@ describe("search endpoint e2e (nearly)", () => {
       updatedData: { nofSearchObjects: newPositiveInteger(0) },
     });
 
-    await sleep(5000); // wait to propagate
+    await sleep(10000); // wait to propagate (otherwise can be flaky)
 
     responseEither = await search(
       { client: apiClient, token },

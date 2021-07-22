@@ -41,6 +41,15 @@ const createEmptySearchObject = (
         },
       },
     },
+    slackNotification: {
+      enabledStatus: "DISABLED",
+      channel: "add channel id",
+      bot: {
+        credentials: {
+          token: "add bot token",
+        },
+      },
+    },
   },
 });
 
@@ -63,6 +72,9 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const [updatedDiscordConfig, setUpdatedDiscordConfig] = useState<
     SearchObjectDomain["notificationData"]["discordNotification"]
   >(searchObject.notificationData.discordNotification);
+  const [updatedSlackConfig, setUpdatedSlackConfig] = useState<
+    SearchObjectDomain["notificationData"]["slackNotification"]
+  >(searchObject.notificationData.slackNotification);
   const userFetchStatus = useAppSelector((state) => state.user.fetchStatus);
 
   const handleKeywordChanged = (val: string) => {
@@ -115,18 +127,24 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
     );
   };
 
-  const handleDiscordNotificationConfigOk = () => {
+  // +++++++++
+  // + Discord +
+  // +++++++++
+  const handleNotificationsConfigOk = () => {
     setConfigModalLoading(true);
     void dispatch(
       updateUserSearchObjects([
         searchObject.index,
         deepmergeSafe(searchObject, {
-          notificationData: { discordNotification: updatedDiscordConfig },
+          notificationData: {
+            discordNotification: updatedDiscordConfig,
+            slackNotification: updatedSlackConfig,
+          },
         }),
       ])
     );
   };
-  const handleDiscordNotificationConfigCancel = () => {
+  const handleNotificationsConfigCancel = () => {
     setConfigModalVisible(false);
   };
   const handleDiscordNotificationEnabledChanged = (val: boolean) => {
@@ -146,6 +164,31 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const handleDiscordNotificationBotTokenChanged = (val: string) => {
     setUpdatedDiscordConfig(
       deepmergeSafe(updatedDiscordConfig, {
+        bot: { credentials: { token: val } },
+      })
+    );
+  };
+
+  // +++++++++
+  // + Slack +
+  // +++++++++
+  const handleSlackNotificationEnabledChanged = (val: boolean) => {
+    setUpdatedSlackConfig(
+      deepmergeSafe(updatedSlackConfig, {
+        enabledStatus: val ? "ENABLED" : "DISABLED",
+      })
+    );
+  };
+  const handleSlackNotificationChannelChanged = (val: string) => {
+    setUpdatedSlackConfig(
+      deepmergeSafe(updatedSlackConfig, {
+        channel: val,
+      })
+    );
+  };
+  const handleSlackNotificationBotTokenChanged = (val: string) => {
+    setUpdatedSlackConfig(
+      deepmergeSafe(updatedSlackConfig, {
         bot: { credentials: { token: val } },
       })
     );
@@ -200,12 +243,6 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
       </RowDiv>
       <RowDiv>
         <Text>Notifications:</Text>
-        <Text>
-          {searchObject.notificationData.discordNotification.enabledStatus ===
-          "ENABLED"
-            ? "Discord"
-            : "None"}
-        </Text>
         <Button
           type="default"
           shape="circle"
@@ -214,13 +251,34 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           onClick={() => setConfigModalVisible(true)}
         />
       </RowDiv>
+      <RowDiv>
+        <Text>Discord:</Text>
+        <Text>
+          {searchObject.notificationData.discordNotification.enabledStatus ===
+          "ENABLED"
+            ? "Enabled"
+            : "Disabled"}
+        </Text>
+      </RowDiv>
+      <RowDiv>
+        <Text>Slack:</Text>
+        <Text>
+          {searchObject.notificationData.slackNotification.enabledStatus ===
+          "ENABLED"
+            ? "Enabled"
+            : "Disabled"}
+        </Text>
+      </RowDiv>
       <Modal
-        title="Discord Notifications"
+        title="Notifications"
         visible={configModalVisible}
-        onOk={handleDiscordNotificationConfigOk}
+        onOk={handleNotificationsConfigOk}
         confirmLoading={configModalLoading}
-        onCancel={handleDiscordNotificationConfigCancel}
+        onCancel={handleNotificationsConfigCancel}
       >
+        <RowDiv>
+          <Text>Discord</Text>
+        </RowDiv>
         <RowDiv>
           <p>Enabled</p>
           <Switch
@@ -247,6 +305,37 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
             editable={{ onChange: handleDiscordNotificationBotTokenChanged }}
           >
             {updatedDiscordConfig.bot.credentials.token}
+          </Text>
+        </RowDiv>
+        <RowDiv>
+          <Text>Slack</Text>
+        </RowDiv>
+        <RowDiv>
+          <p>Enabled</p>
+          <Switch
+            defaultChecked
+            checked={updatedSlackConfig.enabledStatus === "ENABLED"}
+            onChange={handleSlackNotificationEnabledChanged}
+          />
+        </RowDiv>
+        <RowDiv>
+          <p>channel ID</p>
+          <Text
+            strong={true}
+            editable={{ onChange: handleSlackNotificationChannelChanged }}
+          >
+            {updatedSlackConfig.channel}
+          </Text>
+        </RowDiv>
+        <RowDiv>
+          <p>Bot token</p>
+        </RowDiv>
+        <RowDiv>
+          <Text
+            strong={true}
+            editable={{ onChange: handleSlackNotificationBotTokenChanged }}
+          >
+            {updatedSlackConfig.bot.credentials.token}
           </Text>
         </RowDiv>
       </Modal>

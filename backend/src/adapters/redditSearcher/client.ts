@@ -45,5 +45,5 @@ export const outToDomain = (
   keyword,
   happenedAt: fromUnix(out.created_utc),
   data: out,
-  link: `https://reddit/${out.permalink}`,
+  link: `https://reddit.com${out.permalink}`,
 });

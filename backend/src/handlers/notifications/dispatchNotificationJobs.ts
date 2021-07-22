@@ -21,8 +21,9 @@ import {
 import { makeQueueNotificationJobs } from "../../adapters/notificationJobsQueue/queueNotificationJobs";
 import { getClient as getNotificationJobsQueueClient } from "../../adapters/notificationJobsQueue/client";
 import { QueueNotificationJobsFn } from "../../domain/ports/notificationJobsQueue/queueNotificationJobs";
-import { DiscordNotificatonJob } from "../../domain/models/notificationJob";
+import { NotificationJob } from "../../domain/models/notificationJob";
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
+import { throwUnexpectedCase } from "../..//lib/runtime";
 
 const config = getConfig();
 const logger = getLogger();
@@ -95,22 +96,38 @@ const dispatchNotificationJobs: DispatchJobs = async (
   searchResult,
   searchObjects
 ): DefaultOkReturn => {
-  const jobs: DiscordNotificatonJob[] = [];
+  const jobs: NotificationJob[] = [];
 
   for (const searchObject of searchObjects) {
-    const config = getConfigForNotificationMedium(
-      searchObject,
-      notificationMedium
-    );
-    if (config.enabledStatus !== "ENABLED") {
+    let job: NotificationJob | undefined = undefined;
+    switch (notificationMedium) {
+      // need to add the job in single object for types to be correct
+      case "discord":
+        job = {
+          searchResult,
+          notificationMedium,
+          config: searchObject.notificationData.discordNotification,
+        };
+        break;
+      case "slack":
+        job = {
+          searchResult,
+          notificationMedium,
+          config: searchObject.notificationData.slackNotification,
+        };
+        break;
+      default:
+        return throwUnexpectedCase(
+          notificationMedium,
+          "dispatchNotificationJobs"
+        );
+    }
+
+    if (job.config.enabledStatus !== "ENABLED") {
       continue;
     }
 
-    jobs.push({
-      searchResult,
-      notificationMedium,
-      config,
-    });
+    jobs.push(job);
   }
 
   if (jobs.length == 0) {
@@ -118,14 +135,4 @@ const dispatchNotificationJobs: DispatchJobs = async (
   }
 
   return await queueNotificationJobsFn(logger, notificationMedium, jobs);
-};
-
-const getConfigForNotificationMedium = (
-  searchObject: SearchObjectDomain,
-  notificationMedium: NotificationMedium
-) => {
-  switch (notificationMedium) {
-    case "discord":
-      return searchObject.notificationData.discordNotification;
-  }
 };

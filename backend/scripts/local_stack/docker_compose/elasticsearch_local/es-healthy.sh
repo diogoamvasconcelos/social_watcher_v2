@@ -114,7 +114,8 @@ container_keeps_failing() {
 
 container_healthy() {
   local address
-  address=$(docker inspect elasticsearch-local -f '{{range $k, $v := .NetworkSettings.Ports}}{{printf "%s\n" $v}}{{end}}' | head -n1 | sed 's/^..//' | sed 's/..$//' | sed -e 's/\s\+/:/g')
+  # get addresses > first line > select ip > remove bracers (front) > remove bracers (back) > join into good ip (with `:`)
+  address=$(docker inspect elasticsearch-local -f '{{range $k, $v := .NetworkSettings.Ports}}{{printf "%s\n" $v}}{{end}}' | head -n1 | grep -oP '\[\{.*?\}' |  sed 's/^..//' | sed 's/.$//' | sed -e 's/\s\+/:/g')
 
   curl -s ${address} 2>&1 > /dev/null
 }
@@ -124,7 +125,7 @@ main() {
   cd $THIS_PATH
 
   local timeout wait_time
-  timeout=180
+  timeout=
 
   while getopts :t: opt
   do
