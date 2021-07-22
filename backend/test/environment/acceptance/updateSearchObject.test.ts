@@ -123,7 +123,9 @@ describe("update searchObject e2e test", () => {
     expect(response).toEqual(
       expect.objectContaining({
         index,
-        notificationData: { discordNotification: discordNotificationConfig },
+        notificationData: expect.objectContaining({
+          discordNotification: discordNotificationConfig,
+        }),
       })
     );
 
@@ -137,7 +139,9 @@ describe("update searchObject e2e test", () => {
       items: [
         expect.objectContaining({
           index,
-          notificationData: { discordNotification: discordNotificationConfig },
+          notificationData: expect.objectContaining({
+            discordNotification: discordNotificationConfig,
+          }),
         }),
       ],
     });
