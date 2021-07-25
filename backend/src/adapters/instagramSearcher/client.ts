@@ -4,7 +4,7 @@ import { Client as SSMClient, getParameter } from "../../lib/ssm";
 import { Keyword } from "../../domain/models/keyword";
 import { InstagramSearchResult } from "../../domain/models/searchResult";
 import { fromUnix } from "../../lib/date";
-import { InstagramMediaNode } from "src/lib/instagram/models";
+import { InstagramMediaNode } from "../../lib/instagram/models";
 
 export const ensureAPIKeyInEnv = async (
   ssmClient: SSMClient,

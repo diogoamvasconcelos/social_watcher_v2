@@ -9,7 +9,7 @@ resource "aws_lambda_function" "dispatch_notification_jobs" {
   handler          = ".build/src/handlers/notifications/dispatchNotificationJobs.lambdaHandler"
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
-  memory_size      = "128"
+  memory_size      = "256"
   timeout          = "15"
   source_code_hash = filebase64sha256(local.lambda_file)
   description      = "Dispatches Notification jobs for the different notification mediums"

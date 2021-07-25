@@ -1,5 +1,5 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { search } from "src/lib/instagram/client";
+import { search } from "../../lib/instagram/client";
 import { SearchInstagramFn } from "../../domain/ports/instagramSearcher/searchInstagram";
 import { outToDomain } from "./client";
 
