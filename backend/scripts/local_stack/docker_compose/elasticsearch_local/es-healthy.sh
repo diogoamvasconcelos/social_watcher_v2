@@ -125,7 +125,7 @@ main() {
   cd $THIS_PATH
 
   local timeout wait_time
-  timeout=
+  timeout=90
 
   while getopts :t: opt
   do

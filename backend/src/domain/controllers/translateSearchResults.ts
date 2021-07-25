@@ -21,6 +21,8 @@ export const translateSearchResults = async <T extends SearchResult>(
         return item.data.selftext;
       case "hackernews":
         return item.data.text;
+      case "instagram":
+        return item.data.caption;
       default:
         return throwUnexpectedCase(item, "translateSearchResults");
     }

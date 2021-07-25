@@ -9,6 +9,7 @@ export const twitterCredentialsCodec = t.type({
 export type TwitterCredentials = t.TypeOf<typeof twitterCredentialsCodec>;
 
 export const searchRecentResponseItemCodec = t.type({
+  // TODO: add number of followers
   id: t.string,
   text: t.string,
   created_at: dateISOString,

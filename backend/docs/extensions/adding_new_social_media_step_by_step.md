@@ -26,6 +26,14 @@
 
 - add `<newSocialMedia>search_jobs` SQS queue to tf
 
+- add searchData to keyword `src/domain/models/userItem.ts -> searchObjectSearchData`
+
+- fix missing handling of new socialMedia (run yarn check-all)
+
+  - searchResultStore
+  - controllers/notify<notificationMedium>
+  - `src/domain/controllers/translateSearchResults.ts`
+
 - deploy
 
 ## Phase 2:

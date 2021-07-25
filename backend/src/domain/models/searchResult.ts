@@ -11,35 +11,44 @@ export const searchResultMetadaCodec = t.type({
   link: t.string,
 });
 
+const searchResultDataBaseCodec = t.partial({
+  translatedText: t.string,
+  lang: t.string,
+});
+
+// +++++++++++
+// + Twitter +
+// +++++++++++
 export const twitterSearchResultCodec = t.intersection([
   searchResultMetadaCodec,
   t.type({
     socialMedia: t.literal("twitter"),
-    data: t.intersection([
-      twitterSearchItemCodec,
-      t.partial({ translatedText: t.string }),
-    ]),
+    data: t.intersection([searchResultDataBaseCodec, twitterSearchItemCodec]),
   }),
 ]);
 export type TwitterSearchResult = t.TypeOf<typeof twitterSearchResultCodec>;
 
+// ++++++++++
+// + Reddit +
+// ++++++++++
 export const redditSearchResultCodec = t.intersection([
   searchResultMetadaCodec,
   t.type({
     socialMedia: t.literal("reddit"),
-    data: t.intersection([
-      redditSearchItemCodec,
-      t.partial({ translatedText: t.string, lang: t.string }),
-    ]),
+    data: t.intersection([searchResultDataBaseCodec, redditSearchItemCodec]),
   }),
 ]);
 export type RedditSearchResult = t.TypeOf<typeof redditSearchResultCodec>;
 
+// ++++++++++++++
+// + Hackernews +
+// ++++++++++++++
 export const hackernewsSearchResultCodec = t.intersection([
   searchResultMetadaCodec,
   t.type({
     socialMedia: t.literal("hackernews"),
     data: t.intersection([
+      searchResultDataBaseCodec,
       t.type({
         text: t.string,
         author: t.string,
@@ -49,8 +58,6 @@ export const hackernewsSearchResultCodec = t.intersection([
       }),
       t.partial({
         storyId: t.string,
-        translatedText: t.string,
-        lang: t.string,
       }),
     ]),
   }),
@@ -59,9 +66,40 @@ export type HackernewsSearchResult = t.TypeOf<
   typeof hackernewsSearchResultCodec
 >;
 
+// +++++++++++++
+// + Instagram +
+// +++++++++++++
+export const instagramSearchResultCodec = t.intersection([
+  searchResultMetadaCodec,
+  t.type({
+    socialMedia: t.literal("instagram"),
+    data: t.intersection([
+      searchResultDataBaseCodec,
+      t.type({
+        id: t.string,
+        caption: t.string,
+        owner: t.string,
+        shortcode: t.string,
+        display_url: t.string,
+        num_comments: t.number,
+        num_likes: t.number,
+        is_video: t.boolean,
+      }),
+      t.partial({
+        num_video_views: t.number,
+      }),
+    ]),
+  }),
+]);
+export type InstagramSearchResult = t.TypeOf<typeof instagramSearchResultCodec>;
+
+// ++++++++++++++++
+// + SearchResult +
+// ++++++++++++++++
 export const searchResultCodec = t.union([
   twitterSearchResultCodec,
   redditSearchResultCodec,
   hackernewsSearchResultCodec,
+  instagramSearchResultCodec,
 ]);
 export type SearchResult = t.TypeOf<typeof searchResultCodec>;

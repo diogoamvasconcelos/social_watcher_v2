@@ -1,4 +1,4 @@
-import { isLeft, left } from "fp-ts/lib/Either";
+import { isLeft, left, right } from "fp-ts/lib/Either";
 import { getClient as getKeywordStoreClient } from "../adapters/keywordStore/client";
 import { getClient as getSearchJobsQueueClient } from "../adapters/searchJobsQueue/client";
 import { makeGetActiveKeywords } from "../adapters/keywordStore/getActiveKeywords";
@@ -29,6 +29,11 @@ const handler = async () => {
 
   const results = await Promise.all(
     socialMedias.map(async (socialMedia) => {
+      // TODO: remove this once rate limiting for instagram search jobs is in place
+      if (socialMedia === "instagram") {
+        return right("OK");
+      }
+
       const activeKeywordsResult = await getActiveKeywordsFn(
         logger,
         socialMedia

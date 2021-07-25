@@ -50,6 +50,8 @@ export const documentToSearchResult = (
       return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
     case "hackernews":
       return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
+    case "instagram":
+      return _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"]);
     default:
       return throwUnexpectedCase(docItem, "documentToSearchResult");
   }
