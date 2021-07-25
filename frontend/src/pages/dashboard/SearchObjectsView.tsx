@@ -30,6 +30,7 @@ const createEmptySearchObject = (
     twitter: { enabledStatus: "DISABLED" },
     reddit: { enabledStatus: "DISABLED", over18: true },
     hackernews: { enabledStatus: "DISABLED" },
+    instagram: { enabledStatus: "DISABLED" },
   },
   notificationData: {
     discordNotification: {
@@ -127,9 +128,22 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
     );
   };
 
-  // +++++++++
+  const handleInstagramSwitchedChanged = (val: boolean) => {
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          searchData: {
+            instagram: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+          },
+        }),
+      ])
+    );
+  };
+
+  // +++++++++++
   // + Discord +
-  // +++++++++
+  // +++++++++++
   const handleNotificationsConfigOk = () => {
     setConfigModalLoading(true);
     void dispatch(
@@ -239,6 +253,16 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
             searchObject.searchData.hackernews.enabledStatus === "ENABLED"
           }
           onChange={handleHackernewsSwitchedChanged}
+        />
+      </RowDiv>
+      <RowDiv>
+        <Text>instagram</Text>
+        <Switch
+          defaultChecked
+          checked={
+            searchObject.searchData.instagram.enabledStatus === "ENABLED"
+          }
+          onChange={handleInstagramSwitchedChanged}
         />
       </RowDiv>
       <RowDiv>
