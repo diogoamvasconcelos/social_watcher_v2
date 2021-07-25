@@ -44,9 +44,3 @@ export const instagramMediaNodeCodec = t.exact(
   ])
 );
 export type InstagramMediaNode = t.TypeOf<typeof instagramMediaNodeCodec>;
-
-export const scrapeResponseCodec = t.type({
-  total: t.number,
-  medias: t.type({ node: t.array(instagramMediaNodeCodec) }),
-});
-export type ScrapeResponse = t.TypeOf<typeof scrapeResponseCodec>;

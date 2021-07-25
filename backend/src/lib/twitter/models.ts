@@ -31,8 +31,3 @@ export const searchRecentResponseCodec = t.type({
   meta: searchRecentResponseMetaCodec,
 });
 export type SearchRecentResponse = t.TypeOf<typeof searchRecentResponseCodec>;
-
-export type SearchRecentOptions = {
-  maxResults: number;
-  minutesAgo: number;
-};
