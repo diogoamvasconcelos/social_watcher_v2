@@ -1,8 +1,8 @@
-import { isLeft, left } from "fp-ts/lib/Either";
+import { isLeft, left, right } from "fp-ts/lib/Either";
 import { getClient as getKeywordStoreClient } from "../adapters/keywordStore/client";
 import { getClient as getSearchJobsQueueClient } from "../adapters/searchJobsQueue/client";
 import { makeGetActiveKeywords } from "../adapters/keywordStore/getActiveKeywords";
-import { socialMedias } from "../domain/models/socialMedia";
+import { SocialMedia, socialMedias } from "../domain/models/socialMedia";
 import { getConfig } from "../lib/config";
 import _ from "lodash";
 import { KeywordData } from "../domain/models/keyword";
@@ -11,6 +11,9 @@ import { getLogger } from "../lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
 import { eitherListToDefaultOk } from "../domain/ports/shared";
 import { fromEither } from "@diogovasconcelos/lib/iots";
+import { throwUnexpectedCase } from "../lib/runtime";
+import { getHoursAgo, getNow } from "../lib/date";
+import { makeUpdateKeywordData } from "../adapters/keywordStore/updateKeywordData";
 
 const config = getConfig();
 const logger = getLogger();
@@ -26,6 +29,10 @@ const handler = async () => {
     searchJobsQueueClient,
     config.searchJobsQueueTemplateName
   );
+  const updateKeywordData = makeUpdateKeywordData(
+    keywordStoreClient,
+    config.keywordsTableName
+  );
 
   const results = await Promise.all(
     socialMedias.map(async (socialMedia) => {
@@ -40,8 +47,31 @@ const handler = async () => {
         return left("ERROR");
       }
 
-      const searchJobs = activeKeywordsResult.right.map(keywordDataToSearchJob);
-      return await queueSearchJobsFn(logger, socialMedia, searchJobs);
+      const filteredKeywords = filterKeywords(
+        socialMedia,
+        activeKeywordsResult.right
+      );
+
+      const searchJobs = filteredKeywords.map(keywordDataToSearchJob);
+      const queueEither = await queueSearchJobsFn(
+        logger,
+        socialMedia,
+        searchJobs
+      );
+      if (isLeft(queueEither)) {
+        return queueEither;
+      }
+
+      // update searchedAt for queued keywords/searchObjects
+      const now = getNow();
+      const updateSearchedAtResults = await Promise.all(
+        filteredKeywords.map(
+          async (keywordData) =>
+            await updateKeywordData(logger, { ...keywordData, searchedAt: now })
+        )
+      );
+
+      return eitherListToDefaultOk(updateSearchedAtResults);
     })
   );
 
@@ -52,4 +82,44 @@ export const lambdaHandler = defaultMiddlewareStack(handler);
 
 const keywordDataToSearchJob = (keywordData: KeywordData) => {
   return _.omit(keywordData, ["status"]);
+};
+
+// TODO: write unit test
+export const filterKeywords = (
+  socialMedia: SocialMedia,
+  keywords: KeywordData[]
+) => {
+  switch (socialMedia) {
+    case "twitter":
+    case "reddit":
+    case "hackernews":
+      return keywords;
+    case "instagram": {
+      // Due to RapidAPI limits, instagram searchs needs to be more restricted
+      // ref: https://rapidapi.com/restyler/api/instagram40/pricing
+      const maxSearchObjectsPerSearch = 10;
+      const cooldownPeriodInHours = 24;
+      const allowedSearchedAt = new Date(getHoursAgo(cooldownPeriodInHours));
+
+      const filteredKeywords: KeywordData[] = [];
+      for (const keyword of keywords) {
+        if (filteredKeywords.length == maxSearchObjectsPerSearch) {
+          break;
+        }
+
+        if (
+          keyword.searchedAt &&
+          new Date(keyword.searchedAt) > allowedSearchedAt
+        ) {
+          continue;
+        }
+
+        filteredKeywords.push(keyword);
+      }
+
+      return filteredKeywords;
+    }
+    default:
+      return throwUnexpectedCase(socialMedia, "filterKeywords");
+  }
 };

@@ -6,6 +6,7 @@ import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import {
   buildHackernewsSearchResult,
+  buildInstagramSearchResult,
   buildRedditSearchResult,
   buildTwitterSearchResult,
 } from "../../../../lib/builders";
@@ -30,6 +31,7 @@ describe("adapters/putSearchResults", () => {
       buildTwitterSearchResult(),
       buildRedditSearchResult(),
       buildHackernewsSearchResult(),
+      buildInstagramSearchResult(),
     ];
 
     fromEither(await putSearchResultsFn(logger, searchResults));

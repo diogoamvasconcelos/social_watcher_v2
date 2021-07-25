@@ -20,11 +20,13 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
   const toSocialMediaLabel = (socialMedia: SocialMedia) => {
     switch (socialMedia) {
       case "twitter":
-        return "twitter post";
+        return "twitter message";
       case "reddit":
         return "reddit post";
       case "hackernews":
         return "hackernews post";
+      case "instagram":
+        return "instagram post";
     }
   };
 
@@ -36,6 +38,8 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         return searchResult.data.selftext;
       case "hackernews":
         return searchResult.data.text;
+      case "instagram":
+        return searchResult.data.caption;
     }
   };
 

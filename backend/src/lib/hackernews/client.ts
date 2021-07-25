@@ -50,13 +50,13 @@ export const search = async (
   keyword: string,
   params?: PartialDeep<SearchParams>
 ): Promise<Either<string[], SearchHNResponseItem[]>> => {
+  const searchParams = deepmergeSafe(defaultSearchParams, params ?? {});
+
   let results: SearchHNResponseItem[] = [];
   let page = 0;
 
-  const mergedParams = deepmergeSafe(defaultSearchParams, params ?? {});
-
   const timestamp = toUnixTimstamp(
-    new Date(getMinutesAgo(mergedParams.minutesAgo))
+    new Date(getMinutesAgo(searchParams.minutesAgo))
   );
 
   do {
@@ -66,7 +66,7 @@ export const search = async (
       params: {
         page,
         // https://www.algolia.com/doc/api-reference/api-parameters/hitsPerPage/
-        hitsPerPage: Math.min(mergedParams.maxResults, 1000),
+        hitsPerPage: Math.min(searchParams.maxResults, 1000),
         numericFilters: `created_at_i>${timestamp}`,
         query: keyword,
       },
@@ -120,7 +120,7 @@ export const search = async (
     results = [...results, ...patchedItems];
 
     page = response.page < response.nbPages ? response.page + 1 : -1;
-  } while (page > -1 && results.length < mergedParams.maxResults);
+  } while (page > -1 && results.length < searchParams.maxResults);
 
   return right(results);
 };

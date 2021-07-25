@@ -5,7 +5,10 @@ import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
-import { SearchObjectUserDataIo } from "../../domain/models/userItem";
+import {
+  SearchObjectUserDataDomain,
+  SearchObjectUserDataIo,
+} from "../../domain/models/userItem";
 import {
   fromEither,
   newLowerCase,
@@ -49,7 +52,7 @@ const defaultUser: User = {
   },
 };
 
-const defaultRequestData: SearchObjectUserDataIo = {
+const defaultRequestData: SearchObjectUserDataDomain = {
   keyword: newLowerCase("some_keyword"),
   searchData: {
     twitter: {
@@ -60,6 +63,9 @@ const defaultRequestData: SearchObjectUserDataIo = {
       over18: false,
     },
     hackernews: {
+      enabledStatus: "DISABLED",
+    },
+    instagram: {
       enabledStatus: "DISABLED",
     },
   },

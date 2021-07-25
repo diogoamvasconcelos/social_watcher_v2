@@ -2,13 +2,13 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { decode } from "@diogovasconcelos/lib/iots";
 import {
-  SearchRecentOptions,
   SearchRecentResponse,
   searchRecentResponseCodec,
   TwitterCredentials,
 } from "./models";
 import { getMinutesAgo } from "../date";
 import { doRequest } from "../axios";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 export const getClient = (credentials: TwitterCredentials) => {
   // Look into https://www.npmjs.com/package/oauth if we want to use the key/secret to fetch the token
@@ -22,15 +22,28 @@ export const getClient = (credentials: TwitterCredentials) => {
 };
 export type Client = ReturnType<typeof getClient>;
 
+// ++++++++++++++++
+// + SearchRecent +
+// ++++++++++++++++
 // https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
+
+export type SearchParams = {
+  maxResults: number;
+  minutesAgo: number;
+};
+
+const defaultSearchRequestParams: SearchParams = {
+  maxResults: 100,
+  minutesAgo: 10,
+};
+
 export const searchRecent = async (
   client: Client,
   keyword: string,
-  { maxResults, minutesAgo }: SearchRecentOptions = {
-    maxResults: 100,
-    minutesAgo: 10,
-  }
+  params?: Partial<SearchParams>
 ): Promise<Either<string[], SearchRecentResponse["data"]>> => {
+  const searchParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
+
   let results: SearchRecentResponse["data"] = [];
   let token: string | undefined = undefined;
 
@@ -38,9 +51,9 @@ export const searchRecent = async (
     const request: AxiosRequestConfig = {
       params: {
         query: `${keyword} -is:retweet`,
-        max_results: Math.min(maxResults, 100),
+        max_results: Math.min(searchParams.maxResults, 100),
         next_token: token,
-        start_time: getMinutesAgo(minutesAgo),
+        start_time: getMinutesAgo(searchParams.minutesAgo),
         "tweet.fields": [
           "created_at",
           "lang",
@@ -68,7 +81,7 @@ export const searchRecent = async (
 
     token = decodeResult.right.meta.next_token;
     results = [...results, ...decodeResult.right.data];
-  } while (token != undefined && results.length < maxResults);
+  } while (token != undefined && results.length < searchParams.maxResults);
 
   return right(results);
 };

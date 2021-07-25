@@ -9,6 +9,7 @@ export const twitterCredentialsCodec = t.type({
 export type TwitterCredentials = t.TypeOf<typeof twitterCredentialsCodec>;
 
 export const searchRecentResponseItemCodec = t.type({
+  // TODO: add number of followers
   id: t.string,
   text: t.string,
   created_at: dateISOString,
@@ -30,8 +31,3 @@ export const searchRecentResponseCodec = t.type({
   meta: searchRecentResponseMetaCodec,
 });
 export type SearchRecentResponse = t.TypeOf<typeof searchRecentResponseCodec>;
-
-export type SearchRecentOptions = {
-  maxResults: number;
-  minutesAgo: number;
-};

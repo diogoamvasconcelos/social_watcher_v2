@@ -4,6 +4,7 @@ import { getLogger } from "../../../../src/lib/logger";
 import { uuid } from "../../../../src/lib/uuid";
 import {
   buildHackernewsSearchResult,
+  buildInstagramSearchResult,
   buildRedditSearchResult,
   buildSQSEvent,
   buildTwitterSearchResult,
@@ -32,6 +33,7 @@ describe("handlers/syncSearchResultsToEs", () => {
       buildTwitterSearchResult({ keyword }),
       buildRedditSearchResult({ keyword }),
       buildHackernewsSearchResult({ keyword }),
+      buildInstagramSearchResult({ keyword }),
     ];
     const searchJobEvent = buildSQSEvent(searchResults);
 

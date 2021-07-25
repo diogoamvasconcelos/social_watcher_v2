@@ -2,8 +2,11 @@ import { newDateISOString } from "@diogovasconcelos/lib/iots";
 
 export const getNow = () => newDateISOString(new Date().toISOString());
 
+export const getHoursAgo = (hours: number = 0) => getMinutesAgo(hours * 60);
 export const getMinutesAgo = (minutes: number = 0) =>
-  newDateISOString(new Date(Date.now() - minutes * 60 * 1000).toISOString());
+  getSecondsAgo(minutes * 60);
+export const getSecondsAgo = (seconds: number = 0) =>
+  newDateISOString(new Date(Date.now() - seconds * 1000).toISOString());
 
 export const getSecondsAfter = (seconds: number = 0) =>
   newDateISOString(new Date(Date.now() + seconds * 1000).toISOString());

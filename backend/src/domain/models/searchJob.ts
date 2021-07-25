@@ -6,6 +6,9 @@ const searchJobBaseCodec = t.type({
 });
 export type SearchJobBase = t.TypeOf<typeof searchJobBaseCodec>;
 
+// +++++++++++
+// + Twitter +
+// +++++++++++
 export const twitterSearchJobCodec = t.intersection([
   searchJobBaseCodec,
   t.type({
@@ -14,6 +17,9 @@ export const twitterSearchJobCodec = t.intersection([
 ]);
 export type TwitterSearchJob = t.TypeOf<typeof twitterSearchJobCodec>;
 
+// ++++++++++
+// + Reddit +
+// ++++++++++
 export const redditSearchJobCodec = t.intersection([
   searchJobBaseCodec,
   t.type({
@@ -22,6 +28,9 @@ export const redditSearchJobCodec = t.intersection([
 ]);
 export type RedditSearchJob = t.TypeOf<typeof redditSearchJobCodec>;
 
+// ++++++++++++++
+// + Hackernews +
+// ++++++++++++++
 export const hackernewsSearchJobCodec = t.intersection([
   searchJobBaseCodec,
   t.type({
@@ -30,9 +39,24 @@ export const hackernewsSearchJobCodec = t.intersection([
 ]);
 export type HackernewsSearchJob = t.TypeOf<typeof hackernewsSearchJobCodec>;
 
+// +++++++++++++
+// + Instagram +
+// +++++++++++++
+export const instagramSearchJobCodec = t.intersection([
+  searchJobBaseCodec,
+  t.type({
+    socialMedia: t.literal("instagram"),
+  }),
+]);
+export type InstagramSearchJob = t.TypeOf<typeof instagramSearchJobCodec>;
+
+// +++++++++++++
+// + SearchJob +
+// +++++++++++++
 export const searchJobCodec = t.union([
   twitterSearchJobCodec,
   redditSearchJobCodec,
   hackernewsSearchJobCodec,
+  instagramSearchJobCodec,
 ]);
 export type SearchJob = t.TypeOf<typeof searchJobCodec>;

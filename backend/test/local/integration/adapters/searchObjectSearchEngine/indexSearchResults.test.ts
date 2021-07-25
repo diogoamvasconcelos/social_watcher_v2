@@ -20,6 +20,7 @@ import {
   buildRedditSearchResult,
   buildTwitterSearchResult,
   buildHackernewsSearchResult,
+  buildInstagramSearchResult,
 } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
 import { sortSearchResults } from "../../../../lib/sort";
@@ -53,6 +54,7 @@ describe("indexSearchResults", () => {
       buildTwitterSearchResult({ keyword }),
       buildRedditSearchResult({ keyword }),
       buildHackernewsSearchResult({ keyword }),
+      buildInstagramSearchResult({ keyword }),
     ];
 
     const indexResult = fromEither(

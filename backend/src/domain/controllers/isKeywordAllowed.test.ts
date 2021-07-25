@@ -30,6 +30,7 @@ describe("controllers/isKeywordAllowed", () => {
       twitter: { enabledStatus: "ENABLED" },
       reddit: { enabledStatus: "DISABLED", over18: false },
       hackernews: { enabledStatus: "DISABLED" },
+      instagram: { enabledStatus: "DISABLED" },
     },
     notificationData: {
       discordNotification: {

@@ -1,6 +1,7 @@
 import { PartialDeep } from "type-fest";
 import {
   HackernewsSearchResult,
+  InstagramSearchResult,
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
@@ -52,6 +53,8 @@ export const buildSearchResult = (
       return buildRedditSearchResult(partial);
     case "hackernews":
       return buildHackernewsSearchResult(partial);
+    case "instagram":
+      return buildInstagramSearchResult(partial);
   }
 };
 
@@ -80,6 +83,7 @@ export const buildTwitterSearchResult = (
     partial ?? {}
   );
 };
+
 export const buildRedditSearchResult = (
   partial?: PartialDeep<RedditSearchResult>
 ): RedditSearchResult => {
@@ -111,6 +115,7 @@ export const buildRedditSearchResult = (
     partial ?? {}
   );
 };
+
 export const buildHackernewsSearchResult = (
   partial?: PartialDeep<HackernewsSearchResult>
 ): HackernewsSearchResult => {
@@ -132,6 +137,35 @@ export const buildHackernewsSearchResult = (
         storyId: "storyId",
         storyLink: "some-story-link",
         numComments: 0,
+      },
+    },
+    partial ?? {}
+  );
+};
+
+export const buildInstagramSearchResult = (
+  partial?: PartialDeep<InstagramSearchResult>
+): InstagramSearchResult => {
+  const now = getNow();
+  const id = uuid();
+
+  return deepmergeSafe(
+    {
+      id,
+      keyword: newLowerCase(uuid()),
+      socialMedia: "instagram",
+      happenedAt: now,
+      link: "some-link",
+      data: {
+        id,
+        caption: "some-caption",
+        owner: "owner",
+        shortcode: "shortcode",
+        display_url: "display_url",
+        num_comments: 0,
+        num_likes: 0,
+        is_video: false as boolean, // lol
+        num_video_views: 0,
       },
     },
     partial ?? {}

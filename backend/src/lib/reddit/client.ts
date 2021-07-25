@@ -145,18 +145,18 @@ export const searchAll = async (
   keyword: string,
   params?: Partial<SearchParams>
 ): Promise<Either<"ERROR", SearchListingItem[]>> => {
+  const searchParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
+
   let results: SearchListingItem[] = [];
   let after: string | undefined | null = undefined;
-
-  const mergedParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
 
   do {
     const request: AxiosRequestConfig = {
       baseURL: "https://www.reddit.com/search.json",
       method: "GET",
       params: {
-        ...mergedParams,
-        limit: Math.min(mergedParams.limit, 100),
+        ...searchParams,
+        limit: Math.min(searchParams.limit, 100),
         q: keyword,
       },
     };
@@ -176,7 +176,7 @@ export const searchAll = async (
       ...results,
       ...responseEither.right.data.children.map((children) => children.data),
     ];
-  } while (after != undefined && results.length < mergedParams.limit);
+  } while (after != undefined && results.length < searchParams.limit);
 
   return right(results);
 };
