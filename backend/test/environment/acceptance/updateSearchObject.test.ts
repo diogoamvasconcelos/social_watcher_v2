@@ -45,15 +45,17 @@ describe("update searchObject e2e test", () => {
       keyword,
       searchData: {
         twitter: { enabledStatus: "ENABLED" },
-        reddit: { enabledStatus: "ENABLED", over18: false },
-        hackernews: { enabledStatus: "ENABLED" },
       },
       notificationData: {},
     };
 
     const expectedResponse = expect.objectContaining({
       index,
-      ...{ ...userData, notificationData: expect.any(Object) },
+      ...{
+        ...userData,
+        searchData: expect.objectContaining(userData.searchData),
+        notificationData: expect.objectContaining(userData.notificationData),
+      },
     });
 
     const response = fromEither(
