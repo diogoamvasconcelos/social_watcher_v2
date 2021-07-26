@@ -2,12 +2,12 @@ import { Keyword } from "../../domain/models/keyword";
 import { HackernewsSearchResult } from "../../domain/models/searchResult";
 import { SearchHNResponseItem } from "../../lib/hackernews/models";
 import {
-  getClient as getHNClient,
-  Client as HNClient,
+  getClient as getHackernewsClient,
+  Client as HackernewsClient,
 } from "../../lib/hackernews/client";
 
-export const getClient = getHNClient;
-export type Client = HNClient;
+export const getClient = getHackernewsClient;
+export type Client = HackernewsClient;
 
 export const outToDomain = (
   keyword: Keyword,

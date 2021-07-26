@@ -44,3 +44,6 @@ export const instagramMediaNodeCodec = t.exact(
   ])
 );
 export type InstagramMediaNode = t.TypeOf<typeof instagramMediaNodeCodec>;
+
+export const instagramApiKeyCodec = t.string;
+export type InstagramApiKey = t.TypeOf<typeof instagramApiKeyCodec>;

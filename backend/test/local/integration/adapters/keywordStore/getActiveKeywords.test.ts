@@ -25,7 +25,7 @@ describe("getActiveKeywords", () => {
   };
 
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
   });
 
   beforeEach(async () => {

@@ -1,5 +1,5 @@
 import { getLogger } from "../../src/lib/logger";
-import { search } from "../../src/lib/instagram/client";
+import { getClient, search } from "../../src/lib/instagram/client";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import util from "util";
 import { buildSQSEvent } from "../../test/lib/builders";
@@ -9,7 +9,10 @@ import { lambdaHandler } from "../../src/handlers/searchers/searchInstagram";
 const logger = getLogger();
 
 const searchInstagram = async () => {
-  const result = fromEither(await search({ logger }, "diogo vasconcelos"));
+  const client = await getClient("missing-api-key");
+  const result = fromEither(
+    await search({ logger, client }, "diogo vasconcelos")
+  );
   console.log(util.inspect(result, { showHidden: false, depth: null }));
   console.log(
     result.map((res) => ({ shortcode: res.shortcode, isvideo: res.is_video }))
@@ -30,11 +33,11 @@ const searchInstagramUsingHandler = async () => {
 
 export const main = async () => {
   try {
-    //await searchInstagram();
+    await searchInstagram();
     await searchInstagramUsingHandler();
   } catch (error) {
     logger.error("main failed", { error });
   }
 };
 
-void main();
+//void main();

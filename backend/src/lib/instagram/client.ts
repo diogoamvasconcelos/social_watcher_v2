@@ -1,12 +1,25 @@
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { scrapeTag, ScrapeMediaNode } from "instagram-scraping";
+import { ScrapeMediaNode } from "instagram-scraping";
 import { fromUnix, getMinutesAgo } from "../date";
 import { Logger } from "../logger";
-import { InstagramMediaNode, instagramMediaNodeCodec } from "./models";
+import { Awaited } from "../types";
+import {
+  InstagramApiKey,
+  InstagramMediaNode,
+  instagramMediaNodeCodec,
+} from "./models";
+
+// instagram-scraping modulen checks env vars (for APIKEY) at load time, so we need to load it on demand
+export const getClient = async (apiKey: InstagramApiKey) => {
+  process.env["RAPIDAPI_KEY"] = apiKey;
+  return await import("instagram-scraping");
+};
+export type Client = Awaited<ReturnType<typeof getClient>>;
 
 export type InstagramDependencies = {
+  client: Client;
   logger: Logger;
 };
 
@@ -26,7 +39,7 @@ const defaultSearchRequestParams: SearchParams = {
 };
 
 export const search = async (
-  { logger }: InstagramDependencies,
+  { client, logger }: InstagramDependencies,
   text: string,
   params?: Partial<SearchParams>
 ): Promise<Either<"ERROR", InstagramMediaNode[]>> => {
@@ -35,7 +48,7 @@ export const search = async (
   try {
     // tags can't have spaces, only characters, numbers and underscore
     const tag = text.replace(/[^a-zA-Z0-9_]/g, "");
-    const tagRes = await scrapeTag(tag);
+    const tagRes = await client.scrapeTag(tag);
     // this does too many requests: expensive and blocked
     //     const deepTagRes = await ig.deepScrapeTagPage(text);
 

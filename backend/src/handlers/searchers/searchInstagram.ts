@@ -3,19 +3,23 @@ import { getClient as getSsmClient } from "../../lib/ssm";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";
 import { makeSearcherHandler } from "./shared";
-import { ensureAPIKeyInEnv } from "../../adapters/instagramSearcher/client";
 import { makeSearchInstagram } from "../../adapters/instagramSearcher/searchInstagram";
 import { isLeft } from "fp-ts/lib/Either";
+import {
+  getClient as getInstagramClient,
+  getClientAPIKey,
+} from "../../adapters/instagramSearcher/client";
 
 const logger = getLogger();
 
 const handler = async (event: SQSEvent) => {
-  const ensureAPIKeyEither = await ensureAPIKeyInEnv(getSsmClient(), logger);
-  if (isLeft(ensureAPIKeyEither)) {
-    return ensureAPIKeyEither;
+  const apiKeyEither = await getClientAPIKey(getSsmClient(), logger);
+  if (isLeft(apiKeyEither)) {
+    return apiKeyEither;
   }
 
-  const searchInstagramFn = makeSearchInstagram();
+  const instagramClient = await getInstagramClient(apiKeyEither.right);
+  const searchInstagramFn = makeSearchInstagram(instagramClient);
 
   return await makeSearcherHandler({
     logger,

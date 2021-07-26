@@ -1,6 +1,6 @@
 import { scrapeTag } from "instagram-scraping";
 import { getLogger } from "../logger";
-import { search } from "./client";
+import { getClient, search } from "./client";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { InstagramMediaNode } from "./models";
 import { uuid } from "../uuid";
@@ -24,7 +24,8 @@ describe("instagram", () => {
   it("can handle empty nodes", async () => {
     scrapeTagMock.mockResolvedValueOnce({ total: 0, medias: [] });
 
-    const result = fromEither(await search({ logger }, "test"));
+    const client = await getClient("some-api-key");
+    const result = fromEither(await search({ logger, client }, "test"));
 
     expect(result).toHaveLength(0);
   });
@@ -40,8 +41,9 @@ describe("instagram", () => {
       })),
     });
 
+    const client = await getClient("some-api-key");
     const result = fromEither(
-      await search({ logger }, "test", { maxResults: 10 })
+      await search({ logger, client }, "test", { maxResults: 10 })
     );
 
     expect(result).toHaveLength(10);
