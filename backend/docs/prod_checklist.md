@@ -18,7 +18,7 @@
   - add some heavy keywords (tesla, bitcoin, trump, etc)
 - give feedback if notification credentials (discord token) is not valid or fails
   - alert if notification failed...
-- enablw XRAY and use it on all lambdas and such
+- enable XRAY and use it on all lambdas and such
   - wrap sqs, dynamodb, es, etc clients with xray instrumentation
     - add segments and such
 - Monitoring:

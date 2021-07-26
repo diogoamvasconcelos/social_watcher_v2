@@ -1,4 +1,4 @@
-import { isLeft, left, right } from "fp-ts/lib/Either";
+import { isLeft, left } from "fp-ts/lib/Either";
 import { getClient as getKeywordStoreClient } from "../adapters/keywordStore/client";
 import { getClient as getSearchJobsQueueClient } from "../adapters/searchJobsQueue/client";
 import { makeGetActiveKeywords } from "../adapters/keywordStore/getActiveKeywords";
