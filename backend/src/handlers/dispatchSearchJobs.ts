@@ -96,7 +96,8 @@ export const filterKeywords = (
       return keywords;
     case "instagram": {
       // Due to RapidAPI limits, instagram searchs needs to be more restricted
-      // ref: https://rapidapi.com/restyler/api/instagram40/pricing
+      // - https://rapidapi.com/restyler/api/instagram40/pricing
+      // - https://docs.google.com/spreadsheets/d/1fS1pXaw-j79P1-mrVHD3agRqLvb-ARYbumLtoRdcKlU/edit#gid=0
       const maxSearchObjectsPerSearch = 10;
       const cooldownPeriodInHours = 24;
       const allowedSearchedAt = new Date(getHoursAgo(cooldownPeriodInHours));

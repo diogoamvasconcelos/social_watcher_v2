@@ -6,8 +6,6 @@ import { fromUnix, getMinutesAgo } from "../date";
 import { Logger } from "../logger";
 import { InstagramMediaNode, instagramMediaNodeCodec } from "./models";
 
-// TODO: add RAPIDAPI_KEY to envvar
-
 export type InstagramDependencies = {
   logger: Logger;
 };

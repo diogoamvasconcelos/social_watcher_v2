@@ -14,7 +14,7 @@ describe("handler/searchInstagram", () => {
   });
 
   // TODO: when RapidAPI allow this test we can re-enable it
-  it("can handle a instagram search job", async () => {
+  it.skip("can handle a instagram search job", async () => {
     const searchJobEvent = buildInstagramSearchJobEvent();
 
     const invokeResult = fromEither(

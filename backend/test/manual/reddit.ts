@@ -34,4 +34,4 @@ export const main = async () => {
   await searchReddit();
 };
 
-void main();
+//void main();

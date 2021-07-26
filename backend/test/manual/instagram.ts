@@ -30,11 +30,11 @@ const searchInstagramUsingHandler = async () => {
 
 export const main = async () => {
   try {
-    //await searchInstagram();
-    //await searchInstagramUsingHandler();
+    await searchInstagram();
+    await searchInstagramUsingHandler();
   } catch (error) {
     logger.error("main failed", { error });
   }
 };
 
-void main();
+//void main();

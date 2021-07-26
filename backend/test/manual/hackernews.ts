@@ -23,4 +23,4 @@ export const main = async () => {
   await getItemHn();
 };
 
-void main();
+//void main();
