@@ -9,6 +9,11 @@
 
 - possible workarounds: https://www.quora.com/How-do-websites-allow-unlimited-hashtag-search-when-Instagram-graph-API-is-limited-to-30-unique-hashtags-in-7-days
 
+## Using public API
+
+- https://rapidapi.com/restyler/api/instagram40/pricing
+- https://www.npmjs.com/package/instagram-scraping
+
 # Hackernews
 
 - https://hn.algolia.com/api
@@ -16,6 +21,26 @@
 
 # Telegram - notification
 
-# Discord - notification
+# Slack - notification
+
+- done
 
 # Email - notification
+
+# TikTok
+
+- https://www.npmjs.com/package/tiktok-api
+
+# Linkdin
+
+# Pintrest
+
+- uma bosta
+
+# Facebook
+
+- it's possible to do group search, maybe?
+
+# Youtube
+
+- search for video captions, comments (not sure how easy)

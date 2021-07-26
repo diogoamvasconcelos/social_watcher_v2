@@ -151,11 +151,11 @@
   - search endpoint: https://www.reddit.com/dev/api/#GET_search
   - add over_18 filter: https://www.reddit.com/r/redditdev/comments/8ow901/the_search_api_endpoint_ignores_the_include_over/
 
-  - add "add new social media" guide
+  - add "add new social media" guide <DONE>
   - add version to database structs (eg: reddit:enabled status should be patched when reading from db)
     - add a test where we store an old version, without reddit
 
-- add slack notifier
+- add slack notAifier <DONE>
 
 # Phase 9 - tech debt improvs
 

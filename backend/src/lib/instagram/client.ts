@@ -33,7 +33,9 @@ export const search = async (
   const searchParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
 
   try {
-    const tagRes = await scrapeTag(text);
+    // tags can't have spaces, only characters, numbers and underscore
+    const tag = text.replace(/[^a-zA-Z0-9_]/g, "");
+    const tagRes = await scrapeTag(tag);
     // this does too many requests: expensive and blocked
     //     const deepTagRes = await ig.deepScrapeTagPage(text);
 
