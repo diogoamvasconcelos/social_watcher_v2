@@ -9,7 +9,7 @@ import _ from "lodash";
 import "jest-extended";
 
 jest.mock("instagram-scraping", () => ({
-  ...jest.requireActual("../../adapters/userStore/putSearchObject"),
+  ...jest.requireActual("instagram-scraping"),
   scrapeTag: jest.fn(),
 }));
 const scrapeTagMock = scrapeTag as jest.MockedFunction<typeof scrapeTag>;

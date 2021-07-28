@@ -40,14 +40,14 @@ const defaultSearchRequestParams: SearchParams = {
 
 export const search = async (
   { client, logger }: InstagramDependencies,
-  text: string,
+  keyword: string,
   params?: Partial<SearchParams>
 ): Promise<Either<"ERROR", InstagramMediaNode[]>> => {
   const searchParams = deepmergeSafe(defaultSearchRequestParams, params ?? {});
 
   try {
     // tags can't have spaces, only characters, numbers and underscore
-    const tag = text.replace(/[^a-zA-Z0-9_]/g, "");
+    const tag = keyword.replace(/[^a-zA-Z0-9_]/g, "");
     const tagRes = await client.scrapeTag(tag);
     // this does too many requests: expensive and blocked
     //     const deepTagRes = await ig.deepScrapeTagPage(text);

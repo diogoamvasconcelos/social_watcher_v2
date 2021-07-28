@@ -1,7 +1,7 @@
 import { dateISOString, optionalNull } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 
-export const searchHNResponseItemCodec = t.exact(
+export const searchHackernewsResponseItemCodec = t.exact(
   t.type({
     author: t.string,
     objectID: t.string,
@@ -16,20 +16,31 @@ export const searchHNResponseItemCodec = t.exact(
     parent_id: optionalNull(t.number), // parent comment or root
   })
 );
-export type SearchHNResponseItem = t.TypeOf<typeof searchHNResponseItemCodec>;
+export type SearchHackernewsResponseItem = t.TypeOf<
+  typeof searchHackernewsResponseItemCodec
+>;
 
-export const searchHNResponseCodec = t.type({
-  hits: t.array(searchHNResponseItemCodec),
+export const searchHackernewsResponseCodec = t.type({
+  hits: t.array(searchHackernewsResponseItemCodec),
   page: t.number,
   nbPages: t.number,
 });
-export type SearchHNResponse = t.TypeOf<typeof searchHNResponseCodec>;
+export type SearchHackernewsResponse = t.TypeOf<
+  typeof searchHackernewsResponseCodec
+>;
 
-export const getItemHNResponseCodec = t.exact(
-  t.type({
-    id: t.number,
-    created_at: dateISOString,
-    points: optionalNull(t.number),
-  })
+export const getItemHackernewsResponseCodec = t.exact(
+  t.intersection([
+    t.type({
+      id: t.number,
+      created_at: dateISOString,
+      points: optionalNull(t.number),
+    }),
+    t.partial({
+      children: t.array(t.UnknownRecord),
+    }),
+  ])
 );
-export type GetItemHNResponse = t.TypeOf<typeof getItemHNResponseCodec>;
+export type GetItemHackernewsResponse = t.TypeOf<
+  typeof getItemHackernewsResponseCodec
+>;

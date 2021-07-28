@@ -1,6 +1,6 @@
 import { Keyword } from "../../domain/models/keyword";
 import { HackernewsSearchResult } from "../../domain/models/searchResult";
-import { SearchHNResponseItem } from "../../lib/hackernews/models";
+import { SearchHackernewsResponseItem } from "../../lib/hackernews/models";
 import {
   getClient as getHackernewsClient,
   Client as HackernewsClient,
@@ -11,7 +11,7 @@ export type Client = HackernewsClient;
 
 export const outToDomain = (
   keyword: Keyword,
-  out: SearchHNResponseItem
+  out: SearchHackernewsResponseItem
 ): HackernewsSearchResult => ({
   socialMedia: "hackernews",
   id: out.objectID,

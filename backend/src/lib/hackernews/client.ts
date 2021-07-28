@@ -5,18 +5,20 @@
 
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode } from "@diogovasconcelos/lib/iots";
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
+import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { PartialDeep } from "type-fest";
 import { doRequest } from "../axios";
 import { getMinutesAgo, toUnixTimstamp } from "../date";
 import { Logger } from "../logger";
 import {
-  GetItemHNResponse,
-  getItemHNResponseCodec,
-  searchHNResponseCodec,
-  SearchHNResponseItem,
+  GetItemHackernewsResponse,
+  getItemHackernewsResponseCodec,
+  searchHackernewsResponseCodec,
+  SearchHackernewsResponseItem,
 } from "./models";
+import Fuse from "fuse.js";
 
 export const getClient = () => {
   return axios.create({
@@ -45,14 +47,15 @@ const defaultSearchParams: SearchParams = {
   minutesAgo: 10,
 };
 
+//TODO: add some fuzzy checker to make sure result is related with keyword
 export const search = async (
   { client, logger }: HNDependencies,
   keyword: string,
   params?: PartialDeep<SearchParams>
-): Promise<Either<string[], SearchHNResponseItem[]>> => {
+): Promise<Either<string[], SearchHackernewsResponseItem[]>> => {
   const searchParams = deepmergeSafe(defaultSearchParams, params ?? {});
 
-  let results: SearchHNResponseItem[] = [];
+  let results: SearchHackernewsResponseItem[] = [];
   let page = 0;
 
   const timestamp = toUnixTimstamp(
@@ -74,21 +77,26 @@ export const search = async (
 
     const responseRaw = await doRequest(client, request);
     logger.debug("hackernews search response", {
-      data: responseRaw.data,
+      response: responseRaw as unknown as JsonEncodable,
       keyword,
     });
     if (responseRaw.status != 200) {
       return left([`${responseRaw.status} : ${responseRaw.data}`]);
     }
 
-    const responseEither = decode(searchHNResponseCodec, responseRaw.data);
+    const responseEither = decode(
+      searchHackernewsResponseCodec,
+      responseRaw.data
+    );
     if (isLeft(responseEither)) {
       return responseEither;
     }
     const response = responseEither.right;
 
+    const filteredResults = filterUnrelatedToKeyword(keyword, response.hits);
+
     const patchedItemsEither = await Promise.all(
-      response.hits.map(async (item) => {
+      filteredResults.map(async (item) => {
         if (item.num_comments) {
           return right(item);
         }
@@ -109,7 +117,7 @@ export const search = async (
       })
     );
 
-    let patchedItems: SearchHNResponseItem[] = [];
+    let patchedItems: SearchHackernewsResponseItem[] = [];
     for (const itemEither of patchedItemsEither) {
       if (isLeft(itemEither)) {
         return itemEither;
@@ -119,7 +127,7 @@ export const search = async (
 
     results = [...results, ...patchedItems];
 
-    page = response.page < response.nbPages ? response.page + 1 : -1;
+    page = response.page < response.nbPages - 1 ? response.page + 1 : -1;
   } while (page > -1 && results.length < searchParams.maxResults);
 
   return right(results);
@@ -128,7 +136,9 @@ export const search = async (
 export const getItem = async (
   { client, logger }: HNDependencies,
   id: string
-): Promise<Either<string[], GetItemHNResponse & { numComments: number }>> => {
+): Promise<
+  Either<string[], GetItemHackernewsResponse & { numComments: number }>
+> => {
   const request: AxiosRequestConfig = {
     url: `v1/items/${id}`,
     method: "GET",
@@ -136,25 +146,29 @@ export const getItem = async (
 
   const responseRaw = await doRequest(client, request);
   logger.debug("hackernews getItem response", {
-    data: responseRaw.data,
+    response: responseRaw as unknown as JsonEncodable,
     id,
   });
   if (responseRaw.status != 200) {
     return left([`${responseRaw.status} : ${responseRaw.data}`]);
   }
 
-  const responseEither = decode(getItemHNResponseCodec, responseRaw.data);
+  const responseEither = decode(
+    getItemHackernewsResponseCodec,
+    responseRaw.data
+  );
   if (isLeft(responseEither)) {
     return responseEither;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const countComments = (rawObj: AxiosResponse<any>["data"]): number => {
-    return rawObj.children.reduce(
+  const countComments = (data: GetItemHackernewsResponse): number => {
+    if (!data.children?.length) return 0;
+
+    return data.children.reduce(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (acc: number, currChild: AxiosResponse<any>["data"]) =>
-        acc + countComments(currChild),
-      (rawObj.children?.length ?? 0) as number
+      (acc: number, currChild: any) => acc + countComments(currChild),
+      data.children.length
     );
   };
 
@@ -162,4 +176,22 @@ export const getItem = async (
     ...responseEither.right,
     numComments: countComments(responseRaw.data),
   });
+};
+
+const filterUnrelatedToKeyword = (
+  keyword: string,
+  items: SearchHackernewsResponseItem[]
+) => {
+  // https://fusejs.io/api/options.html
+  const options = {
+    includeScore: true,
+    shouldSort: false,
+    ignoreLocation: true,
+    threshold: 0.2, // 0 = exact match, 1 = match eveythin
+    keys: ["comment_text", "story_title"],
+  };
+  const fuse = new Fuse(items, options);
+
+  const result = fuse.search(keyword);
+  return result.map((resultItem) => resultItem.item);
 };
