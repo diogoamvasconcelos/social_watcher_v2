@@ -16,6 +16,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
+  aliases = [local.page_url]
+
   enabled = true
 
   default_root_object = "index.html"
@@ -67,7 +69,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    #cloudfront_default_certificate = true
+    acm_certificate_arn = aws_acm_certificate_validation.main.certificate_arn
+    ssl_support_method  = "sni-only"
   }
 
   tags = local.tags
