@@ -5,7 +5,7 @@ import { Client, outToDomain } from "./client";
 
 export const makeSearchTwitter = (client: Client): SearchTwitterFn => {
   return async (logger, keyword) => {
-    const results = await searchRecent(client, keyword, {
+    const results = await searchRecent({ client, logger }, keyword, {
       maxResults: 100,
       minutesAgo: 20,
     });

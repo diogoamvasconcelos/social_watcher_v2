@@ -27,7 +27,7 @@ export const getClient = () => {
 };
 export type Client = ReturnType<typeof getClient>;
 
-export type HNDependencies = {
+type HackernewsDependencies = {
   client: Client;
   logger: Logger;
 };
@@ -47,9 +47,8 @@ const defaultSearchParams: SearchParams = {
   minutesAgo: 10,
 };
 
-//TODO: add some fuzzy checker to make sure result is related with keyword
 export const search = async (
-  { client, logger }: HNDependencies,
+  { client, logger }: HackernewsDependencies,
   keyword: string,
   params?: PartialDeep<SearchParams>
 ): Promise<Either<string[], SearchHackernewsResponseItem[]>> => {
@@ -116,7 +115,6 @@ export const search = async (
         });
       })
     );
-
     let patchedItems: SearchHackernewsResponseItem[] = [];
     for (const itemEither of patchedItemsEither) {
       if (isLeft(itemEither)) {
@@ -134,7 +132,7 @@ export const search = async (
 };
 
 export const getItem = async (
-  { client, logger }: HNDependencies,
+  { client, logger }: HackernewsDependencies,
   id: string
 ): Promise<
   Either<string[], GetItemHackernewsResponse & { numComments: number }>

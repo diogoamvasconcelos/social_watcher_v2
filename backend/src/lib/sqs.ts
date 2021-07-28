@@ -2,8 +2,6 @@ import * as t from "io-ts";
 import _ from "lodash";
 import {
   MessageList,
-  ChangeMessageVisibilityBatchRequestEntry,
-  ChangeMessageVisibilityBatchRequest,
   DeleteMessageBatchRequestEntry,
 } from "aws-sdk/clients/sqs";
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
@@ -190,29 +188,4 @@ export const deleteMessages = async (
     logger.error("sqs/deleteMessages failed", { error: error });
     return left("ERROR");
   }
-};
-
-export const hideMessages = async (
-  client: Client,
-  queueUrl: string,
-  messages: MessageList,
-  seconds: number
-): Promise<void> => {
-  const entries = messages.map(
-    (m): ChangeMessageVisibilityBatchRequestEntry => {
-      return {
-        Id: m.MessageId as string,
-        ReceiptHandle: m.ReceiptHandle as string,
-        VisibilityTimeout: seconds,
-      };
-    }
-  );
-
-  const request: ChangeMessageVisibilityBatchRequest = {
-    QueueUrl: queueUrl,
-    Entries: entries,
-  };
-
-  // TODO: parse results, some messages can fail and some can succeed, return this
-  await client.changeMessageVisibilityBatch(request).promise();
 };

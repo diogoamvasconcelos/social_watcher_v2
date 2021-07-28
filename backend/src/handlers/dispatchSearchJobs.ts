@@ -84,7 +84,6 @@ const keywordDataToSearchJob = (keywordData: KeywordData) => {
   return _.omit(keywordData, ["status"]);
 };
 
-// TODO: write unit test
 export const filterKeywords = (
   socialMedia: SocialMedia,
   keywords: KeywordData[]

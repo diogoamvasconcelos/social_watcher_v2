@@ -49,8 +49,9 @@ const buildMessage = (searchResult: SearchResult): string => {
 
 const buildTwitterMessage = (searchResult: TwitterSearchResult): string => {
   const messages = [
-    // TODO: add number of followers
-    `New '${searchResult.keyword}' Twitter message`,
+    `New '${searchResult.keyword}' Twitter message (${
+      searchResult.data.followers_count ?? 0
+    } followers)`,
     searchResult.link,
     searchResult.data.translatedText
       ? [
