@@ -186,7 +186,7 @@ const filterUnrelatedToKeyword = (
     shouldSort: false,
     ignoreLocation: true,
     threshold: 0.2, // 0 = exact match, 1 = match eveythin
-    keys: ["comment_text", "story_title"],
+    keys: ["comment_text", "title"],
   };
   const fuse = new Fuse(items, options);
 
