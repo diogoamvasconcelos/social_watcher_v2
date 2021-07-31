@@ -1,5 +1,11 @@
 import { isRight } from "fp-ts/lib/Either";
-import { DateFromISOStringV2, dateISOString, decode, lowerCase } from "./iots";
+import {
+  DateFromISOStringV2,
+  dateISOString,
+  decode,
+  emailFromString,
+  lowerCase,
+} from "./iots";
 
 describe("lowercase", () => {
   const testCases: [string, string, boolean][] = [
@@ -52,6 +58,26 @@ describe("DateISOString", () => {
     (_title: string, u: string | Date, isDateISOString: boolean) => {
       const decodeResult = decode(dateISOString, u);
       expect(isRight(decodeResult)).toEqual(isDateISOString);
+    }
+  );
+});
+
+describe("EmailFromString", () => {
+  const testCases: [string, string, boolean][] = [
+    ["empty string", "", false],
+    ["normal email", "test@example.com", true],
+    ["normal email with plus", "test+ola@gmail.com", true],
+    ["invalid email (not @)", "testexamplecom", false],
+    ["invalid email (not .)", "test@examplecom", false],
+    ["invalid email (spaces)", "test test@example.com", false],
+    ["invalid email (multiple)", "test@example.com, test2@example.com", false],
+  ];
+
+  test.each(testCases)(
+    "decode %p as emailFromString?",
+    (_title: string, u: string, isEmail: boolean) => {
+      const decodeResult = decode(emailFromString, u);
+      expect(isRight(decodeResult)).toEqual(isEmail);
     }
   );
 });

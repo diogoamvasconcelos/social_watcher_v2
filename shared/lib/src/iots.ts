@@ -3,6 +3,7 @@ import { isRight, left, Either, isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
 import { DateFromISOString } from "io-ts-types";
+import isEmail from "validator/lib/isEmail";
 
 export const fromEither = ruins.fromEither;
 
@@ -114,3 +115,20 @@ export type DateISOString = t.TypeOf<typeof dateISOString>;
 
 export const newDateISOString = (x: string): DateISOString =>
   fromEither(decode(dateISOString, x));
+
+// EmailFromString
+
+export interface EmailFromStringBrand {
+  readonly EmailFromString: unique symbol;
+}
+
+export const emailFromString = t.brand(
+  t.string,
+  (u): u is t.Branded<string, EmailFromStringBrand> => isEmail(u),
+  "EmailFromString" // the name must match the readonly field in the brand);
+);
+
+export type EmailFromString = t.TypeOf<typeof emailFromString>;
+
+export const newEmailFromString = (x: string): EmailFromString =>
+  fromEither(decode(emailFromString, x));
