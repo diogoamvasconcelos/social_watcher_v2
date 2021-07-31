@@ -90,6 +90,15 @@ resource "aws_iam_policy" "lambda_default" {
       ],
       "Resource": "arn:aws:es:*:*",
       "Effect": "Allow"
+    },
+    {
+      "Sid": "SimpleEmailSystem",
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+      ],
+      "Resource": "*"
+      "Effect": "Allow",
     }
   ]
 }
