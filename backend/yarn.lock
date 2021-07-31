@@ -1224,16 +1224,17 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@diogovasconcelos/lib@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@diogovasconcelos/lib/-/lib-0.1.7.tgz#812645de4ec8651c4d60a5c355e114492df94068"
-  integrity sha512-ebypf64ZII++GYgj5UfJA/iLzRESkd2ndPz01j3HAQGZAKx3xPz5fOk8BtUmcXoz7wjR4xMpmYA3WJdpU/3drA==
+"@diogovasconcelos/lib@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@diogovasconcelos/lib/-/lib-0.1.8.tgz#15343f9bf6c4b9f1af011852c11aba6422d6a222"
+  integrity sha512-CV2ttlsCg1BX3pvxJIi+YmI9leHTnFfRluZ3rLczezTrbenXEFxeXJnEvx1/xcxYYHNJ0UJ9TbCVDwCO38H0bQ==
   dependencies:
     deepmerge "^4.2.2"
     fp-ts "^2.10.5"
     io-ts "^2.2.16"
     io-ts-types "^0.5.16"
     ruins-ts "^0.0.3"
+    validator "^13.6.0"
 
 "@discordjs/collection@^0.1.6":
   version "0.1.6"
@@ -2164,10 +2165,10 @@ aws-sdk@^2.358.0:
     uuid "3.3.2"
     xml2js "0.4.19"
 
-aws-sdk@^2.956.0:
-  version "2.956.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.956.0.tgz#fbc3900f413bb1a7a48f586587a8edea76bca615"
-  integrity sha512-vSzL66tjeRSBPnLR2Pkx4qS7SPqADT7K9QBjWdMhVd9BF5spyMvJ9hReIEShILp3hq99sHI+MvO+uTUm5s023g==
+aws-sdk@^2.958.0:
+  version "2.958.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.958.0.tgz#c28b1cf98c93fc3401b47b9d4ac00083f4f9176c"
+  integrity sha512-D5/2mW+hl5+CYvAniB209VUN3lFo7ZypCdO0RxyKG49DjoB+h3wvNxJo/BKL3A0sSiMOlrT61vDWsmkeE34S/g==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -3005,10 +3006,10 @@ eslint-visitor-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.0.0.tgz#21fdc8fbcd9c795cc0321f0563702095751511a8"
   integrity sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==
 
-eslint@^7.31.0:
-  version "7.31.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.31.0.tgz#f972b539424bf2604907a970860732c5d99d3aca"
-  integrity sha512-vafgJpSh2ia8tnTkNUkwxGmnumgckLh5aAbLa1xRmIn9+owi8qBNGKL+B881kNKNTy7FFqTEkpNkUvmw0n6PkA==
+eslint@^7.32.0:
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.32.0.tgz#c6d328a14be3fb08c8d1d21e12c02fdb7a2a812d"
+  integrity sha512-VHZ8gX+EDfz+97jGcgyGCyRia/dPOd6Xh9yPv8Bl1+SoaIwD+a/vlrOmGRUyOYu7MwUhc7CxqeaDZU13S4+EpA==
   dependencies:
     "@babel/code-frame" "7.12.11"
     "@eslint/eslintrc" "^0.4.3"
@@ -6257,10 +6258,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-type-fest@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-1.2.2.tgz#1930bc36b2064f7ab4aa307a6d1b65965199c698"
-  integrity sha512-pfkPYCcuV0TJoo/jlsUeWNV8rk7uMU6ocnYNvca1Vu+pyKi8Rl8Zo2scPt9O72gCsXIm+dMxOOWuA3VFDSdzWA==
+type-fest@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-1.2.3.tgz#0f01bd89ca65ba5f3ebbb1646b314e2138d1f460"
+  integrity sha512-w81kTuuq5V8j7aZamYO9TJ+LYqhw11mkHyMISJIRl2+uMYmgOj3yhSLk2qH6lznyTicBOdMrudxrrVvCQzK1tQ==
 
 type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"
@@ -6399,6 +6400,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+validator@^13.6.0:
+  version "13.6.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-13.6.0.tgz#1e71899c14cdc7b2068463cb24c1cc16f6ec7059"
+  integrity sha512-gVgKbdbHgtxpRyR8K0O6oFZPhhB5tT1jeEHZR0Znr9Svg03U0+r9DXWMrnRAB+HtCStDQKlaIZm42tVsVjqtjg==
 
 vary@~1.1.2:
   version "1.1.2"
