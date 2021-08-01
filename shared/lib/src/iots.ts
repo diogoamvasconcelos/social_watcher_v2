@@ -1,5 +1,6 @@
 import * as t from "io-ts";
-import { isRight, left, Either, isLeft } from "fp-ts/lib/Either";
+import { isRight, left, Either, isLeft, right } from "fp-ts/lib/Either";
+import * as A from "fp-ts/lib/Array";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
 import { DateFromISOString } from "io-ts-types";
@@ -17,6 +18,17 @@ export const decode = <A>(
   } else {
     const errors = PathReporter.report(result);
     return left(errors);
+  }
+};
+
+export const toSingleEither = <L, R>(
+  eithers: Either<L, R>[]
+): Either<L[], R[]> => {
+  const separated = A.separate(eithers);
+  if (separated.left.length > 0) {
+    return left(separated.left);
+  } else {
+    return right(separated.right);
   }
 };
 

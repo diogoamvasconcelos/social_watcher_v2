@@ -1,11 +1,51 @@
-import { isRight } from "fp-ts/lib/Either";
+import { Either, isRight, left, right } from "fp-ts/lib/Either";
 import {
   DateFromISOStringV2,
   dateISOString,
   decode,
   emailFromString,
   lowerCase,
+  toSingleEither,
 } from "./iots";
+
+describe("toSingleEither", () => {
+  const testCases: [
+    string,
+    Either<string, string>[],
+    Either<string[], string[]>
+  ][] = [
+    ["empty list", [], right([])],
+    ["single right", [right("OK")], right(["OK"])],
+    ["single left", [left("ERROR")], left(["ERROR"])],
+    [
+      "many rights",
+      [right("OK#0"), right("OK#1"), right("OK#2")],
+      right(["OK#0", "OK#1", "OK#2"]),
+    ],
+    [
+      "many lefts",
+      [left("ERROR#0"), left("ERROR#1"), left("ERROR#2")],
+      left(["ERROR#0", "ERROR#1", "ERROR#2"]),
+    ],
+    [
+      "mixed",
+      [right("OK#0"), left("ERROR#0"), right("OK#1"), left("ERROR#1")],
+      left(["ERROR#0", "ERROR#1"]),
+    ],
+  ];
+
+  test.each(testCases)(
+    "toSingleEither %p",
+    (
+      _title: string,
+      eithers: Either<string, string>[],
+      singleEither: Either<string[], string[]>
+    ) => {
+      const result = toSingleEither(eithers);
+      expect(result).toEqual(singleEither);
+    }
+  );
+});
 
 describe("lowercase", () => {
   const testCases: [string, string, boolean][] = [

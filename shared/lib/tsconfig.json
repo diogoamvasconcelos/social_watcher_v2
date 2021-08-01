@@ -7,5 +7,5 @@
     "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": ["src/"],
-  "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**"]
+  "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**", "dist/**"]
 }
