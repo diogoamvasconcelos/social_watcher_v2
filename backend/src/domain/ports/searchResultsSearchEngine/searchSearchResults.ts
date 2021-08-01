@@ -1,4 +1,4 @@
-import { positiveInteger } from "@diogovasconcelos/lib/iots";
+import { DateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 import { Logger } from "../../../lib/logger";
 import { Keyword } from "../../models/keyword";
@@ -25,11 +25,17 @@ export type SearchSearchResultsResult = t.TypeOf<
   typeof searchSearchResultsResultCodec
 >;
 
+export type SearchSearchResultsParams = {
+  keyword: Keyword;
+  dataQuery?: string;
+  pagination?: PaginationRequest;
+  timeQuery?: {
+    happenedAtStart?: DateISOString;
+    happenedAtEnd?: DateISOString;
+  };
+};
+
 export type SearchSearchResultsFn = (
   logger: Logger,
-  searchParams: {
-    keyword: Keyword;
-    dataQuery?: string;
-    pagination?: PaginationRequest;
-  }
+  searchParams: SearchSearchResultsParams
 ) => CustomRightReturn<SearchSearchResultsResult>;

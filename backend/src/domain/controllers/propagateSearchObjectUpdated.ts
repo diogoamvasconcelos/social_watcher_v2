@@ -39,11 +39,11 @@ export const propagateSearchObjectUpdated = async (
 
   const results = await Promise.all(
     socialMedias.map(async (socialMedia) => {
-      const newKeywordStatus: KeywordData["status"] = forceDeactivation
-        ? "INACTIVE"
-        : searchObject.searchData[socialMedia].enabledStatus === "ENABLED"
-        ? "ACTIVE"
-        : "INACTIVE";
+      const newKeywordStatus: KeywordData["status"] =
+        forceDeactivation ||
+        searchObject.searchData[socialMedia].enabledStatus === "DISABLED"
+          ? "INACTIVE"
+          : "ACTIVE";
 
       const keywordDataEither = await getKeywordDataFn(
         logger,

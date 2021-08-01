@@ -6,6 +6,7 @@ import {
   discordNotificationConfigCodec,
   slackNotificationConfigCodec,
 } from "./notificationJob";
+import { emailReportConfigCodec } from "./reportJob";
 import { userCodec, userIdCodec } from "./user";
 
 // +++++++++++++
@@ -67,12 +68,21 @@ const searchObjectNotificationData = {
   slackNotification: slackNotificationConfigCodec,
 };
 
+const searchObjectReportData = {
+  emailReport: emailReportConfigCodec,
+};
+
 export const searchObjectUserDataIoCodec = t.exact(
-  t.type({
-    keyword: keywordCodec,
-    searchData: t.partial(searchObjectSearchData),
-    notificationData: t.partial(searchObjectNotificationData),
-  })
+  t.intersection([
+    t.type({
+      keyword: keywordCodec,
+      searchData: t.partial(searchObjectSearchData),
+      notificationData: t.partial(searchObjectNotificationData),
+    }),
+    t.partial({
+      reportData: t.partial(searchObjectReportData),
+    }),
+  ])
 );
 export type SearchObjectUserDataIo = t.TypeOf<
   typeof searchObjectUserDataIoCodec
@@ -83,6 +93,7 @@ export const searchObjectUserDataDomainCodec = t.exact(
     keyword: keywordCodec,
     searchData: t.type(searchObjectSearchData),
     notificationData: t.type(searchObjectNotificationData),
+    reportData: t.type(searchObjectReportData),
   })
 );
 export type SearchObjectUserDataDomain = t.TypeOf<
@@ -120,6 +131,12 @@ export const searchObjectUserDataIoToDomain = (
           },
         },
       },
+      reportData: {
+        emailReport: {
+          status: "DISABLED",
+          addresses: [],
+        },
+      },
     };
   }
 
@@ -138,6 +155,10 @@ export const searchObjectUserDataIoToDomain = (
       slackNotification:
         io.notificationData.slackNotification ??
         defaultData.notificationData.slackNotification,
+    },
+    reportData: {
+      emailReport:
+        io.reportData?.emailReport ?? defaultData.reportData.emailReport,
     },
   };
 };

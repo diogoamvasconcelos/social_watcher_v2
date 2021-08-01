@@ -8,6 +8,7 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
+import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
 
 const logger = getLogger();
 const getSearchObjectsForUserFnMocked =
@@ -21,37 +22,12 @@ describe("controllers/isKeywordAllowed", () => {
   const userId = "my-user-id";
   const keyword = newLowerCase("my-keyword");
   const defaultSearchObject: SearchObjectDomain = {
+    ...defaultSearchObjectDataDomain,
     type: "SEARCH_OBJECT",
     id: userId,
     index: newPositiveInteger(0),
     lockedStatus: "UNLOCKED",
     keyword,
-    searchData: {
-      twitter: { enabledStatus: "ENABLED" },
-      reddit: { enabledStatus: "DISABLED", over18: false },
-      hackernews: { enabledStatus: "DISABLED" },
-      instagram: { enabledStatus: "DISABLED" },
-    },
-    notificationData: {
-      discordNotification: {
-        enabledStatus: "ENABLED",
-        channel: "discord-channel",
-        bot: {
-          credentials: {
-            token: "discord-bot-token",
-          },
-        },
-      },
-      slackNotification: {
-        enabledStatus: "DISABLED",
-        channel: "",
-        bot: {
-          credentials: {
-            token: "slack-bot-token",
-          },
-        },
-      },
-    },
   };
 
   const testCases: [string, SearchObjectDomain[], boolean][] = [

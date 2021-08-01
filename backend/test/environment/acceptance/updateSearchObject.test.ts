@@ -55,6 +55,7 @@ describe("update searchObject e2e test", () => {
         ...userData,
         searchData: expect.objectContaining(userData.searchData),
         notificationData: expect.objectContaining(userData.notificationData),
+        reportData: expect.any(Object),
       },
     });
 

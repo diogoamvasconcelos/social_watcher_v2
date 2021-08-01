@@ -12,3 +12,6 @@
 - smoke tests that search social media
   - bot posts twit with uuid and then we search for it
 - create official ms teams bot: https://support.atlassian.com/opsgenie/docs/integrate-opsgenie-with-microsoft-teams/ (that can be downloaded and sideloaded)
+- show warning if reports or notifications are selected but not searcher is active
+  - in current arch, it won't even produe any reports if keyword is not "active"
+- show when reports are searched (daily and weeky(friday)) to the users

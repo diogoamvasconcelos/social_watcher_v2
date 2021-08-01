@@ -9,12 +9,9 @@ import {
   SearchObjectUserDataDomain,
   SearchObjectUserDataIo,
 } from "../../domain/models/userItem";
-import {
-  fromEither,
-  newLowerCase,
-  newPositiveInteger,
-} from "@diogovasconcelos/lib/iots";
+import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -52,44 +49,8 @@ const defaultUser: User = {
   },
 };
 
-const defaultRequestData: SearchObjectUserDataDomain = {
-  keyword: newLowerCase("some_keyword"),
-  searchData: {
-    twitter: {
-      enabledStatus: "ENABLED",
-    },
-    reddit: {
-      enabledStatus: "DISABLED",
-      over18: false,
-    },
-    hackernews: {
-      enabledStatus: "DISABLED",
-    },
-    instagram: {
-      enabledStatus: "DISABLED",
-    },
-  },
-  notificationData: {
-    discordNotification: {
-      enabledStatus: "ENABLED",
-      channel: "some-channel",
-      bot: {
-        credentials: {
-          token: "some-token",
-        },
-      },
-    },
-    slackNotification: {
-      enabledStatus: "ENABLED",
-      channel: "some-channel",
-      bot: {
-        credentials: {
-          token: "some-token",
-        },
-      },
-    },
-  },
-};
+const defaultRequestData: SearchObjectUserDataDomain =
+  defaultSearchObjectDataDomain;
 
 const buildEvent = (user: User, requestData: SearchObjectUserDataIo) => {
   return {

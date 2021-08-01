@@ -41,9 +41,10 @@ const handler = async () => {
         socialMedia
       );
       if (isLeft(activeKeywordsResult)) {
-        logger.error(
-          `Failed to getActiveKeywords: ${activeKeywordsResult.left}`
-        );
+        logger.error("Failed to getActiveKeywords", {
+          error: activeKeywordsResult.left,
+          socialMedia,
+        });
         return left("ERROR");
       }
 
