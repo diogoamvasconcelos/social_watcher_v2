@@ -23,6 +23,7 @@ locals {
     STRIPE_PRODUCT_NORMAL_ID               = var.stripe_product_normal_id
     SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL = aws_sqs_queue.search_results_notifications.id
     NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME  = "{notificationMedium}_notification_jobs"
+    REPORT_JOBS_QUEUE_TEMPLATE_NAME        = "{reportMedium}_report_jobs"
   }
 
   tags = {

@@ -1,3 +1,4 @@
+import "jest-extended";
 import { unknownToSearchResult } from "../../../../../src/adapters/searchResultsStore/client";
 import { makePutSearchResults } from "../../../../../src/adapters/searchResultsStore/putSearchResults";
 import { scanItems } from "../../../../../src/lib/dynamoDb";
@@ -11,7 +12,6 @@ import {
   buildTwitterSearchResult,
 } from "../../../../lib/builders";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
-import { sortSearchResults } from "../../../../lib/sort";
 
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();
@@ -19,7 +19,7 @@ describe("adapters/putSearchResults", () => {
   const putSearchResultsFn = makePutSearchResults(client, tableName);
 
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(45000);
   });
 
   beforeEach(async () => {
@@ -47,8 +47,6 @@ describe("adapters/putSearchResults", () => {
       )
     );
 
-    expect(sortSearchResults(fetchedSearchResults)).toEqual(
-      sortSearchResults(searchResults)
-    );
+    expect(fetchedSearchResults).toIncludeAllMembers(searchResults);
   });
 });

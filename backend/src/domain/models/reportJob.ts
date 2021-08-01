@@ -2,6 +2,7 @@ import * as t from "io-ts";
 import { searchResultCodec } from "./searchResult";
 import { dateISOString, emailFromString } from "@diogovasconcelos/lib/iots";
 import { nonEmptyArray } from "io-ts-types";
+import { keywordCodec } from "./keyword";
 
 const reportFrequencyCodec = t.union([t.literal("DAILY"), t.literal("WEEKLY")]);
 export type ReportFrequency = t.TypeOf<typeof reportFrequencyCodec>;
@@ -12,6 +13,7 @@ const reportConfigBaseCodec = t.type({
 
 const reportJobBaseCodec = t.intersection([
   t.type({
+    keyword: keywordCodec,
     searchResults: t.array(searchResultCodec),
     searchFrequency: reportFrequencyCodec,
   }),
@@ -42,3 +44,9 @@ export const emailReportJobCodec = t.intersection([
   }),
 ]);
 export type EmailReportJob = t.TypeOf<typeof emailReportJobCodec>;
+
+// +++++++
+// + All +
+// +++++++
+export const reportJobCodec = emailReportJobCodec;
+export type ReportJob = t.TypeOf<typeof reportJobCodec>;

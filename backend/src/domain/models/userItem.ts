@@ -134,7 +134,6 @@ export const searchObjectUserDataIoToDomain = (
       reportData: {
         emailReport: {
           status: "DISABLED",
-          addresses: [],
         },
       },
     };

@@ -1,3 +1,4 @@
+import "jest-extended";
 import {
   createSearchResultIndex,
   getClient,
@@ -23,7 +24,6 @@ import {
   buildInstagramSearchResult,
 } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
-import { sortSearchResults } from "../../../../lib/sort";
 
 const config = getLocalTestConfig();
 const logger = getLogger();
@@ -67,9 +67,7 @@ describe("indexSearchResults", () => {
     );
 
     expect(indexResult).toEqual("OK");
-    expect(sortSearchResults(searchedResults.items)).toEqual(
-      sortSearchResults(searchResults)
-    );
+    expect(searchedResults.items).toIncludeAllMembers(searchResults);
   });
 
   afterEach(async () => {

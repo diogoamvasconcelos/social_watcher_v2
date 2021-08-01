@@ -18,7 +18,7 @@ const DEFAULT_OFFSET = 0;
 export const makeSearchSearchResults = (
   client: Client
 ): SearchSearchResultsFn => {
-  return async (logger, { keyword, dataQuery, pagination }) => {
+  return async (logger, { keyword, dataQuery, timeQuery, pagination }) => {
     const queriesMust: JsonObjectEncodable[] = [];
     queriesMust.push({
       constant_score: {
@@ -38,6 +38,16 @@ export const makeSearchSearchResults = (
           fuzziness: 0,
         },
       });
+    }
+
+    if (timeQuery) {
+      queriesMust.push(
+        makeGreaterLessThanQuery({
+          property: "happenedAt",
+          gte: timeQuery.happenedAtStart,
+          lte: timeQuery.happenedAtEnd,
+        })
+      );
     }
 
     const searchParams: RequestParamsSearch = {
@@ -76,5 +86,25 @@ export const makeSearchSearchResults = (
       return left("ERROR");
     }
     return decodedResultEither;
+  };
+};
+
+const makeGreaterLessThanQuery = ({
+  property,
+  gte,
+  lte,
+}: {
+  property: string;
+  gte?: string;
+  lte?: string;
+}) => {
+  return {
+    constant_score: {
+      filter: {
+        range: {
+          [property]: { gte, lte },
+        },
+      },
+    },
   };
 };

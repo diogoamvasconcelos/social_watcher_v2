@@ -14,6 +14,8 @@
 - point-in-time recovery on ddb
 - full acceptance tests (that are also smoke tests maybe)
   - twit, and check notification to test discord channel
+- more local tests for handlers
+  - for dispatchJob handlers, mock SQS as a inmemoryqueue that can be checked
 - load tests
   - add some heavy keywords (tesla, bitcoin, trump, etc)
 - give feedback if notification credentials (discord token) is not valid or fails
@@ -26,3 +28,4 @@
   - cloudwatch alarms
     - sns send alerts
   - ref: https://aws.amazon.com/blogs/aws/new-use-cloudwatch-synthetics-to-monitor-sites-api-endpoints-web-workflows-and-more/
+- put SES out of sandbox for prod account: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html

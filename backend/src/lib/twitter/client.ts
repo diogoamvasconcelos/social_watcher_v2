@@ -1,12 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { decode } from "@diogovasconcelos/lib/iots";
+import { decode, toSingleEither } from "@diogovasconcelos/lib/iots";
 import {
   GetUserResponse,
   getUserResponseCodec,
   SearchRecentResponse,
   searchRecentResponseCodec,
-  SearchRecentResponseItem,
   TwitterCredentials,
 } from "./models";
 import { getMinutesAgo } from "../date";
@@ -88,30 +87,29 @@ export const searchRecent = async (
       return decodeResult;
     }
 
-    const patchedItemsEither = await Promise.all(
-      decodeResult.right.data.map(async (item) => {
-        // get followers count from author
-        const userEither = await getUser({ client, logger }, item.author_id);
-        if (isLeft(userEither)) {
-          return userEither;
-        }
+    const patchedItemsEither = toSingleEither(
+      await Promise.all(
+        decodeResult.right.data.map(async (item) => {
+          // get followers count from author
+          const userEither = await getUser({ client, logger }, item.author_id);
+          if (isLeft(userEither)) {
+            return userEither;
+          }
 
-        return right({
-          ...item,
-          followers_count: userEither.right.public_metrics.followers_count,
-        });
-      })
+          return right({
+            ...item,
+            followers_count: userEither.right.public_metrics.followers_count,
+          });
+        })
+      )
     );
-    let patchedItems: SearchRecentResponseItem[] = [];
-    for (const itemEither of patchedItemsEither) {
-      if (isLeft(itemEither)) {
-        return itemEither;
-      }
-      patchedItems = [...patchedItems, itemEither.right];
+    if (isLeft(patchedItemsEither)) {
+      return left(patchedItemsEither.left.flat());
     }
 
+    results = [...results, ...patchedItemsEither.right];
+
     token = decodeResult.right.meta.next_token;
-    results = [...results, ...patchedItems];
   } while (token != undefined && results.length < searchParams.maxResults);
 
   return right(results);

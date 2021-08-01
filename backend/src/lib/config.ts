@@ -20,9 +20,10 @@ export const getConfig = () => {
     searchResultsNotificationsQueueUrl: ensure(
       "SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL"
     ),
-    notificationJosbQueueTemplateName: ensure(
+    notificationJobsQueueTemplateName: ensure(
       "NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME"
     ),
+    reportJobsQueueTemplateName: ensure("REPORT_JOBS_QUEUE_TEMPLATE_NAME"),
   };
 };
 export type Config = ReturnType<typeof getConfig>;

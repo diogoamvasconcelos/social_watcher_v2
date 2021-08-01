@@ -41,7 +41,6 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
   reportData: {
     emailReport: {
       status: "DISABLED",
-      addresses: [],
     },
   },
 };

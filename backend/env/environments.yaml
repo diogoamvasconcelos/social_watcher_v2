@@ -23,6 +23,7 @@ common:
   SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL: sync_search_results_to_es
   SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL: search_results_notifications
   NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME: "{notificationMedium}_notification_jobs"
+  REPORT_JOBS_QUEUE_TEMPLATE_NAME: "{reportMedium}_report_jobs"
 
 local:
   DYNAMODB_PORT: 8000

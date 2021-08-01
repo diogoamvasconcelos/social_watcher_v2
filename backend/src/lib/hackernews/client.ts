@@ -4,7 +4,7 @@
 */
 
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { decode } from "@diogovasconcelos/lib/iots";
+import { decode, toSingleEither } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
@@ -94,36 +94,34 @@ export const search = async (
 
     const filteredResults = filterUnrelatedToKeyword(keyword, response.hits);
 
-    const patchedItemsEither = await Promise.all(
-      filteredResults.map(async (item) => {
-        if (item.num_comments) {
-          return right(item);
-        }
+    const patchedItemsEither = toSingleEither(
+      await Promise.all(
+        filteredResults.map(async (item) => {
+          if (item.num_comments) {
+            return right(item);
+          }
 
-        // try to get the item of the parent to check it's num_comments
-        const fetchedItemEither = await getItem(
-          { client, logger },
-          item.parent_id ? item.parent_id.toString() : item.objectID
-        );
-        if (isLeft(fetchedItemEither)) {
-          return fetchedItemEither;
-        }
+          // try to get the item of the parent to check it's num_comments
+          const fetchedItemEither = await getItem(
+            { client, logger },
+            item.parent_id ? item.parent_id.toString() : item.objectID
+          );
+          if (isLeft(fetchedItemEither)) {
+            return fetchedItemEither;
+          }
 
-        return right({
-          ...item,
-          num_comments: fetchedItemEither.right.numComments,
-        });
-      })
+          return right({
+            ...item,
+            num_comments: fetchedItemEither.right.numComments,
+          });
+        })
+      )
     );
-    let patchedItems: SearchHackernewsResponseItem[] = [];
-    for (const itemEither of patchedItemsEither) {
-      if (isLeft(itemEither)) {
-        return itemEither;
-      }
-      patchedItems = [...patchedItems, itemEither.right];
+    if (isLeft(patchedItemsEither)) {
+      return left(patchedItemsEither.left.flat());
     }
 
-    results = [...results, ...patchedItems];
+    results = [...results, ...patchedItemsEither.right];
 
     page = response.page < response.nbPages - 1 ? response.page + 1 : -1;
   } while (page > -1 && results.length < searchParams.maxResults);

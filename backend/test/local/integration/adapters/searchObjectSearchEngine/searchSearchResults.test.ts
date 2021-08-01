@@ -1,3 +1,4 @@
+import "jest-extended";
 import {
   createSearchResultIndex,
   getClient,
@@ -18,7 +19,7 @@ import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { buildSearchResult } from "../../../../lib/builders";
 import { getLocalTestConfig } from "../../../../lib/config";
-import { sortSearchResults } from "../../../../lib/sort";
+import { getMinutesAgo } from "../../../../../src/lib/date";
 
 const config = getLocalTestConfig();
 const logger = getLogger();
@@ -43,7 +44,7 @@ describe("indexSearchResults", () => {
     ).name;
   });
 
-  it("can search using QueryData", async () => {
+  it("can search using dataQuery", async () => {
     const keyword = newLowerCase(uuid());
     const otherKeyword = newLowerCase(uuid());
 
@@ -89,34 +90,87 @@ describe("indexSearchResults", () => {
     );
 
     expect(
-      sortSearchResults(
-        fromEither(
-          await searchSearchResultsFn(logger, { keyword, dataQuery: "dog" })
-        ).items
-      )
-    ).toEqual(sortSearchResults([searchResultDog, searchResultDogNCat]));
+      fromEither(
+        await searchSearchResultsFn(logger, { keyword, dataQuery: "dog" })
+      ).items
+    ).toIncludeAllMembers([searchResultDog, searchResultDogNCat]);
 
     expect(
-      sortSearchResults(
-        fromEither(
-          await searchSearchResultsFn(logger, { keyword, dataQuery: "cat" })
-        ).items
-      )
-    ).toEqual(sortSearchResults([searchResultCat, searchResultDogNCat]));
+      fromEither(
+        await searchSearchResultsFn(logger, { keyword, dataQuery: "cat" })
+      ).items
+    ).toIncludeAllMembers([searchResultCat, searchResultDogNCat]);
 
     expect(
-      sortSearchResults(
-        fromEither(
-          await searchSearchResultsFn(logger, { keyword, dataQuery: "human" })
-        ).items
-      )
-    ).toEqual(sortSearchResults([searchResultHuman]));
+      fromEither(
+        await searchSearchResultsFn(logger, { keyword, dataQuery: "human" })
+      ).items
+    ).toIncludeAllMembers([searchResultHuman]);
 
     expect(
       fromEither(
         await searchSearchResultsFn(logger, { keyword, dataQuery: "airplane" })
       ).items
     ).toEqual([]);
+  });
+
+  it("can search using timeQuery", async () => {
+    const keyword = newLowerCase(uuid());
+
+    const queryStartTime = getMinutesAgo(20);
+    const queryEndTime = getMinutesAgo(10);
+
+    const beforeStartSearchResult = buildSearchResult({
+      keyword,
+      happenedAt: getMinutesAgo(1, new Date(queryStartTime)),
+      data: { text: "flower" },
+    });
+    const beforeEndSearchResult = buildSearchResult({
+      keyword,
+      happenedAt: getMinutesAgo(1, new Date(queryEndTime)),
+      data: { text: "flower" },
+    });
+    const afterEndSearchResult = buildSearchResult({
+      keyword,
+      happenedAt: getMinutesAgo(-1, new Date(queryEndTime)),
+      data: { text: "flower" },
+    });
+
+    await indexSearchResults([
+      beforeStartSearchResult,
+      beforeEndSearchResult,
+      afterEndSearchResult,
+    ]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          timeQuery: { happenedAtStart: queryStartTime },
+        })
+      ).items
+    ).toIncludeAllMembers([beforeEndSearchResult, afterEndSearchResult]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          timeQuery: { happenedAtEnd: queryEndTime },
+        })
+      ).items
+    ).toIncludeAllMembers([beforeStartSearchResult, beforeEndSearchResult]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          timeQuery: {
+            happenedAtStart: queryStartTime,
+            happenedAtEnd: queryEndTime,
+          },
+        })
+      ).items
+    ).toIncludeAllMembers([beforeEndSearchResult]);
   });
 
   afterEach(async () => {

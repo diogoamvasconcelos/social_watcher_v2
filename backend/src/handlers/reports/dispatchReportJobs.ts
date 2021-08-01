@@ -10,7 +10,12 @@ import { Keyword } from "../../domain/models/keyword";
 import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
 import _ from "lodash";
 import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
-import { ReportFrequency, ReportJobBase } from "../../domain/models/reportJob";
+import {
+  EmailReportJob,
+  ReportFrequency,
+  ReportJob,
+  ReportJobBase,
+} from "../../domain/models/reportJob";
 import {
   SearchSearchResultsFn,
   SearchSearchResultsParams,
@@ -18,17 +23,25 @@ import {
 import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
 import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
 import {
+  fromEither,
   newPositiveInteger,
   PositiveInteger,
   toSingleEither,
 } from "@diogovasconcelos/lib/iots";
-import { getHoursAgo } from "src/lib/date";
-import { throwUnexpectedCase } from "src/lib/runtime";
+import { getHoursAgo } from "../../lib/date";
+import { throwUnexpectedCase } from "../../lib/runtime";
+import { ReportMedium, reportMediums } from "../../domain/models/reportMedium";
+import { SearchObjectDomain } from "../../domain/models/userItem";
+import { getClient as getReportJobsQueueClient } from "../../adapters/reportJobsQueue/client";
+import { makeQueueReportJobs } from "../../adapters/reportJobsQueue/queueReportJobs";
+import { QueueReportJobsFn } from "../../domain/ports/reportJobsQueue/queueReportJobs";
+import { eitherListToDefaultOk } from "../../domain/ports/shared";
 
 const config = getConfig();
 const logger = getLogger();
 
 const handler = async () => {
+  // deps
   const keywordStoreClient = getKeywordStoreClient();
   const getActiveKeywordsFn = makeGetActiveKeywords(
     keywordStoreClient,
@@ -43,6 +56,12 @@ const handler = async () => {
 
   const searchEngineClient = getSearchEngineClient(config.mainElasticSearchUrl);
   const searchSearchResultsFn = makeSearchSearchResults(searchEngineClient);
+
+  const reportJobQueueClient = getReportJobsQueueClient();
+  const queueReportJobsFn = makeQueueReportJobs(
+    reportJobQueueClient,
+    config.reportJobsQueueTemplateName
+  );
 
   // get all active keywords, filter if no reports are required by any user
   const allActiveKeywordsEither = await getAllActiveKeywords({
@@ -61,7 +80,7 @@ const handler = async () => {
     return filteredKeywordsEither;
   }
 
-  // search daily and search weekly (if friday) - cap at most recent (because of SQS size limt)
+  // search daily and search weekly (if friday) and cache results - cap at most recent (because of SQS size limt)
   const searchResultsForDailyReportsEither = await searchForReport(
     { logger, searchSearchResultsFn },
     filteredKeywordsEither.right,
@@ -74,6 +93,8 @@ const handler = async () => {
   let reportsCache = searchResultsForDailyReportsEither.right;
 
   if (isFriday()) {
+    // we are assuming we only dispatch reports once a day,
+    // so checking for Friday is enough to do the weekly search once a week
     const searchResultsForWeeklyReportsEither = await searchForReport(
       { logger, searchSearchResultsFn },
       filteredKeywordsEither.right,
@@ -94,13 +115,16 @@ const handler = async () => {
   const dispatchReportJobsEither = toSingleEither(
     await Promise.all(
       reportsCache.map(
-        async (_report) => await dispatchReportJobsForKeyword({ logger })
+        async (report) =>
+          await dispatchReportJobsForKeyword(
+            { logger, getSearchObjectsForKeywordFn, queueReportJobsFn },
+            report
+          )
       )
     )
   );
-  if (isLeft(dispatchReportJobsEither)) {
-    return left("ERROR");
-  }
+
+  fromEither(dispatchReportJobsEither);
 };
 export const lambdaHandler = defaultMiddlewareStack(handler);
 
@@ -190,11 +214,83 @@ const searchForReport = async (
   );
 };
 
-const dispatchReportJobsForKeyword = async ({ logger }: { logger: Logger }) => {
-  // get all users for keyword
-  // check if requested report and it matches the frequency
-  // dispatch report job
-  return left("ERROR");
+const dispatchReportJobsForKeyword = async (
+  {
+    logger,
+    getSearchObjectsForKeywordFn,
+    queueReportJobsFn,
+  }: {
+    logger: Logger;
+    getSearchObjectsForKeywordFn: GetSearchObjectsForKeywordFn;
+    queueReportJobsFn: QueueReportJobsFn;
+  },
+  report: ReportJobBase
+) => {
+  const allSearchObjectsForKeywordEither = await getSearchObjectsForKeywordFn(
+    logger,
+    report.keyword
+  );
+  if (isLeft(allSearchObjectsForKeywordEither)) {
+    logger.error("Failed to find search objects for report", {
+      keyword: report.keyword,
+      frequency: report.searchFrequency,
+    });
+    return allSearchObjectsForKeywordEither;
+  }
+
+  const queueReportJobsEither = await Promise.all(
+    // iterate all reportMediums
+    reportMediums.map(
+      async (reportMedium) =>
+        await queueReportJobs(
+          { logger, queueReportJobsFn },
+          allSearchObjectsForKeywordEither.right,
+          report,
+          reportMedium
+        )
+    )
+  );
+
+  return eitherListToDefaultOk(queueReportJobsEither);
+};
+
+const queueReportJobs = async (
+  {
+    logger,
+    queueReportJobsFn,
+  }: { logger: Logger; queueReportJobsFn: QueueReportJobsFn },
+  searchObjects: SearchObjectDomain[],
+  report: ReportJobBase,
+  reportMedium: ReportMedium
+) => {
+  const filteredReportJobs: ReportJob[] = searchObjects
+    .filter((searchObject) => {
+      switch (reportMedium) {
+        case "email":
+          return (
+            searchObject.reportData.emailReport.status ===
+            report.searchFrequency
+          );
+        default:
+          return throwUnexpectedCase(reportMedium, "queueReportJobs filter");
+      }
+    })
+    .map((searchObject) => {
+      switch (reportMedium) {
+        case "email": {
+          const emailReportJob: EmailReportJob = {
+            reportMedium,
+            ...report,
+            config: searchObject.reportData.emailReport,
+          };
+          return emailReportJob;
+        }
+        default:
+          return throwUnexpectedCase(reportMedium, "queueReportJobs map");
+      }
+    });
+
+  return await queueReportJobsFn(logger, reportMedium, filteredReportJobs);
 };
 
 const isFriday = () => new Date().getDay() == 6;
@@ -206,6 +302,6 @@ const calcSearchStartDate = (frequency: ReportFrequency) => {
     case "WEEKLY":
       return getHoursAgo(24 * 7);
     default:
-      return throwUnexpectedCase(frequency, "calcSearchFrom");
+      return throwUnexpectedCase(frequency, "calcSearchStartDate");
   }
 };

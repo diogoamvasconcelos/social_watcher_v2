@@ -1,4 +1,7 @@
-import { getClient as getSQSClient } from "../../lib/sqs";
+import {
+  getClient as getQueueClient,
+  Client as QueueClient,
+} from "../queueShared";
 
-export const getClient = getSQSClient;
-export type Client = ReturnType<typeof getClient>;
+export const getClient = getQueueClient;
+export type Client = QueueClient;

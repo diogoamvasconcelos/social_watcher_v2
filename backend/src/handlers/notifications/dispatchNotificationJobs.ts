@@ -30,7 +30,7 @@ const logger = getLogger();
 
 const handler = async (event: SQSEvent) => {
   const userStoreClient = getUserStoreClient();
-  const searchJobsQueueClient = getNotificationJobsQueueClient();
+  const notificationJobsQueueClient = getNotificationJobsQueueClient();
   const getSearchObjectsForKeywordFn = makeGetSearchObjectsForKeyword(
     userStoreClient,
     config.usersTableName
@@ -39,8 +39,8 @@ const handler = async (event: SQSEvent) => {
   const dispatchJobsDeps: DispatchJobsDeps = {
     logger,
     queueNotificationJobsFn: makeQueueNotificationJobs(
-      searchJobsQueueClient,
-      config.notificationJosbQueueTemplateName
+      notificationJobsQueueClient,
+      config.notificationJobsQueueTemplateName
     ),
   };
 
