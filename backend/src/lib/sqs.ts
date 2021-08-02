@@ -1,18 +1,17 @@
 import * as t from "io-ts";
 import _ from "lodash";
-import {
+import SQS, {
   MessageList,
   DeleteMessageBatchRequestEntry,
 } from "aws-sdk/clients/sqs";
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
-import AWS from "aws-sdk";
 import { Logger } from "./logger";
 import { uuid } from "./uuid";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = () => {
-  return new AWS.SQS();
+  return new SQS();
 };
 export type Client = ReturnType<typeof getClient>;
 

@@ -1,10 +1,10 @@
-import AWS from "aws-sdk";
+import SSM from "aws-sdk/clients/ssm";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
 
 export const getClient = () => {
-  return new AWS.SSM();
+  return new SSM();
 };
 export type Client = ReturnType<typeof getClient>;
 

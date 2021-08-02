@@ -1,10 +1,11 @@
-import * as aws from "aws-sdk";
 import util from "util";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { PromiseResult } from "aws-sdk/lib/request";
 import { right, left } from "fp-ts/lib/Either";
+import Lambda from "aws-sdk/clients/lambda";
+import { AWSError } from "aws-sdk/lib/error";
 
-const lambdaClient = new aws.Lambda();
+const lambdaClient = new Lambda();
 
 export const invokeLambda = async (
   functionName: string,
@@ -15,7 +16,7 @@ export const invokeLambda = async (
     Payload: JSON.stringify(payload),
   };
 
-  let result: PromiseResult<aws.Lambda.InvocationResponse, aws.AWSError>;
+  let result: PromiseResult<Lambda.InvocationResponse, AWSError>;
   try {
     result = await lambdaClient.invoke(params).promise();
   } catch (e) {

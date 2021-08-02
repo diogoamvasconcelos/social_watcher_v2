@@ -3,8 +3,7 @@ How to run:
 - scripts/with_env.js yarn ts-node scripts/ops/clean_ddb_table.ts
 */
 
-import AWS from "aws-sdk";
-import {
+import DynamoDB, {
   DeleteItemInput,
   DocumentClient,
   ScanInput,
@@ -24,7 +23,7 @@ const cleanTable = async (tableName: string, verbose: boolean = false) => {
 
   let tableKeySchema: AWS.DynamoDB.KeySchema | undefined = undefined;
   try {
-    const ddb = new AWS.DynamoDB();
+    const ddb = new DynamoDB();
     const describeResult = await ddb
       .describeTable({ TableName: tableName })
       .promise();
@@ -43,7 +42,7 @@ const cleanTable = async (tableName: string, verbose: boolean = false) => {
     );
   }
 
-  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  const dynamoDBClient = new DynamoDB.DocumentClient();
   let cursor: DocumentClient.Key | undefined = undefined;
   let itemCount = 0;
   do {

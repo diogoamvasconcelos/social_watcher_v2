@@ -1,10 +1,10 @@
-import * as AWS from "aws-sdk";
 import { Client } from "@elastic/elasticsearch";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
 import { Logger } from "../logger";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { applyTransformToItem } from "../iots";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
+import { config } from "aws-sdk";
 
 const isLocalHost = (url?: string) => {
   return url?.includes("localhost");
@@ -17,7 +17,7 @@ export const getClient = (elasticsearchUrl: string): Client => {
     });
   } else {
     return new Client({
-      ...createAwsElasticsearchConnector(AWS.config),
+      ...createAwsElasticsearchConnector(config),
       node: elasticsearchUrl,
     });
   }

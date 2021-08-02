@@ -1,10 +1,11 @@
-import AWS from "aws-sdk";
-import { AuthenticationResultType } from "aws-sdk/clients/cognitoidentityserviceprovider";
+import CognitoIdentityServiceProvider, {
+  AuthenticationResultType,
+} from "aws-sdk/clients/cognitoidentityserviceprovider";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
 
 export const getClient = () => {
-  return new AWS.CognitoIdentityServiceProvider();
+  return new CognitoIdentityServiceProvider();
 };
 export type Client = ReturnType<typeof getClient>;
 

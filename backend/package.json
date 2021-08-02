@@ -14,7 +14,9 @@
     "test:unit": "scripts/with_env.js \"jest test --testMatch '<rootDir>/src/**/*.test.ts?(x)'\"",
     "test:environment": "scripts/with_env.js \"jest test/environment\" --env dev",
     "test:coverage": "yarn with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment' --coverage\"",
-    "audit": "yarn audit"
+    "audit": "yarn audit",
+    "upgrade-pkgs": "yarn upgrade-interactive --latest --deep",
+    "compile-ts4fe": "yarn tsc -b"
   },
   "dependencies": {
     "@diogovasconcelos/lib": "^0.1.9",

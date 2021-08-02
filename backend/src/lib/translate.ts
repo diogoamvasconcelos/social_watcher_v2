@@ -1,10 +1,9 @@
-import AWS from "aws-sdk";
-import { TranslateTextRequest } from "aws-sdk/clients/translate";
+import Translate, { TranslateTextRequest } from "aws-sdk/clients/translate";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
 
 export const getClient = () => {
-  return new AWS.Translate();
+  return new Translate();
 };
 export type Client = ReturnType<typeof getClient>;
 

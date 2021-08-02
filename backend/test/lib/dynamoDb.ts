@@ -1,10 +1,9 @@
+import DynamoDB from "aws-sdk/clients/dynamodb";
 import { getClient as getDynamoDBClient } from "../../src/lib/dynamoDb";
-
-import * as AWS from "aws-sdk";
 import { getLocalTestConfig } from "./config";
 
 const endpoint = getLocalTestConfig().dynamoDbUrl;
-const dynamoDb = new AWS.DynamoDB({ endpoint });
+const dynamoDb = new DynamoDB({ endpoint });
 export const client = getDynamoDBClient(endpoint);
 
 const tableExists = async (tableName: string) => {

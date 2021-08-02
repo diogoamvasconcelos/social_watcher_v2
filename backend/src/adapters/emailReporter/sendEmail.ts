@@ -8,7 +8,7 @@ import { Client } from "./client";
 export const makeSendEmail = (client: Client): SendEmailFn => {
   return async (logger, { addresses, subject, body }) => {
     const params: SES.Types.SendEmailRequest = {
-      Source: "notifier@thesocialwatcher.com",
+      Source: "notifier-noreply@thesocialwatcher.com",
       Destination: { ToAddresses: addresses },
       Message: {
         Subject: { Data: subject },
