@@ -11,7 +11,14 @@
       "@backend/*": ["../backend/src/*"]
     }
   },
-  "include": ["./src", "./scripts/**/*.ts", "./test", "./typings", "./assets"],
+  "include": [
+    "./src",
+    "./scripts/**/*.ts",
+    "./test",
+    "./typings",
+    "./assets",
+    "./tf/cloudfront_functions/*.js"
+  ],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**", "../backend"],
   "references": [{ "path": "../backend" }]
 }

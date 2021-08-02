@@ -1,22 +1,6 @@
-resource "aws_route53_zone" "main" {
-  name = local.page_url
-
-  tags = local.tags
-}
-
-resource "aws_route53_record" "main-ns" {
+resource "aws_route53_record" "www-a" {
   allow_overwrite = true
-  name            = local.page_url
-  ttl             = 1800 #30min
-  type            = "NS"
-  zone_id         = aws_route53_zone.main.zone_id
-
-  records = aws_route53_zone.main.name_servers
-}
-
-resource "aws_route53_record" "main-a" {
-  allow_overwrite = true
-  name            = local.page_url
+  name            = local.www_page_url
   type            = "A"
   zone_id         = aws_route53_zone.main.zone_id
 
@@ -28,9 +12,9 @@ resource "aws_route53_record" "main-a" {
 }
 
 # Used to validate the acm certificate for SSL (https://www.azavea.com/blog/2018/07/16/provisioning-acm-certificates-on-aws-with-terraform/)
-resource "aws_route53_record" "validation" {
+resource "aws_route53_record" "validation_www" {
   for_each = {
-    for dvo in aws_acm_certificate.main.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.www.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type

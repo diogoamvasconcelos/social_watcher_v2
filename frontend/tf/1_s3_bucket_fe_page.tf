@@ -17,6 +17,7 @@ data "aws_iam_policy_document" "fe_page_s3_policy" {
   }
 }
 
+// required although it will never be used as it will be redirected
 resource "aws_s3_bucket_policy" "fe_page" {
   bucket = aws_s3_bucket.fe_page.id
   policy = data.aws_iam_policy_document.fe_page_s3_policy.json

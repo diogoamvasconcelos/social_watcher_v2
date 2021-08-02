@@ -40,6 +40,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
   }
 
+  # not sure why we need this special cache behavior...
   ordered_cache_behavior {
     path_pattern     = "*.html"
     allowed_methods  = ["HEAD", "GET", "OPTIONS"]

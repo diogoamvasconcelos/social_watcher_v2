@@ -159,5 +159,5 @@
 
 # Phase 9 - tech debt improvs
 
-- upgrade to terraform v1.0.0
+- upgrade to terraform v1.0.0 <DONE>
 - add cypress tests (FE)
