@@ -12,7 +12,7 @@ resource "aws_lambda_function" "notify_slack" {
   memory_size      = "128"
   timeout          = "15"
   source_code_hash = filebase64sha256(local.lambda_file)
-  description      = "Notify to DSlack the searchResults/Notification jobs"
+  description      = "Notify to Slack the searchResults/Notification jobs"
   depends_on       = [aws_cloudwatch_log_group.notify_slack]
 
   environment {

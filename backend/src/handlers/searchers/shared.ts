@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { isLeft } from "fp-ts/lib/Either";
 import { searchJobCodec } from "../../domain/models/searchJob";
 import { Logger } from "../../lib/logger";

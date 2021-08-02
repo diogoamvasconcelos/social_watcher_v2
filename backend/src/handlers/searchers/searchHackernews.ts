@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { makeSearchHackernews } from "../../adapters/hackernewsSearcher/searchHackernews";
 import { getClient as getHackernewsClient } from "../../adapters/hackernewsSearcher/client";
 import { getLogger } from "../../lib/logger";

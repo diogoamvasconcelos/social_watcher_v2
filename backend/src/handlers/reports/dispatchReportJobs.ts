@@ -40,6 +40,9 @@ import { eitherListToDefaultOk } from "../../domain/ports/shared";
 const config = getConfig();
 const logger = getLogger();
 
+// TODO: write tests
+// - don't dispatch if no results are found (which is kind of assured by the type anyway)
+
 const handler = async () => {
   // deps
   const keywordStoreClient = getKeywordStoreClient();
@@ -110,6 +113,9 @@ const handler = async () => {
       ...searchResultsForWeeklyReportsEither.right,
     ];
   }
+
+  // filter reports without any search results
+  reportsCache.filter((report) => report.searchResults.length > 0);
 
   // dispatch reports per user that requested
   const dispatchReportJobsEither = toSingleEither(

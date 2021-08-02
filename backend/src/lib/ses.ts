@@ -1,5 +1,5 @@
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
-import { SES } from "aws-sdk";
+import SES from "aws-sdk/clients/ses";
 import { right, left, Either } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
 

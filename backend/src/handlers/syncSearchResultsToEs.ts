@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { getConfig } from "../lib/config";
 import { getClient as getSearchResultSearchEngineClient } from "../adapters/searchResultsSearchEngine/client";
 import { getLogger } from "../lib/logger";

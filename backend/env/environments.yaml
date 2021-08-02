@@ -14,6 +14,7 @@ common:
   SEARCH_REDDIT_LAMBDA_NAME: search_reddit
   SEARCH_HACKERNEWS_LAMBDA_NAME: search_hackernews
   SEARCH_INSTAGRAM_LAMBDA_NAME: search_instagram
+  REPORT_EMAIL_LAMBDA_NAME: report_email
   API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9

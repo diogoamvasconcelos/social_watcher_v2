@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { getClient as getSsmClient } from "../../lib/ssm";
 import { getLogger } from "../../lib/logger";
 import { defaultMiddlewareStack } from "../middlewares/common";

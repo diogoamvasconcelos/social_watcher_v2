@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { makeSearchTwitter } from "../../adapters/twitterSearcher/searchTwitter";
 import {
   getClient as getTwitterClient,

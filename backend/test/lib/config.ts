@@ -19,6 +19,7 @@ export const getEnvTestConfig = () => {
     searchRedditLambdaName: ensure("SEARCH_REDDIT_LAMBDA_NAME"),
     searchHackernewsLambdaName: ensure("SEARCH_HACKERNEWS_LAMBDA_NAME"),
     searchInstagramLambdaName: ensure("SEARCH_INSTAGRAM_LAMBDA_NAME"),
+    reportEmailLambdaName: ensure("REPORT_EMAIL_LAMBDA_NAME"),
     cognitoClientId: ensure("COGNITO_CLIENT_ID"),
     cognitoUserPoolId: ensure("COGNITO_USER_POOL_ID"),
     apiEndpoint: ensure("API_ENDPOINT"),

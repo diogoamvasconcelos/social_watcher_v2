@@ -1,5 +1,5 @@
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { getClient as getSlackNotifierClient } from "../../adapters/slackNotifier/client";
 import { makeSendMessageToChannel } from "../../adapters/slackNotifier/sendMessageToChannel";
 import { notifySearchResultToSlack } from "../../domain/controllers/notifySearchResultToSlack";

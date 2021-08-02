@@ -1,4 +1,4 @@
-import { SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda/trigger/sqs";
 import {
   getClient as getRedditClient,
   getClientCredentials as getRedditCredentials,
