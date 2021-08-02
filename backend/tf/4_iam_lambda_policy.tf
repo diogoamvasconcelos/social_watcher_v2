@@ -97,8 +97,8 @@ resource "aws_iam_policy" "lambda_default" {
         "ses:SendEmail",
         "ses:SendRawEmail"
       ],
-      "Resource": "*"
-      "Effect": "Allow",
+      "Resource": "*",
+      "Effect": "Allow"
     }
   ]
 }
