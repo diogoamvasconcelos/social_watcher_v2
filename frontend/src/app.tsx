@@ -1,7 +1,6 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Layout } from "antd";
 import { Navbar } from "./shared/components/Navbar";
 import { WithAuth } from "./shared/components/Auth";
 import { UserPage } from "./pages/user/UserPage";
@@ -11,6 +10,7 @@ import { DashboardPage } from "./pages/dashboard/DashboardPage";
 import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
 import { SignupPage } from "./pages/signup/SignupPage";
+import Layout from "antd/lib/layout";
 
 const App: React.FC = () => (
   <Provider store={store}>

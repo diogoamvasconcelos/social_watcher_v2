@@ -7,8 +7,9 @@ import { useAppDispatch, useAppSelector } from "../../shared/store";
 import React, { useState } from "react";
 import { newLowerCase } from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../shared/lib/formatting";
-import { Input, Select } from "antd";
 import { SearchResult } from "@backend/domain/models/searchResult";
+import Select from "antd/lib/select";
+import Input from "antd/lib/input";
 
 const { Option } = Select;
 const { Search } = Input;

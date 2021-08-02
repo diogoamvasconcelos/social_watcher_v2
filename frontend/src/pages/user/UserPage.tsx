@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import { JSONViewer } from "../../shared/components/JSONViewer/JSONViewer";
-import { Typography, Button } from "antd";
 import { createPaymentPortal } from "./userPageState";
 import { useHistory } from "react-router";
 import { getUserDetails } from "../../shared/reducers/userState";
 import { getConfig } from "../../shared/lib/config";
+import Typography from "antd/lib/typography";
+import Button from "antd/lib/button";
 
 const { Title } = Typography;
 

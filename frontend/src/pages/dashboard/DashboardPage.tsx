@@ -5,11 +5,12 @@ import {
   UserState,
 } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
-import { Button, Typography } from "antd";
 import { SearchResultsTable } from "./SearchResultsTable";
 import { SearchObjectsView } from "./SearchObjectsView";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import Button from "antd/lib/button";
+import Typography from "antd/lib/typography";
 
 const { Title, Text } = Typography;
 

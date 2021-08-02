@@ -1,5 +1,6 @@
+import Button from "antd/lib/button";
+import Typography from "antd/lib/typography";
 import React from "react";
-import { Typography, Button } from "antd";
 import { gotoCognitoSignup } from "../../shared/components/Navbar";
 
 const { Title } = Typography;

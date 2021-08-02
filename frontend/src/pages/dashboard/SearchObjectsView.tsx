@@ -1,6 +1,3 @@
-import { SettingFilled } from "@ant-design/icons";
-import { Button, Switch, Typography, Modal } from "antd";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { User } from "@backend/domain/models/user";
@@ -9,6 +6,12 @@ import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
 import { updateUserSearchObjects } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
+import Typography from "antd/lib/typography";
+import Switch from "antd/lib/switch";
+import Modal from "antd/lib/modal";
+import Button from "antd/lib/button";
+import SettingFilled from "@ant-design/icons/lib/icons/SettingFilled";
+import _range from "lodash/range";
 
 const { Text } = Typography;
 
@@ -50,6 +53,11 @@ const createEmptySearchObject = (
           token: "add bot token",
         },
       },
+    },
+  },
+  reportData: {
+    emailReport: {
+      status: "DISABLED",
     },
   },
 });
@@ -377,7 +385,7 @@ export const SearchObjectsView: React.FC<SearchObjectsViewProps> = ({
 }) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      {_.range(userNofSearchObjects).map((i) => {
+      {_range(userNofSearchObjects).map((i) => {
         let searchObject = searchObjects.find((so) => so.index == i);
         if (!searchObject) {
           searchObject = createEmptySearchObject(newPositiveInteger(i));

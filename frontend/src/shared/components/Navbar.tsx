@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Button, Layout, Menu, Dropdown, Typography } from "antd";
 import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import { Auth } from "aws-amplify";
@@ -9,8 +8,13 @@ import { UserState } from "../reducers/userState";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { useLocationPathChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
-import _ from "lodash";
-import { UserOutlined } from "@ant-design/icons";
+import _findKey from "lodash/findKey";
+import Layout from "antd/lib/layout";
+import Typography from "antd/lib/typography";
+import Menu from "antd/lib/menu";
+import Button from "antd/lib/button";
+import Dropdown from "antd/lib/dropdown";
+import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -37,7 +41,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   });
 
   useLocationPathChanged((newPath: string) => {
-    const currentKey = _.findKey(navigationConfig, (path) => newPath == path);
+    const currentKey = _findKey(navigationConfig, (path) => newPath == path);
     setState({ selectedKeys: currentKey ? [currentKey] : [] });
   });
 

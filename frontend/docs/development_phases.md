@@ -27,10 +27,10 @@
   - subcription managmenet <DONE>
 - visuaize the trial on FE and how much time left for expiration <DONE>
 
-- manage subscription
+- manage subscription <DONE>
   - change to invalid when time is up and no payment (stripe has notifications for this but nice to have a fallback like 48hour grace period)
-    - use step function for this fallback
-  - stripe can handle email notifications
+    - use step function for this fallback <SKIP>
+  - stripe can handle email notifications <DONE>
     - https://stripe.com/docs/billing/invoices/sending#overdue
 
 # Phase 3 - More Features
