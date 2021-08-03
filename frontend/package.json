@@ -11,6 +11,7 @@
     "audit": "yarn audit",
     "upgrade-pkgs": "yarn upgrade-interactive --latest --deep",
     "deploy": "scripts/with_env.js 'scripts/deploy.sh' --env dev",
+    "deploy-prod": "scripts/with_env.js 'scripts/deploy.sh' --env prod",
     "deploy-infra": "scripts/with_env.js 'scripts/terraform_deploy.sh' --env dev"
   },
   "dependencies": {
@@ -58,6 +59,7 @@
     "@typescript-eslint/parser": "^4.28.5",
     "babel-plugin-import": "^1.13.3",
     "commander": "^7.2.0",
+    "compression-webpack-plugin": "^8.0.1",
     "cors": "^2.8.5",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^5.2.6",

@@ -4,9 +4,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+//const CompressionPlugin = require("compression-webpack-plugin");
 
-const env = process.env.ENV;
-const prod = env === "prod";
+const prod = process.env.ENV === "prod";
 
 const config = {
   entry: ["./src/index.tsx"],
@@ -91,6 +91,7 @@ const config = {
       "APP_URL",
     ]),
   ].concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : []),
+  //.concat(prod ? [new CompressionPlugin()] : []),
 };
 
 module.exports = config;

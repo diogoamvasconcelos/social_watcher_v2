@@ -8,8 +8,10 @@ set -o errexit -o nounset
 echo Preparing to deploy to $ENV
 
 OUT_PATH=$THIS_PATH/../.out
+BUILD_PATH=$THIS_PATH/../.build
 
 rm -rf $OUT_PATH
+rm -rf $BUILD_PATH
 yarn build
 
 echo Building done, starting deployment...
