@@ -25,10 +25,8 @@ export const getClient = (
     };
   };
 } => {
-  // Look into https://www.npmjs.com/package/oauth if we want to use the key/secret to fetch the token
   return {
     instance: axios.create({
-      //baseURL: "https://www.reddit.com/api/",
       baseURL: "https://oauth.reddit.com/",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
