@@ -6,14 +6,14 @@ resource "aws_cloudfront_distribution" "www_redirect" {
   enabled = true
 
   origin {
-    domain_name = aws_s3_bucket.dummy_www_fe_page.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.dummy_www_fe_page.id
+    domain_name = aws_s3_bucket.fe_page.bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.fe_page.id
   }
 
   default_cache_behavior {
     allowed_methods  = ["HEAD", "GET", "OPTIONS"]
     cached_methods   = ["HEAD", "GET", "OPTIONS"]
-    target_origin_id = aws_s3_bucket.dummy_www_fe_page.id
+    target_origin_id = aws_s3_bucket.fe_page.id
 
     forwarded_values {
       query_string = false
@@ -53,11 +53,4 @@ resource "aws_cloudfront_function" "redirect_wwww" {
   comment = "redirect www to naked (main)"
   publish = true
   code    = file("${var.tf_dir}/cloudfront_functions/redirect_www.js")
-}
-
-resource "aws_s3_bucket" "dummy_www_fe_page" {
-  bucket = "dummy-www-fe-page"
-  acl    = "private" #default
-
-  tags = local.tags
 }

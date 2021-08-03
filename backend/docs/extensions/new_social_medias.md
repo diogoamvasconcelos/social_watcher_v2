@@ -29,7 +29,8 @@
 
 # TikTok
 
-- https://www.npmjs.com/package/tiktok-api
+- https://www.npmjs.com/package/tiktok-api (looks promising, but not video search?)
+- https://www.npmjs.com/package/tiktok-scraper
 
 # Linkdin
 
@@ -40,7 +41,10 @@
 # Facebook
 
 - it's possible to do group search, maybe?
+- https://rapidapi.com/restyler/api/fnetwork/ (proxyAPI)
 
 # Youtube
 
-- search for video captions, comments (not sure how easy)
+- Do our own based on:
+  - https://www.npmjs.com/package/youtube-search
+  - https://developers.google.com/youtube/v3/docs/search/list
