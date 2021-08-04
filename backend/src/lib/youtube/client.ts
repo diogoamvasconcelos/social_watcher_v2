@@ -42,7 +42,7 @@ export type SearchParams = {
 
 const defaultSearchParams: SearchParams = {
   maxResults: 100,
-  minutesAgo: 10,
+  minutesAgo: 60 * 24, // 1 day
 };
 
 export const search = async (
@@ -68,7 +68,6 @@ export const search = async (
         maxResults: Math.min(searchParams.maxResults, 50),
         type: "video",
         safeSearch: "none",
-        part: "snippet",
       },
       url: "v3/search",
       method: "GET",

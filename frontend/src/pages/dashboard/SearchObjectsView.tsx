@@ -34,6 +34,7 @@ const createEmptySearchObject = (
     reddit: { enabledStatus: "DISABLED", over18: true },
     hackernews: { enabledStatus: "DISABLED" },
     instagram: { enabledStatus: "DISABLED" },
+    youtube: { enabledStatus: "DISABLED" },
   },
   notificationData: {
     discordNotification: {
@@ -143,6 +144,19 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         deepmergeSafe(searchObject, {
           searchData: {
             instagram: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+          },
+        }),
+      ])
+    );
+  };
+
+  const handleYoutubeSwitchedChanged = (val: boolean) => {
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          searchData: {
+            youtube: { enabledStatus: val ? "ENABLED" : "DISABLED" },
           },
         }),
       ])
@@ -271,6 +285,14 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
             searchObject.searchData.instagram.enabledStatus === "ENABLED"
           }
           onChange={handleInstagramSwitchedChanged}
+        />
+      </RowDiv>
+      <RowDiv>
+        <Text>youtube</Text>
+        <Switch
+          defaultChecked
+          checked={searchObject.searchData.youtube.enabledStatus === "ENABLED"}
+          onChange={handleYoutubeSwitchedChanged}
         />
       </RowDiv>
       <RowDiv>

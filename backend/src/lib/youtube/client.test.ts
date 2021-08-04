@@ -148,7 +148,6 @@ const makeYoutubeVideosResponse = (
           },
           contentDetails: {
             duration: "0s",
-            caption: "caption",
           },
           statistics: {
             viewCount: newNumberFromStringy("0"),

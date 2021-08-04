@@ -49,7 +49,7 @@ export const youtubeSearchResponseItemCodec = t.exact(
       kind: t.literal("youtube#video"),
       videoId: t.string,
     }),
-    snippet: baseSnippetCodec,
+    //snippet: baseSnippetCodec,
   })
 );
 export type YoutubeSearchResponseItem = t.TypeOf<
@@ -76,7 +76,6 @@ export const youtubeVideosResponseItemCodec = t.exact(
     snippet: baseSnippetCodec,
     contentDetails: t.type({
       duration: t.string,
-      caption: t.string,
     }),
     statistics: t.intersection([
       t.type({

@@ -14,7 +14,9 @@ const searchYoutube = async () => {
 
   const client = getClient(youtubeCredentials);
   const result = fromEither(
-    await search({ client, logger }, "dota2", { minutesAgo: 30 })
+    await search({ client, logger }, "diogo vasconcelos", {
+      minutesAgo: 60 * 24,
+    })
   );
   console.log(result);
 };
@@ -23,4 +25,4 @@ export const main = async () => {
   await searchYoutube();
 };
 
-void main();
+//void main();

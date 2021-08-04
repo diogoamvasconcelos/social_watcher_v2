@@ -9,7 +9,7 @@ import {
 } from "../../src/domain/models/searchResult";
 import { getNow, toUnixTimstamp } from "../../src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { newLowerCase } from "@diogovasconcelos/lib/iots";
+import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
@@ -192,12 +192,11 @@ export const buildYoutubeSearchResult = (
         id,
         title: "title",
         description: "decription",
-        caption: "caption",
-        viewCount: 0,
-        likeCount: 0,
-        dislikeCount: 0,
-        favoriteCount: 0,
-        commentCount: 0,
+        viewCount: newNumberFromStringy("0"),
+        likeCount: newNumberFromStringy("0"),
+        dislikeCount: newNumberFromStringy("0"),
+        favoriteCount: newNumberFromStringy("0"),
+        commentCount: newNumberFromStringy("0"),
         thumbnailUrl: "thumbnail-url",
         durationInSeconds: 1,
       },

@@ -24,9 +24,7 @@ export const translateSearchResults = async <T extends SearchResult>(
       case "instagram":
         return item.data.caption;
       case "youtube":
-        return [item.data.title, item.data.description, item.data.caption].join(
-          "\n"
-        );
+        return [item.data.title, item.data.description].join("\n");
       default:
         return throwUnexpectedCase(item, "translateSearchResults");
     }
