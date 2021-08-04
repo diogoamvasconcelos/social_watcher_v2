@@ -5,6 +5,7 @@ import {
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
+  YoutubeSearchResult,
 } from "../../src/domain/models/searchResult";
 import { getNow, toUnixTimstamp } from "../../src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
@@ -55,6 +56,8 @@ export const buildSearchResult = (
       return buildHackernewsSearchResult(partial);
     case "instagram":
       return buildInstagramSearchResult(partial);
+    case "youtube":
+      return buildYoutubeSearchResult(partial);
   }
 };
 
@@ -172,32 +175,33 @@ export const buildInstagramSearchResult = (
   );
 };
 
-// TODO (cooy from lib/youtube/test and then replace with this)
-// export const buildYoutubeSearchResult = (
-//   partial?: PartialDeep<InstagramSearchResult>
-// ): InstagramSearchResult => {
-//   const now = getNow();
-//   const id = uuid();
+export const buildYoutubeSearchResult = (
+  partial?: PartialDeep<YoutubeSearchResult>
+): YoutubeSearchResult => {
+  const now = getNow();
+  const id = uuid();
 
-//   return deepmergeSafe(
-//     {
-//       id,
-//       keyword: newLowerCase(uuid()),
-//       socialMedia: "instagram",
-//       happenedAt: now,
-//       link: "some-link",
-//       data: {
-//         id,
-//         caption: "some-caption",
-//         owner: "owner",
-//         shortcode: "shortcode",
-//         display_url: "display_url",
-//         num_comments: 0,
-//         num_likes: 0,
-//         is_video: false as boolean, // lol
-//         num_video_views: 0,
-//       },
-//     },
-//     partial ?? {}
-//   );
-// };
+  return deepmergeSafe(
+    {
+      id,
+      keyword: newLowerCase(uuid()),
+      socialMedia: "youtube",
+      happenedAt: now,
+      link: "some-link",
+      data: {
+        id,
+        title: "title",
+        description: "decription",
+        caption: "caption",
+        viewCount: 0,
+        likeCount: 0,
+        dislikeCount: 0,
+        favoriteCount: 0,
+        commentCount: 0,
+        thumbnailUrl: "thumbnail-url",
+        durationInSeconds: 1,
+      },
+    },
+    partial ?? {}
+  );
+};

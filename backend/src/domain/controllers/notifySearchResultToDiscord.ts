@@ -8,6 +8,7 @@ import {
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
+  YoutubeSearchResult,
 } from "../models/searchResult";
 import { SendMessageToChannelFn } from "../ports/discordNotifier/sendMessageToChannel";
 import { DefaultOkReturn } from "../ports/shared";
@@ -41,6 +42,9 @@ const buildMessage = (searchResult: SearchResult): string => {
     }
     case "instagram": {
       return buildInstagramMessage(searchResult);
+    }
+    case "youtube": {
+      return buildYoutubeMessage(searchResult);
     }
     default:
       return throwUnexpectedCase(searchResult, "discordBuildMessage");
@@ -115,7 +119,7 @@ const buildHackernewsMessage = (
 
 const buildInstagramMessage = (searchResult: InstagramSearchResult): string => {
   const messages = [
-    `New '${searchResult.keyword}' Instagram post`,
+    `New '${searchResult.keyword}' Instagram post (${searchResult.data.num_likes} likes, ${searchResult.data.num_comments} comments)`,
     searchResult.link,
     searchResult.data.translatedText
       ? [
@@ -126,6 +130,27 @@ const buildInstagramMessage = (searchResult: InstagramSearchResult): string => {
         ]
       : undefined,
     searchResult.data.display_url,
+  ];
+
+  return _.flatten(messages)
+    .filter((message) => message != undefined)
+    .join("\n");
+};
+
+const buildYoutubeMessage = (searchResult: YoutubeSearchResult): string => {
+  const messages = [
+    `New '${searchResult.keyword}' youtube video (${searchResult.data.viewCount} views, ${searchResult.data.likeCount} likes)`,
+    searchResult.data.title,
+    searchResult.link,
+    searchResult.data.translatedText
+      ? [
+          `Translated message (lang: ${searchResult.data.lang})`,
+          "```",
+          searchResult.data.translatedText,
+          "```",
+        ]
+      : undefined,
+    searchResult.data.thumbnailUrl,
   ];
 
   return _.flatten(messages)

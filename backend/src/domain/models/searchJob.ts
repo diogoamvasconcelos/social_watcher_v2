@@ -51,6 +51,17 @@ export const instagramSearchJobCodec = t.intersection([
 export type InstagramSearchJob = t.TypeOf<typeof instagramSearchJobCodec>;
 
 // +++++++++++++
+// + Youtube +
+// +++++++++++++
+export const youtubeSearchJobCodec = t.intersection([
+  searchJobBaseCodec,
+  t.type({
+    socialMedia: t.literal("youtube"),
+  }),
+]);
+export type YoutubeSearchJob = t.TypeOf<typeof youtubeSearchJobCodec>;
+
+// +++++++++++++
 // + SearchJob +
 // +++++++++++++
 export const searchJobCodec = t.union([
@@ -58,5 +69,6 @@ export const searchJobCodec = t.union([
   redditSearchJobCodec,
   hackernewsSearchJobCodec,
   instagramSearchJobCodec,
+  youtubeSearchJobCodec,
 ]);
 export type SearchJob = t.TypeOf<typeof searchJobCodec>;

@@ -93,6 +93,34 @@ export const instagramSearchResultCodec = t.intersection([
 ]);
 export type InstagramSearchResult = t.TypeOf<typeof instagramSearchResultCodec>;
 
+// +++++++++++
+// + Youtube +
+// +++++++++++
+
+export const youtubeSearchResultCodec = t.intersection([
+  searchResultMetadaCodec,
+  t.type({
+    socialMedia: t.literal("youtube"),
+    data: t.intersection([
+      searchResultDataBaseCodec,
+      t.type({
+        id: t.string,
+        title: t.string,
+        description: t.string,
+        thumbnailUrl: t.string,
+        viewCount: t.number,
+        likeCount: t.number,
+        dislikeCount: t.number,
+        favoriteCount: t.number,
+        commentCount: t.number,
+        durationInSeconds: t.number,
+        caption: t.string,
+      }),
+    ]),
+  }),
+]);
+export type YoutubeSearchResult = t.TypeOf<typeof youtubeSearchResultCodec>;
+
 // ++++++++++++++++
 // + SearchResult +
 // ++++++++++++++++
@@ -101,5 +129,6 @@ export const searchResultCodec = t.union([
   redditSearchResultCodec,
   hackernewsSearchResultCodec,
   instagramSearchResultCodec,
+  youtubeSearchResultCodec,
 ]);
 export type SearchResult = t.TypeOf<typeof searchResultCodec>;
