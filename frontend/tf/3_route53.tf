@@ -5,20 +5,18 @@ resource "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "main-ns" {
-  allow_overwrite = true
-  name            = local.page_url
-  ttl             = 1800 #30min
-  type            = "NS"
-  zone_id         = aws_route53_zone.main.zone_id
+  name    = local.page_url
+  ttl     = 1800 #30min
+  type    = "NS"
+  zone_id = aws_route53_zone.main.zone_id
 
   records = aws_route53_zone.main.name_servers
 }
 
 resource "aws_route53_record" "main-a" {
-  allow_overwrite = true
-  name            = local.page_url
-  type            = "A"
-  zone_id         = aws_route53_zone.main.zone_id
+  name    = local.page_url
+  type    = "A"
+  zone_id = aws_route53_zone.main.zone_id
 
   alias {
     name                   = aws_cloudfront_distribution.s3_distribution.domain_name
@@ -37,10 +35,9 @@ resource "aws_route53_record" "validation" {
     }
   }
 
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = aws_route53_zone.main.zone_id
+  name    = each.value.name
+  records = [each.value.record]
+  ttl     = 60
+  type    = each.value.type
+  zone_id = aws_route53_zone.main.zone_id
 }

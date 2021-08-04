@@ -1,5 +1,4 @@
 resource "aws_route53_record" "www-a" {
-  allow_overwrite = true
   name            = local.www_page_url
   type            = "A"
   zone_id         = aws_route53_zone.main.zone_id
@@ -21,7 +20,6 @@ resource "aws_route53_record" "validation_www" {
     }
   }
 
-  allow_overwrite = true
   name            = each.value.name
   records         = [each.value.record]
   ttl             = 60
