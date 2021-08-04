@@ -19,7 +19,7 @@ export const getClient = (
 ): { instance: AxiosInstance; credentials: YoutubeCredentials } => {
   return {
     instance: axios.create({
-      baseURL: "https://www.googleapis.com/youtube",
+      baseURL: "https://youtube.googleapis.com/youtube/",
     }),
     credentials,
   };
@@ -49,13 +49,13 @@ export const search = async (
   { logger, client }: YoutubeDependencies,
   keyword: string,
   params?: Partial<SearchParams>
-) => {
+): Promise<Either<string[], YoutubeVideosResponse["items"]>> => {
   // search but only keep videos
   // get video details to add more data
   const searchParams = deepmergeSafe(defaultSearchParams, params ?? {});
   let results: YoutubeVideosResponse["items"] = [];
 
-  let nextPageToken: string = "";
+  let nextPageToken: string | undefined = undefined;
 
   const startTime = getMinutesAgo(searchParams.minutesAgo);
 
@@ -68,24 +68,26 @@ export const search = async (
         maxResults: Math.min(searchParams.maxResults, 50),
         type: "video",
         safeSearch: "none",
-        part: ["snippet", "contentDetails", "statistics"].join(","),
+        part: "snippet",
       },
-      url: "3/search",
+      url: "v3/search",
       method: "GET",
     };
 
-    if (nextPageToken.length > 0) {
+    logger.debug("search request", { request: request as JsonEncodable });
+
+    if (nextPageToken) {
       request.params = { ...request.params, pageToken: nextPageToken };
     }
 
     const response = await doRequest(client.instance, request);
+    logger.debug("search response", {
+      data: response.data,
+      status: response.status,
+    });
     if (response.status != 200) {
       return left([`${response.status} : ${response.data}`]);
     }
-
-    logger.info("search response", {
-      response: response as unknown as JsonEncodable,
-    });
 
     const responseEither = decode(youtubeSearchResponseCodec, response.data);
     if (isLeft(responseEither)) {
@@ -98,7 +100,7 @@ export const search = async (
     const patchedItemsEither = toSingleEither(
       await Promise.all(
         responseEither.right.items.map(async (item) => {
-          return await getVideo({ client, logger }, item.id.videoId ?? "");
+          return await getVideo({ client, logger }, item.id.videoId);
         })
       )
     );
@@ -110,9 +112,11 @@ export const search = async (
 
     nextPageToken = responseEither.right.nextPageToken;
   } while (
-    nextPageToken.length > 0 &&
+    nextPageToken != undefined &&
     results.length < searchParams.maxResults
   );
+
+  return right(results);
 };
 
 // ++++++++++
@@ -128,11 +132,15 @@ export const getVideo = async (
       part: ["snippet", "contentDetails", "statistics"].join(","),
       id: videoId,
     },
-    url: "3/videos",
+    url: "v3/videos",
     method: "GET",
   };
 
   const response = await doRequest(client.instance, request);
+  logger.debug("videos response", {
+    data: response.data,
+    status: response.status,
+  });
   if (response.status != 200) {
     return left([`${response.status} : ${response.data}`]);
   }

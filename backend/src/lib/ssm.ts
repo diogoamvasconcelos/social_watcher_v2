@@ -9,8 +9,8 @@ export const getClient = () => {
 export type Client = ReturnType<typeof getClient>;
 
 export const getParameter = async <T>(
-  client: AWS.SSM,
-  request: AWS.SSM.GetParameterRequest,
+  client: SSM,
+  request: SSM.GetParameterRequest,
   transformFn: (item: string) => Either<string[], T>,
   logger: Logger
 ): Promise<Either<"ERROR", "NOT_FOUND" | T>> => {

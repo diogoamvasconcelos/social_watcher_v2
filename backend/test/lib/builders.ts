@@ -171,3 +171,33 @@ export const buildInstagramSearchResult = (
     partial ?? {}
   );
 };
+
+// TODO (cooy from lib/youtube/test and then replace with this)
+// export const buildYoutubeSearchResult = (
+//   partial?: PartialDeep<InstagramSearchResult>
+// ): InstagramSearchResult => {
+//   const now = getNow();
+//   const id = uuid();
+
+//   return deepmergeSafe(
+//     {
+//       id,
+//       keyword: newLowerCase(uuid()),
+//       socialMedia: "instagram",
+//       happenedAt: now,
+//       link: "some-link",
+//       data: {
+//         id,
+//         caption: "some-caption",
+//         owner: "owner",
+//         shortcode: "shortcode",
+//         display_url: "display_url",
+//         num_comments: 0,
+//         num_likes: 0,
+//         is_video: false as boolean, // lol
+//         num_video_views: 0,
+//       },
+//     },
+//     partial ?? {}
+//   );
+// };

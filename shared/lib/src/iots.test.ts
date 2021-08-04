@@ -5,6 +5,7 @@ import {
   decode,
   emailFromString,
   lowerCase,
+  numberFromStringy,
   toSingleEither,
 } from "./iots";
 
@@ -118,6 +119,24 @@ describe("EmailFromString", () => {
     (_title: string, u: string, isEmail: boolean) => {
       const decodeResult = decode(emailFromString, u);
       expect(isRight(decodeResult)).toEqual(isEmail);
+    }
+  );
+});
+
+describe("NumberFromStringy", () => {
+  const testCases: [string, string, boolean][] = [
+    ["empty string", "", false],
+    ["good int", "0", true],
+    ["good float", "0.1", true],
+    ["good neg float", "-0.1", true],
+    ["not a number", "nan", false],
+  ];
+
+  test.each(testCases)(
+    "decode %p as numberFromStringy",
+    (_title: string, u: string, isNumber: boolean) => {
+      const decodeResult = decode(numberFromStringy, u);
+      expect(isRight(decodeResult)).toEqual(isNumber);
     }
   );
 });

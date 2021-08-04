@@ -1,4 +1,4 @@
-import { dateISOString } from "@diogovasconcelos/lib/iots";
+import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 
 export const youtubeCredentialsCodec = t.type({
@@ -21,34 +21,34 @@ const baseSnippetCodec = t.type({
     default: t.type({
       url: t.string,
     }),
+    medium: t.type({
+      url: t.string,
+    }),
+    high: t.type({
+      url: t.string,
+    }),
   }),
 });
 
-const baseListResponseCodec = t.type({
-  pageInfo: t.type({
-    totalResults: t.number,
-    resultsPerPage: t.number,
+const baseListResponseCodec = t.intersection([
+  t.type({
+    pageInfo: t.type({
+      totalResults: t.number,
+      resultsPerPage: t.number,
+    }),
   }),
-  nextPageToken: t.string,
-  prevPageToken: t.string,
-});
+  t.partial({
+    nextPageToken: t.string,
+    prevPageToken: t.string,
+  }),
+]);
 
 export const youtubeSearchResponseItemCodec = t.exact(
   t.type({
-    id: t.intersection([
-      t.type({
-        kind: t.union([
-          t.literal("youtube#video"),
-          t.literal("youtube#channel"),
-          t.literal("youtube#playlist"),
-        ]),
-      }),
-      t.partial({
-        videoId: t.string,
-        channelId: t.string,
-        playlistId: t.string,
-      }),
-    ]),
+    id: t.type({
+      kind: t.literal("youtube#video"),
+      videoId: t.string,
+    }),
     snippet: baseSnippetCodec,
   })
 );
@@ -78,13 +78,17 @@ export const youtubeVideosResponseItemCodec = t.exact(
       duration: t.string,
       caption: t.string,
     }),
-    statistics: t.type({
-      viewCount: t.number,
-      likeCount: t.number,
-      dislikeCount: t.number,
-      favouriteCount: t.number,
-      commentCount: t.number,
-    }),
+    statistics: t.intersection([
+      t.type({
+        viewCount: numberFromStringy,
+        likeCount: numberFromStringy,
+        dislikeCount: numberFromStringy,
+        favoriteCount: numberFromStringy,
+      }),
+      t.partial({
+        commentCount: numberFromStringy,
+      }),
+    ]),
   })
 );
 export type YoutubeVideosResponseItem = t.TypeOf<
