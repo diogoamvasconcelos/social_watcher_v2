@@ -8,6 +8,7 @@ import {
   buildRedditSearchResult,
   buildSQSEvent,
   buildTwitterSearchResult,
+  buildYoutubeSearchResult,
 } from "../../../lib/builders";
 import { getEnvTestConfig } from "../../../lib/config";
 import { invokeLambda } from "../../../lib/lambda";
@@ -34,6 +35,7 @@ describe("handlers/syncSearchResultsToEs", () => {
       buildRedditSearchResult({ keyword }),
       buildHackernewsSearchResult({ keyword }),
       buildInstagramSearchResult({ keyword }),
+      buildYoutubeSearchResult({ keyword }),
     ];
     const searchJobEvent = buildSQSEvent(searchResults);
 

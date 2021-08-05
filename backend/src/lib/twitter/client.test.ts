@@ -18,6 +18,10 @@ const requestMock = twitterClient.request as jest.MockedFunction<
 >;
 
 describe("twitter", () => {
+  beforeEach(() => {
+    requestMock.mockReset();
+  });
+
   it("can paginate", async () => {
     const twitterResponse0 = makeTwitterResponse();
     const twitterResponse1 = makeTwitterResponse({

@@ -28,6 +28,8 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         return "hackernews post";
       case "instagram":
         return "instagram post";
+      case "youtube":
+        return "youtube video";
     }
   };
 
@@ -41,6 +43,8 @@ const ResultsTable: React.FC<SearchTableProps> = ({ searchResults }) => {
         return searchResult.data.text;
       case "instagram":
         return searchResult.data.caption;
+      case "youtube":
+        return searchResult.data.title;
     }
   };
 

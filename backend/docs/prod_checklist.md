@@ -29,3 +29,4 @@
     - sns send alerts
   - ref: https://aws.amazon.com/blogs/aws/new-use-cloudwatch-synthetics-to-monitor-sites-api-endpoints-web-workflows-and-more/
 - put SES out of sandbox for prod account: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+  - check how it was done in the dev account (check email, diogo.am.vasconcelos)

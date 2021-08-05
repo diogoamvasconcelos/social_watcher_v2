@@ -40,7 +40,7 @@
 
 # Facebook
 
-- it's possible to do group search, maybe?
+- https://www.facebook.com/search/top?q=pureref (it seems possible?)
 - https://rapidapi.com/restyler/api/fnetwork/ (proxyAPI)
 
 # Youtube

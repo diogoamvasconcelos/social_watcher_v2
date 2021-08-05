@@ -5,10 +5,11 @@ import {
   RedditSearchResult,
   SearchResult,
   TwitterSearchResult,
+  YoutubeSearchResult,
 } from "../../src/domain/models/searchResult";
 import { getNow, toUnixTimstamp } from "../../src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { newLowerCase } from "@diogovasconcelos/lib/iots";
+import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
 
@@ -55,6 +56,8 @@ export const buildSearchResult = (
       return buildHackernewsSearchResult(partial);
     case "instagram":
       return buildInstagramSearchResult(partial);
+    case "youtube":
+      return buildYoutubeSearchResult(partial);
   }
 };
 
@@ -166,6 +169,36 @@ export const buildInstagramSearchResult = (
         num_likes: 0,
         is_video: false as boolean, // lol
         num_video_views: 0,
+      },
+    },
+    partial ?? {}
+  );
+};
+
+export const buildYoutubeSearchResult = (
+  partial?: PartialDeep<YoutubeSearchResult>
+): YoutubeSearchResult => {
+  const now = getNow();
+  const id = uuid();
+
+  return deepmergeSafe(
+    {
+      id,
+      keyword: newLowerCase(uuid()),
+      socialMedia: "youtube",
+      happenedAt: now,
+      link: "some-link",
+      data: {
+        id,
+        title: "title",
+        description: "decription",
+        viewCount: newNumberFromStringy("0"),
+        likeCount: newNumberFromStringy("0"),
+        dislikeCount: newNumberFromStringy("0"),
+        favoriteCount: newNumberFromStringy("0"),
+        commentCount: newNumberFromStringy("0"),
+        thumbnailUrl: "thumbnail-url",
+        durationInSeconds: 1,
       },
     },
     partial ?? {}

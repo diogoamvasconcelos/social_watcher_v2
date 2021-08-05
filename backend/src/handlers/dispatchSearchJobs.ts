@@ -12,7 +12,7 @@ import { defaultMiddlewareStack } from "./middlewares/common";
 import { eitherListToDefaultOk } from "../domain/ports/shared";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { throwUnexpectedCase } from "../lib/runtime";
-import { getHoursAgo, getNow } from "../lib/date";
+import { getMinutesAgo, getNow } from "../lib/date";
 import { makeUpdateKeywordData } from "../adapters/keywordStore/updateKeywordData";
 
 const config = getConfig();
@@ -98,29 +98,61 @@ export const filterKeywords = (
       // Due to RapidAPI limits, instagram searchs needs to be more restricted
       // - https://rapidapi.com/restyler/api/instagram40/pricing
       // - https://docs.google.com/spreadsheets/d/1fS1pXaw-j79P1-mrVHD3agRqLvb-ARYbumLtoRdcKlU/edit#gid=0
-      const maxSearchObjectsPerSearch = 10;
-      const cooldownPeriodInHours = 24;
-      const allowedSearchedAt = new Date(getHoursAgo(cooldownPeriodInHours));
-
-      const filteredKeywords: KeywordData[] = [];
-      for (const keyword of keywords) {
-        if (filteredKeywords.length == maxSearchObjectsPerSearch) {
-          break;
-        }
-
-        if (
-          keyword.searchedAt &&
-          new Date(keyword.searchedAt) > allowedSearchedAt
-        ) {
-          continue;
-        }
-
-        filteredKeywords.push(keyword);
-      }
-
-      return filteredKeywords;
+      return applyCooldownToKeywords(
+        {
+          cooldownPeriodInMinutes: 24 * 60,
+          maxSearchObjectsPerSearch: 10,
+        },
+        keywords
+      );
+    }
+    case "youtube": {
+      // Youtube API quota: https://developers.google.com/youtube/v3/getting-started#quota
+      // request cost calc: https://developers.google.com/youtube/v3/determine_quota_cost
+      // TODO: request quota extension
+      return applyCooldownToKeywords(
+        {
+          cooldownPeriodInMinutes: 12 * 60,
+        },
+        keywords
+      );
     }
     default:
       return throwUnexpectedCase(socialMedia, "filterKeywords");
   }
+};
+
+export const applyCooldownToKeywords = (
+  {
+    cooldownPeriodInMinutes,
+    maxSearchObjectsPerSearch,
+  }: {
+    cooldownPeriodInMinutes?: number;
+    maxSearchObjectsPerSearch?: number;
+  },
+  keywords: KeywordData[]
+): KeywordData[] => {
+  const allowedSearchedAt = new Date(getMinutesAgo(cooldownPeriodInMinutes));
+
+  const filteredKeywords: KeywordData[] = [];
+  for (const keyword of keywords) {
+    if (
+      maxSearchObjectsPerSearch &&
+      filteredKeywords.length == maxSearchObjectsPerSearch
+    ) {
+      break;
+    }
+
+    if (
+      cooldownPeriodInMinutes &&
+      keyword.searchedAt &&
+      new Date(keyword.searchedAt) > allowedSearchedAt
+    ) {
+      continue;
+    }
+
+    filteredKeywords.push(keyword);
+  }
+
+  return filteredKeywords;
 };

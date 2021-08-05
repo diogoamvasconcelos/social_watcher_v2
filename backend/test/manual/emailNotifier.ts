@@ -28,4 +28,4 @@ export const main = async () => {
   await sendTestEmail();
 };
 
-void main();
+//void main();

@@ -2,7 +2,7 @@ import * as t from "io-ts";
 import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
-import { dateISOString } from "@diogovasconcelos/lib/iots";
+import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
 
 export const searchResultMetadaCodec = t.type({
   id: t.string,
@@ -93,6 +93,33 @@ export const instagramSearchResultCodec = t.intersection([
 ]);
 export type InstagramSearchResult = t.TypeOf<typeof instagramSearchResultCodec>;
 
+// +++++++++++
+// + Youtube +
+// +++++++++++
+
+export const youtubeSearchResultCodec = t.intersection([
+  searchResultMetadaCodec,
+  t.type({
+    socialMedia: t.literal("youtube"),
+    data: t.intersection([
+      searchResultDataBaseCodec,
+      t.type({
+        id: t.string,
+        title: t.string,
+        description: t.string,
+        thumbnailUrl: t.string,
+        viewCount: numberFromStringy,
+        likeCount: numberFromStringy,
+        dislikeCount: numberFromStringy,
+        favoriteCount: numberFromStringy,
+        commentCount: numberFromStringy,
+        durationInSeconds: t.number,
+      }),
+    ]),
+  }),
+]);
+export type YoutubeSearchResult = t.TypeOf<typeof youtubeSearchResultCodec>;
+
 // ++++++++++++++++
 // + SearchResult +
 // ++++++++++++++++
@@ -101,5 +128,6 @@ export const searchResultCodec = t.union([
   redditSearchResultCodec,
   hackernewsSearchResultCodec,
   instagramSearchResultCodec,
+  youtubeSearchResultCodec,
 ]);
 export type SearchResult = t.TypeOf<typeof searchResultCodec>;

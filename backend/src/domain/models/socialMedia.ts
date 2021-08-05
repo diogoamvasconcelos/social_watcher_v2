@@ -5,6 +5,7 @@ export const socialMediaCodec = t.union([
   t.literal("reddit"),
   t.literal("hackernews"),
   t.literal("instagram"),
+  t.literal("youtube"),
 ]);
 export type SocialMedia = t.TypeOf<typeof socialMediaCodec>;
 
@@ -13,4 +14,5 @@ export const socialMedias: SocialMedia[] = [
   "reddit",
   "hackernews",
   "instagram",
+  "youtube",
 ];

@@ -17,6 +17,9 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
     instagram: {
       enabledStatus: "DISABLED",
     },
+    youtube: {
+      enabledStatus: "DISABLED",
+    },
   },
   notificationData: {
     discordNotification: {

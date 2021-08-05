@@ -8,10 +8,17 @@ import { SearchListing } from "./models";
 
 const logger = getLogger();
 
+const redditClient = {
+  instance: { request: jest.fn() },
+} as unknown as Client;
+const requestMock = redditClient.instance.request as jest.MockedFunction<
+  Client["instance"]["request"]
+>;
+
 describe("reddit", () => {
-  const redditClient = {
-    instance: { request: jest.fn() },
-  } as unknown as Client;
+  beforeEach(() => {
+    requestMock.mockReset();
+  });
 
   it("can handle empty listings", async () => {
     const redditResponse = {
@@ -24,12 +31,7 @@ describe("reddit", () => {
       },
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type AnyType = any;
-
-    (
-      redditClient.instance.request as jest.MockedFunction<AnyType>
-    ).mockResolvedValueOnce({
+    requestMock.mockResolvedValueOnce({
       status: 200,
       data: redditResponse,
     });
@@ -53,8 +55,7 @@ describe("reddit", () => {
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (redditClient.instance.request as jest.MockedFunction<any>)
+    requestMock
       .mockResolvedValueOnce({
         status: 200,
         data: redditResponse0,

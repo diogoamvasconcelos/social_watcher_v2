@@ -10,6 +10,7 @@ import {
   buildInstagramSearchResult,
   buildRedditSearchResult,
   buildTwitterSearchResult,
+  buildYoutubeSearchResult,
 } from "../../../../lib/builders";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
 
@@ -19,7 +20,7 @@ describe("adapters/putSearchResults", () => {
   const putSearchResultsFn = makePutSearchResults(client, tableName);
 
   beforeAll(() => {
-    jest.setTimeout(45000);
+    jest.setTimeout(60000);
   });
 
   beforeEach(async () => {
@@ -32,6 +33,7 @@ describe("adapters/putSearchResults", () => {
       buildRedditSearchResult(),
       buildHackernewsSearchResult(),
       buildInstagramSearchResult(),
+      buildYoutubeSearchResult(),
     ];
 
     fromEither(await putSearchResultsFn(logger, searchResults));

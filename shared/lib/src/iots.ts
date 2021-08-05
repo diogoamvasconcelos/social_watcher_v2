@@ -3,7 +3,7 @@ import { isRight, left, Either, isLeft, right } from "fp-ts/lib/Either";
 import * as A from "fp-ts/lib/Array";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
-import { DateFromISOString } from "io-ts-types";
+import { DateFromISOString, NumberFromString } from "io-ts-types";
 import isEmail from "validator/lib/isEmail";
 
 export const fromEither = ruins.fromEither;
@@ -72,7 +72,7 @@ export type PositiveInteger = t.TypeOf<typeof positiveInteger>;
 export const newPositiveInteger = (x: number | string): PositiveInteger =>
   fromEither(decode(positiveInteger, x));
 
-// DateFromStringV2 (can convert from date as well (nice for redecoding))
+// DateFromStringV2 (can convert from date as well (nice for redecoding)) - NOT USED
 // ref: https://github.com/gcanti/io-ts-types/blob/master/src/DateFromISOString.ts
 
 export const DateFromISOStringV2 = new t.Type<Date, Date | string, unknown>(
@@ -144,3 +144,21 @@ export type EmailFromString = t.TypeOf<typeof emailFromString>;
 
 export const newEmailFromString = (x: string): EmailFromString =>
   fromEither(decode(emailFromString, x));
+
+// NumberFromStringy (better than io-ts-types)
+
+export interface NumberFromStringyBrand {
+  readonly NumberFromStringy: unique symbol;
+}
+
+export const numberFromStringy = t.brand(
+  t.string,
+  (u): u is t.Branded<string, NumberFromStringyBrand> =>
+    isRight(NumberFromString.decode(u)),
+  "NumberFromStringy" // the name must match the readonly field in the brand);
+);
+
+export type NumberFromStringy = t.TypeOf<typeof numberFromStringy>;
+
+export const newNumberFromStringy = (x: string): NumberFromStringy =>
+  fromEither(decode(numberFromStringy, x));

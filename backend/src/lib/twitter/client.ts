@@ -55,13 +55,15 @@ export const searchRecent = async (
   let results: SearchRecentResponse["data"] = [];
   let token: string | undefined = undefined;
 
+  const startTime = getMinutesAgo(searchParams.minutesAgo);
+
   do {
     const request: AxiosRequestConfig = {
       params: {
         query: `${keyword} -is:retweet`,
         max_results: Math.min(searchParams.maxResults, 100),
         next_token: token,
-        start_time: getMinutesAgo(searchParams.minutesAgo),
+        start_time: startTime,
         "tweet.fields": [
           "created_at",
           "lang",
@@ -82,14 +84,14 @@ export const searchRecent = async (
       response.data["data"] = [];
     }
 
-    const decodeResult = decode(searchRecentResponseCodec, response.data);
-    if (isLeft(decodeResult)) {
-      return decodeResult;
+    const responseEither = decode(searchRecentResponseCodec, response.data);
+    if (isLeft(responseEither)) {
+      return responseEither;
     }
 
     const patchedItemsEither = toSingleEither(
       await Promise.all(
-        decodeResult.right.data.map(async (item) => {
+        responseEither.right.data.map(async (item) => {
           // get followers count from author
           const userEither = await getUser({ client, logger }, item.author_id);
           if (isLeft(userEither)) {
@@ -109,7 +111,7 @@ export const searchRecent = async (
 
     results = [...results, ...patchedItemsEither.right];
 
-    token = decodeResult.right.meta.next_token;
+    token = responseEither.right.meta.next_token;
   } while (token != undefined && results.length < searchParams.maxResults);
 
   return right(results);
@@ -137,10 +139,10 @@ export const getUser = async (
     return left([`${response.status} : ${response.data}`]);
   }
 
-  const decodeResult = decode(getUserResponseCodec, response.data);
-  if (isLeft(decodeResult)) {
-    return decodeResult;
+  const responseEither = decode(getUserResponseCodec, response.data);
+  if (isLeft(responseEither)) {
+    return responseEither;
   }
 
-  return right(decodeResult.right.data);
+  return right(responseEither.right.data);
 };
