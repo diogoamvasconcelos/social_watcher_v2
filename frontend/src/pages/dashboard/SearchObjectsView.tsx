@@ -12,6 +12,9 @@ import Modal from "antd/lib/modal";
 import Button from "antd/lib/button";
 import SettingFilled from "@ant-design/icons/lib/icons/SettingFilled";
 import _range from "lodash/range";
+import { capitalizeWord } from "../../shared/lib/text";
+import Radio, { RadioChangeEvent } from "antd/lib/radio";
+import Input from "antd/lib/input";
 
 const { Text } = Typography;
 
@@ -77,14 +80,25 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   searchObject,
 }) => {
   const dispatch = useAppDispatch();
-  const [configModalVisible, setConfigModalVisible] = useState(false);
-  const [configModalLoading, setConfigModalLoading] = useState(false);
+  const [configNotificationsModalVisible, setNotificationsConfigModalVisible] =
+    useState(false);
+  const [configNotificationsModalLoading, setConfigNotificationsModalLoading] =
+    useState(false);
   const [updatedDiscordConfig, setUpdatedDiscordConfig] = useState<
     SearchObjectDomain["notificationData"]["discordNotification"]
   >(searchObject.notificationData.discordNotification);
   const [updatedSlackConfig, setUpdatedSlackConfig] = useState<
     SearchObjectDomain["notificationData"]["slackNotification"]
   >(searchObject.notificationData.slackNotification);
+
+  const [configReportsModalVisible, setReportsConfigModalVisible] =
+    useState(false);
+  const [configReportsModalLoading, setConfigReportsModalLoading] =
+    useState(false);
+  const [updatedEmailConfig, setUpdatedEmailConfig] = useState<
+    SearchObjectDomain["reportData"]["emailReport"]
+  >(searchObject.reportData.emailReport);
+
   const userFetchStatus = useAppSelector((state) => state.user.fetchStatus);
 
   const handleKeywordChanged = (val: string) => {
@@ -167,7 +181,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   // + Discord +
   // +++++++++++
   const handleNotificationsConfigOk = () => {
-    setConfigModalLoading(true);
+    setConfigNotificationsModalLoading(true);
     void dispatch(
       updateUserSearchObjects([
         searchObject.index,
@@ -181,7 +195,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
     );
   };
   const handleNotificationsConfigCancel = () => {
-    setConfigModalVisible(false);
+    setNotificationsConfigModalVisible(false);
   };
   const handleDiscordNotificationEnabledChanged = (val: boolean) => {
     setUpdatedDiscordConfig(
@@ -230,16 +244,31 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
     );
   };
 
-  useEffect(() => {
-    if (userFetchStatus === "idle" && configModalVisible) {
-      setConfigModalLoading(false);
-      setConfigModalVisible(false);
-    }
-  }, [userFetchStatus]);
+  // + EMAIL
+
+  const handleReportsConfigOk = () => {
+    setConfigReportsModalLoading(true);
+    void dispatch(
+      updateUserSearchObjects([
+        searchObject.index,
+        deepmergeSafe(searchObject, {
+          reportData: {
+            emailReport: updatedEmailConfig,
+          },
+        }),
+      ])
+    );
+  };
+  const handleReportsConfigCancel = () => {
+    setReportsConfigModalVisible(false);
+  };
 
   useEffect(() => {
-    setUpdatedDiscordConfig(searchObject.notificationData.discordNotification);
-  }, [searchObject]);
+    if (userFetchStatus === "idle" && configNotificationsModalVisible) {
+      setConfigNotificationsModalLoading(false);
+      setNotificationsConfigModalVisible(false);
+    }
+  }, [userFetchStatus]);
 
   return (
     <SearchObjectItemContainer key={searchObject.index}>
@@ -302,32 +331,30 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           shape="circle"
           icon={<SettingFilled />}
           size="small"
-          onClick={() => setConfigModalVisible(true)}
+          onClick={() => setNotificationsConfigModalVisible(true)}
         />
       </RowDiv>
       <RowDiv>
         <Text>Discord:</Text>
         <Text>
-          {searchObject.notificationData.discordNotification.enabledStatus ===
-          "ENABLED"
-            ? "Enabled"
-            : "Disabled"}
+          {capitalizeWord(
+            searchObject.notificationData.discordNotification.enabledStatus
+          )}
         </Text>
       </RowDiv>
       <RowDiv>
         <Text>Slack:</Text>
         <Text>
-          {searchObject.notificationData.slackNotification.enabledStatus ===
-          "ENABLED"
-            ? "Enabled"
-            : "Disabled"}
+          {capitalizeWord(
+            searchObject.notificationData.slackNotification.enabledStatus
+          )}
         </Text>
       </RowDiv>
       <Modal
         title="Notifications"
-        visible={configModalVisible}
+        visible={configNotificationsModalVisible}
         onOk={handleNotificationsConfigOk}
-        confirmLoading={configModalLoading}
+        confirmLoading={configNotificationsModalLoading}
         onCancel={handleNotificationsConfigCancel}
       >
         <RowDiv>
@@ -393,6 +420,60 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           </Text>
         </RowDiv>
       </Modal>
+      <RowDiv>
+        <Text>Reports:</Text>
+        <Button
+          type="default"
+          shape="circle"
+          icon={<SettingFilled />}
+          size="small"
+          onClick={() => setReportsConfigModalVisible(true)}
+        />
+      </RowDiv>
+      <RowDiv>
+        <Text>Email:</Text>
+        <Text>
+          {capitalizeWord(searchObject.reportData.emailReport.status)}
+        </Text>
+      </RowDiv>
+      <Modal
+        title="Reports"
+        visible={configReportsModalVisible}
+        onOk={handleReportsConfigOk}
+        confirmLoading={configReportsModalLoading}
+        onCancel={handleReportsConfigCancel}
+      >
+        <RowDiv>
+          <Text>Email</Text>
+        </RowDiv>
+        <RowDiv>
+          <Text>Status:</Text>
+          <Radio.Group
+            onChange={(e: RadioChangeEvent) => {
+              setUpdatedEmailConfig(
+                deepmergeSafe(updatedEmailConfig, {
+                  status: e.target
+                    .value as SearchObjectDomain["reportData"]["emailReport"]["status"],
+                })
+              );
+            }}
+            value={searchObject.reportData.emailReport.status}
+          >
+            <Radio value={"DISABLED"}>Disabled</Radio>
+            <Radio value={"DAILY"}>Daily</Radio>
+            <Radio value={"WEEKLY"}>Weekly</Radio>
+          </Radio.Group>
+        </RowDiv>
+        <RowDiv>
+          <Text>Addresses:</Text>
+          <Input
+            placeholder="enter a valid email to recieve the reports"
+            defaultValue={searchObject.reportData.emailReport.addresses?.join(
+              ", "
+            )}
+          />
+        </RowDiv>
+      </Modal>
     </SearchObjectItemContainer>
   );
 };
@@ -405,15 +486,23 @@ export const SearchObjectsView: React.FC<SearchObjectsViewProps> = ({
   userNofSearchObjects,
   searchObjects,
 }) => {
+  const usedIndices = searchObjects.map((searchObject) => searchObject.index);
+  const getNextAvailableIndex = () => {
+    let freeIndex = newPositiveInteger(0);
+    while (usedIndices.includes(freeIndex)) {
+      ++freeIndex;
+    }
+    return freeIndex;
+  };
+  const emptySearchObjects = _range(
+    userNofSearchObjects - searchObjects.length
+  ).map((_i) => createEmptySearchObject(getNextAvailableIndex()));
+
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      {_range(userNofSearchObjects).map((i) => {
-        let searchObject = searchObjects.find((so) => so.index == i);
-        if (!searchObject) {
-          searchObject = createEmptySearchObject(newPositiveInteger(i));
-        }
-        return SearchObjectItem({ searchObject });
-      })}
+      {[...searchObjects, ...emptySearchObjects].map((searchObject) =>
+        SearchObjectItem({ searchObject })
+      )}
     </div>
   );
 };
