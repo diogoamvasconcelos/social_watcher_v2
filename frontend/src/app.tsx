@@ -11,6 +11,7 @@ import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
 import { SignupPage } from "./pages/signup/SignupPage";
 import Layout from "antd/lib/layout";
+import { DashboardPageV2 } from "./pages/dashboard_v2/DashboardPageV2";
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -24,6 +25,7 @@ const App: React.FC = () => (
               <p>Work in Progress</p>
             </Route>
             <Route path="/user/dashboard" component={DashboardPage} />
+            <Route path="/user/dashboardv2" component={DashboardPageV2} />
             <Route path="/user/account" component={UserPage} />
             <Route path="/user/guides" component={TodoPage} />
             <Route path="/pricing" component={TodoPage} />

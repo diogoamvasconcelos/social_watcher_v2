@@ -9,14 +9,13 @@ import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { useLocationPathChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
 import _findKey from "lodash/findKey";
-import Layout from "antd/lib/layout";
 import Typography from "antd/lib/typography";
 import Menu from "antd/lib/menu";
 import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
+import { Header } from "antd/lib/layout/layout";
 
-const { Header } = Layout;
 const { Text } = Typography;
 
 const config = getConfig();
@@ -27,6 +26,7 @@ const navigationConfig: Record<string, string> = {
   about: "/about",
   guides: "/user/guides",
   dashboard: "/user/dashboard",
+  dashboardv2: "/user/dashboardv2",
 };
 
 type TopMenuProps = {
@@ -51,20 +51,20 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   };
 
   const buttons: JSX.Element[] = [];
-  if (inUserSubPage) {
-    buttons.push(
-      <Menu.Item key="dashboard">Dashboard</Menu.Item>,
-      <Menu.Item key="guides">Guides</Menu.Item>
-    );
-  } else {
+  if (!inUserSubPage) {
     buttons.push(
       <Menu.Item key="product">Product</Menu.Item>,
       <Menu.Item key="pricing">Pricing</Menu.Item>,
       <Menu.Item key="about">About</Menu.Item>
     );
-    if (userLoggedIn) {
-      buttons.push(<Menu.Item key="dashboard">Dashboard</Menu.Item>);
-    }
+  }
+
+  if (userLoggedIn) {
+    buttons.push(
+      <Menu.Item key="dashboard">Dashboard</Menu.Item>,
+      <Menu.Item key="dashboardv2">Dashboard V2</Menu.Item>,
+      <Menu.Item key="guides">Guides</Menu.Item>
+    );
   }
 
   return (
@@ -95,7 +95,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const history = useHistory();
 
   const handleItemClicked: MenuClickEventHandler = async ({ key }) => {
-    console.log(key);
     switch (key.toString()) {
       case "account": {
         history.push("/user/account");
