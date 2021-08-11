@@ -22,7 +22,7 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
     },
   },
   notificationData: {
-    discordNotification: {
+    discord: {
       enabledStatus: "ENABLED",
       channel: "discord-channel",
       bot: {
@@ -31,7 +31,7 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
         },
       },
     },
-    slackNotification: {
+    slack: {
       enabledStatus: "ENABLED",
       channel: "slack-channel",
       bot: {
@@ -42,7 +42,7 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
     },
   },
   reportData: {
-    emailReport: {
+    email: {
       status: "DISABLED",
     },
   },

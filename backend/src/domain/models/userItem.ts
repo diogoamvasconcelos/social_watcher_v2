@@ -66,12 +66,12 @@ const searchObjectSearchData = {
 };
 
 const searchObjectNotificationData = {
-  discordNotification: discordNotificationConfigCodec,
-  slackNotification: slackNotificationConfigCodec,
+  discord: discordNotificationConfigCodec,
+  slack: slackNotificationConfigCodec,
 };
 
 const searchObjectReportData = {
-  emailReport: emailReportConfigCodec,
+  email: emailReportConfigCodec,
 };
 
 export const searchObjectUserDataIoCodec = t.exact(
@@ -119,14 +119,14 @@ export const searchObjectUserDataIoToDomain = (
         youtube: { enabledStatus: "DISABLED" },
       },
       notificationData: {
-        discordNotification: {
+        discord: {
           enabledStatus: "DISABLED",
           channel: "",
           bot: {
             credentials: { token: "" },
           },
         },
-        slackNotification: {
+        slack: {
           enabledStatus: "DISABLED",
           channel: "",
           bot: {
@@ -135,13 +135,14 @@ export const searchObjectUserDataIoToDomain = (
         },
       },
       reportData: {
-        emailReport: {
+        email: {
           status: "DISABLED",
         },
       },
     };
   }
 
+  // TODO: map this dude (this change)
   return {
     ...io,
     searchData: {
@@ -152,16 +153,12 @@ export const searchObjectUserDataIoToDomain = (
       youtube: io.searchData.youtube ?? defaultData.searchData.youtube,
     },
     notificationData: {
-      discordNotification:
-        io.notificationData.discordNotification ??
-        defaultData.notificationData.discordNotification,
-      slackNotification:
-        io.notificationData.slackNotification ??
-        defaultData.notificationData.slackNotification,
+      discord:
+        io.notificationData.discord ?? defaultData.notificationData.discord,
+      slack: io.notificationData.slack ?? defaultData.notificationData.slack,
     },
     reportData: {
-      emailReport:
-        io.reportData?.emailReport ?? defaultData.reportData.emailReport,
+      email: io.reportData?.email ?? defaultData.reportData.email,
     },
   };
 };

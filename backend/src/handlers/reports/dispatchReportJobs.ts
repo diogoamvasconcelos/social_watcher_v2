@@ -11,7 +11,6 @@ import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSe
 import _ from "lodash";
 import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
 import {
-  EmailReportJob,
   ReportFrequency,
   ReportJob,
   ReportJobBase,
@@ -159,7 +158,7 @@ const filterKeywordsWithoutRequestedReports = async (
           hasRequestedReport: _.some(
             allSearchObjectsForKeywordEither.right,
             (searchObject) =>
-              searchObject.reportData.emailReport.status !== "DISABLED"
+              searchObject.reportData.email.status !== "DISABLED"
           ),
         });
       })
@@ -271,29 +270,17 @@ const queueReportJobs = async (
 ) => {
   const filteredReportJobs: ReportJob[] = searchObjects
     .filter((searchObject) => {
-      switch (reportMedium) {
-        case "email":
-          return (
-            searchObject.reportData.emailReport.status ===
-            report.searchFrequency
-          );
-        default:
-          return throwUnexpectedCase(reportMedium, "queueReportJobs filter");
-      }
+      return (
+        searchObject.reportData[reportMedium].status === report.searchFrequency
+      );
     })
     .map((searchObject) => {
-      switch (reportMedium) {
-        case "email": {
-          const emailReportJob: EmailReportJob = {
-            reportMedium,
-            ...report,
-            config: searchObject.reportData.emailReport,
-          };
-          return emailReportJob;
-        }
-        default:
-          return throwUnexpectedCase(reportMedium, "queueReportJobs map");
-      }
+      const job: ReportJob = {
+        reportMedium,
+        ...report,
+        config: searchObject.reportData[reportMedium],
+      };
+      return job;
     });
 
   return await queueReportJobsFn(logger, reportMedium, filteredReportJobs);

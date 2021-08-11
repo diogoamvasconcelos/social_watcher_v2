@@ -96,8 +96,8 @@ describe("update searchObject e2e test", () => {
       })
     );
     expect(
-      initialGetSearchObjectsResponse.items[0].notificationData
-        .discordNotification?.enabledStatus
+      initialGetSearchObjectsResponse.items[0].notificationData.discord
+        ?.enabledStatus
     ).toEqual("DISABLED");
 
     const discordNotificationConfig: DiscordNotificationConfig = {
@@ -117,7 +117,7 @@ describe("update searchObject e2e test", () => {
           userData: {
             ...initialGetSearchObjectsResponse.items[0],
             notificationData: {
-              discordNotification: discordNotificationConfig,
+              discord: discordNotificationConfig,
             },
           },
         }
@@ -127,7 +127,7 @@ describe("update searchObject e2e test", () => {
       expect.objectContaining({
         index,
         notificationData: expect.objectContaining({
-          discordNotification: discordNotificationConfig,
+          discord: discordNotificationConfig,
         }),
       })
     );
@@ -143,7 +143,7 @@ describe("update searchObject e2e test", () => {
         expect.objectContaining({
           index,
           notificationData: expect.objectContaining({
-            discordNotification: discordNotificationConfig,
+            discord: discordNotificationConfig,
           }),
         }),
       ],
