@@ -40,7 +40,7 @@ const createEmptySearchObject = (
     youtube: { enabledStatus: "DISABLED" },
   },
   notificationData: {
-    discordNotification: {
+    discord: {
       enabledStatus: "DISABLED",
       channel: "add channel id",
       bot: {
@@ -49,7 +49,7 @@ const createEmptySearchObject = (
         },
       },
     },
-    slackNotification: {
+    slack: {
       enabledStatus: "DISABLED",
       channel: "add channel id",
       bot: {
@@ -60,7 +60,7 @@ const createEmptySearchObject = (
     },
   },
   reportData: {
-    emailReport: {
+    email: {
       status: "DISABLED",
     },
   },
@@ -85,19 +85,19 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const [configNotificationsModalLoading, setConfigNotificationsModalLoading] =
     useState(false);
   const [updatedDiscordConfig, setUpdatedDiscordConfig] = useState<
-    SearchObjectDomain["notificationData"]["discordNotification"]
-  >(searchObject.notificationData.discordNotification);
+    SearchObjectDomain["notificationData"]["discord"]
+  >(searchObject.notificationData.discord);
   const [updatedSlackConfig, setUpdatedSlackConfig] = useState<
-    SearchObjectDomain["notificationData"]["slackNotification"]
-  >(searchObject.notificationData.slackNotification);
+    SearchObjectDomain["notificationData"]["slack"]
+  >(searchObject.notificationData.slack);
 
   const [configReportsModalVisible, setReportsConfigModalVisible] =
     useState(false);
   const [configReportsModalLoading, setConfigReportsModalLoading] =
     useState(false);
   const [updatedEmailConfig, setUpdatedEmailConfig] = useState<
-    SearchObjectDomain["reportData"]["emailReport"]
-  >(searchObject.reportData.emailReport);
+    SearchObjectDomain["reportData"]["email"]
+  >(searchObject.reportData.email);
 
   const userFetchStatus = useAppSelector((state) => state.user.fetchStatus);
 
@@ -187,8 +187,8 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         searchObject.index,
         deepmergeSafe(searchObject, {
           notificationData: {
-            discordNotification: updatedDiscordConfig,
-            slackNotification: updatedSlackConfig,
+            discord: updatedDiscordConfig,
+            slack: updatedSlackConfig,
           },
         }),
       ])
@@ -253,7 +253,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
         searchObject.index,
         deepmergeSafe(searchObject, {
           reportData: {
-            emailReport: updatedEmailConfig,
+            email: updatedEmailConfig,
           },
         }),
       ])
@@ -337,17 +337,13 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
       <RowDiv>
         <Text>Discord:</Text>
         <Text>
-          {capitalizeWord(
-            searchObject.notificationData.discordNotification.enabledStatus
-          )}
+          {capitalizeWord(searchObject.notificationData.discord.enabledStatus)}
         </Text>
       </RowDiv>
       <RowDiv>
         <Text>Slack:</Text>
         <Text>
-          {capitalizeWord(
-            searchObject.notificationData.slackNotification.enabledStatus
-          )}
+          {capitalizeWord(searchObject.notificationData.slack.enabledStatus)}
         </Text>
       </RowDiv>
       <Modal
@@ -432,9 +428,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
       </RowDiv>
       <RowDiv>
         <Text>Email:</Text>
-        <Text>
-          {capitalizeWord(searchObject.reportData.emailReport.status)}
-        </Text>
+        <Text>{capitalizeWord(searchObject.reportData.email.status)}</Text>
       </RowDiv>
       <Modal
         title="Reports"
@@ -453,11 +447,11 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
               setUpdatedEmailConfig(
                 deepmergeSafe(updatedEmailConfig, {
                   status: e.target
-                    .value as SearchObjectDomain["reportData"]["emailReport"]["status"],
+                    .value as SearchObjectDomain["reportData"]["email"]["status"],
                 })
               );
             }}
-            value={searchObject.reportData.emailReport.status}
+            value={searchObject.reportData.email.status}
           >
             <Radio value={"DISABLED"}>Disabled</Radio>
             <Radio value={"DAILY"}>Daily</Radio>
@@ -468,9 +462,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
           <Text>Addresses:</Text>
           <Input
             placeholder="enter a valid email to recieve the reports"
-            defaultValue={searchObject.reportData.emailReport.addresses?.join(
-              ", "
-            )}
+            defaultValue={searchObject.reportData.email.addresses?.join(", ")}
           />
         </RowDiv>
       </Modal>
