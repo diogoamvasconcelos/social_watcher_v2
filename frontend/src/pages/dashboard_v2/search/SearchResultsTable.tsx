@@ -4,18 +4,27 @@ import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import styled from "styled-components";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
-import React, { useState } from "react";
-import { newLowerCase } from "@diogovasconcelos/lib";
+import React, { ChangeEvent, useState } from "react";
+import {
+  DateISOString,
+  newDateISOString,
+  newLowerCase,
+} from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../../shared/lib/formatting";
 import { SearchResult } from "@backend/domain/models/searchResult";
 import Select from "antd/lib/select";
-import Search from "antd/lib/input/Search";
 import { Keyword } from "@backend/domain/models/keyword";
 import DatePicker, { RangePickerProps } from "antd/lib/date-picker";
 import { useEffect } from "react";
+import Button from "antd/lib/button";
+import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
+import Typography from "antd/lib/typography";
+import Input from "antd/lib/input";
+import { SearchRequestUserData } from "@backend/handlers/api/models/search";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
+const { Text } = Typography;
 
 // +++++++++++++
 // + CONTAINER +
@@ -125,7 +134,18 @@ const ResultsTable: React.FC<SearchTableProps> = ({
 // ++++++++++
 
 const TableHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 8px;
+  max-width: 600px;
+`;
+
+const TableHeaderRow = styled.div`
+  display: flex;
   flex-direction: row;
+  gap: 8px;
+  align-items: center;
 `;
 
 type TableHeaderProps = {
@@ -139,14 +159,15 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const initialKeyword = "chose a keyword";
-  const [keyword, setKeyword] = useState(initialKeyword);
+  const [searchRequestData, setSearchRequestData] =
+    useState<SearchRequestUserData>({ keyword: newLowerCase(initialKeyword) });
 
-  const [searchInputEnabled, setSearchInputEnabled] = useState(false);
+  const [searchEnabled, setSearchEnabled] = useState(false);
 
   // TODO: allow search for multiple keywords
   const handleSelectKeyword = (val: string) => {
-    setKeyword(val);
-    setSearchInputEnabled(val != initialKeyword);
+    setSearchRequestData({ ...searchRequestData, keyword: newLowerCase(val) });
+    setSearchEnabled(val != initialKeyword);
   };
 
   const handleSelectFilterSocialMedia = (vals: string[]) => {
@@ -157,26 +178,39 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   const handleRangePickerChanged: RangePickerProps["onChange"] = (
     _dates,
-    dateStrings
+    [startDate, endDate]
   ) => {
-    // TODO: propagate state changes
-    console.log(dateStrings);
+    const startTime: DateISOString | undefined = startDate
+      ? newDateISOString(startDate)
+      : undefined;
+    const endTime: DateISOString | undefined = endDate
+      ? newDateISOString(endDate)
+      : undefined;
+
+    setSearchRequestData({
+      ...searchRequestData,
+      timeQuery: {
+        happenedAtStart: startTime,
+        happenedAtEnd: endTime,
+      },
+    });
   };
 
-  const handleSearchClicked = (val: string) => {
-    if (!searchInputEnabled) {
+  const handleSearchTextChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    const val = event.target.value;
+
+    setSearchRequestData({
+      ...searchRequestData,
+      dataQuery: val || undefined,
+    });
+  };
+
+  const handleSearchClicked = () => {
+    if (!searchEnabled) {
       return;
     }
 
-    void dispatch(
-      searchKeyword([
-        {
-          keyword: newLowerCase(keyword),
-          dataQuery: val.length == 0 ? undefined : val,
-        },
-      ])
-    );
-
+    void dispatch(searchKeyword([searchRequestData]));
     onSearch();
   };
 
@@ -188,23 +222,41 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <TableHeaderContainer>
-      <Select
-        defaultValue="chose a keyword"
-        onChange={handleSelectKeyword}
-        style={{ minWidth: 200 }}
-      >
-        {allowedKeywords.map((keyword) => (
-          <Option value={keyword} key={keyword}>
-            {keyword}
-          </Option>
-        ))}
-      </Select>
+      <TableHeaderRow>
+        <Select
+          defaultValue="chose a keyword"
+          onChange={handleSelectKeyword}
+          style={{ minWidth: 200 }}
+        >
+          {allowedKeywords.map((keyword) => (
+            <Option value={keyword} key={keyword}>
+              {keyword}
+            </Option>
+          ))}
+        </Select>
+        <Button
+          type="primary"
+          style={{ width: "60px", height: "100%", borderRadius: "4px" }}
+          icon={<SearchOutlined />}
+          size="small"
+          onClick={handleSearchClicked}
+          disabled={!searchEnabled}
+        />
+      </TableHeaderRow>
+      <TableHeaderRow>
+        <Text>Filters</Text>
+      </TableHeaderRow>
+      <Input
+        placeholder="search for specific text"
+        // enterButton
+        // onSearch={handleSearchClicked}
+        onChange={handleSearchTextChanged}
+      />
       <Select
         placeholder="all social media"
         mode="multiple"
         allowClear
         onChange={handleSelectFilterSocialMedia}
-        style={{ minWidth: 200 }}
       >
         {allowedSocialMedias.map((socialMedia) => (
           <Option value={socialMedia} key={socialMedia}>
@@ -217,14 +269,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         showTime={true}
         allowEmpty={[true, true]}
         onChange={handleRangePickerChanged}
+        style={{ width: "240px" }}
       />
-      <Search
-        placeholder="search for  text"
-        style={{ width: 400 }}
-        enterButton
-        onSearch={handleSearchClicked}
-        disabled={!searchInputEnabled}
-      ></Search>
     </TableHeaderContainer>
   );
 };
