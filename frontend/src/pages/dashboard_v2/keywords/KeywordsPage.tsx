@@ -7,6 +7,7 @@ import {
 } from "../../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
+import styled from "styled-components";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -16,6 +17,17 @@ const LoadingUserWidget: React.FC = () => {
     </div>
   );
 };
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  /* TODO: fix this attempt to center items */
+  position: relative;
+  left: 50%;
+  transform: translate(-100%, 0%);
+`;
 
 export const KeywordsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,14 +42,13 @@ export const KeywordsPage: React.FC = () => {
   return user == undefined ? (
     <LoadingUserWidget />
   ) : (
-    <div>
+    <MainContainer>
       <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
-
       {searchObjects.length == 0 ? (
         <p>TODO no items</p>
       ) : (
         <SearchObjectsList searchObjects={searchObjects} />
       )}
-    </div>
+    </MainContainer>
   );
 };

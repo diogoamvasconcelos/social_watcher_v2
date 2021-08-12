@@ -12,6 +12,8 @@ import {
   reportMediums,
 } from "@backend/domain/models/reportMedium";
 import { ReportFrequency, ReportJob } from "@backend/domain/models/reportJob";
+import SettingFilled from "@ant-design/icons/lib/icons/SettingFilled";
+import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import TwitterOutlined from "@ant-design/icons/lib/icons/TwitterOutlined";
 import RedditOutlined from "@ant-design/icons/lib/icons/RedditOutlined";
 import WarningOutlined from "@ant-design/icons/lib/icons/WarningOutlined";
@@ -20,6 +22,7 @@ import YoutubeOutlined from "@ant-design/icons/lib/icons/YoutubeOutlined";
 import SlackOutlined from "@ant-design/icons/lib/icons/SlackOutlined";
 import MailOutlined from "@ant-design/icons/lib/icons/MailOutlined";
 import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
+import Button from "antd/lib/button";
 
 // ++++++++
 // + LIST +
@@ -27,7 +30,7 @@ import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
 const SearchObjectListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 `;
 
 type SearchObjectsListProps = {
@@ -36,12 +39,30 @@ type SearchObjectsListProps = {
 export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
   searchObjects,
 }) => {
+  const handleNewSearchObjectButtonClicked = () => {
+    console.log("New searchObject clicked");
+  };
+
   return (
-    <SearchObjectListContainer>
-      {searchObjects.map((searchObject) => (
-        <SearchObjectItem searchObject={searchObject} />
-      ))}
-    </SearchObjectListContainer>
+    <>
+      <SearchObjectListContainer>
+        {searchObjects.map((searchObject) => (
+          <SearchObjectItem
+            key={searchObject.index}
+            searchObject={searchObject}
+          />
+        ))}
+      </SearchObjectListContainer>
+      <div style={{ margin: "20px" }}>
+        <Button
+          type="primary"
+          style={{ width: "200px", borderRadius: "4px" }}
+          onClick={handleNewSearchObjectButtonClicked}
+        >
+          Add new keyword
+        </Button>
+      </div>
+    </>
   );
 };
 
@@ -51,11 +72,23 @@ export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
 
 const SearchObjectItemContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  flex-direction: column;
+  gap: 4px;
   border-style: solid;
   border-width: 1px;
   border-radius: 4px;
+  padding: 8px 16px;
+`;
+
+const SearchObjectItemRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+`;
+const SearchObjectTopItemRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 30px 30px;
 `;
 
 type SearchObjectItemProp = {
@@ -81,16 +114,48 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
     })
   );
 
+  const handleConfigButtonClicked = () => {
+    console.log(`Config clicked for searchobject #${searchObject.index}`);
+  };
+  const handleSearchButtonClicked = () => {
+    console.log(`Search clicked for searchobject #${searchObject.index}`);
+  };
+
   return (
     <SearchObjectItemContainer>
-      <Text>{`Index: ${searchObject.index}`}</Text>
-      <Text>{`Keyword: ${searchObject.keyword}`}</Text>
-      <Text>Social Medias:</Text>
-      {socialMediaIcons}
-      <Text>Notifications:</Text>
-      {notificationMediumIcons}
-      <Text>Reports:</Text>
-      {reportMediumIcons}
+      <SearchObjectTopItemRow>
+        <Text
+          style={{ gridColumnStart: "1" }}
+        >{`Keyword#${searchObject.index}: ${searchObject.keyword}`}</Text>
+        <Button
+          style={{ gridColumnStart: "2", justifySelf: "end" }} // justifySelf:end aligns to right
+          type="default"
+          shape="circle"
+          icon={<SettingFilled />}
+          size="small"
+          onClick={handleConfigButtonClicked}
+        />
+        <Button
+          style={{ gridColumnStart: "3", justifySelf: "end" }}
+          type="default"
+          shape="circle"
+          icon={<SearchOutlined />}
+          size="small"
+          onClick={handleSearchButtonClicked}
+        />
+      </SearchObjectTopItemRow>
+      <SearchObjectItemRow>
+        <Text>Social Medias:</Text>
+        {socialMediaIcons}
+      </SearchObjectItemRow>
+      <SearchObjectItemRow>
+        <Text>Notifications:</Text>
+        {notificationMediumIcons}
+      </SearchObjectItemRow>
+      <SearchObjectItemRow>
+        <Text>Reports:</Text>
+        {reportMediumIcons}
+      </SearchObjectItemRow>
     </SearchObjectItemContainer>
   );
 };
@@ -107,15 +172,15 @@ const getActiveSocialMedias = (
 const getSocialMediaIcon = (socialMedia: SocialMedia): React.ReactNode => {
   switch (socialMedia) {
     case "twitter":
-      return <TwitterOutlined />;
+      return <TwitterOutlined key="twitter" />;
     case "reddit":
-      return <RedditOutlined />;
+      return <RedditOutlined key="reddit" />;
     case "hackernews":
-      return <WarningOutlined />;
+      return <WarningOutlined key="hackernews" />;
     case "instagram":
-      return <InstagramOutlined />;
+      return <InstagramOutlined key="instagram" />;
     case "youtube":
-      return <YoutubeOutlined />;
+      return <YoutubeOutlined key="youtube" />;
   }
 };
 
@@ -134,9 +199,9 @@ const getNotificationMediumIcon = (
 ): React.ReactNode => {
   switch (notificatioMedium) {
     case "discord":
-      return <WarningOutlined />;
+      return <WarningOutlined key="discord" />;
     case "slack":
-      return <SlackOutlined />;
+      return <SlackOutlined key="slack" />;
   }
 };
 
@@ -157,9 +222,9 @@ const getReportMediumIcon = ({
     case "email":
       switch (searchFrequency) {
         case "DAILY":
-          return <MailOutlined />;
+          return <MailOutlined key="email daily" />;
         case "WEEKLY":
-          return <CalendarOutlined />;
+          return <CalendarOutlined key="email weekly" />;
       }
   }
 };
