@@ -9,10 +9,6 @@ import { SearchResultsTable } from "./SearchResultsTable";
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* TODO: fix this attempt to center items */
-  position: relative;
-  left: 50%;
-  transform: translate(-60%, 0%);
 `;
 
 export const SearchPage: React.FC = () => {

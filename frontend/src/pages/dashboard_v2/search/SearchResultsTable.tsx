@@ -1,14 +1,18 @@
 import { SocialMedia, socialMedias } from "@backend/domain/models/socialMedia";
-import { searchKeyword, SearchState } from "./searchState";
-import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
+import { searchKeyword, SearchRequestData, SearchState } from "./searchState";
+import Table, {
+  ColumnsType,
+  TablePaginationConfig,
+  TableProps,
+} from "antd/lib/table";
 import styled from "styled-components";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useReducer, useState } from "react";
 import {
-  DateISOString,
   newDateISOString,
   newLowerCase,
+  newPositiveInteger,
 } from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../../shared/lib/formatting";
 import { SearchResult } from "@backend/domain/models/searchResult";
@@ -20,11 +24,52 @@ import Button from "antd/lib/button";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import Typography from "antd/lib/typography";
 import Input from "antd/lib/input";
-import { SearchRequestUserData } from "@backend/handlers/api/models/search";
+import { AnyAction, createAction, createReducer } from "@reduxjs/toolkit";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
+
+// +++++++++
+// + STATE +
+// +++++++++
+
+type SearchRequestState = SearchRequestData;
+const searchRequestInitialState: SearchRequestState = {
+  keyword: newLowerCase(""),
+  pagination: {
+    limit: newPositiveInteger(20),
+    offset: newPositiveInteger(0),
+  },
+};
+
+const changeKeywordAction =
+  createAction<SearchRequestState["keyword"]>("CHANGE_KEYWORD");
+const changeDataQueryAction =
+  createAction<SearchRequestState["dataQuery"]>("CHANGE_DATA_QUERY");
+const changeTimeQueryAction =
+  createAction<SearchRequestState["timeQuery"]>("CHANGE_TIME_QUERY");
+const changePaginationAction =
+  createAction<SearchRequestState["pagination"]>("CHANGE_PAGINATION");
+
+const searchRequestStateReducer = createReducer<SearchRequestState>(
+  searchRequestInitialState,
+  (builder) => {
+    builder
+      .addCase(changeKeywordAction, (state, action) => {
+        state.keyword = action.payload;
+      })
+      .addCase(changeDataQueryAction, (state, action) => {
+        state.dataQuery = action.payload;
+      })
+      .addCase(changeTimeQueryAction, (state, action) => {
+        state.timeQuery = action.payload;
+      })
+      .addCase(changePaginationAction, (state, action) => {
+        state.pagination = action.payload;
+      });
+  }
+);
 
 // +++++++++++++
 // + CONTAINER +
@@ -41,25 +86,51 @@ type SearchResultsTableProps = {
 export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   searchObjects,
 }) => {
+  const dispatch = useAppDispatch();
   const searchResult = useAppSelector((state) => state.search);
-
   const [isSearcing, setIsSearching] = useState(false);
+
+  const [searchRequestState, dispatchSearchRequestStateAction] = useReducer(
+    searchRequestStateReducer,
+    searchRequestInitialState
+  );
 
   useEffect(() => {
     // hacky way to know how when the search has ended...probably worth improving
     setIsSearching(false);
   }, [searchResult]);
 
+  const dispatchSearch = () => {
+    if (searchRequestState.keyword.length > 0) {
+      setIsSearching(true);
+      void dispatch(searchKeyword(searchRequestState));
+    }
+  };
+
+  const handleOnSearchRequested = () => {
+    dispatchSearch();
+  };
+
+  useEffect(() => {
+    // hacky way to search when table pagination changes
+    dispatchSearch();
+  }, [searchRequestState.pagination]);
+
   return (
     <>
       <TableContainer>
         <TableHeader
           searchObjects={searchObjects}
-          onSearch={() => {
-            setIsSearching(true);
-          }}
+          onSearch={handleOnSearchRequested}
+          searchRequestState={searchRequestState}
+          dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
         />
-        <ResultsTable searchResults={searchResult} loading={isSearcing} />
+        <ResultsTable
+          searchResults={searchResult}
+          loading={isSearcing}
+          searchRequestState={searchRequestState}
+          dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
+        />
       </TableContainer>
     </>
   );
@@ -69,20 +140,27 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
 // + TABLE +
 // +++++++++
 
+type TableRecord = Omit<
+  SearchState["items"][0],
+  "socialMedia" | "happenedAt"
+> & {
+  socialMedia: string;
+  happenedAt: string;
+};
+
 type SearchTableProps = {
   searchResults: SearchState;
   loading: boolean;
+  searchRequestState: SearchRequestState;
+  dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
 };
 const ResultsTable: React.FC<SearchTableProps> = ({
   searchResults,
   loading,
+  searchRequestState,
+  dispatchSearchRequestStateAction,
 }) => {
-  const columns: ColumnsType<
-    Omit<SearchState["items"][0], "socialMedia" | "happenedAt"> & {
-      socialMedia: string;
-      happenedAt: string;
-    }
-  > = [
+  const columns: ColumnsType<TableRecord> = [
     {
       title: "Social Media",
       dataIndex: "socialMedia",
@@ -98,17 +176,32 @@ const ResultsTable: React.FC<SearchTableProps> = ({
     { title: "Translated Text", dataIndex: "translatedText" },
   ];
 
+  const handleTableChange: TableProps<TableRecord>["onChange"] = (
+    pagination,
+    _filters,
+    _sorter
+  ) => {
+    const pageSize = pagination.pageSize ?? 0;
+    const current = pagination.current ?? 1;
+
+    const offset = newPositiveInteger((current - 1) * pageSize);
+    const limit = newPositiveInteger(pageSize);
+    dispatchSearchRequestStateAction(changePaginationAction({ offset, limit }));
+  };
+
   const paginationConfig: TablePaginationConfig = {
-    onChange: (number, pageSize) =>
-      console.log(`onChange, number:${number} | pageSize:${pageSize}`),
-    defaultPageSize: 25,
     defaultCurrent: 1,
-    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-    pageSizeOptions: ["10", "25", "50", "100"],
-    onShowSizeChange: (current, size) =>
-      console.log(`onShowSizeChange, number:${current} | pageSize:${size}`),
+    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+    pageSizeOptions: ["10", "20", "50", "100"],
     showSizeChanger: true,
     position: ["topRight", "bottomRight"],
+    current: searchRequestState.pagination
+      ? searchRequestState.pagination.offset /
+          searchRequestState.pagination.limit +
+        1
+      : 1,
+    pageSize: searchRequestState.pagination?.limit,
+    total: searchResults.pagination.total,
   };
 
   return (
@@ -125,6 +218,7 @@ const ResultsTable: React.FC<SearchTableProps> = ({
       pagination={paginationConfig}
       rowKey="id"
       loading={loading}
+      onChange={handleTableChange}
     />
   );
 };
@@ -151,22 +245,22 @@ const TableHeaderRow = styled.div`
 type TableHeaderProps = {
   searchObjects: SearchObjectDomain[];
   onSearch: () => void;
+  searchRequestState: SearchRequestState; // not used atm
+  dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
 };
 
 const TableHeader: React.FC<TableHeaderProps> = ({
   searchObjects,
   onSearch,
+  dispatchSearchRequestStateAction,
 }) => {
-  const dispatch = useAppDispatch();
-  const initialKeyword = "chose a keyword";
-  const [searchRequestData, setSearchRequestData] =
-    useState<SearchRequestUserData>({ keyword: newLowerCase(initialKeyword) });
+  const initialKeyword = "choose a keyword";
 
   const [searchEnabled, setSearchEnabled] = useState(false);
 
   // TODO: allow search for multiple keywords
   const handleSelectKeyword = (val: string) => {
-    setSearchRequestData({ ...searchRequestData, keyword: newLowerCase(val) });
+    dispatchSearchRequestStateAction(changeKeywordAction(newLowerCase(val)));
     setSearchEnabled(val != initialKeyword);
   };
 
@@ -180,29 +274,18 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     _dates,
     [startDate, endDate]
   ) => {
-    const startTime: DateISOString | undefined = startDate
-      ? newDateISOString(startDate)
-      : undefined;
-    const endTime: DateISOString | undefined = endDate
-      ? newDateISOString(endDate)
-      : undefined;
-
-    setSearchRequestData({
-      ...searchRequestData,
-      timeQuery: {
-        happenedAtStart: startTime,
-        happenedAtEnd: endTime,
-      },
-    });
+    dispatchSearchRequestStateAction(
+      changeTimeQueryAction({
+        happenedAtStart: startDate ? newDateISOString(startDate) : undefined,
+        happenedAtEnd: endDate ? newDateISOString(endDate) : undefined,
+      })
+    );
   };
 
   const handleSearchTextChanged = (event: ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
 
-    setSearchRequestData({
-      ...searchRequestData,
-      dataQuery: val || undefined,
-    });
+    dispatchSearchRequestStateAction(changeDataQueryAction(val || undefined));
   };
 
   const handleSearchClicked = () => {
@@ -210,7 +293,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       return;
     }
 
-    void dispatch(searchKeyword([searchRequestData]));
     onSearch();
   };
 
@@ -248,6 +330,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </TableHeaderRow>
       <Input
         placeholder="search for specific text"
+        allowClear={true}
         // enterButton
         // onSearch={handleSearchClicked}
         onChange={handleSearchTextChanged}
