@@ -34,7 +34,7 @@ describe("update searchObject e2e test", () => {
     await deleteKeyword(keyword);
   });
 
-  it("updateSearchKeyword works", async () => {
+  it("updateSearchObject works", async () => {
     const token = await getIdToken({
       username: testUser.email,
       password: testUser.password,

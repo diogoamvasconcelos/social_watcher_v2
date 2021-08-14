@@ -78,10 +78,10 @@ export const searchObjectUserDataIoCodec = t.exact(
   t.intersection([
     t.type({
       keyword: keywordCodec,
-      searchData: t.partial(searchObjectSearchData),
-      notificationData: t.partial(searchObjectNotificationData),
     }),
     t.partial({
+      searchData: t.partial(searchObjectSearchData),
+      notificationData: t.partial(searchObjectNotificationData),
       reportData: t.partial(searchObjectReportData),
     }),
   ])
@@ -146,16 +146,17 @@ export const searchObjectUserDataIoToDomain = (
   return {
     ...io,
     searchData: {
-      twitter: io.searchData.twitter ?? defaultData.searchData.twitter,
-      reddit: io.searchData.reddit ?? defaultData.searchData.reddit,
-      hackernews: io.searchData.hackernews ?? defaultData.searchData.hackernews,
-      instagram: io.searchData.instagram ?? defaultData.searchData.instagram,
-      youtube: io.searchData.youtube ?? defaultData.searchData.youtube,
+      twitter: io.searchData?.twitter ?? defaultData.searchData.twitter,
+      reddit: io.searchData?.reddit ?? defaultData.searchData.reddit,
+      hackernews:
+        io.searchData?.hackernews ?? defaultData.searchData.hackernews,
+      instagram: io.searchData?.instagram ?? defaultData.searchData.instagram,
+      youtube: io.searchData?.youtube ?? defaultData.searchData.youtube,
     },
     notificationData: {
       discord:
-        io.notificationData.discord ?? defaultData.notificationData.discord,
-      slack: io.notificationData.slack ?? defaultData.notificationData.slack,
+        io.notificationData?.discord ?? defaultData.notificationData.discord,
+      slack: io.notificationData?.slack ?? defaultData.notificationData.slack,
     },
     reportData: {
       email: io.reportData?.email ?? defaultData.reportData.email,

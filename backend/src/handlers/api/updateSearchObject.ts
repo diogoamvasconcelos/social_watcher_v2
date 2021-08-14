@@ -5,7 +5,6 @@ import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
-  makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
@@ -13,7 +12,11 @@ import {
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { makeGetUser } from "../../adapters/userStore/getUser";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
-import { apiGetUser, toApigwRequestMetadata } from "./shared";
+import {
+  apiGetUser,
+  toApigwRequestMetadata,
+  validateSearchObjectIndex,
+} from "./shared";
 import { User } from "../../domain/models/user";
 import {
   searchObjectIndexCodec,
@@ -64,14 +67,13 @@ export const handler = async (
     return getUserEither;
   }
   const user: User = getUserEither.right;
-
-  if (request.index >= user.subscription.nofSearchObjects) {
-    logger.error(
-      `Trying to update a search object with index (${request.index}) higher than user's nofSearchObjects (${user.subscription.nofSearchObjects})`
-    );
-    return left(
-      makeForbiddenResponse("Provided Search Object index is forbidden.")
-    );
+  const validateIndexEither = validateSearchObjectIndex({
+    logger,
+    user,
+    request,
+  });
+  if (isLeft(validateIndexEither)) {
+    return validateIndexEither;
   }
 
   const currentSearchObjectEither = await getSearchObjectFn(
@@ -123,15 +125,20 @@ const toUpdateKeywordRequest = (
     );
   }
   const body = bodyEither.right;
-  const data = decode(searchObjectUserDataIoCodec, body);
-  if (isLeft(data)) {
-    logger.error("Failed to decode body.", { error: data.left });
+  const dataEither = decode(searchObjectUserDataIoCodec, body);
+  if (isLeft(dataEither)) {
+    logger.error("Failed to decode body.", { error: dataEither.left });
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
-  const index = decode(searchObjectIndexCodec, event.pathParameters?.index);
-  if (isLeft(index)) {
-    logger.error("Failed to decode path paramters.", { error: index.left });
+  const indexEither = decode(
+    searchObjectIndexCodec,
+    event.pathParameters?.index
+  );
+  if (isLeft(indexEither)) {
+    logger.error("Failed to decode path paramters.", {
+      error: indexEither.left,
+    });
     return left(
       makeRequestMalformedResponse("Request pathParameters are invalid.")
     );
@@ -139,7 +146,7 @@ const toUpdateKeywordRequest = (
 
   return right({
     ...metadataEither.right,
-    data: data.right,
-    index: index.right,
+    data: dataEither.right,
+    index: indexEither.right,
   });
 };

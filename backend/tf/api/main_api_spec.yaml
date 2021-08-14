@@ -87,6 +87,24 @@ paths:
     parameters:
       - $ref: "#/components/parameters/searchObjectIndex"
 
+    get:
+      description: Get specific SearchObject of a user
+      responses:
+        200:
+          description: A SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${get_search_object_invoke_arn}
+
     put:
       description: Update SearchObject of a user
       requestBody:
