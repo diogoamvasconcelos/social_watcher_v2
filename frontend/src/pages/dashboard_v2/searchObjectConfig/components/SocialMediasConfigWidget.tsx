@@ -8,6 +8,7 @@ import Switch from "antd/lib/switch";
 import { useAppDispatch } from "../../../../shared/store";
 import { updateSearchData } from "../searchObjectConfigState";
 import { SearchObjectUserDataDomain } from "@backend/domain/models/userItem";
+import { deepmergeSafe } from "@diogovasconcelos/lib";
 
 // ++++++++++
 // + WIDGET +
@@ -54,13 +55,11 @@ export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
     val: boolean
   ) => {
     dispatch(
-      updateSearchData({
-        ...searchObject.searchData,
-        [socialMedia]: {
-          ...searchObject.searchData[socialMedia],
-          enabledStatus: val ? "ENABLED" : "DISABLED",
-        },
-      })
+      updateSearchData(
+        deepmergeSafe(searchObject.searchData, {
+          [socialMedia]: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+        })
+      )
     );
   };
 
@@ -81,13 +80,11 @@ export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
                   redditSearchData={searchObject.searchData.reddit}
                   onOver18Change={(val) => {
                     dispatch(
-                      updateSearchData({
-                        ...searchObject.searchData,
-                        reddit: {
-                          ...searchObject.searchData.reddit,
-                          over18: val,
-                        },
-                      })
+                      updateSearchData(
+                        deepmergeSafe(searchObject.searchData, {
+                          reddit: { over18: val },
+                        })
+                      )
                     );
                   }}
                 />
@@ -122,7 +119,6 @@ const SocialMediaEnabledSwitch: React.FC<SocialMediaEnabledSwitchProps> = ({
       </Text>
       <Switch
         style={{ gridColumnStart: "2", justifySelf: "end" }}
-        defaultChecked
         checked={searchData[socialMedia].enabledStatus === "ENABLED"}
         onChange={onChange}
       />
@@ -131,7 +127,7 @@ const SocialMediaEnabledSwitch: React.FC<SocialMediaEnabledSwitchProps> = ({
 };
 
 // ++++++++++
-// + REDDIT +
+// + Reddit +
 // ++++++++++
 
 type RedditCustomOptionsProps = {
@@ -148,7 +144,6 @@ const RedditCustomOptions: React.FC<RedditCustomOptionsProps> = ({
       <Text style={{ gridColumnStart: "1" }}>Over 18?</Text>
       <Switch
         style={{ gridColumnStart: "2", justifySelf: "end" }}
-        defaultChecked
         checked={redditSearchData.over18}
         onChange={onOver18Change}
       />

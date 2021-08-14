@@ -61,6 +61,14 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject.searchData = action.payload;
       }
     },
+    updateNotificationData(
+      state,
+      action: PayloadAction<SearchObjectDomain["notificationData"]>
+    ) {
+      if (state.searchObject) {
+        state.searchObject.notificationData = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -81,6 +89,6 @@ const searchObjectConfigStateSlice = createSlice({
   },
 });
 
-export const { updateKeyword, updateSearchData } =
+export const { updateKeyword, updateSearchData, updateNotificationData } =
   searchObjectConfigStateSlice.actions;
 export const reducer = searchObjectConfigStateSlice.reducer;
