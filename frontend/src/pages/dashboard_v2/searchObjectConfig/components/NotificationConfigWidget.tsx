@@ -8,6 +8,12 @@ import { useAppDispatch } from "../../../../shared/store";
 import { updateNotificationData } from "../searchObjectConfigState";
 import Divider from "antd/lib/divider";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { PartialDeep } from "type-fest";
+import {
+  NotificationMedium,
+  notificationMediums,
+} from "@backend/domain/models/notificationMedium";
+import { capitalizeWord } from "src/shared/lib/text";
 
 // ++++++++++
 // + WIDGET +
@@ -19,6 +25,34 @@ const MainContainer = styled.div`
   padding: 16px;
   gap: 8px;
 `;
+
+export const NotificationsConfigWidget: React.FC<ConfigWidgetProps> = ({
+  searchObject,
+}) => {
+  return (
+    <MainContainer>
+      <Text>Notifications Config</Text>
+      <Text code>
+        Get notifications in real time whenever a new result has been found
+      </Text>
+      {notificationMediums.map((notificationMedium) => {
+        return (
+          <div key={notificationMedium}>
+            <Divider />
+            <NotificationMediumConfigWidget
+              notificationMedium={notificationMedium}
+              notificationData={searchObject.notificationData}
+            />
+          </div>
+        );
+      })}
+    </MainContainer>
+  );
+};
+
+// ++++++++++++++++++++++
+// + NotificationMedium +
+// ++++++++++++++++++++++
 
 const ConfigContainer = styled.div`
   display: flex;
@@ -36,100 +70,83 @@ const RowDiv = styled.div`
   grid-template-columns: 100px 1fr;
 `;
 
-export const NotificationsConfigWidget: React.FC<ConfigWidgetProps> = ({
-  searchObject,
-}) => {
-  return (
-    <MainContainer>
-      <Text>Notifications Config</Text>
-      <Text code>
-        Get notifications in real time whenever a new result has been found
-      </Text>
-      <Divider />
-      <DiscordConfigWidget notificationData={searchObject.notificationData} />
-    </MainContainer>
-  );
-};
-
-// +++++++++++
-// + Discord +
-// +++++++++++
-
-type DiscordConfigWidgetProps = {
+type NotificationMediumConfigWidgetProps = {
+  notificationMedium: NotificationMedium;
   notificationData: SearchObjectDomain["notificationData"];
 };
 
-const DiscordConfigWidget: React.FC<DiscordConfigWidgetProps> = ({
-  notificationData,
-}) => {
-  const dispatch = useAppDispatch();
+const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetProps> =
+  ({ notificationMedium, notificationData }) => {
+    const dispatch = useAppDispatch();
 
-  const handleEnabledChange = (val: boolean) => {
-    dispatch(
-      updateNotificationData(
-        deepmergeSafe(notificationData, {
-          discord: { enabledStatus: val ? "ENABLED" : "DISABLED" },
-        })
-      )
+    const dispatchUpdateNotificationData = (
+      data: PartialDeep<SearchObjectDomain["notificationData"]>
+    ) => {
+      dispatch(updateNotificationData(deepmergeSafe(notificationData, data)));
+    };
+
+    const handleEnabledChange = (val: boolean) =>
+      dispatchUpdateNotificationData({
+        [notificationMedium]: { enabledStatus: val ? "ENABLED" : "DISABLED" },
+      });
+
+    const handleChannelChanged = (val: string) =>
+      dispatchUpdateNotificationData({
+        [notificationMedium]: { channel: val },
+      });
+
+    const handleBotTokenChanged = (val: string) =>
+      dispatchUpdateNotificationData({
+        [notificationMedium]: { bot: { credentials: { token: val } } },
+      });
+
+    const isEnabled =
+      notificationData[notificationMedium].enabledStatus === "ENABLED";
+
+    return (
+      <>
+        <Text>${capitalizeWord(notificationMedium)}</Text>
+        <ConfigContainer>
+          <RowDiv>
+            <Text style={{ gridColumnStart: "1" }}>Enabled</Text>
+            <Switch
+              style={{ gridColumnStart: "2", justifySelf: "end" }}
+              checked={isEnabled}
+              onChange={handleEnabledChange}
+            />
+          </RowDiv>
+          <RowDiv>
+            <Text style={{ gridColumnStart: "1" }}>Channel ID</Text>
+            <Text
+              style={{ gridColumnStart: "2", justifySelf: "end" }}
+              strong={true}
+              ellipsis={{
+                tooltip: notificationData[notificationMedium].channel,
+              }}
+              editable={isEnabled ? { onChange: handleChannelChanged } : false}
+            >
+              {notificationData[notificationMedium].channel}
+            </Text>
+          </RowDiv>
+          <RowDiv>
+            <Text style={{ gridColumnStart: "1" }}>Bot Token</Text>
+            <Text
+              style={{
+                gridColumnStart: "2",
+                justifySelf: "end",
+                width: "300px",
+              }}
+              strong={true}
+              ellipsis={{
+                tooltip:
+                  notificationData[notificationMedium].bot.credentials.token,
+              }}
+              editable={isEnabled ? { onChange: handleBotTokenChanged } : false}
+            >
+              {notificationData[notificationMedium].bot.credentials.token}
+            </Text>
+          </RowDiv>
+        </ConfigContainer>
+      </>
     );
   };
-
-  const handleChannelChanged = (val: string) => {
-    dispatch(
-      updateNotificationData(
-        deepmergeSafe(notificationData, {
-          discord: { channel: val },
-        })
-      )
-    );
-  };
-
-  const handleBotTokenChanged = (val: string) => {
-    dispatch(
-      updateNotificationData(
-        deepmergeSafe(notificationData, {
-          discord: { bot: { credentials: { token: val } } },
-        })
-      )
-    );
-  };
-
-  return (
-    <>
-      <Text>Discord</Text>
-      <ConfigContainer>
-        <RowDiv>
-          <Text style={{ gridColumnStart: "1" }}>Enabled</Text>
-          <Switch
-            style={{ gridColumnStart: "2", justifySelf: "end" }}
-            checked={notificationData.discord.enabledStatus === "ENABLED"}
-            onChange={handleEnabledChange}
-          />
-        </RowDiv>
-        <RowDiv>
-          <Text style={{ gridColumnStart: "1" }}>Channel ID</Text>
-          <Text
-            style={{ gridColumnStart: "2", justifySelf: "end" }}
-            strong={true}
-            editable={{ onChange: handleChannelChanged }}
-          >
-            {notificationData.discord.channel}
-          </Text>
-        </RowDiv>
-        <RowDiv>
-          <Text style={{ gridColumnStart: "1" }}>Bot Token</Text>
-          <Text
-            style={{ gridColumnStart: "2", justifySelf: "end", width: "300px" }}
-            strong={true}
-            ellipsis={{
-              tooltip: notificationData.discord.bot.credentials.token,
-            }}
-            editable={{ onChange: handleBotTokenChanged }}
-          >
-            {notificationData.discord.bot.credentials.token}
-          </Text>
-        </RowDiv>
-      </ConfigContainer>
-    </>
-  );
-};
