@@ -23,6 +23,7 @@ import SlackOutlined from "@ant-design/icons/lib/icons/SlackOutlined";
 import MailOutlined from "@ant-design/icons/lib/icons/MailOutlined";
 import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
 import Button from "antd/lib/button";
+import { useHistory } from "react-router-dom";
 
 // ++++++++
 // + LIST +
@@ -95,6 +96,8 @@ type SearchObjectItemProp = {
   searchObject: SearchObjectDomain;
 };
 const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
+  const history = useHistory();
+
   const socialMediaIcons: React.ReactNode[] = getActiveSocialMedias(
     searchObject
   ).map((socialMedia) => getSocialMediaIcon(socialMedia));
@@ -115,9 +118,10 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
   );
 
   const handleConfigButtonClicked = () => {
-    console.log(`Config clicked for searchobject #${searchObject.index}`);
+    history.push(`${history.location.pathname}/${searchObject.index}`);
   };
   const handleSearchButtonClicked = () => {
+    // TODO: navigate to search and setting this keyword automatically (url params)
     console.log(`Search clicked for searchobject #${searchObject.index}`);
   };
 

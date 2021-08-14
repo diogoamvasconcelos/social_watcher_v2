@@ -9,14 +9,12 @@ import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { useLocationPathChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
 import _findKey from "lodash/findKey";
-import Typography from "antd/lib/typography";
+import Text from "antd/lib/typography/Text";
 import Menu from "antd/lib/menu";
 import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
 import { Header } from "antd/lib/layout/layout";
-
-const { Text } = Typography;
 
 const config = getConfig();
 

@@ -6,7 +6,7 @@ import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
 import { updateUserSearchObjects } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
-import Typography from "antd/lib/typography";
+import Text from "antd/lib/typography/Text";
 import Switch from "antd/lib/switch";
 import Modal from "antd/lib/modal";
 import Button from "antd/lib/button";
@@ -15,8 +15,6 @@ import _range from "lodash/range";
 import { capitalizeWord } from "../../shared/lib/text";
 import Radio, { RadioChangeEvent } from "antd/lib/radio";
 import Input from "antd/lib/input";
-
-const { Text } = Typography;
 
 const RowDiv = styled.div`
   display: flex;

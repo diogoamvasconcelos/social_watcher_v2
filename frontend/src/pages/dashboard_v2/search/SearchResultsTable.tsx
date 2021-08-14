@@ -22,13 +22,12 @@ import DatePicker, { RangePickerProps } from "antd/lib/date-picker";
 import { useEffect } from "react";
 import Button from "antd/lib/button";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
-import Typography from "antd/lib/typography";
+import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
 import { AnyAction, createAction, createReducer } from "@reduxjs/toolkit";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const { Text } = Typography;
 
 // +++++++++
 // + STATE +

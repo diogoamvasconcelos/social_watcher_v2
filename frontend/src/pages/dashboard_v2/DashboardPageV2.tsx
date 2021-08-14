@@ -11,6 +11,7 @@ import { SearchPage } from "./search/SearchPage";
 import { useLocationPathChanged } from "../../shared/lib/react";
 import _findKey from "lodash/findKey";
 import { mapRecord } from "../../shared/lib/collections";
+import { SearchObjectConfigPage } from "./searchObjectConfig/SearchObjectConfigPage";
 
 // ref: https://preview.pro.ant.design/dashboard/analysis/
 
@@ -45,9 +46,8 @@ const SideBar: React.FC = () => {
   };
 
   useLocationPathChanged((newPath: string) => {
-    const currentKey = _findKey(
-      navigationConfig,
-      (item) => newPath == item.path
+    const currentKey = _findKey(navigationConfig, (item) =>
+      newPath.includes(item.path)
     );
     setselectedKeys(currentKey ? [currentKey] : []);
   });
@@ -80,6 +80,10 @@ export const DashboardPageV2: React.FC = () => {
           exact
           render={() => <Redirect to="/user/dashboardv2/keywords" />}
         ></Route>
+        <Route
+          path="/user/dashboardv2/keywords/:index"
+          component={SearchObjectConfigPage}
+        />
         <Route path="/user/dashboardv2/keywords" component={KeywordsPage} />
         <Route path="/user/dashboardv2/search" component={SearchPage} />
       </Switch>
