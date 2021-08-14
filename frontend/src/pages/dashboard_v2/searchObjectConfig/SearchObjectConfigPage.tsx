@@ -3,21 +3,36 @@ import { Status as StepStatus } from "rc-steps/lib/interface";
 import Text from "antd/lib/typography/Text";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { KeywordConfigWidget } from "./components/KeywordConfigWidget";
 import { NotificationsConfigWidget } from "./components/NotificationConfigWidget";
 import { SocialMediasConfigWidget } from "./components/SocialMediasConfigWidget";
 import { ReportsConfigWidget } from "./components/ReportsConfigWidget";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
+import { getUserSearchObject } from "./searchObjectConfigState";
+import { decode } from "@diogovasconcelos/lib";
+import {
+  SearchObjectDomain,
+  searchObjectIndexCodec,
+} from "@backend/domain/models/userItem";
+import Spin from "antd/lib/spin";
+import { isRight } from "fp-ts/lib/Either";
+import Button from "antd/lib/button";
+import { navigationConfig } from "../DashboardPageV2";
+import { updateUserSearchObject } from "src/shared/reducers/userState";
 
 const { Step } = Steps;
 
-const MainContainer = styled.div``;
+const MainContainer = styled.div`
+  padding: 8px;
+`;
 
-type ParamType = {
-  index: string;
-};
+const TopBarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
 
 type ConfigStepState = {
   status: StepStatus;
@@ -42,7 +57,7 @@ const stepsContent: ConfigStepContent[] = [
   } as ConfigStepContent,
   {
     title: "Search",
-    description: "Enabled social medias",
+    description: "social medias",
     configWidget: SocialMediasConfigWidget,
   } as ConfigStepContent,
   {
@@ -55,14 +70,22 @@ const stepsContent: ConfigStepContent[] = [
   } as ConfigStepContent,
 ];
 
+// TODO: add "SAVE" and "DISCARD" buttons
+// - save should only be allowed if searchObject is dirty
 export const SearchObjectConfigPage: React.FC = () => {
-  const { index } = useParams<ParamType>();
+  const history = useHistory();
+  const { index } = useParams<{ index: string }>();
+  const indexEither = decode(searchObjectIndexCodec, index);
 
   const dispatch = useAppDispatch();
-  const searchObjects = useAppSelector((state) => state.user.searchObjects);
+  const searchObjectConfig = useAppSelector(
+    (state) => state.searchObjectConfig
+  );
 
   useEffect(() => {
-    void dispatch(getUserSearchObjects());
+    if (isRight(indexEither)) {
+      void dispatch(getUserSearchObject([indexEither.right]));
+    }
   }, []);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -95,38 +118,86 @@ export const SearchObjectConfigPage: React.FC = () => {
     setCurrentStep(current);
   };
 
-  const makeStep = (
-    { title, description, state }: ConfigStepContent,
-    isSelected: boolean
-  ) => {
-    return (
-      <Step
-        title={title}
-        description={state.errorMessage ?? description}
-        status={isSelected ? "process" : state.status}
-        key={title}
-      />
-    );
+  const handleSaveButton = () => {
+    if (searchObjectConfig.searchObject && isRight(indexEither)) {
+      void dispatch(
+        updateUserSearchObject([
+          indexEither.right,
+          searchObjectConfig.searchObject,
+        ])
+      );
+    }
+  };
+  const handleDiscardButton = () => {
+    history.push(navigationConfig["keywords"].path);
   };
 
+  const isLoading = searchObjectConfig.getStatus === "PENDING";
+  const isSaving = searchObjectConfig.putStatus === "PENDING";
   const currentStepContent = stepsContent[currentStep];
   const CurrentConfigWidget = currentStepContent.configWidget; // need to be set to a Capitalized var
 
   return (
     <MainContainer>
-      <Text>{`Config for index: ${index}`}</Text>
-      <Steps current={currentStep} onChange={handleStepsChange}>
-        {stepsContent.map((content, i) => makeStep(content, currentStep == i))}
-      </Steps>
-      <CurrentConfigWidget
-        stepState={currentStepContent.state}
-        setStepState={currentStepContent.setState}
-      />
+      {isRight(indexEither) ? (
+        <>
+          <TopBarContainer>
+            <Steps current={currentStep} onChange={handleStepsChange}>
+              {stepsContent.map(({ title, description, state }, i) => {
+                const isSelected = currentStep == i;
+                return (
+                  <Step
+                    title={title}
+                    description={state.errorMessage ?? description}
+                    status={isSelected ? "process" : state.status}
+                    key={title}
+                  />
+                );
+              })}
+            </Steps>
+            <Button
+              type="primary"
+              onClick={handleSaveButton}
+              loading={isSaving}
+            >
+              Save
+            </Button>
+            <Button type="default" onClick={handleDiscardButton}>
+              Discard
+            </Button>
+          </TopBarContainer>
+          {searchObjectConfig.searchObject && !isLoading ? (
+            <CurrentConfigWidget
+              searchObject={searchObjectConfig.searchObject}
+              stepState={currentStepContent.state}
+              setStepState={currentStepContent.setState}
+            />
+          ) : (
+            <Spin />
+          )}
+        </>
+      ) : (
+        <InvalidIndexWidget />
+      )}
     </MainContainer>
   );
 };
 
 export type ConfigWidgetProps = {
+  searchObject: SearchObjectDomain;
   stepState: ConfigStepState;
   setStepState: React.Dispatch<React.SetStateAction<ConfigStepState>>;
+};
+
+// +++++++++++++++++
+// + INVALID INDEX +
+// +++++++++++++++++
+
+// TODO: improve this
+const InvalidIndexWidget: React.FC = () => {
+  return (
+    <MainContainer>
+      <Text>INVALID</Text>
+    </MainContainer>
+  );
 };

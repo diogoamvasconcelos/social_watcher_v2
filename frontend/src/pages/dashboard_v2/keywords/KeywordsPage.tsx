@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 const LoadingUserWidget: React.FC = () => {
   return (
-    <div>
+    <div style={{ display: "flex", gap: "8px" }}>
       <Text>Loading User</Text>
       <Spin />
     </div>
@@ -27,6 +27,7 @@ const MainContainer = styled.div`
   position: relative;
   left: 50%;
   transform: translate(-100%, 0%);
+  padding: 8px;
 `;
 
 export const KeywordsPage: React.FC = () => {
@@ -39,15 +40,19 @@ export const KeywordsPage: React.FC = () => {
     void dispatch(getUserSearchObjects());
   }, []);
 
-  return user == undefined ? (
-    <LoadingUserWidget />
-  ) : (
+  return (
     <MainContainer>
-      <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
-      {searchObjects.length == 0 ? (
-        <p>TODO no items</p>
+      {user ? (
+        <>
+          <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
+          {searchObjects.length == 0 ? (
+            <p>TODO no items</p>
+          ) : (
+            <SearchObjectsList searchObjects={searchObjects} />
+          )}
+        </>
       ) : (
-        <SearchObjectsList searchObjects={searchObjects} />
+        <LoadingUserWidget />
       )}
     </MainContainer>
   );

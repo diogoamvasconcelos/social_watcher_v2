@@ -34,7 +34,7 @@ export const getUserSearchObjects = createAsyncThunk(
     return res.right;
   }
 );
-export const updateUserSearchObjects = createAsyncThunk(
+export const updateUserSearchObject = createAsyncThunk(
   "put:searchObject",
   async (
     args: Parameters<typeof apiUpdateSearchObject>,
@@ -65,10 +65,11 @@ const userStateSlice = createSlice({
       .addCase(getUserSearchObjects.fulfilled, (state, action) => {
         state.searchObjects = action.payload.items;
       })
-      .addCase(updateUserSearchObjects.pending, (state, _action) => {
+      // TODO: remove this!!! :)
+      .addCase(updateUserSearchObject.pending, (state, _action) => {
         state.fetchStatus = "loading";
       })
-      .addCase(updateUserSearchObjects.fulfilled, (state, action) => {
+      .addCase(updateUserSearchObject.fulfilled, (state, action) => {
         state.fetchStatus = "idle";
 
         const updatedSearchObject: SearchObjectDomain = action.payload;

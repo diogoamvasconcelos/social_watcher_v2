@@ -15,7 +15,7 @@ import { SearchObjectConfigPage } from "./searchObjectConfig/SearchObjectConfigP
 
 // ref: https://preview.pro.ant.design/dashboard/analysis/
 
-const navigationConfig: Record<
+export const navigationConfig: Record<
   string,
   { path: string; label: string; icon: React.ReactNode }
 > = {

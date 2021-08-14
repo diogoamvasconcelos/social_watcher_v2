@@ -12,6 +12,7 @@ import {
   updateSearchObject,
   createPaymentsPortal,
   Client,
+  getSearchObject,
 } from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
@@ -29,6 +30,16 @@ export const apiGetSearchObjects = async () => {
     client: apiClient,
     token: getUserIdToken() ?? "",
   });
+};
+
+export const apiGetSearchObject = async (index: SearchObjectIo["index"]) => {
+  return await getSearchObject(
+    {
+      client: apiClient,
+      token: getUserIdToken() ?? "",
+    },
+    { index }
+  );
 };
 
 export const apiSearch = async (userData: SearchRequestUserData) => {

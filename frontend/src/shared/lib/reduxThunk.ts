@@ -8,3 +8,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   null,
   Action<string>
 >;
+
+export type ActionStatus = "PENDING" | "FULFILLED" | "REJECTED";

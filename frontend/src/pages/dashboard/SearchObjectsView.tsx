@@ -4,7 +4,7 @@ import { User } from "@backend/domain/models/user";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib";
-import { updateUserSearchObjects } from "../../shared/reducers/userState";
+import { updateUserSearchObject } from "../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import Text from "antd/lib/typography/Text";
 import Switch from "antd/lib/switch";
@@ -102,7 +102,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const handleKeywordChanged = (val: string) => {
     console.log(`handleKeywordChanged: ${val}`);
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, { keyword: newLowerCase(val) }),
       ])
@@ -111,7 +111,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
   const handleTwitterSwitchedChanged = (val: boolean) => {
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           searchData: {
@@ -124,7 +124,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
   const handleRedditSwitchedChanged = (val: boolean) => {
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           searchData: {
@@ -138,7 +138,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
   const handleHackernewsSwitchedChanged = (val: boolean) => {
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           searchData: {
@@ -151,7 +151,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
   const handleInstagramSwitchedChanged = (val: boolean) => {
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           searchData: {
@@ -164,7 +164,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
 
   const handleYoutubeSwitchedChanged = (val: boolean) => {
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           searchData: {
@@ -181,7 +181,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const handleNotificationsConfigOk = () => {
     setConfigNotificationsModalLoading(true);
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           notificationData: {
@@ -247,7 +247,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProps> = ({
   const handleReportsConfigOk = () => {
     setConfigReportsModalLoading(true);
     void dispatch(
-      updateUserSearchObjects([
+      updateUserSearchObject([
         searchObject.index,
         deepmergeSafe(searchObject, {
           reportData: {
