@@ -87,12 +87,18 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject = action.payload;
         state.getStatus = "FULFILLED";
       })
+      .addCase(getUserSearchObject.rejected, (state, _action) => {
+        state.getStatus = "REJECTED";
+      })
       .addCase(updateUserSearchObject.pending, (state, _action) => {
         state.putStatus = "PENDING";
       })
       .addCase(updateUserSearchObject.fulfilled, (state, action) => {
         state.searchObject = action.payload;
         state.putStatus = "FULFILLED";
+      })
+      .addCase(updateUserSearchObject.rejected, (state, _action) => {
+        state.putStatus = "REJECTED";
       });
   },
 });

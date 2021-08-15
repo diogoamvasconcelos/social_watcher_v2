@@ -24,6 +24,8 @@ import { updateUserSearchObject } from "src/shared/reducers/userState";
 
 const { Step } = Steps;
 
+// TODO: add validation to allow "save"
+
 const MainContainer = styled.div`
   padding: 8px;
 `;

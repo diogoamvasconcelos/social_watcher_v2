@@ -105,7 +105,7 @@ const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetPro
 
     return (
       <>
-        <Text>${capitalizeWord(notificationMedium)}</Text>
+        <Text>{capitalizeWord(notificationMedium)}</Text>
         <ConfigContainer>
           <RowDiv>
             <Text style={{ gridColumnStart: "1" }}>Enabled</Text>

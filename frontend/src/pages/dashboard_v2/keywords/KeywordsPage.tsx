@@ -8,6 +8,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
 import styled from "styled-components";
+import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import { useHistory } from "react-router-dom";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -31,6 +33,7 @@ const MainContainer = styled.div`
 `;
 
 export const KeywordsPage: React.FC = () => {
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.details);
   const searchObjects = useAppSelector((state) => state.user.searchObjects);
@@ -40,6 +43,21 @@ export const KeywordsPage: React.FC = () => {
     void dispatch(getUserSearchObjects());
   }, []);
 
+  const handleNewSearchObjectClicked = () => {
+    const usedIndices = searchObjects.map((searchObject) => searchObject.index);
+    let availableIndex = newPositiveInteger(0);
+    while (usedIndices.includes(availableIndex)) {
+      ++availableIndex;
+    }
+
+    if (user && availableIndex >= user.subscription.nofSearchObjects) {
+      // TODO: handle this very off case
+      return;
+    }
+
+    history.push(`${history.location.pathname}/${availableIndex}`);
+  };
+
   return (
     <MainContainer>
       {user ? (
@@ -48,7 +66,13 @@ export const KeywordsPage: React.FC = () => {
           {searchObjects.length == 0 ? (
             <p>TODO no items</p>
           ) : (
-            <SearchObjectsList searchObjects={searchObjects} />
+            <SearchObjectsList
+              searchObjects={searchObjects}
+              allowNewSearchObject={
+                searchObjects.length < user.subscription.nofSearchObjects
+              }
+              onNewSearchObjectClicked={handleNewSearchObjectClicked}
+            />
           )}
         </>
       ) : (

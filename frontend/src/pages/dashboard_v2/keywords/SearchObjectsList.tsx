@@ -24,6 +24,8 @@ import MailOutlined from "@ant-design/icons/lib/icons/MailOutlined";
 import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
 import Button from "antd/lib/button";
 import { useHistory } from "react-router-dom";
+import Tooltip from "antd/lib/tooltip";
+import { capitalizeWord } from "src/shared/lib/text";
 
 // ++++++++
 // + LIST +
@@ -36,14 +38,14 @@ const SearchObjectListContainer = styled.div`
 
 type SearchObjectsListProps = {
   searchObjects: SearchObjectDomain[];
+  allowNewSearchObject: boolean;
+  onNewSearchObjectClicked: () => void;
 };
 export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
   searchObjects,
+  allowNewSearchObject,
+  onNewSearchObjectClicked,
 }) => {
-  const handleNewSearchObjectButtonClicked = () => {
-    console.log("New searchObject clicked");
-  };
-
   return (
     <>
       <SearchObjectListContainer>
@@ -58,7 +60,8 @@ export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
         <Button
           type="primary"
           style={{ width: "200px", borderRadius: "4px" }}
-          onClick={handleNewSearchObjectButtonClicked}
+          onClick={onNewSearchObjectClicked}
+          disabled={!allowNewSearchObject}
         >
           Add new keyword
         </Button>
@@ -109,13 +112,23 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
 
   const reportMediumIcons: React.ReactNode[] = getActiveReportMediums(
     searchObject
-  ).map((reportMedium) =>
-    getReportMediumIcon({
+  ).map((reportMedium) => {
+    const getCustomTooltip = (): string | undefined => {
+      switch (reportMedium) {
+        case "email":
+          return `to: ${searchObject.reportData.email.addresses?.join(", ")}`;
+        default:
+          return undefined;
+      }
+    };
+
+    return getReportMediumIcon({
       reportMedium,
       searchFrequency: searchObject.reportData[reportMedium]
         .status as ReportFrequency,
-    })
-  );
+      customTooltip: getCustomTooltip(),
+    });
+  });
 
   const handleConfigButtonClicked = () => {
     history.push(`${history.location.pathname}/${searchObject.index}`);
@@ -174,18 +187,26 @@ const getActiveSocialMedias = (
 };
 
 const getSocialMediaIcon = (socialMedia: SocialMedia): React.ReactNode => {
-  switch (socialMedia) {
-    case "twitter":
-      return <TwitterOutlined key="twitter" />;
-    case "reddit":
-      return <RedditOutlined key="reddit" />;
-    case "hackernews":
-      return <WarningOutlined key="hackernews" />;
-    case "instagram":
-      return <InstagramOutlined key="instagram" />;
-    case "youtube":
-      return <YoutubeOutlined key="youtube" />;
-  }
+  const getIcon = () => {
+    switch (socialMedia) {
+      case "twitter":
+        return <TwitterOutlined />;
+      case "reddit":
+        return <RedditOutlined />;
+      case "hackernews":
+        return <WarningOutlined />;
+      case "instagram":
+        return <InstagramOutlined />;
+      case "youtube":
+        return <YoutubeOutlined />;
+    }
+  };
+
+  return (
+    <Tooltip title={capitalizeWord(socialMedia)} key={socialMedia}>
+      {getIcon()}
+    </Tooltip>
+  );
 };
 
 const getActiveNotificationMediums = (
@@ -199,14 +220,25 @@ const getActiveNotificationMediums = (
 };
 
 const getNotificationMediumIcon = (
-  notificatioMedium: NotificationMedium
+  notificationMedium: NotificationMedium
 ): React.ReactNode => {
-  switch (notificatioMedium) {
-    case "discord":
-      return <WarningOutlined key="discord" />;
-    case "slack":
-      return <SlackOutlined key="slack" />;
-  }
+  const getIcon = () => {
+    switch (notificationMedium) {
+      case "discord":
+        return <WarningOutlined />;
+      case "slack":
+        return <SlackOutlined />;
+    }
+  };
+
+  return (
+    <Tooltip
+      title={capitalizeWord(notificationMedium)}
+      key={notificationMedium}
+    >
+      {getIcon()}
+    </Tooltip>
+  );
 };
 
 const getActiveReportMediums = (
@@ -221,14 +253,30 @@ const getActiveReportMediums = (
 const getReportMediumIcon = ({
   reportMedium,
   searchFrequency,
-}: Pick<ReportJob, "reportMedium" | "searchFrequency">): React.ReactNode => {
-  switch (reportMedium) {
-    case "email":
-      switch (searchFrequency) {
-        case "DAILY":
-          return <MailOutlined key="email daily" />;
-        case "WEEKLY":
-          return <CalendarOutlined key="email weekly" />;
-      }
-  }
+  customTooltip,
+}: Pick<ReportJob, "reportMedium" | "searchFrequency"> & {
+  customTooltip?: string;
+}): React.ReactNode => {
+  const getIcon = () => {
+    switch (reportMedium) {
+      case "email":
+        switch (searchFrequency) {
+          case "DAILY":
+            return <MailOutlined />;
+          case "WEEKLY":
+            return <CalendarOutlined />;
+        }
+    }
+  };
+
+  return (
+    <Tooltip
+      title={`${capitalizeWord(searchFrequency)} ${capitalizeWord(
+        reportMedium
+      )} ${customTooltip}`}
+      key={reportMedium}
+    >
+      {getIcon()}
+    </Tooltip>
+  );
 };

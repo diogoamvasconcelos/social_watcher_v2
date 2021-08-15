@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ConfigWidgetProps } from "../SearchObjectConfigPage";
 import Text from "antd/lib/typography/Text";
 import { SocialMedia, socialMedias } from "@backend/domain/models/socialMedia";
@@ -9,6 +9,7 @@ import { useAppDispatch } from "../../../../shared/store";
 import { updateSearchData } from "../searchObjectConfigState";
 import { SearchObjectUserDataDomain } from "@backend/domain/models/userItem";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
+import _some from "lodash/some";
 
 // ++++++++++
 // + WIDGET +
@@ -43,12 +44,26 @@ const RowDiv = styled.div`
   grid-template-columns: 1fr 40px;
 `;
 
-// TODO: add reddit custom widget (over_18?)
-
 export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
   searchObject,
+  setStepState,
 }) => {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const hasAtLeastOneSocialMedia = _some(
+      socialMedias.map(
+        (socialMedia) =>
+          searchObject.searchData[socialMedia].enabledStatus === "ENABLED"
+      )
+    );
+
+    if (hasAtLeastOneSocialMedia) {
+      setStepState({ status: "finish", errorMessage: undefined });
+    } else {
+      setStepState({ status: "error", errorMessage: "nothing to search" });
+    }
+  }, [searchObject.searchData]);
 
   const handleEnabledStatusChanged = (
     socialMedia: SocialMedia,
@@ -146,6 +161,7 @@ const RedditCustomOptions: React.FC<RedditCustomOptionsProps> = ({
         style={{ gridColumnStart: "2", justifySelf: "end" }}
         checked={redditSearchData.over18}
         onChange={onOver18Change}
+        disabled={redditSearchData.enabledStatus === "DISABLED"}
       />
     </RowDiv>
   );
