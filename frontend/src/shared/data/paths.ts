@@ -1,0 +1,9 @@
+export const ROOT_PATH = "/";
+export const PRICING_PATH = "/pricing";
+export const ABOUT_PATH = "/about";
+export const SIGNUP_PATH = "/signup";
+export const USER_PATH = "/user/account";
+export const GUIDES_PATH = "/user/guides";
+export const DASHBOARD_PATH = "/user/dashboard";
+export const KEYWORDS_PATH = `${DASHBOARD_PATH}/keywords`;
+export const SEARCH_PATH = `${DASHBOARD_PATH}/search`;

@@ -15,15 +15,24 @@ import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
 import { Header } from "antd/lib/layout/layout";
+import {
+  ABOUT_PATH,
+  DASHBOARD_PATH,
+  GUIDES_PATH,
+  PRICING_PATH,
+  ROOT_PATH,
+  SIGNUP_PATH,
+  USER_PATH,
+} from "../data/paths";
 
 const config = getConfig();
 
 const navigationConfig: Record<string, string> = {
-  product: "/",
-  pricing: "/pricing",
-  about: "/about",
-  guides: "/user/guides",
-  dashboard: "/user/dashboard",
+  product: ROOT_PATH,
+  pricing: PRICING_PATH,
+  about: ABOUT_PATH,
+  guides: GUIDES_PATH,
+  dashboard: DASHBOARD_PATH,
 };
 
 type TopMenuProps = {
@@ -93,7 +102,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const handleItemClicked: MenuClickEventHandler = async ({ key }) => {
     switch (key.toString()) {
       case "account": {
-        history.push("/user/account");
+        history.push(USER_PATH);
         break;
       }
       case "logout": {
@@ -156,7 +165,7 @@ const LoginButtons: React.FC = () => {
   };
 
   const handleSignupClicked = () => {
-    history.push("/signup");
+    history.push(SIGNUP_PATH);
   };
 
   return (
@@ -193,7 +202,7 @@ export const Navbar: React.FC = () => {
     <Header>
       <NavbarContainer>
         <LogoContainer>
-          <Link to="/">
+          <Link to={ROOT_PATH}>
             <img src={logo} alt="Social Watcher logo" />
           </Link>
         </LogoContainer>

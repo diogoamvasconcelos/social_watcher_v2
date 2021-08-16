@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import { useAppDispatch } from "../store";
 import { onLogin, onLogout } from "../reducers/userAuthState";
 import { getConfig } from "../lib/config";
+import { DASHBOARD_PATH, ROOT_PATH } from "../data/paths";
 
 const config = getConfig();
 
@@ -46,11 +47,11 @@ export const WithAuth: React.FC = () => {
           })
         );
 
-        history.push("/user/dashboard");
+        history.push(DASHBOARD_PATH);
         break;
       case "signOut":
         dispatch(onLogout());
-        history.push("/");
+        history.push(ROOT_PATH);
         break;
     }
   };

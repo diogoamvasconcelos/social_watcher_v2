@@ -26,6 +26,7 @@ import Button from "antd/lib/button";
 import { useHistory } from "react-router-dom";
 import Tooltip from "antd/lib/tooltip";
 import { capitalizeWord } from "../../../shared/lib/text";
+import { SEARCH_PATH } from "../../../shared/data/paths";
 
 // ++++++++
 // + LIST +
@@ -134,8 +135,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
     history.push(`${history.location.pathname}/${searchObject.index}`);
   };
   const handleSearchButtonClicked = () => {
-    // TODO: navigate to search and setting this keyword automatically (url params)
-    console.log(`Search clicked for searchobject #${searchObject.index}`);
+    history.push(`${SEARCH_PATH}?keyword=${searchObject.keyword}`);
   };
 
   return (

@@ -11,6 +11,15 @@ import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
 import { SignupPage } from "./pages/signup/SignupPage";
 import Layout from "antd/lib/layout";
+import {
+  USER_PATH,
+  DASHBOARD_PATH,
+  ROOT_PATH,
+  GUIDES_PATH,
+  PRICING_PATH,
+  ABOUT_PATH,
+  SIGNUP_PATH,
+} from "./shared/data/paths";
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -20,15 +29,15 @@ const App: React.FC = () => (
         <Navbar />
         <Layout.Content>
           <Switch>
-            <Route path="/" exact>
+            <Route path={ROOT_PATH} exact>
               <p>Work in Progress</p>
             </Route>
-            <Route path="/user/dashboard" component={DashboardPage} />
-            <Route path="/user/account" component={UserPage} />
-            <Route path="/user/guides" component={TodoPage} />
-            <Route path="/pricing" component={TodoPage} />
-            <Route path="/about" component={TodoPage} />
-            <Route path="/signup" component={SignupPage} />
+            <Route path={DASHBOARD_PATH} component={DashboardPage} />
+            <Route path={USER_PATH} component={UserPage} />
+            <Route path={GUIDES_PATH} component={TodoPage} />
+            <Route path={PRICING_PATH} component={TodoPage} />
+            <Route path={ABOUT_PATH} component={TodoPage} />
+            <Route path={SIGNUP_PATH} component={SignupPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </Layout.Content>

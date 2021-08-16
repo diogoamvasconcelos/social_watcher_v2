@@ -12,6 +12,11 @@ import { useLocationPathChanged } from "../../shared/lib/react";
 import _findKey from "lodash/findKey";
 import { mapRecord } from "../../shared/lib/collections";
 import { SearchObjectConfigPage } from "./searchObjectConfig/SearchObjectConfigPage";
+import {
+  DASHBOARD_PATH,
+  KEYWORDS_PATH,
+  SEARCH_PATH,
+} from "../../shared/data/paths";
 
 // ref: https://preview.pro.ant.design/dashboard/analysis/
 
@@ -24,12 +29,12 @@ export const navigationConfig: Record<
   { path: string; label: string; icon: React.ReactNode }
 > = {
   keywords: {
-    path: "/user/dashboard/keywords",
+    path: KEYWORDS_PATH,
     label: "Keywords",
     icon: <TagsFilled />,
   },
   search: {
-    path: "/user/dashboard/search",
+    path: SEARCH_PATH,
     label: "Search",
     icon: <FileSearchOutlined />,
   },
@@ -84,16 +89,16 @@ export const DashboardPage: React.FC = () => {
       <SideBar />
       <Switch>
         <Route
-          path="/user/dashboard"
+          path={DASHBOARD_PATH}
           exact
-          render={() => <Redirect to="/user/dashboard/keywords" />}
+          render={() => <Redirect to={KEYWORDS_PATH} />}
         ></Route>
         <Route
-          path="/user/dashboard/keywords/:index"
+          path={`${KEYWORDS_PATH}/:index`}
           component={SearchObjectConfigPage}
         />
-        <Route path="/user/dashboard/keywords" component={KeywordsPage} />
-        <Route path="/user/dashboard/search" component={SearchPage} />
+        <Route path={KEYWORDS_PATH} component={KeywordsPage} />
+        <Route path={SEARCH_PATH} component={SearchPage} />
       </Switch>
     </Layout>
   );
