@@ -24,7 +24,6 @@ const navigationConfig: Record<string, string> = {
   about: "/about",
   guides: "/user/guides",
   dashboard: "/user/dashboard",
-  dashboardv2: "/user/dashboardv2",
 };
 
 type TopMenuProps = {
@@ -60,7 +59,6 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   if (userLoggedIn) {
     buttons.push(
       <Menu.Item key="dashboard">Dashboard</Menu.Item>,
-      <Menu.Item key="dashboardv2">Dashboard V2</Menu.Item>,
       <Menu.Item key="guides">Guides</Menu.Item>
     );
   }

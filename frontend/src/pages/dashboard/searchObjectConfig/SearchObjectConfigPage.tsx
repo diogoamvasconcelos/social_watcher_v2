@@ -19,7 +19,7 @@ import {
 import Spin from "antd/lib/spin";
 import { isRight } from "fp-ts/lib/Either";
 import Button from "antd/lib/button";
-import { navigationConfig } from "../DashboardPageV2";
+import { navigationConfig } from "../DashboardPage";
 import { updateUserSearchObject } from "src/shared/reducers/userState";
 
 const { Step } = Steps;
