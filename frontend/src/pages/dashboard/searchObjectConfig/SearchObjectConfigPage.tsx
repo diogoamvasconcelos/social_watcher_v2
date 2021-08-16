@@ -23,6 +23,7 @@ import Spin from "antd/lib/spin";
 import { isRight } from "fp-ts/lib/Either";
 import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
+import _every from "lodash/every";
 
 const { Step } = Steps;
 
@@ -43,7 +44,7 @@ type ConfigStepState = {
   errorMessage?: string;
 };
 const initialConfigStepState: ConfigStepState = {
-  status: "wait",
+  status: "finish",
 };
 
 type ConfigStepContent = {
@@ -74,8 +75,7 @@ const stepsContent: ConfigStepContent[] = [
   } as ConfigStepContent,
 ];
 
-// TODO: add "SAVE" and "DISCARD" buttons
-// - save should only be allowed if searchObject is dirty
+// save should only be allowed if searchObject is dirty
 export const SearchObjectConfigPage: React.FC = () => {
   const history = useHistory();
   const { index } = useParams<{ index: string }>();
@@ -94,7 +94,7 @@ export const SearchObjectConfigPage: React.FC = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  // TODO: improve this boiler plate
+  // TODO: improve this boiler plate (hard one...)
   // hooks need to be called always on the same order, can't use hooks or map to initiate them
   const [keywordStepState, setKeywordStepState] = useState<ConfigStepState>(
     initialConfigStepState
@@ -141,6 +141,10 @@ export const SearchObjectConfigPage: React.FC = () => {
   const currentStepContent = stepsContent[currentStep];
   const CurrentConfigWidget = currentStepContent.configWidget; // need to be set to a Capitalized var
 
+  const saveAllowed = _every(
+    stepsContent.map((stepContent) => stepContent.state.status !== "error")
+  );
+
   return (
     <MainContainer>
       {isRight(indexEither) ? (
@@ -163,6 +167,7 @@ export const SearchObjectConfigPage: React.FC = () => {
               type="primary"
               onClick={handleSaveButton}
               loading={isSaving}
+              disabled={!saveAllowed}
             >
               Save
             </Button>

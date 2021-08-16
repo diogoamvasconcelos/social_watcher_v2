@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ConfigWidgetProps } from "../SearchObjectConfigPage";
 import Text from "antd/lib/typography/Text";
 import { useAppDispatch } from "../../../../shared/store";
@@ -24,15 +24,11 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
   setStepState,
 }) => {
   const dispatch = useAppDispatch();
-  const [keywordValue, setKeywordValue] = useState<string>(
-    searchObject.keyword
-  );
 
   const handleKeywordChanged = (val: string) => {
-    setKeywordValue(val);
+    dispatch(updateKeyword(newLowerCase(val)));
 
     if (val.length > 0) {
-      dispatch(updateKeyword(newLowerCase(val)));
       setStepState({ status: "finish", errorMessage: undefined });
     } else {
       setStepState({ status: "error", errorMessage: "keyword not valid" });
@@ -44,7 +40,7 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
       <RowDiv>
         <Text>current keyword:</Text>
         <Text strong={true} editable={{ onChange: handleKeywordChanged }}>
-          {keywordValue}
+          {searchObject.keyword}
         </Text>
       </RowDiv>
       <RowDiv>

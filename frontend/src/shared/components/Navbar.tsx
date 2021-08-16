@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
-import { Auth } from "aws-amplify";
+import Auth from "@aws-amplify/auth/lib";
 import { useAppSelector } from "../store";
 import { UserState } from "../reducers/userState";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
