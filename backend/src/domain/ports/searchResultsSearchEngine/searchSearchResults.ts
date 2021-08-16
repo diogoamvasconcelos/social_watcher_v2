@@ -1,7 +1,7 @@
-import { DateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
+import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 import { Logger } from "../../../lib/logger";
-import { Keyword } from "../../models/keyword";
+import { keywordCodec } from "../../models/keyword";
 import { searchResultCodec } from "../../models/searchResult";
 import { CustomRightReturn } from "../shared";
 
@@ -25,15 +25,22 @@ export type SearchSearchResultsResult = t.TypeOf<
   typeof searchSearchResultsResultCodec
 >;
 
-export type SearchSearchResultsParams = {
-  keyword: Keyword;
-  dataQuery?: string;
-  pagination?: PaginationRequest;
-  timeQuery?: {
-    happenedAtStart?: DateISOString;
-    happenedAtEnd?: DateISOString;
-  };
-};
+export const SearchSearchResultParamsCodec = t.intersection([
+  t.type({
+    keyword: keywordCodec,
+  }),
+  t.partial({
+    dataQuery: t.string,
+    timeQuery: t.partial({
+      happenedAtStart: dateISOString,
+      happenedAtEnd: dateISOString,
+    }),
+    pagination: paginationRequestCodec,
+  }),
+]);
+export type SearchSearchResultsParams = t.TypeOf<
+  typeof SearchSearchResultParamsCodec
+>;
 
 export type SearchSearchResultsFn = (
   logger: Logger,

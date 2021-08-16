@@ -34,19 +34,6 @@ export const getUserSearchObjects = createAsyncThunk(
     return res.right;
   }
 );
-export const updateUserSearchObjects = createAsyncThunk(
-  "put:searchObject",
-  async (
-    args: Parameters<typeof apiUpdateSearchObject>,
-    { rejectWithValue }
-  ) => {
-    const res = await apiUpdateSearchObject(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
-);
 
 const initialState: UserState = {
   searchObjects: [],
@@ -64,19 +51,6 @@ const userStateSlice = createSlice({
       })
       .addCase(getUserSearchObjects.fulfilled, (state, action) => {
         state.searchObjects = action.payload.items;
-      })
-      .addCase(updateUserSearchObjects.pending, (state, _action) => {
-        state.fetchStatus = "loading";
-      })
-      .addCase(updateUserSearchObjects.fulfilled, (state, action) => {
-        state.fetchStatus = "idle";
-
-        const updatedSearchObject: SearchObjectDomain = action.payload;
-        state.searchObjects = state.searchObjects.map((searchObject) =>
-          searchObject.index == updatedSearchObject.index
-            ? updatedSearchObject
-            : searchObject
-        );
       });
   },
 });

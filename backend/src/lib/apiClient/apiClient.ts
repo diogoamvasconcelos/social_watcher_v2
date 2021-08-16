@@ -17,6 +17,7 @@ import {
   CreatePaymentsPortalUserData,
 } from "../../handlers/api/models/createPaymentsPortal";
 import { decode } from "@diogovasconcelos/lib/iots";
+import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -96,7 +97,21 @@ export const getSearchObjects = createClientMethod(
   getSearchObjectsResponseCodec
 );
 
-// special case, don't use the helper function yet (can be done I guess)
+// special case (with extra args), don't use the helper function yet (can be done I guess)
+export const getSearchObject = async (
+  deps: ApiClientDeps,
+  data: {
+    index: SearchObjectIo["index"];
+  }
+) =>
+  createClientMethod(
+    {
+      method: "get",
+      url: `user/searchObject/${data.index}`,
+    },
+    getSearchObjectResponseCodec
+  )(deps);
+
 export const updateSearchObject = async (
   deps: ApiClientDeps,
   data: {

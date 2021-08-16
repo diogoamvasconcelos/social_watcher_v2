@@ -7,11 +7,13 @@ import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
 import { ApiErrorResponse, ApiRequestMetadata } from "./models/models";
 import {
+  makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
 } from "./responses";
 import { parseSafe } from "@diogovasconcelos/lib/json";
 import { decode } from "@diogovasconcelos/lib/iots";
+import { SearchObjectIo } from "../../domain/models/userItem";
 
 export const apiGetUser = async ({
   logger,
@@ -34,6 +36,27 @@ export const apiGetUser = async ({
   }
 
   return right(userEither.right);
+};
+
+export const validateSearchObjectIndex = ({
+  logger,
+  user,
+  request,
+}: {
+  logger: Logger;
+  user: User;
+  request: ApiRequestMetadata & { index: SearchObjectIo["index"] };
+}): Either<ApiErrorResponse<"FORBIDDEN">, "OK"> => {
+  if (request.index >= user.subscription.nofSearchObjects) {
+    logger.error(
+      `Trying to access a search object with index (${request.index}) higher than user's nofSearchObjects (${user.subscription.nofSearchObjects})`
+    );
+    return left(
+      makeForbiddenResponse("Provided Search Object index is forbidden.")
+    );
+  }
+
+  return right("OK");
 };
 
 export const toApigwRequestMetadata = (

@@ -21,6 +21,7 @@ import {
 } from "../../../src/lib/apiClient/apiClient";
 import { retryUntil, sleep } from "../../lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
+import { getMinutesAgo } from "../../../src/lib/date";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -68,6 +69,51 @@ describe("search endpoint e2e (nearly)", () => {
     expect(searchResponse.items).toEqual([searchResult]);
   });
 
+  it("can search with time queries", async () => {
+    const queryStartTime = getMinutesAgo(20);
+    const queryEndTime = getMinutesAgo(10);
+
+    // add syntetic search result before range
+    await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+      happenedAt: getMinutesAgo(1, new Date(queryStartTime)),
+    });
+    // add syntetic search result withing range
+    const searchResultWithin = await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+      happenedAt: getMinutesAgo(1, new Date(queryEndTime)),
+    });
+    // add syntetic search result after range
+    await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+      happenedAt: getMinutesAgo(-1, new Date(queryEndTime)),
+    });
+
+    const token = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
+    });
+
+    const searchResponse = await trySearchUsingApi(
+      { client: apiClient, token },
+      {
+        userData: {
+          keyword,
+          timeQuery: {
+            happenedAtStart: queryStartTime,
+            happenedAtEnd: queryEndTime,
+          },
+        },
+      }
+    );
+
+    expect(searchResponse.items).toEqual([searchResultWithin]);
+  });
+
+  // run this test last as it disables the keyword
   it("can't search for not allowed keywords", async () => {
     const anotherKeyword = newLowerCase(uuid());
     const token = await getIdToken({

@@ -66,22 +66,22 @@ const searchObjectSearchData = {
 };
 
 const searchObjectNotificationData = {
-  discordNotification: discordNotificationConfigCodec,
-  slackNotification: slackNotificationConfigCodec,
+  discord: discordNotificationConfigCodec,
+  slack: slackNotificationConfigCodec,
 };
 
 const searchObjectReportData = {
-  emailReport: emailReportConfigCodec,
+  email: emailReportConfigCodec,
 };
 
 export const searchObjectUserDataIoCodec = t.exact(
   t.intersection([
     t.type({
       keyword: keywordCodec,
-      searchData: t.partial(searchObjectSearchData),
-      notificationData: t.partial(searchObjectNotificationData),
     }),
     t.partial({
+      searchData: t.partial(searchObjectSearchData),
+      notificationData: t.partial(searchObjectNotificationData),
       reportData: t.partial(searchObjectReportData),
     }),
   ])
@@ -119,14 +119,14 @@ export const searchObjectUserDataIoToDomain = (
         youtube: { enabledStatus: "DISABLED" },
       },
       notificationData: {
-        discordNotification: {
+        discord: {
           enabledStatus: "DISABLED",
           channel: "",
           bot: {
             credentials: { token: "" },
           },
         },
-        slackNotification: {
+        slack: {
           enabledStatus: "DISABLED",
           channel: "",
           bot: {
@@ -135,33 +135,31 @@ export const searchObjectUserDataIoToDomain = (
         },
       },
       reportData: {
-        emailReport: {
+        email: {
           status: "DISABLED",
         },
       },
     };
   }
 
+  // TODO: map this dude (this change)
   return {
     ...io,
     searchData: {
-      twitter: io.searchData.twitter ?? defaultData.searchData.twitter,
-      reddit: io.searchData.reddit ?? defaultData.searchData.reddit,
-      hackernews: io.searchData.hackernews ?? defaultData.searchData.hackernews,
-      instagram: io.searchData.instagram ?? defaultData.searchData.instagram,
-      youtube: io.searchData.youtube ?? defaultData.searchData.youtube,
+      twitter: io.searchData?.twitter ?? defaultData.searchData.twitter,
+      reddit: io.searchData?.reddit ?? defaultData.searchData.reddit,
+      hackernews:
+        io.searchData?.hackernews ?? defaultData.searchData.hackernews,
+      instagram: io.searchData?.instagram ?? defaultData.searchData.instagram,
+      youtube: io.searchData?.youtube ?? defaultData.searchData.youtube,
     },
     notificationData: {
-      discordNotification:
-        io.notificationData.discordNotification ??
-        defaultData.notificationData.discordNotification,
-      slackNotification:
-        io.notificationData.slackNotification ??
-        defaultData.notificationData.slackNotification,
+      discord:
+        io.notificationData?.discord ?? defaultData.notificationData.discord,
+      slack: io.notificationData?.slack ?? defaultData.notificationData.slack,
     },
     reportData: {
-      emailReport:
-        io.reportData?.emailReport ?? defaultData.reportData.emailReport,
+      email: io.reportData?.email ?? defaultData.reportData.email,
     },
   };
 };

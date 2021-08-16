@@ -6,12 +6,14 @@ import { handler } from "./updateSearchObject";
 import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
 import {
+  SearchObjectDomain,
   SearchObjectUserDataDomain,
   SearchObjectUserDataIo,
 } from "../../domain/models/userItem";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
+import { PartialDeep } from "type-fest";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -132,7 +134,7 @@ describe("handlers/api/updateSearchObject", () => {
     } as SearchObjectUserDataIo);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
-    const existingSearchObjct = {
+    const existingSearchObjct: PartialDeep<SearchObjectDomain> = {
       keyword: defaultRequestData.keyword,
       searchData: {
         twitter: {
@@ -144,7 +146,7 @@ describe("handlers/api/updateSearchObject", () => {
         },
       },
       notificationData: {
-        discordNotification: {
+        discord: {
           enabledStatus: "DISABLED",
           channel: "existing-channel",
           bot: {

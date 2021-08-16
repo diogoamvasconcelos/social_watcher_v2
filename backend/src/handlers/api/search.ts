@@ -62,11 +62,7 @@ const handler = async (
     );
   }
 
-  const searchResultEither = await searchSearchResultsFn(logger, {
-    keyword: request.keyword,
-    dataQuery: request.dataQuery,
-    // pagination : {...} // fully implemented but not tested!
-  });
+  const searchResultEither = await searchSearchResultsFn(logger, request);
   if (isLeft(searchResultEither)) {
     return left(makeInternalErrorResponse("Failed to search."));
   }

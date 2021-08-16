@@ -17,12 +17,11 @@ export const makeInternalErrorResponse = (
   errorMessage,
 });
 
-export const makeNotFoundResponse = <T extends string>(
-  errorCode: T,
+export const makeNotFoundResponse = (
   errorMessage: string
-): ApiErrorResponse<T> => ({
+): ApiErrorResponse<"NOT_FOUND"> => ({
   statusCode: 404,
-  errorCode,
+  errorCode: "NOT_FOUND",
   errorMessage,
 });
 
@@ -42,7 +41,7 @@ export const makeRequestMalformedResponse = (
 
 export const makeUnauthorizedResponse = (
   errorMessage: string
-): ApiErrorResponse => ({
+): ApiErrorResponse<"UNAUTHORIZED"> => ({
   statusCode: 401,
   errorCode: "UNAUTHORIZED",
   errorMessage,
@@ -50,7 +49,7 @@ export const makeUnauthorizedResponse = (
 
 export const makeForbiddenResponse = (
   errorMessage: string
-): ApiErrorResponse => ({
+): ApiErrorResponse<"FORBIDDEN"> => ({
   statusCode: 403,
   errorCode: "FORBIDDEN",
   errorMessage,

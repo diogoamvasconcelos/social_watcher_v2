@@ -1,21 +1,12 @@
 import * as t from "io-ts";
-import { keywordCodec } from "../../../domain/models/keyword";
 import {
-  paginationRequestCodec,
+  SearchSearchResultParamsCodec,
   searchSearchResultsResultCodec,
 } from "../../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export const searchRequestUserDataCodec = t.exact(
-  t.intersection([
-    t.type({
-      keyword: keywordCodec,
-    }),
-    t.partial({
-      dataQuery: t.string,
-      pagination: paginationRequestCodec,
-    }),
-  ])
+  SearchSearchResultParamsCodec
 );
 export type SearchRequestUserData = t.TypeOf<typeof searchRequestUserDataCodec>;
 

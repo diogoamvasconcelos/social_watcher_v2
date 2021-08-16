@@ -48,3 +48,7 @@
 - Do our own based on:
   - https://www.npmjs.com/package/youtube-search
   - https://developers.google.com/youtube/v3/docs/search/list
+
+# Signal - notifications
+
+- https://github.com/signalapp/Signal-Server/wiki/API-Protocol

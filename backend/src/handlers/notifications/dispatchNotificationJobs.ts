@@ -23,7 +23,6 @@ import { getClient as getNotificationJobsQueueClient } from "../../adapters/noti
 import { QueueNotificationJobsFn } from "../../domain/ports/notificationJobsQueue/queueNotificationJobs";
 import { NotificationJob } from "../../domain/models/notificationJob";
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
-import { throwUnexpectedCase } from "../..//lib/runtime";
 
 const config = getConfig();
 const logger = getLogger();
@@ -99,29 +98,11 @@ const dispatchNotificationJobs: DispatchJobs = async (
   const jobs: NotificationJob[] = [];
 
   for (const searchObject of searchObjects) {
-    let job: NotificationJob | undefined = undefined;
-    switch (notificationMedium) {
-      // need to add the job in single object for types to be correct
-      case "discord":
-        job = {
-          searchResult,
-          notificationMedium,
-          config: searchObject.notificationData.discordNotification,
-        };
-        break;
-      case "slack":
-        job = {
-          searchResult,
-          notificationMedium,
-          config: searchObject.notificationData.slackNotification,
-        };
-        break;
-      default:
-        return throwUnexpectedCase(
-          notificationMedium,
-          "dispatchNotificationJobs"
-        );
-    }
+    const job: NotificationJob = {
+      searchResult,
+      notificationMedium,
+      config: searchObject.notificationData[notificationMedium],
+    };
 
     if (job.config.enabledStatus !== "ENABLED") {
       continue;

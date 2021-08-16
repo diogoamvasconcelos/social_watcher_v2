@@ -9,7 +9,7 @@ type JSONViewerProps = {
 };
 
 export const JSONViewer: React.FC<JSONViewerProps> = ({ json, ...rest }) => {
-  const { darkMode } = { darkMode: false }; // TODO
+  const { darkMode } = { darkMode: true }; // TODO
   return (
     <ReactJson
       style={{
