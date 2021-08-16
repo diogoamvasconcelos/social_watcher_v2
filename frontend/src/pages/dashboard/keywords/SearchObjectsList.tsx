@@ -25,7 +25,7 @@ import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
 import Button from "antd/lib/button";
 import { useHistory } from "react-router-dom";
 import Tooltip from "antd/lib/tooltip";
-import { capitalizeWord } from "src/shared/lib/text";
+import { capitalizeWord } from "../../../shared/lib/text";
 
 // ++++++++
 // + LIST +

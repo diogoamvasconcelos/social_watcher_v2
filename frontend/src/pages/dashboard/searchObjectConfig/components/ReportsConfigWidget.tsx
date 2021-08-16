@@ -73,7 +73,6 @@ type EmailConfigWidgetProps = {
   reportData: SearchObjectDomain["reportData"];
 };
 
-// TODO: make a dynamic Add/Remove email addresses
 const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
   reportData,
 }) => {

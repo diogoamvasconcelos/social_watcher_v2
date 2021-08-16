@@ -1,7 +1,7 @@
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
-import { ActionStatus } from "src/shared/lib/reduxThunk";
+import { ActionStatus } from "../../../shared/lib/reduxThunk";
 import {
   apiGetSearchObject,
   apiUpdateSearchObject,

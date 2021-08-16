@@ -10,7 +10,10 @@ import { NotificationsConfigWidget } from "./components/NotificationConfigWidget
 import { SocialMediasConfigWidget } from "./components/SocialMediasConfigWidget";
 import { ReportsConfigWidget } from "./components/ReportsConfigWidget";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
-import { getUserSearchObject } from "./searchObjectConfigState";
+import {
+  getUserSearchObject,
+  updateUserSearchObject,
+} from "./searchObjectConfigState";
 import { decode } from "@diogovasconcelos/lib";
 import {
   SearchObjectDomain,
@@ -20,7 +23,6 @@ import Spin from "antd/lib/spin";
 import { isRight } from "fp-ts/lib/Either";
 import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
-import { updateUserSearchObject } from "src/shared/reducers/userState";
 
 const { Step } = Steps;
 

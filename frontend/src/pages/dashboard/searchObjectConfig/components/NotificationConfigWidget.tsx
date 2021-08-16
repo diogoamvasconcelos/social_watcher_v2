@@ -13,7 +13,7 @@ import {
   NotificationMedium,
   notificationMediums,
 } from "@backend/domain/models/notificationMedium";
-import { capitalizeWord } from "src/shared/lib/text";
+import { capitalizeWord } from "../../../../shared/lib/text";
 
 // ++++++++++
 // + WIDGET +
