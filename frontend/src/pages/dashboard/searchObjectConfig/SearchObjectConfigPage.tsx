@@ -24,10 +24,9 @@ import { isRight } from "fp-ts/lib/Either";
 import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
 import _every from "lodash/every";
+import _isEqual from "lodash/isEqual";
 
 const { Step } = Steps;
-
-// TODO: add validation to allow "save"
 
 const MainContainer = styled.div`
   padding: 8px;
@@ -75,7 +74,6 @@ const stepsContent: ConfigStepContent[] = [
   } as ConfigStepContent,
 ];
 
-// save should only be allowed if searchObject is dirty
 export const SearchObjectConfigPage: React.FC = () => {
   const history = useHistory();
   const { index } = useParams<{ index: string }>();
@@ -144,6 +142,10 @@ export const SearchObjectConfigPage: React.FC = () => {
   const saveAllowed = _every(
     stepsContent.map((stepContent) => stepContent.state.status !== "error")
   );
+  const searchObjectIsDirty = !_isEqual(
+    searchObjectConfig.searchObject,
+    searchObjectConfig.fetchedSearchObject
+  );
 
   return (
     <MainContainer>
@@ -167,7 +169,7 @@ export const SearchObjectConfigPage: React.FC = () => {
               type="primary"
               onClick={handleSaveButton}
               loading={isSaving}
-              disabled={!saveAllowed}
+              disabled={!saveAllowed || !searchObjectIsDirty}
             >
               Save
             </Button>

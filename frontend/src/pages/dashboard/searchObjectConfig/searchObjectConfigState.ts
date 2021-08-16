@@ -34,12 +34,14 @@ export const updateUserSearchObject = createAsyncThunk(
 
 export type SearchObjectConfigState = {
   searchObject: SearchObjectDomain | null;
+  fetchedSearchObject: SearchObjectDomain | null;
   getStatus: ActionStatus;
   putStatus: ActionStatus;
 };
 
 const initialState: SearchObjectConfigState = {
   searchObject: null,
+  fetchedSearchObject: null,
   getStatus: "FULFILLED",
   putStatus: "FULFILLED",
 };
@@ -84,7 +86,7 @@ const searchObjectConfigStateSlice = createSlice({
         state.getStatus = "PENDING";
       })
       .addCase(getUserSearchObject.fulfilled, (state, action) => {
-        state.searchObject = action.payload;
+        state.searchObject = state.fetchedSearchObject = action.payload;
         state.getStatus = "FULFILLED";
       })
       .addCase(getUserSearchObject.rejected, (state, _action) => {
@@ -94,7 +96,7 @@ const searchObjectConfigStateSlice = createSlice({
         state.putStatus = "PENDING";
       })
       .addCase(updateUserSearchObject.fulfilled, (state, action) => {
-        state.searchObject = action.payload;
+        state.searchObject = state.fetchedSearchObject = action.payload;
         state.putStatus = "FULFILLED";
       })
       .addCase(updateUserSearchObject.rejected, (state, _action) => {
