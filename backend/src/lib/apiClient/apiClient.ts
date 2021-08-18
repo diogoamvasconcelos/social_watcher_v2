@@ -18,6 +18,7 @@ import {
 } from "../../handlers/api/models/createPaymentsPortal";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
+import { createSearchObjectResponseCodec } from "../../handlers/api/models/createSearchObject";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -110,6 +111,21 @@ export const getSearchObject = async (
       url: `user/searchObject/${data.index}`,
     },
     getSearchObjectResponseCodec
+  )(deps);
+
+export const createSearchObject = async (
+  deps: ApiClientDeps,
+  data: {
+    userData: SearchObjectUserDataIo;
+  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `user/searchObject`,
+      data: JSON.stringify(data.userData),
+    },
+    createSearchObjectResponseCodec
   )(deps);
 
 export const updateSearchObject = async (

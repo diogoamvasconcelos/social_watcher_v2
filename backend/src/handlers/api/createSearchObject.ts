@@ -1,57 +1,58 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { getConfig } from "../../lib/config";
 import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
-import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
+  CreateSearchObjectErrorCode,
+  CreateSearchObjectRequest,
+  createSearchObjectResponse,
+} from "./models/createSearchObject";
+import { ApiErrorResponse, ApiResponse } from "./models/models";
+import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
+import { makeGetUser } from "../../adapters/userStore/getUser";
+import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { Either, isLeft, left, right } from "fp-ts/lib/Either";
+import {
+  makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
 import {
   apiGetUser,
   parseRequestBodyJSON,
   toApigwRequestMetadata,
-  validateSearchObjectIndex,
 } from "./shared";
-import { User } from "../../domain/models/user";
+import { decode, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import {
-  searchObjectIndexCodec,
+  SearchObjectDomain,
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
 } from "../../domain/models/userItem";
-import {
-  UpdateSearchObjectErrorCode,
-  UpdateSearchObjectRequest,
-  UpdateSearchObjectResponse,
-} from "./models/updateSearchObject";
-import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
-import { decode } from "@diogovasconcelos/lib/iots";
+import { User } from "../../domain/models/user";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
+import _ from "lodash";
 
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<
-  ApiResponse<UpdateSearchObjectErrorCode, UpdateSearchObjectResponse>
+  ApiResponse<CreateSearchObjectErrorCode, createSearchObjectResponse>
 > => {
   const config = getConfig();
   const logger = getLogger();
 
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
+  const getSearchObjectsForUserFn = makeGetSearchObjectsForUser(
+    getUsersStoreClient(),
+    config.usersTableName
+  );
   const putSearchObjectFn = makePutSearchObject(
     userStoreClient,
     config.usersTableName
   );
-  const getSearchObjectFn = makeGetSearchObject(
-    userStoreClient,
-    config.usersTableName
-  );
 
-  const requestEither = toUpdateSearchObjectRequest(logger, event);
+  const requestEither = toCreateSearchObjectRequest(logger, event);
   if (isLeft(requestEither)) {
     return requestEither;
   }
@@ -67,36 +68,46 @@ export const handler = async (
     return getUserEither;
   }
   const user: User = getUserEither.right;
-  const validateIndexEither = validateSearchObjectIndex({
-    logger,
-    user,
-    request,
-  });
-  if (isLeft(validateIndexEither)) {
-    return validateIndexEither;
-  }
 
-  const currentSearchObjectEither = await getSearchObjectFn(
+  const searchObjectsEither = await getSearchObjectsForUserFn(
     logger,
-    user.id,
-    request.index
+    request.authData.id
   );
-  if (isLeft(currentSearchObjectEither)) {
+  if (isLeft(searchObjectsEither)) {
     return left(
-      makeInternalErrorResponse("Failed to get current SearchObject.")
+      makeInternalErrorResponse("Error trying to get user's search objects.")
+    );
+  }
+  const searchObjects: SearchObjectDomain[] = searchObjectsEither.right;
+
+  // get next free index
+  const freeIndex = newPositiveInteger(searchObjects.length);
+
+  // validate index
+  if (freeIndex >= user.subscription.nofSearchObjects) {
+    return left(
+      makeForbiddenResponse(
+        `User already has all search objects in use (${searchObjects.length})`
+      )
     );
   }
 
-  const currentSearchObject =
-    currentSearchObjectEither.right !== "NOT_FOUND"
-      ? currentSearchObjectEither.right
-      : undefined;
+  if (
+    _.some(searchObjects, (searchObject) => searchObject.index == freeIndex)
+  ) {
+    logger.error("Free index, is already in use by another searchObject", {
+      freeIndex,
+      searchObjects,
+    });
+    return left(makeInternalErrorResponse("Error trying get free index"));
+  }
 
+  // store new searchObject
   const putResultEither = await putSearchObjectFn(logger, {
-    ...searchObjectUserDataIoToDomain(request.data, currentSearchObject),
+    ...searchObjectUserDataIoToDomain(request.data),
     type: "SEARCH_OBJECT",
     id: user.id,
-    index: request.index,
+    index: freeIndex,
     lockedStatus: "UNLOCKED",
   });
   if (isLeft(putResultEither)) {
@@ -108,10 +119,10 @@ export const handler = async (
 
 export const lambdaHandler = apigwMiddlewareStack(handler);
 
-const toUpdateSearchObjectRequest = (
+const toCreateSearchObjectRequest = (
   logger: Logger,
   event: APIGatewayProxyEvent
-): Either<ApiErrorResponse, UpdateSearchObjectRequest> => {
+): Either<ApiErrorResponse, CreateSearchObjectRequest> => {
   const metadataEither = toApigwRequestMetadata(event);
   if (isLeft(metadataEither)) {
     return metadataEither;
@@ -131,22 +142,8 @@ const toUpdateSearchObjectRequest = (
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
-  const indexEither = decode(
-    searchObjectIndexCodec,
-    event.pathParameters?.index
-  );
-  if (isLeft(indexEither)) {
-    logger.error("Failed to decode path paramters.", {
-      error: indexEither.left,
-    });
-    return left(
-      makeRequestMalformedResponse("Request pathParameters are invalid.")
-    );
-  }
-
   return right({
     ...metadataEither.right,
     data: dataEither.right,
-    index: indexEither.right,
   });
 };

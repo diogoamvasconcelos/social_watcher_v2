@@ -14,6 +14,7 @@ import {
 import { parseSafe } from "@diogovasconcelos/lib/json";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { SearchObjectIo } from "../../domain/models/userItem";
+import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export const apiGetUser = async ({
   logger,
@@ -61,7 +62,7 @@ export const validateSearchObjectIndex = ({
 
 export const toApigwRequestMetadata = (
   event: APIGatewayProxyEvent
-): Either<ApiErrorResponse, ApiRequestMetadata> => {
+): Either<ApiErrorResponse<"INTERNAL_ERROR">, ApiRequestMetadata> => {
   const id: string | undefined = event.requestContext.authorizer?.claims?.sub;
   const email: string | undefined =
     event.requestContext.authorizer?.claims?.email;
@@ -78,7 +79,10 @@ export const toRequestWithUserData = <U>(
   logger: Logger,
   event: APIGatewayProxyEvent,
   userDataDecoder: t.Decoder<unknown, U>
-): Either<ApiErrorResponse, U & ApiRequestMetadata> => {
+): Either<
+  ApiErrorResponse<"INTERNAL_ERROR" | "REQUEST_MALFORMED">,
+  U & ApiRequestMetadata
+> => {
   const metadataEither = toApigwRequestMetadata(event);
   if (isLeft(metadataEither)) {
     return metadataEither;
@@ -102,4 +106,19 @@ export const toRequestWithUserData = <U>(
     ...metadataEither.right,
     ...userDataEither.right,
   });
+};
+
+export const parseRequestBodyJSON = (
+  logger: Logger,
+  jsonBody: string | null
+): Either<ApiErrorResponse<"REQUEST_MALFORMED">, JsonEncodable> => {
+  const bodyEither = parseSafe(jsonBody);
+  if (isLeft(bodyEither)) {
+    logger.error("Failed to parse body to json.", { error: bodyEither.left });
+    return left(
+      makeRequestMalformedResponse("Request body is not a json file.")
+    );
+  }
+
+  return bodyEither;
 };

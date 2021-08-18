@@ -51,12 +51,10 @@ describe("update searchObject e2e test", () => {
 
     const expectedResponse = expect.objectContaining({
       index,
-      ...{
-        ...userData,
-        searchData: expect.objectContaining(userData.searchData),
-        notificationData: expect.objectContaining(userData.notificationData),
-        reportData: expect.any(Object),
-      },
+      ...userData,
+      searchData: expect.objectContaining(userData.searchData),
+      notificationData: expect.objectContaining(userData.notificationData),
+      reportData: expect.any(Object),
     });
 
     const response = fromEither(
