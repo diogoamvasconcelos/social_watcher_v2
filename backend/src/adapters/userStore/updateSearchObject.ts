@@ -1,18 +1,19 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
+import { UpdateSearchObjectFn } from "../../domain/ports/userStore/updateSearchObject";
 import { Client, userItemToDocument } from "./client";
 import { putItem } from "../../lib/dynamoDb";
 
-export const makePutSearchObject = (
+export const makeUpdateSearchObject = (
   client: Client,
   tableName: string
-): PutSearchObjectFn => {
+): UpdateSearchObjectFn => {
   return async (logger, searchObject) => {
     const result = await putItem(
       client,
       {
         TableName: tableName,
         Item: userItemToDocument(searchObject),
+        ConditionExpression: "attribute_exists(pk)",
       },
       logger
     );

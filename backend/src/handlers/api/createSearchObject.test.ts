@@ -3,7 +3,7 @@ import { isLeft, right } from "fp-ts/lib/Either";
 import { User } from "../../domain/models/user";
 import { apiGetUser } from "./shared";
 import { handler } from "./createSearchObject";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeCreateSearchObject } from "../../adapters/userStore/createSearchObject";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
 import {
   SearchObjectUserDataDomain,
@@ -19,15 +19,14 @@ jest.mock("./shared", () => ({
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
-jest.mock("../../adapters/userStore/putSearchObject", () => ({
-  ...jest.requireActual("../../adapters/userStore/putSearchObject"),
-  makePutSearchObject: jest.fn(),
+jest.mock("../../adapters/userStore/createSearchObject", () => ({
+  ...jest.requireActual("../../adapters/userStore/createSearchObject"),
+  makeCreateSearchObject: jest.fn(),
 }));
-const makePutSearchObjectMock = makePutSearchObject as jest.MockedFunction<
-  typeof makePutSearchObject
->;
-const putSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
-makePutSearchObjectMock.mockReturnValue(putSearchObjectMock);
+const makeCreateSearchObjectMock =
+  makeCreateSearchObject as jest.MockedFunction<typeof makeCreateSearchObject>;
+const createSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
+makeCreateSearchObjectMock.mockReturnValue(createSearchObjectMock);
 
 jest.mock("../../adapters/userStore/getSearchObjectsForUser", () => ({
   ...jest.requireActual("../../adapters/userStore/getSearchObjectsForUser"),
@@ -83,7 +82,7 @@ describe("handlers/api/createSearchObject", () => {
     );
 
     expect(response.statusCode).toEqual(200);
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...defaultRequestData,
@@ -104,7 +103,7 @@ describe("handlers/api/createSearchObject", () => {
     );
 
     expect(response.statusCode).toEqual(200);
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...defaultRequestData,
@@ -131,7 +130,7 @@ describe("handlers/api/createSearchObject", () => {
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
     }
-    expect(putSearchObjectMock).not.toHaveBeenCalled();
+    expect(createSearchObjectMock).not.toHaveBeenCalled();
   });
 
   it("removes index and other potential injections from request", async () => {
@@ -147,7 +146,7 @@ describe("handlers/api/createSearchObject", () => {
 
     fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...defaultRequestData,
@@ -189,7 +188,7 @@ describe("handlers/api/createSearchObject", () => {
 
     fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...partialSearchObjct,

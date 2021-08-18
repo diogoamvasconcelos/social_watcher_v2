@@ -11,7 +11,7 @@ import {
 } from "./responses";
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import {
   apiGetUser,
   parseRequestBodyJSON,
@@ -42,7 +42,7 @@ export const handler = async (
 
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
-  const putSearchObjectFn = makePutSearchObject(
+  const updateSearchObjectFn = makeUpdateSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -92,7 +92,7 @@ export const handler = async (
       ? currentSearchObjectEither.right
       : undefined;
 
-  const putResultEither = await putSearchObjectFn(logger, {
+  const putResultEither = await updateSearchObjectFn(logger, {
     ...searchObjectUserDataIoToDomain(request.data, currentSearchObject),
     type: "SEARCH_OBJECT",
     id: user.id,

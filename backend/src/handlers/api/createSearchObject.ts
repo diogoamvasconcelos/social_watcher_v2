@@ -10,7 +10,7 @@ import {
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeCreateSearchObject } from "../../adapters/userStore/createSearchObject";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import {
   makeForbiddenResponse,
@@ -47,7 +47,7 @@ export const handler = async (
     getUsersStoreClient(),
     config.usersTableName
   );
-  const putSearchObjectFn = makePutSearchObject(
+  const createSearchObjectFn = makeCreateSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -103,7 +103,7 @@ export const handler = async (
   }
 
   // store new searchObject
-  const putResultEither = await putSearchObjectFn(logger, {
+  const putResultEither = await createSearchObjectFn(logger, {
     ...searchObjectUserDataIoToDomain(request.data),
     type: "SEARCH_OBJECT",
     id: user.id,

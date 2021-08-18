@@ -3,7 +3,7 @@ import { isLeft, right } from "fp-ts/lib/Either";
 import { User } from "../../domain/models/user";
 import { apiGetUser } from "./shared";
 import { handler } from "./updateSearchObject";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
 import {
   SearchObjectDomain,
@@ -21,15 +21,14 @@ jest.mock("./shared", () => ({
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
-jest.mock("../../adapters/userStore/putSearchObject", () => ({
-  ...jest.requireActual("../../adapters/userStore/putSearchObject"),
-  makePutSearchObject: jest.fn(),
+jest.mock("../../adapters/userStore/updateSearchObject", () => ({
+  ...jest.requireActual("../../adapters/userStore/updateSearchObject"),
+  makeUpdateSearchObject: jest.fn(),
 }));
-const makePutSearchObjectMock = makePutSearchObject as jest.MockedFunction<
-  typeof makePutSearchObject
->;
-const putSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
-makePutSearchObjectMock.mockReturnValue(putSearchObjectMock);
+const makeUpdateSearchObjectMock =
+  makeUpdateSearchObject as jest.MockedFunction<typeof makeUpdateSearchObject>;
+const updateSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
+makeUpdateSearchObjectMock.mockReturnValue(updateSearchObjectMock);
 
 jest.mock("../../adapters/userStore/getSearchObject", () => ({
   ...jest.requireActual("../../adapters/userStore/getSearchObject"),
@@ -105,7 +104,7 @@ describe("handlers/api/updateSearchObject", () => {
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
     }
-    expect(putSearchObjectMock).not.toHaveBeenCalled();
+    expect(updateSearchObjectMock).not.toHaveBeenCalled();
   });
 
   it("removes id and other potential injections from request", async () => {
@@ -119,7 +118,7 @@ describe("handlers/api/updateSearchObject", () => {
 
     fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(updateSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...defaultRequestData,
@@ -162,7 +161,7 @@ describe("handlers/api/updateSearchObject", () => {
 
     fromEither(await handler(event as unknown as APIGatewayProxyEvent));
 
-    expect(putSearchObjectMock).toHaveBeenCalledWith(
+    expect(updateSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         ...defaultRequestData,
