@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { StrictMode } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Navbar } from "./shared/components/Navbar";
 import { WithAuth } from "./shared/components/Auth";
@@ -22,28 +22,30 @@ import {
 } from "./shared/data/paths";
 
 const App: React.FC = () => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <WithAuth />
-      <Layout className="layout">
-        <Navbar />
-        <Layout.Content>
-          <Switch>
-            <Route path={ROOT_PATH} exact>
-              <p>Work in Progress</p>
-            </Route>
-            <Route path={DASHBOARD_PATH} component={DashboardPage} />
-            <Route path={USER_PATH} component={UserPage} />
-            <Route path={GUIDES_PATH} component={TodoPage} />
-            <Route path={PRICING_PATH} component={TodoPage} />
-            <Route path={ABOUT_PATH} component={TodoPage} />
-            <Route path={SIGNUP_PATH} component={SignupPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </Layout.Content>
-        <p style={{ textAlign: "center" }}>Footer placeholder</p>
-      </Layout>
-    </BrowserRouter>
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <WithAuth />
+        <Layout className="layout">
+          <Navbar />
+          <Layout.Content>
+            <Switch>
+              <Route path={ROOT_PATH} exact>
+                <p>Work in Progress</p>
+              </Route>
+              <Route path={DASHBOARD_PATH} component={DashboardPage} />
+              <Route path={USER_PATH} component={UserPage} />
+              <Route path={GUIDES_PATH} component={TodoPage} />
+              <Route path={PRICING_PATH} component={TodoPage} />
+              <Route path={ABOUT_PATH} component={TodoPage} />
+              <Route path={SIGNUP_PATH} component={SignupPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Layout.Content>
+          <p style={{ textAlign: "center" }}>Footer placeholder</p>
+        </Layout>
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>
 );
 export default App;
