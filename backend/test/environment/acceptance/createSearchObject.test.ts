@@ -19,12 +19,18 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("create searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let userToken: string;
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
     jest.setTimeout(10000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
+    });
+
+    userToken = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
     });
   });
 
@@ -34,11 +40,6 @@ describe("create searchObject e2e test", () => {
   });
 
   it("createSearchObject works", async () => {
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
-
     const userData: SearchObjectUserDataIo = {
       keyword,
       searchData: {
@@ -59,7 +60,7 @@ describe("create searchObject e2e test", () => {
       await createSearchObject(
         {
           client: apiClient,
-          token,
+          token: userToken,
         },
         { userData }
       )
@@ -69,7 +70,7 @@ describe("create searchObject e2e test", () => {
     const getSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
-        token,
+        token: userToken,
       })
     );
     expect(getSearchObjectsResponse).toEqual({

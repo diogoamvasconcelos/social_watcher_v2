@@ -11,6 +11,7 @@ import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
 describe("getActiveKeywords", () => {
   const logger = getLogger();
   const tableName: string = uuid();
+
   const getActiveKeywordsFn = makeGetActiveKeywords(client, tableName);
 
   const putKeywordInTable = async (keywordData: KeywordData) => {

@@ -5,6 +5,7 @@ import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
+  makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
@@ -76,24 +77,27 @@ export const handler = async (
     return validateIndexEither;
   }
 
-  const currentSearchObjectEither = await getSearchObjectFn(
+  const existingSearchObjectEither = await getSearchObjectFn(
     logger,
     user.id,
     request.index
   );
-  if (isLeft(currentSearchObjectEither)) {
+  if (isLeft(existingSearchObjectEither)) {
     return left(
-      makeInternalErrorResponse("Failed to get current SearchObject.")
+      makeInternalErrorResponse("Failed to get existing SearchObject.")
+    );
+  }
+  if (existingSearchObjectEither.right === "NOT_FOUND") {
+    return left(
+      makeForbiddenResponse("Can't update a non-existing searchObject")
     );
   }
 
-  const currentSearchObject =
-    currentSearchObjectEither.right !== "NOT_FOUND"
-      ? currentSearchObjectEither.right
-      : undefined;
-
   const putResultEither = await updateSearchObjectFn(logger, {
-    ...searchObjectUserDataIoToDomain(request.data, currentSearchObject),
+    ...searchObjectUserDataIoToDomain(
+      request.data,
+      existingSearchObjectEither.right
+    ),
     type: "SEARCH_OBJECT",
     id: user.id,
     index: request.index,

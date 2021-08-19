@@ -20,12 +20,18 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("get searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let userToken: string;
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
     jest.setTimeout(10000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
+    });
+
+    userToken = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
     });
   });
 
@@ -35,16 +41,11 @@ describe("get searchObject e2e test", () => {
   });
 
   it("getSearchObject returns 404", async () => {
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
-
     const index = newPositiveInteger(0);
     const responseEither = await getSearchObject(
       {
         client: apiClient,
-        token,
+        token: userToken,
       },
       { index }
     );
@@ -59,11 +60,6 @@ describe("get searchObject e2e test", () => {
 
   it("getSearchObject returns 200 on existing", async () => {
     // similar to a updateSearchObject endpoint test
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
-
     const index = newPositiveInteger(0);
     const userData: SearchObjectUserDataIo = {
       keyword,
@@ -83,7 +79,7 @@ describe("get searchObject e2e test", () => {
       await createSearchObject(
         {
           client: apiClient,
-          token,
+          token: userToken,
         },
         { userData }
       )
@@ -94,7 +90,7 @@ describe("get searchObject e2e test", () => {
       await getSearchObject(
         {
           client: apiClient,
-          token,
+          token: userToken,
         },
         { index }
       )

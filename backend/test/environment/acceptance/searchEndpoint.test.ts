@@ -28,12 +28,18 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("search endpoint e2e (nearly)", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let userToken: string;
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
     jest.setTimeout(45000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
+    });
+
+    userToken = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
     });
   });
 
@@ -50,18 +56,14 @@ describe("search endpoint e2e (nearly)", () => {
     });
 
     // add keyword to user
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
     await createUserSearchObject({
-      token: token,
+      token: userToken,
       keyword,
       twitterStatus: "ENABLED",
     });
 
     const searchResponse = await trySearchUsingApi(
-      { client: apiClient, token },
+      { client: apiClient, token: userToken },
       { userData: { keyword } }
     );
 
@@ -91,13 +93,8 @@ describe("search endpoint e2e (nearly)", () => {
       happenedAt: getMinutesAgo(-1, new Date(queryEndTime)),
     });
 
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
-
     const searchResponse = await trySearchUsingApi(
-      { client: apiClient, token },
+      { client: apiClient, token: userToken },
       {
         userData: {
           keyword,
@@ -115,13 +112,9 @@ describe("search endpoint e2e (nearly)", () => {
   // run this test last as it disables the keyword
   it("can't search for not allowed keywords", async () => {
     const anotherKeyword = newLowerCase(uuid());
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
 
     let responseEither = await search(
-      { client: apiClient, token },
+      { client: apiClient, token: userToken },
       { userData: { keyword: anotherKeyword } }
     );
 
@@ -138,10 +131,10 @@ describe("search endpoint e2e (nearly)", () => {
       updatedData: { nofSearchObjects: newPositiveInteger(0) },
     });
 
-    await sleep(10000); // wait to propagate (otherwise can be flaky)
+    await sleep(15000); // wait to propagate (otherwise can be flaky)
 
     responseEither = await search(
-      { client: apiClient, token },
+      { client: apiClient, token: userToken },
       { userData: { keyword } }
     );
 

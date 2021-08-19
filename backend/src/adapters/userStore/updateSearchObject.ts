@@ -22,6 +22,13 @@ export const makeUpdateSearchObject = (
       return left("ERROR");
     }
 
+    if (result.right === "CONDITION_CHECK_FAILED") {
+      logger.error(`Trying to update searchObject that does not exist`, {
+        searchObject,
+      });
+      return left("ERROR");
+    }
+
     return right(searchObject);
   };
 };
