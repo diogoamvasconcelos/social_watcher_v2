@@ -1,7 +1,7 @@
 import {
+  createSearchObject,
   getClient as getApiClient,
   getSearchObject,
-  updateSearchObject,
 } from "../../../src/lib/apiClient/apiClient";
 import {
   fromEither,
@@ -80,12 +80,12 @@ describe("get searchObject e2e test", () => {
     });
 
     const response = fromEither(
-      await updateSearchObject(
+      await createSearchObject(
         {
           client: apiClient,
           token,
         },
-        { index, userData }
+        { userData }
       )
     );
     expect(response).toEqual(expectedResponse);

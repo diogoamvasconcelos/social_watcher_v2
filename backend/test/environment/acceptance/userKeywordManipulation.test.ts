@@ -1,13 +1,17 @@
-import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import {
+  newPositiveInteger,
+  PositiveInteger,
+} from "@diogovasconcelos/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import {
   checkKeyword,
   createTestUser,
+  createUserSearchObject,
   deleteKeyword,
   deleteUser,
   getIdToken,
-  updateKeyword,
+  updateUserSearchObject,
 } from "./steps";
 
 describe("keyword interaction between multiple users", () => {
@@ -15,6 +19,8 @@ describe("keyword interaction between multiple users", () => {
   let testUserB: Awaited<ReturnType<typeof createTestUser>>;
   let userAToken: string;
   let userBToken: string;
+  let indexUserA: PositiveInteger;
+  let indexUserB: PositiveInteger;
 
   const theKeyword = uuid();
   const anotherKeyword = uuid();
@@ -56,12 +62,13 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userA adds disabled keyword
-    await updateKeyword({
-      token: userAToken,
-      keyword: theKeyword,
-      index: 0,
-      twitterStatus: "DISABLED",
-    });
+    indexUserA = (
+      await createUserSearchObject({
+        token: userAToken,
+        keyword: theKeyword,
+        twitterStatus: "DISABLED",
+      })
+    ).index;
 
     await checkKeyword({
       keyword: theKeyword,
@@ -71,12 +78,13 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userB adds enabled keyword
-    await updateKeyword({
-      token: userBToken,
-      keyword: theKeyword,
-      index: 0,
-      twitterStatus: "ENABLED",
-    });
+    indexUserB = (
+      await createUserSearchObject({
+        token: userBToken,
+        keyword: theKeyword,
+        twitterStatus: "ENABLED",
+      })
+    ).index;
 
     await checkKeyword({
       keyword: theKeyword,
@@ -88,16 +96,16 @@ describe("keyword interaction between multiple users", () => {
 
   it("activate and deactivate that keyword", async () => {
     // Initial state: userA and userB enabled keyword
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userAToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserA,
       twitterStatus: "ENABLED",
     });
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userBToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserB,
       twitterStatus: "ENABLED",
     });
 
@@ -109,10 +117,10 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userA disables
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userAToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserA,
       twitterStatus: "DISABLED",
     });
 
@@ -124,10 +132,10 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userB disables
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userBToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserB,
       twitterStatus: "DISABLED",
     });
 
@@ -139,10 +147,10 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userA enables
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userAToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserA,
       twitterStatus: "ENABLED",
     });
 
@@ -156,24 +164,24 @@ describe("keyword interaction between multiple users", () => {
 
   it("one user changes keyword", async () => {
     // Initial state: both users enable keyword
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userAToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserA,
       twitterStatus: "ENABLED",
     });
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userBToken,
       keyword: theKeyword,
-      index: 0,
+      index: indexUserB,
       twitterStatus: "ENABLED",
     });
 
     // userA changes to another keyword (still enabled)
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userAToken,
       keyword: anotherKeyword,
-      index: 0,
+      index: indexUserA,
       twitterStatus: "ENABLED",
     });
 
@@ -191,10 +199,10 @@ describe("keyword interaction between multiple users", () => {
     });
 
     // userB changes to another keyword too
-    await updateKeyword({
+    await updateUserSearchObject({
       token: userBToken,
       keyword: anotherKeyword,
-      index: 0,
+      index: indexUserB,
       twitterStatus: "ENABLED",
     });
 

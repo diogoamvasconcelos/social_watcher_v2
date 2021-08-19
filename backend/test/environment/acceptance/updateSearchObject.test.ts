@@ -8,11 +8,18 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
+  PositiveInteger,
 } from "@diogovasconcelos/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
-import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import {
+  createTestUser,
+  createUserSearchObject,
+  deleteKeyword,
+  deleteUser,
+  getIdToken,
+} from "./steps";
 import { SearchObjectUserDataIo } from "../../../src/domain/models/userItem";
 
 const config = getEnvTestConfig();
@@ -20,6 +27,7 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let searchObjectIndex: PositiveInteger;
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
@@ -40,20 +48,27 @@ describe("update searchObject e2e test", () => {
       password: testUser.password,
     });
 
-    const index = newPositiveInteger(0);
+    const initialState = await createUserSearchObject({
+      token,
+      keyword,
+      twitterStatus: "DISABLED",
+    });
+    searchObjectIndex = initialState.index;
+    expect(initialState.searchData.twitter.enabledStatus).toEqual("DISABLED");
+
     const userData: SearchObjectUserDataIo = {
       keyword,
       searchData: {
-        twitter: { enabledStatus: "ENABLED" },
+        twitter: {
+          enabledStatus: "ENABLED",
+        },
       },
-      notificationData: {},
     };
 
     const expectedResponse = expect.objectContaining({
-      index,
+      index: searchObjectIndex,
       ...userData,
       searchData: expect.objectContaining(userData.searchData),
-      notificationData: expect.objectContaining(userData.notificationData),
       reportData: expect.any(Object),
     });
 
@@ -63,7 +78,7 @@ describe("update searchObject e2e test", () => {
           client: apiClient,
           token,
         },
-        { index, userData }
+        { index: searchObjectIndex, userData }
       )
     );
     expect(response).toEqual(expectedResponse);
@@ -85,8 +100,6 @@ describe("update searchObject e2e test", () => {
       password: testUser.password,
     });
 
-    const index = newPositiveInteger(0);
-
     const initialGetSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
@@ -94,8 +107,8 @@ describe("update searchObject e2e test", () => {
       })
     );
     expect(
-      initialGetSearchObjectsResponse.items[0].notificationData.discord
-        ?.enabledStatus
+      initialGetSearchObjectsResponse.items[searchObjectIndex].notificationData
+        .discord.enabledStatus
     ).toEqual("DISABLED");
 
     const discordNotificationConfig: DiscordNotificationConfig = {
@@ -111,7 +124,7 @@ describe("update searchObject e2e test", () => {
           token,
         },
         {
-          index,
+          index: searchObjectIndex,
           userData: {
             ...initialGetSearchObjectsResponse.items[0],
             notificationData: {
@@ -123,7 +136,7 @@ describe("update searchObject e2e test", () => {
     );
     expect(response).toEqual(
       expect.objectContaining({
-        index,
+        index: searchObjectIndex,
         notificationData: expect.objectContaining({
           discord: discordNotificationConfig,
         }),
@@ -139,7 +152,7 @@ describe("update searchObject e2e test", () => {
     expect(getSearchObjectsResponse).toEqual({
       items: [
         expect.objectContaining({
-          index,
+          index: searchObjectIndex,
           notificationData: expect.objectContaining({
             discord: discordNotificationConfig,
           }),

@@ -9,10 +9,10 @@ import { getEnvTestConfig } from "../../lib/config";
 import {
   addSearchResultDirectly,
   createTestUser,
+  createUserSearchObject,
   deleteKeyword,
   deleteUser,
   getIdToken,
-  updateKeyword,
   updateUserSubscription,
 } from "./steps";
 import {
@@ -54,10 +54,9 @@ describe("search endpoint e2e (nearly)", () => {
       username: testUser.email,
       password: testUser.password,
     });
-    await updateKeyword({
+    await createUserSearchObject({
       token: token,
       keyword,
-      index: 0,
       twitterStatus: "ENABLED",
     });
 
