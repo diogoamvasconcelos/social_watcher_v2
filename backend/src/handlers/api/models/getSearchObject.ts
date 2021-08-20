@@ -1,16 +1,12 @@
-import * as t from "io-ts";
 import {
-  searchObjectDomainCodec,
-  SearchObjectIo,
-} from "../../../domain/models/userItem";
-import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
+  SearchObjectErrorCode,
+  SearchObjectRequest,
+  SearchObjectResponse,
+  searchObjectResponseCodec,
+} from "./models";
 
-export type GetSearchObjectRequest = ApiRequestMetadata & {
-  index: SearchObjectIo["index"];
-};
-export type GetSearchObjectErrorCode = ApiBaseErrorCode | "NOT_FOUND";
+export type GetSearchObjectRequest = SearchObjectRequest;
+export type GetSearchObjectErrorCode = SearchObjectErrorCode;
 
-export const getSearchObjectResponseCodec = searchObjectDomainCodec;
-export type GetSearchObjectResponse = t.TypeOf<
-  typeof getSearchObjectResponseCodec
->;
+export const getSearchObjectResponseCodec = searchObjectResponseCodec;
+export type GetSearchObjectResponse = SearchObjectResponse;

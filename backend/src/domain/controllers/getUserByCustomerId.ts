@@ -1,10 +1,11 @@
 import { Logger } from "../../lib/logger";
-import { Either, isLeft, right } from "fp-ts/lib/Either";
+import { isLeft, right } from "fp-ts/lib/Either";
 import { GetUserIdByCustomerIdFn } from "../ports/paymentsManager/getUserIdByCustomerId";
 import { PaymentData } from "../models/userItem";
 import { GetUserFn } from "../ports/userStore/getUser";
 import { GetPaymentDataFn } from "../ports/userStore/getPaymentData";
 import { User } from "../models/user";
+import { CustomRightReturn } from "../ports/shared";
 
 export type GetUserByCustomerIdDeps = {
   logger: Logger;
@@ -21,8 +22,8 @@ export const getUserByCustomerId = async (
     getPaymentDataFn,
   }: GetUserByCustomerIdDeps,
   customerId: string
-): Promise<
-  Either<"ERROR", { user: User; paymentData: PaymentData } | "NOT_FOUND">
+): CustomRightReturn<
+  { user: User; paymentData: PaymentData } | "NOT_FOUND"
 > => {
   const userIdEither = await getUserIdByCustomerIdFn(logger, customerId);
   if (isLeft(userIdEither)) {

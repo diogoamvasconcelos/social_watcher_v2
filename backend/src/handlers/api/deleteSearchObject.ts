@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { getLogger } from "../../lib/logger";
 import { ApiResponse } from "./models/models";
-import { isLeft, right } from "fp-ts/lib/Either";
-import { makeSuccessResponse } from "./responses";
+import { isLeft, left, right } from "fp-ts/lib/Either";
+import { makeInternalErrorResponse, makeSuccessResponse } from "./responses";
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { getConfig } from "../../lib/config";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
@@ -11,17 +11,21 @@ import {
   getExistingSearchObject,
   toSearchObjectRequest,
 } from "./shared";
-import {
-  GetSearchObjectErrorCode,
-  GetSearchObjectResponse,
-} from "./models/getSearchObject";
 import { makeGetUser } from "../../adapters/userStore/getUser";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
+import { SearchObjectDomain } from "../../domain/models/userItem";
 import { User } from "../../domain/models/user";
+import {
+  DeleteSearchObjectErrorCode,
+  DeleteSearchObjectResponse,
+} from "./models/deleteSearchObject";
+import { deleteSearchObjectAndPrune } from "../../domain/controllers/deleteSearchObjectAndPrune";
 
 export const handler = async (
   event: APIGatewayProxyEvent
-): Promise<ApiResponse<GetSearchObjectErrorCode, GetSearchObjectResponse>> => {
+): Promise<
+  ApiResponse<DeleteSearchObjectErrorCode, DeleteSearchObjectResponse>
+> => {
   const config = getConfig();
   const logger = getLogger();
 
@@ -58,7 +62,18 @@ export const handler = async (
   if (isLeft(searchObjectEither)) {
     return searchObjectEither;
   }
-  return right(makeSuccessResponse(200, searchObjectEither.right));
+  const searchObject: SearchObjectDomain = searchObjectEither.right;
+
+  const deleteEither = await deleteSearchObjectAndPrune({
+    logger,
+    searchObjectKeys: searchObject,
+  });
+  if (isLeft(deleteEither)) {
+    logger.error("Failed to delete search object", { searchObject });
+    return left(makeInternalErrorResponse("Failed to delete search object"));
+  }
+
+  return right(makeSuccessResponse(200, searchObject));
 };
 
 export const lambdaHandler = apigwMiddlewareStack(handler);

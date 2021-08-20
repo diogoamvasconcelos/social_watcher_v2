@@ -10,6 +10,7 @@ data "template_file" "main_api_openapi_spec_swagger" {
     get_search_object_invoke_arn      = aws_lambda_function.get_search_object.invoke_arn
     update_search_object_invoke_arn   = aws_lambda_function.update_search_object.invoke_arn
     create_search_object_invoke_arn   = aws_lambda_function.create_search_object.invoke_arn
+    delete_search_object_invoke_arn   = aws_lambda_function.delete_search_object.invoke_arn
     search_endpoint_invoke_arn        = aws_lambda_function.search_endpoint.invoke_arn
     stripe_webhook_invoke_arn         = aws_lambda_function.stripe_webhook.invoke_arn
     create_payments_portal_invoke_arn = aws_lambda_function.create_payments_portal.invoke_arn

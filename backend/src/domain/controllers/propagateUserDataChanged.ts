@@ -2,7 +2,7 @@ import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { Logger } from "../../lib/logger";
 import { UserData } from "../models/userItem";
-import { eitherListToDefaultOk } from "../ports/shared";
+import { DefaultOkReturn, eitherListToDefaultOk } from "../ports/shared";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
 import { UpdateSearchObjectFn } from "../ports/userStore/updateSearchObject";
 
@@ -17,7 +17,7 @@ export const propagateUserDataChanged = async (
     updateSearchObjectFn: UpdateSearchObjectFn;
   },
   userData: UserData
-) => {
+): DefaultOkReturn => {
   // apply nofSearchObjects
   const searchObjectsEither = await getSearchObjectsForUserFn(
     logger,

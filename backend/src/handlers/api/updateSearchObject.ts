@@ -5,7 +5,6 @@ import { getLogger, Logger } from "../../lib/logger";
 import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
-  makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
@@ -15,13 +14,12 @@ import { makeGetUser } from "../../adapters/userStore/getUser";
 import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import {
   apiGetUser,
+  getExistingSearchObject,
   parseRequestBodyJSON,
-  toApigwRequestMetadata,
-  validateSearchObjectIndex,
+  toSearchObjectRequest,
 } from "./shared";
 import { User } from "../../domain/models/user";
 import {
-  searchObjectIndexCodec,
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
 } from "../../domain/models/userItem";
@@ -68,36 +66,19 @@ export const handler = async (
     return getUserEither;
   }
   const user: User = getUserEither.right;
-  const validateIndexEither = validateSearchObjectIndex({
+
+  const searchObjectEither = await getExistingSearchObject({
     logger,
+    getSearchObjectFn,
     user,
     request,
   });
-  if (isLeft(validateIndexEither)) {
-    return validateIndexEither;
-  }
-
-  const existingSearchObjectEither = await getSearchObjectFn(
-    logger,
-    user.id,
-    request.index
-  );
-  if (isLeft(existingSearchObjectEither)) {
-    return left(
-      makeInternalErrorResponse("Failed to get existing SearchObject.")
-    );
-  }
-  if (existingSearchObjectEither.right === "NOT_FOUND") {
-    return left(
-      makeForbiddenResponse("Can't update a non-existing searchObject")
-    );
+  if (isLeft(searchObjectEither)) {
+    return searchObjectEither;
   }
 
   const putResultEither = await updateSearchObjectFn(logger, {
-    ...searchObjectUserDataIoToDomain(
-      request.data,
-      existingSearchObjectEither.right
-    ),
+    ...searchObjectUserDataIoToDomain(request.data, searchObjectEither.right),
     type: "SEARCH_OBJECT",
     id: user.id,
     index: request.index,
@@ -116,9 +97,9 @@ const toUpdateSearchObjectRequest = (
   logger: Logger,
   event: APIGatewayProxyEvent
 ): Either<ApiErrorResponse, UpdateSearchObjectRequest> => {
-  const metadataEither = toApigwRequestMetadata(event);
-  if (isLeft(metadataEither)) {
-    return metadataEither;
+  const searchObjectRequestEither = toSearchObjectRequest(logger, event);
+  if (isLeft(searchObjectRequestEither)) {
+    return searchObjectRequestEither;
   }
 
   const bodyEither = parseRequestBodyJSON(logger, event.body);
@@ -135,22 +116,8 @@ const toUpdateSearchObjectRequest = (
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
-  const indexEither = decode(
-    searchObjectIndexCodec,
-    event.pathParameters?.index
-  );
-  if (isLeft(indexEither)) {
-    logger.error("Failed to decode path paramters.", {
-      error: indexEither.left,
-    });
-    return left(
-      makeRequestMalformedResponse("Request pathParameters are invalid.")
-    );
-  }
-
   return right({
-    ...metadataEither.right,
+    ...searchObjectRequestEither.right,
     data: dataEither.right,
-    index: indexEither.right,
   });
 };

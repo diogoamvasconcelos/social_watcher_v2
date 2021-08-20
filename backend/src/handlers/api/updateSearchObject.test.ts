@@ -90,7 +90,7 @@ describe("handlers/api/updateSearchObject", () => {
     expect(response.statusCode).toEqual(200);
   });
 
-  it("returns forbidden if search object doesnt exist", async () => {
+  it("returns not_found if search object doesnt exist", async () => {
     const event = buildEvent(defaultUser, defaultRequestData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
 
@@ -99,7 +99,7 @@ describe("handlers/api/updateSearchObject", () => {
     const response = await handler(event as unknown as APIGatewayProxyEvent);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
-      expect(response.left.statusCode).toEqual(403);
+      expect(response.left.statusCode).toEqual(404);
     }
     expect(updateSearchObjectMock).not.toHaveBeenCalled();
   });

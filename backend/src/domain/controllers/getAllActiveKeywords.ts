@@ -1,9 +1,10 @@
-import { Either, isLeft, right, left } from "fp-ts/lib/Either";
+import { isLeft, right, left } from "fp-ts/lib/Either";
 import { socialMedias } from "../models/socialMedia";
 import { Logger } from "../../lib/logger";
 import { GetActiveKeywordsFn } from "../ports/keywordStore/getActiveKeywords";
 import { Keyword } from "../models/keyword";
 import { toSingleEither } from "@diogovasconcelos/lib/iots";
+import { CustomRightReturn } from "../ports/shared";
 
 type GetAllActiveKeywordsDeps = {
   logger: Logger;
@@ -13,7 +14,7 @@ type GetAllActiveKeywordsDeps = {
 export const getAllActiveKeywords = async ({
   logger,
   getActiveKeywordsFn,
-}: GetAllActiveKeywordsDeps): Promise<Either<"ERROR", Keyword[]>> => {
+}: GetAllActiveKeywordsDeps): CustomRightReturn<Keyword[]> => {
   const activeKeywordsEither = toSingleEither(
     await Promise.all(
       socialMedias.map(async (socialMedia) => {

@@ -52,3 +52,8 @@
 # Signal - notifications
 
 - https://github.com/signalapp/Signal-Server/wiki/API-Protocol
+
+# Whatsup - notifications
+
+- authy app uses it, so it should be possible with a phone number
+- https://developers.facebook.com/docs/whatsapp/getting-started/

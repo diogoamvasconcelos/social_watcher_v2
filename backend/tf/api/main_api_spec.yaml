@@ -153,6 +153,24 @@ paths:
         credentials: ${main_api_role_arn}
         uri: ${update_search_object_invoke_arn}
 
+    delete:
+      description: Delete SearchObject of a user
+      responses:
+        200:
+          description: The deleted SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${delete_search_object}
+
     options:
       x-amazon-apigateway-integration:
         type: mock

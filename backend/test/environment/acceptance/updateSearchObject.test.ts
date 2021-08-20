@@ -34,7 +34,7 @@ describe("update searchObject e2e test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });
@@ -178,7 +178,7 @@ describe("update searchObject e2e test", () => {
       isLeft(responseEither) && typeof responseEither.left != "string"
     ).toBeTruthy();
     if (isLeft(responseEither) && typeof responseEither.left != "string") {
-      expect(responseEither.left.status).toEqual(403);
+      expect(responseEither.left.status).toEqual(404);
     }
   });
 });
