@@ -144,6 +144,20 @@ export const updateSearchObject = async (
     updateSearchObjectResponseCodec
   )(deps);
 
+export const deleteSearchObject = async (
+  deps: ApiClientDeps,
+  data: {
+    index: SearchObjectIo["index"];
+  }
+) =>
+  createClientMethod(
+    {
+      method: "delete",
+      url: `user/searchObject/${data.index}`,
+    },
+    getSearchObjectResponseCodec
+  )(deps);
+
 export const search = async (
   deps: ApiClientDeps,
   data: {
