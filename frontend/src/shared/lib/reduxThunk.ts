@@ -9,4 +9,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 
-export type ActionStatus = "PENDING" | "FULFILLED" | "REJECTED";
+export type ActionStatus = "INITAL" | "PENDING" | "FULFILLED" | "REJECTED";

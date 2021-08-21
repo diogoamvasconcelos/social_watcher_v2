@@ -13,6 +13,8 @@ import {
   createPaymentsPortal,
   Client,
   getSearchObject,
+  createSearchObject,
+  deleteSearchObject,
 } from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
@@ -49,6 +51,15 @@ export const apiSearch = async (userData: SearchRequestUserData) => {
   );
 };
 
+export const apiCreateSearchObject = async (
+  userData: SearchObjectUserDataIo
+) => {
+  return createSearchObject(
+    { client: apiClient, token: getUserIdToken() ?? "" },
+    { userData }
+  );
+};
+
 export const apiUpdateSearchObject = async (
   index: SearchObjectIo["index"],
   userData: SearchObjectUserDataIo
@@ -56,6 +67,16 @@ export const apiUpdateSearchObject = async (
   return updateSearchObject(
     { client: apiClient, token: getUserIdToken() ?? "" },
     { index, userData }
+  );
+};
+
+export const apiDeleteSearchObject = async (index: SearchObjectIo["index"]) => {
+  return await deleteSearchObject(
+    {
+      client: apiClient,
+      token: getUserIdToken() ?? "",
+    },
+    { index }
   );
 };
 

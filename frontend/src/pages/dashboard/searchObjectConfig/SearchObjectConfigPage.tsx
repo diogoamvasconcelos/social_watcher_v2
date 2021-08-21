@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import Steps, { StepsProps } from "antd/lib/steps";
 import { Status as StepStatus } from "rc-steps/lib/interface";
 import Text from "antd/lib/typography/Text";
@@ -11,6 +12,8 @@ import { SocialMediasConfigWidget } from "./components/SocialMediasConfigWidget"
 import { ReportsConfigWidget } from "./components/ReportsConfigWidget";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import {
+  createUserSearchObject,
+  deleteUserSearchObject,
   getUserSearchObject,
   updateUserSearchObject,
 } from "./searchObjectConfigState";
@@ -25,6 +28,8 @@ import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
 import _every from "lodash/every";
 import _isEqual from "lodash/isEqual";
+import { KEYWORDS_NEW_PATH_ARG } from "src/shared/data/paths";
+import Modal from "antd/lib/modal/Modal";
 
 const { Step } = Steps;
 
@@ -77,7 +82,12 @@ const stepsContent: ConfigStepContent[] = [
 export const SearchObjectConfigPage: React.FC = () => {
   const history = useHistory();
   const { index } = useParams<{ index: string }>();
-  const indexEither = decode(searchObjectIndexCodec, index);
+  const indexEither = decode(
+    t.union([searchObjectIndexCodec, t.literal(KEYWORDS_NEW_PATH_ARG)]),
+    index
+  );
+  const newIndex =
+    isRight(indexEither) && indexEither.right === KEYWORDS_NEW_PATH_ARG;
 
   const dispatch = useAppDispatch();
   const searchObjectConfig = useAppSelector(
@@ -85,12 +95,13 @@ export const SearchObjectConfigPage: React.FC = () => {
   );
 
   useEffect(() => {
-    if (isRight(indexEither)) {
+    if (isRight(indexEither) && indexEither.right !== KEYWORDS_NEW_PATH_ARG) {
       void dispatch(getUserSearchObject([indexEither.right]));
     }
   }, []);
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   // TODO: improve this boiler plate (hard one...)
   // hooks need to be called always on the same order, can't use hooks or map to initiate them
@@ -116,22 +127,39 @@ export const SearchObjectConfigPage: React.FC = () => {
   stepsContent[3].state = reportsStepState;
   stepsContent[3].setState = setReportsStepState;
 
+  useEffect(() => {
+    if (searchObjectConfig.deleteStatus === "FULFILLED") {
+      history.push(navigationConfig["keywords"].path);
+    } else if (searchObjectConfig.deleteStatus === "REJECTED") {
+      setDeleteModalVisible(false);
+    }
+  }, [searchObjectConfig.deleteStatus]);
+
   const handleStepsChange: StepsProps["onChange"] = (current) => {
     setCurrentStep(current);
   };
 
   const handleSaveButton = () => {
     if (searchObjectConfig.searchObject && isRight(indexEither)) {
-      void dispatch(
-        updateUserSearchObject([
-          indexEither.right,
-          searchObjectConfig.searchObject,
-        ])
-      );
+      if (indexEither.right === KEYWORDS_NEW_PATH_ARG) {
+        void dispatch(
+          createUserSearchObject([searchObjectConfig.searchObject])
+        );
+      } else {
+        void dispatch(
+          updateUserSearchObject([
+            indexEither.right,
+            searchObjectConfig.searchObject,
+          ])
+        );
+      }
     }
   };
   const handleDiscardButton = () => {
     history.push(navigationConfig["keywords"].path);
+  };
+  const handleDeleteButton = () => {
+    setDeleteModalVisible(true);
   };
 
   const isLoading = searchObjectConfig.getStatus === "PENDING";
@@ -171,10 +199,18 @@ export const SearchObjectConfigPage: React.FC = () => {
               loading={isSaving}
               disabled={!saveAllowed || !searchObjectIsDirty}
             >
-              Save
+              {newIndex ? "Add" : "Save"}
             </Button>
             <Button type="default" onClick={handleDiscardButton}>
               Discard
+            </Button>
+            <Button
+              type="text"
+              danger={true}
+              onClick={handleDeleteButton}
+              hidden={newIndex}
+            >
+              Delete
             </Button>
           </TopBarContainer>
           {searchObjectConfig.searchObject && !isLoading ? (
@@ -186,6 +222,21 @@ export const SearchObjectConfigPage: React.FC = () => {
           ) : (
             <Spin />
           )}
+          <DeleteModal
+            visible={deleteModalVisible}
+            searchObject={searchObjectConfig.fetchedSearchObject}
+            isDeleting={searchObjectConfig.deleteStatus === "PENDING"}
+            onOk={() => {
+              if (
+                searchObjectConfig.searchObject &&
+                isRight(indexEither) &&
+                indexEither.right !== KEYWORDS_NEW_PATH_ARG
+              ) {
+                void dispatch(deleteUserSearchObject([indexEither.right]));
+              }
+            }}
+            onCancel={() => setDeleteModalVisible(false)}
+          />
         </>
       ) : (
         <InvalidIndexWidget />
@@ -198,6 +249,38 @@ export type ConfigWidgetProps = {
   searchObject: SearchObjectDomain;
   stepState: ConfigStepState;
   setStepState: React.Dispatch<React.SetStateAction<ConfigStepState>>;
+};
+
+// ++++++++++++++++
+// + DELETE MODAL +
+// ++++++++++++++++
+type DeleteModalProps = {
+  searchObject: SearchObjectDomain | null;
+  visible: boolean;
+  isDeleting: boolean;
+  onOk: () => void;
+  onCancel: () => void;
+};
+const DeleteModal: React.FC<DeleteModalProps> = ({
+  searchObject,
+  visible,
+  isDeleting,
+  onOk,
+  onCancel,
+}) => {
+  return (
+    <Modal
+      title={`Are you sure you want to delete the keyword: ${
+        searchObject?.keyword ?? "n/a"
+      }?`}
+      visible={visible}
+      onOk={onOk}
+      okText="Delete"
+      okType="danger"
+      confirmLoading={isDeleting}
+      onCancel={onCancel}
+    ></Modal>
+  );
 };
 
 // +++++++++++++++++

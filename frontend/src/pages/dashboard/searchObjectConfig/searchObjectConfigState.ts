@@ -3,14 +3,31 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
 import { ActionStatus } from "../../../shared/lib/reduxThunk";
 import {
+  apiCreateSearchObject,
+  apiDeleteSearchObject,
   apiGetSearchObject,
   apiUpdateSearchObject,
 } from "../../../shared/lib/apiClient";
+import { newLowerCase } from "@diogovasconcelos/lib";
 
 export const getUserSearchObject = createAsyncThunk(
   "get:searchObject",
   async (args: Parameters<typeof apiGetSearchObject>, { rejectWithValue }) => {
     const res = await apiGetSearchObject(...args);
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
+  }
+);
+
+export const createUserSearchObject = createAsyncThunk(
+  "post:searchObject",
+  async (
+    args: Parameters<typeof apiCreateSearchObject>,
+    { rejectWithValue }
+  ) => {
+    const res = await apiCreateSearchObject(...args);
     if (isLeft(res)) {
       return rejectWithValue(res.left);
     }
@@ -32,19 +49,40 @@ export const updateUserSearchObject = createAsyncThunk(
   }
 );
 
+export const deleteUserSearchObject = createAsyncThunk(
+  "delete:searchObject",
+  async (
+    args: Parameters<typeof apiDeleteSearchObject>,
+    { rejectWithValue }
+  ) => {
+    const res = await apiDeleteSearchObject(...args);
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
+  }
+);
+
 export type SearchObjectConfigState = {
   searchObject: SearchObjectDomain | null;
   fetchedSearchObject: SearchObjectDomain | null;
   getStatus: ActionStatus;
   putStatus: ActionStatus;
+  deleteStatus: ActionStatus;
 };
 
 const initialState: SearchObjectConfigState = {
   searchObject: null,
   fetchedSearchObject: null,
-  getStatus: "FULFILLED",
-  putStatus: "FULFILLED",
+  getStatus: "INITAL",
+  putStatus: "INITAL",
+  deleteStatus: "INITAL",
 };
+
+// TODO: fix this shit
+const newSearchObject: SearchObjectDomain = {
+  keyword: newLowerCase(""),
+} as SearchObjectDomain;
 
 const searchObjectConfigStateSlice = createSlice({
   name: "searchObjectConfigState",
@@ -79,6 +117,9 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject.reportData = action.payload;
       }
     },
+    resetSearchObject(state) {
+      state.searchObject = newSearchObject;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -92,6 +133,16 @@ const searchObjectConfigStateSlice = createSlice({
       .addCase(getUserSearchObject.rejected, (state, _action) => {
         state.getStatus = "REJECTED";
       })
+      .addCase(createUserSearchObject.pending, (state, _action) => {
+        state.putStatus = "PENDING";
+      })
+      .addCase(createUserSearchObject.fulfilled, (state, action) => {
+        state.searchObject = state.fetchedSearchObject = action.payload;
+        state.putStatus = "FULFILLED";
+      })
+      .addCase(createUserSearchObject.rejected, (state, _action) => {
+        state.putStatus = "REJECTED";
+      })
       .addCase(updateUserSearchObject.pending, (state, _action) => {
         state.putStatus = "PENDING";
       })
@@ -101,6 +152,17 @@ const searchObjectConfigStateSlice = createSlice({
       })
       .addCase(updateUserSearchObject.rejected, (state, _action) => {
         state.putStatus = "REJECTED";
+      })
+      .addCase(deleteUserSearchObject.pending, (state, _action) => {
+        state.deleteStatus = "PENDING";
+      })
+      .addCase(deleteUserSearchObject.fulfilled, (state, _action) => {
+        state.searchObject = state.fetchedSearchObject =
+          initialState.searchObject;
+        state.deleteStatus = "FULFILLED";
+      })
+      .addCase(deleteUserSearchObject.rejected, (state, _action) => {
+        state.deleteStatus = "REJECTED";
       });
   },
 });

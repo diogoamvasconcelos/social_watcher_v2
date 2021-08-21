@@ -8,8 +8,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
 import styled from "styled-components";
-import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { useHistory } from "react-router-dom";
+import { KEYWORDS_NEW_PATH } from "../../../shared/data/paths";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -44,18 +44,7 @@ export const KeywordsPage: React.FC = () => {
   }, []);
 
   const handleNewSearchObjectClicked = () => {
-    const usedIndices = searchObjects.map((searchObject) => searchObject.index);
-    let availableIndex = newPositiveInteger(0);
-    while (usedIndices.includes(availableIndex)) {
-      ++availableIndex;
-    }
-
-    if (user && availableIndex >= user.subscription.nofSearchObjects) {
-      // TODO: handle this very off case
-      return;
-    }
-
-    history.push(`${history.location.pathname}/${availableIndex}`);
+    history.push(KEYWORDS_NEW_PATH);
   };
 
   return (

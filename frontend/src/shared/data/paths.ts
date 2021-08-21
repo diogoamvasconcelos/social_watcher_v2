@@ -6,4 +6,6 @@ export const USER_PATH = "/user/account";
 export const GUIDES_PATH = "/user/guides";
 export const DASHBOARD_PATH = "/user/dashboard";
 export const KEYWORDS_PATH = `${DASHBOARD_PATH}/keywords`;
+export const KEYWORDS_NEW_PATH_ARG = "new";
+export const KEYWORDS_NEW_PATH = `${DASHBOARD_PATH}/keywords/${KEYWORDS_NEW_PATH_ARG}`;
 export const SEARCH_PATH = `${DASHBOARD_PATH}/search`;
