@@ -23,7 +23,10 @@ import {
   SearchObjectDomain,
   searchObjectIndexCodec,
 } from "../../domain/models/userItem";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
+import {
+  JsonEncodable,
+  JsonObjectEncodable,
+} from "@diogovasconcelos/lib/models/jsonEncodable";
 import { GetSearchObjectFn } from "../../domain/ports/userStore/getSearchObject";
 
 export const apiGetUser = async ({
@@ -110,6 +113,29 @@ export const parseRequestBodyJSON = (
   }
 
   return bodyEither;
+};
+
+export const buildApiRequestEvent = ({
+  user,
+  body,
+  pathParameters,
+}: {
+  user: User;
+  body?: JsonObjectEncodable;
+  pathParameters?: JsonObjectEncodable;
+}): APIGatewayProxyEvent => {
+  return {
+    requestContext: {
+      authorizer: {
+        claims: {
+          sub: user.id,
+          email: user.email,
+        },
+      },
+    },
+    body: JSON.stringify(body),
+    pathParameters,
+  } as unknown as APIGatewayProxyEvent;
 };
 
 // +++++++++++++++++

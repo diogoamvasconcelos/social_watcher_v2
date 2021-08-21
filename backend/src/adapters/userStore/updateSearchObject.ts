@@ -19,7 +19,7 @@ export const makeUpdateSearchObject = (
     );
 
     if (isLeft(result)) {
-      return left("ERROR");
+      return result;
     }
 
     if (result.right === "CONDITION_CHECK_FAILED") {

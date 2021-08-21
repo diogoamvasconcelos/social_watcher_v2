@@ -1,7 +1,6 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { User } from "../../domain/models/user";
-import { apiGetUser } from "./shared";
+import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { handler } from "./createSearchObject";
 import { makeCreateSearchObject } from "../../adapters/userStore/createSearchObject";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
@@ -53,17 +52,10 @@ const defaultRequestData: SearchObjectUserDataDomain =
   defaultSearchObjectDataDomain;
 
 const buildEvent = (user: User, requestData: SearchObjectUserDataIo) => {
-  return {
-    requestContext: {
-      authorizer: {
-        claims: {
-          sub: user.id,
-          email: user.email,
-        },
-      },
-    },
-    body: JSON.stringify(requestData),
-  };
+  return buildApiRequestEvent({
+    user,
+    body: requestData,
+  });
 };
 
 describe("handlers/api/createSearchObject", () => {
@@ -77,9 +69,7 @@ describe("handlers/api/createSearchObject", () => {
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
     getSearchObjectsForUserMock.mockResolvedValueOnce(right([]));
 
-    const response = fromEither(
-      await handler(event as unknown as APIGatewayProxyEvent)
-    );
+    const response = fromEither(await handler(event));
 
     expect(response.statusCode).toEqual(200);
     expect(createSearchObjectMock).toHaveBeenCalledWith(
@@ -98,9 +88,7 @@ describe("handlers/api/createSearchObject", () => {
       right([defaultSearchObjectDataDomain])
     );
 
-    const response = fromEither(
-      await handler(event as unknown as APIGatewayProxyEvent)
-    );
+    const response = fromEither(await handler(event));
 
     expect(response.statusCode).toEqual(200);
     expect(createSearchObjectMock).toHaveBeenCalledWith(
@@ -125,7 +113,7 @@ describe("handlers/api/createSearchObject", () => {
       right([defaultSearchObjectDataDomain, defaultSearchObjectDataDomain])
     );
 
-    const response = await handler(event as unknown as APIGatewayProxyEvent);
+    const response = await handler(event);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
@@ -144,7 +132,7 @@ describe("handlers/api/createSearchObject", () => {
       right([defaultSearchObjectDataDomain]) // so it should put in index=1
     );
 
-    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
+    fromEither(await handler(event));
 
     expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
@@ -186,7 +174,7 @@ describe("handlers/api/createSearchObject", () => {
 
     getSearchObjectsForUserMock.mockResolvedValueOnce(right([]));
 
-    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
+    fromEither(await handler(event));
 
     expect(createSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),

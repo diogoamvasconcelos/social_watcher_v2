@@ -20,6 +20,8 @@ import {
   DeleteSearchObjectResponse,
 } from "./models/deleteSearchObject";
 import { deleteSearchObjectAndPrune } from "../../domain/controllers/deleteSearchObjectAndPrune";
+import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
+import { makeMoveSearchObject } from "../../adapters/userStore/moveSearchObject";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -32,6 +34,14 @@ export const handler = async (
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
   const getSearchObjectFn = makeGetSearchObject(
+    userStoreClient,
+    config.usersTableName
+  );
+  const getSearchObjectsForUserFn = makeGetSearchObjectsForUser(
+    userStoreClient,
+    config.usersTableName
+  );
+  const moveSearchObjectFn = makeMoveSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -66,6 +76,8 @@ export const handler = async (
 
   const deleteEither = await deleteSearchObjectAndPrune({
     logger,
+    getSearchObjectsForUserFn,
+    moveSearchObjectFn,
     searchObjectKeys: searchObject,
   });
   if (isLeft(deleteEither)) {

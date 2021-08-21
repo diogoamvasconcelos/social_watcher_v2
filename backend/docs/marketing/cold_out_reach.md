@@ -1,7 +1,3 @@
-# camgirls
-
-- https://www.reddit.com/r/CamGirlProblems
-
 # indiehacker guests
 
 - Molly from indiehackers ep214 for agent nest

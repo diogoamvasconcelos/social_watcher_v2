@@ -1,10 +1,8 @@
 import { makeGetSearchObject } from "../../../../../src/adapters/userStore/getSearchObject";
-import { UserItemDomain } from "../../../../../src/domain/models/userItem";
+import { makeCreateSearchObject } from "../../../../../src/adapters/userStore/createSearchObject";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
-import { putItem } from "../../../../../src/lib/dynamoDb";
-import { userItemToDocument } from "../../../../../src/adapters/userStore/client";
 import { defaultSearchObjectDomain } from "../../../../lib/default";
 import { makeUpdateSearchObject } from "../../../../../src/adapters/userStore/updateSearchObject";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
@@ -16,18 +14,8 @@ describe("updateSearchObject", () => {
   const tableName: string = uuid();
 
   const getSearchObjectFn = makeGetSearchObject(client, tableName);
+  const createSearchObjectFn = makeCreateSearchObject(client, tableName);
   const updateSearchObjectFn = makeUpdateSearchObject(client, tableName);
-
-  const directlyPutItemInTable = async (userItem: UserItemDomain) => {
-    return await putItem(
-      client,
-      {
-        TableName: tableName,
-        Item: userItemToDocument(userItem),
-      },
-      logger
-    );
-  };
 
   beforeAll(() => {
     jest.setTimeout(45000);
@@ -39,7 +27,7 @@ describe("updateSearchObject", () => {
 
   it("can update existing searchObject", async () => {
     const initialSearchObject = defaultSearchObjectDomain;
-    await directlyPutItemInTable(initialSearchObject);
+    fromEither(await createSearchObjectFn(logger, initialSearchObject));
 
     const updatedSearchObject = deepmergeSafe(initialSearchObject, {
       lockedStatus: "UNLOCKED",

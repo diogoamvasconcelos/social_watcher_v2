@@ -1,15 +1,13 @@
 import { makeGetSearchObject } from "../../../../../src/adapters/userStore/getSearchObject";
-import { UserItemDomain } from "../../../../../src/domain/models/userItem";
 import { getLogger } from "../../../../../src/lib/logger";
 import { uuid } from "../../../../../src/lib/uuid";
 import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
-import { putItem } from "../../../../../src/lib/dynamoDb";
-import { userItemToDocument } from "../../../../../src/adapters/userStore/client";
 import { defaultSearchObjectDomain } from "../../../../lib/default";
 import { makeCreateSearchObject } from "../../../../../src/adapters/userStore/createSearchObject";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
+import { directlyPutUserItemInTable } from "./shared";
 
 describe("createSearchObject", () => {
   const logger = getLogger();
@@ -17,17 +15,6 @@ describe("createSearchObject", () => {
 
   const getSearchObjectFn = makeGetSearchObject(client, tableName);
   const createSearchObjectFn = makeCreateSearchObject(client, tableName);
-
-  const directlyPutItemInTable = async (userItem: UserItemDomain) => {
-    return await putItem(
-      client,
-      {
-        TableName: tableName,
-        Item: userItemToDocument(userItem),
-      },
-      logger
-    );
-  };
 
   beforeAll(() => {
     jest.setTimeout(45000);
@@ -56,7 +43,10 @@ describe("createSearchObject", () => {
 
   it("can't create searchObject if already exists", async () => {
     const initialSearchObject = defaultSearchObjectDomain;
-    await directlyPutItemInTable(initialSearchObject);
+    await directlyPutUserItemInTable(logger, {
+      tableName,
+      userItem: initialSearchObject,
+    });
 
     const newSearchObject = deepmergeSafe(defaultSearchObjectDomain, {
       id: initialSearchObject.id,

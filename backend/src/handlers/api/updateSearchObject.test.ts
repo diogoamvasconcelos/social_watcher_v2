@@ -1,7 +1,6 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { User } from "../../domain/models/user";
-import { apiGetUser } from "./shared";
+import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { handler } from "./updateSearchObject";
 import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
@@ -12,7 +11,10 @@ import {
 } from "../../domain/models/userItem";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
+import {
+  defaultSearchObjectDataDomain,
+  defaultSearchObjectDomain,
+} from "../../../test/lib/default";
 import { PartialDeep } from "type-fest";
 
 jest.mock("./shared", () => ({
@@ -54,20 +56,11 @@ const defaultRequestData: SearchObjectUserDataDomain =
   defaultSearchObjectDataDomain;
 
 const buildEvent = (user: User, requestData: SearchObjectUserDataIo) => {
-  return {
-    requestContext: {
-      authorizer: {
-        claims: {
-          sub: user.id,
-          email: user.email,
-        },
-      },
-    },
-    body: JSON.stringify(requestData),
-    pathParameters: {
-      index: 0,
-    },
-  };
+  return buildApiRequestEvent({
+    user,
+    body: requestData,
+    pathParameters: { index: 0 },
+  });
 };
 
 describe("handlers/api/updateSearchObject", () => {
@@ -79,13 +72,9 @@ describe("handlers/api/updateSearchObject", () => {
   it("handles happy flow", async () => {
     const event = buildEvent(defaultUser, defaultRequestData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
-    getSearchObjectMock.mockResolvedValueOnce(
-      right(defaultSearchObjectDataDomain)
-    );
+    getSearchObjectMock.mockResolvedValueOnce(right(defaultSearchObjectDomain));
 
-    const response = fromEither(
-      await handler(event as unknown as APIGatewayProxyEvent)
-    );
+    const response = fromEither(await handler(event));
 
     expect(response.statusCode).toEqual(200);
   });
@@ -96,7 +85,7 @@ describe("handlers/api/updateSearchObject", () => {
 
     getSearchObjectMock.mockResolvedValueOnce(right("NOT_FOUND"));
 
-    const response = await handler(event as unknown as APIGatewayProxyEvent);
+    const response = await handler(event);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(404);
@@ -113,11 +102,9 @@ describe("handlers/api/updateSearchObject", () => {
     const event = buildEvent(restrictedUser, defaultRequestData);
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));
-    getSearchObjectMock.mockResolvedValueOnce(
-      right(defaultSearchObjectDataDomain)
-    );
+    getSearchObjectMock.mockResolvedValueOnce(right(defaultSearchObjectDomain));
 
-    const response = await handler(event as unknown as APIGatewayProxyEvent);
+    const response = await handler(event);
     expect(isLeft(response)).toBeTruthy();
     if (isLeft(response)) {
       expect(response.left.statusCode).toEqual(403);
@@ -132,11 +119,9 @@ describe("handlers/api/updateSearchObject", () => {
       lockedStatus: "UNLOCKED",
     } as SearchObjectUserDataIo);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
-    getSearchObjectMock.mockResolvedValueOnce(
-      right(defaultSearchObjectDataDomain)
-    );
+    getSearchObjectMock.mockResolvedValueOnce(right(defaultSearchObjectDomain));
 
-    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
+    fromEither(await handler(event));
 
     expect(updateSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
@@ -179,7 +164,7 @@ describe("handlers/api/updateSearchObject", () => {
     };
     getSearchObjectMock.mockResolvedValueOnce(right(existingSearchObjct));
 
-    fromEither(await handler(event as unknown as APIGatewayProxyEvent));
+    fromEither(await handler(event));
 
     expect(updateSearchObjectMock).toHaveBeenCalledWith(
       expect.anything(),
