@@ -67,6 +67,30 @@ paths:
         credentials: ${main_api_role_arn}
         uri: ${get_search_objects_invoke_arn}
 
+    post:
+      description: Create a new SearchObject of a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSearchObjectRequestBody"
+      responses:
+        200:
+          description: A SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${create_search_object_invoke_arn}
+
     options:
       x-amazon-apigateway-integration:
         type: mock
@@ -128,6 +152,24 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${update_search_object_invoke_arn}
+
+    delete:
+      description: Delete SearchObject of a user
+      responses:
+        200:
+          description: The deleted SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${delete_search_object_invoke_arn}
 
     options:
       x-amazon-apigateway-integration:
@@ -319,11 +361,11 @@ components:
           items:
             $ref: "#/components/schemas/SearchObject"
 
+    # probably not updated, annyoing to keep synched (used by create and update)
     UpdateSearchObjectRequestBody:
       type: object
       required:
         - keyword
-        - searchData
       properties:
         keyword:
           type: string

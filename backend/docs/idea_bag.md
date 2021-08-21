@@ -15,3 +15,4 @@
 - show warning if reports or notifications are selected but not searcher is active
   - in current arch, it won't even produe any reports if keyword is not "active"
 - show when reports are searched (daily and weeky(friday)) to the users
+- add federated user pools (google, fb, etc) to cognito for easy subscriptions

@@ -17,6 +17,7 @@ import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();
   const tableName: string = uuid();
+
   const putSearchResultsFn = makePutSearchResults(client, tableName);
 
   beforeAll(() => {

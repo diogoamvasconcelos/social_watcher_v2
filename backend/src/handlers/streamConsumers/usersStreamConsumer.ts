@@ -23,9 +23,9 @@ import { propagateSearchObjectUpdated } from "../../domain/controllers/propagate
 import { eitherListToDefaultOk } from "../../domain/ports/shared";
 import { propagateUserDataChanged } from "../../domain/controllers/propagateUserDataChanged";
 import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearchObjectsForUser";
-import { PutSearchObjectFn } from "../../domain/ports/userStore/putSearchObject";
+import { UpdateSearchObjectFn } from "../../domain/ports/userStore/updateSearchObject";
 import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 
@@ -53,7 +53,7 @@ export const handler = async (event: DynamoDBStreamEvent) => {
       userStoreClient,
       config.usersTableName
     ),
-    putSearchObjectFn: makePutSearchObject(
+    updateSearchObjectFn: makeUpdateSearchObject(
       userStoreClient,
       config.usersTableName
     ),
@@ -151,7 +151,7 @@ type HandleUserItem<T extends UserItemDomain> = (
     updateKeywordDataFn: UpdateKeywordDataFn;
     getSearchObjectsForKeywordFn: GetSearchObjectsForKeywordFn;
     getSearchObjectsForUserFn: GetSearchObjectsForUserFn;
-    putSearchObjectFn: PutSearchObjectFn;
+    updateSearchObjectFn: UpdateSearchObjectFn;
   },
   recordData: UserItemRecordData<T>
 ) => Promise<Either<"ERROR", "OK">>;

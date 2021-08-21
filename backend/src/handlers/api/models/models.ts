@@ -1,6 +1,15 @@
+import * as t from "io-ts";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { Either } from "fp-ts/lib/Either";
+import {
+  searchObjectDomainCodec,
+  SearchObjectIo,
+} from "../../../domain/models/userItem";
 import { User } from "../../../domain/models/user";
+
+// ++++++++++
+// + SHARED +
+// ++++++++++
 
 export type ApiRequestMetadata = {
   authData: Pick<User, "id" | "email">;
@@ -31,3 +40,16 @@ export type ApiBaseErrorCode =
   | "REQUEST_MALFORMED"
   | "FORBIDDEN"
   | "UNAUTHORIZED";
+
+// +++++++++++++++++
+// + :SearchObject +
+// +++++++++++++++++
+
+export type SearchObjectErrorCode = ApiBaseErrorCode | "NOT_FOUND";
+
+export type SearchObjectRequest = ApiRequestMetadata & {
+  index: SearchObjectIo["index"];
+};
+
+export const searchObjectResponseCodec = searchObjectDomainCodec;
+export type SearchObjectResponse = t.TypeOf<typeof searchObjectResponseCodec>;

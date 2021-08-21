@@ -33,6 +33,7 @@ import {
 import {
   getClient as getApiClient,
   updateSearchObject,
+  createSearchObject,
 } from "../../../src/lib/apiClient/apiClient";
 import { KeywordData } from "../../../src/domain/models/keyword";
 import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
@@ -245,18 +246,43 @@ export const updateUserSubscription = async ({
     .promise();
 };
 
-export const updateKeyword = async ({
+export const createUserSearchObject = async ({
+  token,
+  keyword,
+  twitterStatus,
+}: {
+  token: string;
+  keyword: string;
+  twitterStatus: SocialMediaSearchData["enabledStatus"];
+}) => {
+  return fromEither(
+    await createSearchObject(
+      {
+        client: apiClient,
+        token,
+      },
+      {
+        userData: {
+          keyword: newLowerCase(keyword),
+          searchData: {
+            twitter: { enabledStatus: twitterStatus },
+          },
+        },
+      }
+    )
+  );
+};
+
+export const updateUserSearchObject = async ({
   token,
   keyword,
   index,
   twitterStatus,
-  redditStatus,
 }: {
   token: string;
   keyword: string;
   index: number;
   twitterStatus: SocialMediaSearchData["enabledStatus"];
-  redditStatus?: SocialMediaSearchData["enabledStatus"];
 }) => {
   return fromEither(
     await updateSearchObject(
@@ -270,12 +296,7 @@ export const updateKeyword = async ({
           keyword: newLowerCase(keyword),
           searchData: {
             twitter: { enabledStatus: twitterStatus },
-            reddit: {
-              enabledStatus: redditStatus ?? "DISABLED",
-              over18: false,
-            },
           },
-          notificationData: {},
         },
       }
     )

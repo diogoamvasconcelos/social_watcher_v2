@@ -2,7 +2,7 @@ import {
   JsonEncodable,
   JsonObjectEncodable,
 } from "@diogovasconcelos/lib/models/jsonEncodable";
-import { DocumentClient, Put } from "aws-sdk/clients/dynamodb";
+import { DocumentClient, TransactWriteItem } from "aws-sdk/clients/dynamodb";
 import { Either, right, left, isLeft } from "fp-ts/lib/Either";
 import { NonEmptyArray } from "fp-ts/lib/NonEmptyArray";
 import _ from "lodash";
@@ -37,19 +37,15 @@ const convertDateFieldsToISO = (
   return _.mapValues(obj, convertFields);
 };
 
-export type PutParams = Put;
-
-export const transactPutItems = async (
+export const transactWriteItems = async (
   client: Client,
-  paramsList: NonEmptyArray<PutParams>,
+  paramsList: NonEmptyArray<TransactWriteItem>,
   logger: Logger
 ): Promise<Either<"ERROR", "OK" | "CONDITION_CHECK_FAILED">> => {
   try {
-    const putParamsList: { ["Put"]: Put }[] = paramsList.map((params: Put) => ({
-      Put: params,
-    }));
-
-    const params = { TransactItems: putParamsList };
+    const params: DocumentClient.TransactWriteItemsInput = {
+      TransactItems: paramsList,
+    };
 
     await client.transactWrite(params).promise();
 
@@ -184,10 +180,10 @@ export const deleteItem = async (
   client: Client,
   params: DocumentClient.DeleteItemInput,
   logger: Logger
-) => {
+): Promise<Either<"ERROR", "OK">> => {
   try {
-    const result = await client.delete(params).promise();
-    return right(result);
+    await client.delete(params).promise();
+    return right("OK");
   } catch (error) {
     logger.error("Call to DynamoDB delete exited with error", { error });
     return left("ERROR");

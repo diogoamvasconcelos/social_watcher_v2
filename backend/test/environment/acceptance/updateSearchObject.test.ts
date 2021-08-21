@@ -8,24 +8,40 @@ import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
+  PositiveInteger,
 } from "@diogovasconcelos/lib/iots";
 import { Awaited } from "../../../src/lib/types";
 import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
-import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import {
+  createTestUser,
+  createUserSearchObject,
+  deleteKeyword,
+  deleteUser,
+  getIdToken,
+  updateUserSubscription,
+} from "./steps";
 import { SearchObjectUserDataIo } from "../../../src/domain/models/userItem";
+import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let userToken: string;
+  let searchObjectIndex: PositiveInteger;
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
+    });
+
+    userToken = await getIdToken({
+      username: testUser.email,
+      password: testUser.password,
     });
   });
 
@@ -35,37 +51,37 @@ describe("update searchObject e2e test", () => {
   });
 
   it("updateSearchObject works", async () => {
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
+    const initialState = await createUserSearchObject({
+      token: userToken,
+      keyword,
+      twitterStatus: "DISABLED",
     });
+    searchObjectIndex = initialState.index;
+    expect(initialState.searchData.twitter.enabledStatus).toEqual("DISABLED");
 
-    const index = newPositiveInteger(0);
     const userData: SearchObjectUserDataIo = {
       keyword,
       searchData: {
-        twitter: { enabledStatus: "ENABLED" },
+        twitter: {
+          enabledStatus: "ENABLED",
+        },
       },
-      notificationData: {},
     };
 
     const expectedResponse = expect.objectContaining({
-      index,
-      ...{
-        ...userData,
-        searchData: expect.objectContaining(userData.searchData),
-        notificationData: expect.objectContaining(userData.notificationData),
-        reportData: expect.any(Object),
-      },
+      index: searchObjectIndex,
+      ...userData,
+      searchData: expect.objectContaining(userData.searchData),
+      reportData: expect.any(Object),
     });
 
     const response = fromEither(
       await updateSearchObject(
         {
           client: apiClient,
-          token,
+          token: userToken,
         },
-        { index, userData }
+        { index: searchObjectIndex, userData }
       )
     );
     expect(response).toEqual(expectedResponse);
@@ -73,7 +89,7 @@ describe("update searchObject e2e test", () => {
     const getSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
-        token,
+        token: userToken,
       })
     );
     expect(getSearchObjectsResponse).toEqual({
@@ -82,22 +98,15 @@ describe("update searchObject e2e test", () => {
   });
 
   it("can update discord notification config", async () => {
-    const token = await getIdToken({
-      username: testUser.email,
-      password: testUser.password,
-    });
-
-    const index = newPositiveInteger(0);
-
     const initialGetSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
-        token,
+        token: userToken,
       })
     );
     expect(
-      initialGetSearchObjectsResponse.items[0].notificationData.discord
-        ?.enabledStatus
+      initialGetSearchObjectsResponse.items[searchObjectIndex].notificationData
+        .discord.enabledStatus
     ).toEqual("DISABLED");
 
     const discordNotificationConfig: DiscordNotificationConfig = {
@@ -110,10 +119,10 @@ describe("update searchObject e2e test", () => {
       await updateSearchObject(
         {
           client: apiClient,
-          token,
+          token: userToken,
         },
         {
-          index,
+          index: searchObjectIndex,
           userData: {
             ...initialGetSearchObjectsResponse.items[0],
             notificationData: {
@@ -125,7 +134,7 @@ describe("update searchObject e2e test", () => {
     );
     expect(response).toEqual(
       expect.objectContaining({
-        index,
+        index: searchObjectIndex,
         notificationData: expect.objectContaining({
           discord: discordNotificationConfig,
         }),
@@ -135,18 +144,41 @@ describe("update searchObject e2e test", () => {
     const getSearchObjectsResponse = fromEither(
       await getSearchObjects({
         client: apiClient,
-        token,
+        token: userToken,
       })
     );
     expect(getSearchObjectsResponse).toEqual({
       items: [
         expect.objectContaining({
-          index,
+          index: searchObjectIndex,
           notificationData: expect.objectContaining({
             discord: discordNotificationConfig,
           }),
         }),
       ],
     });
+  });
+
+  it("updateSearchObject can't update non-exiting searchObjects", async () => {
+    // increase users's nofSearchObjects
+    await updateUserSubscription({
+      userId: testUser.id,
+      updatedData: { nofSearchObjects: newPositiveInteger(2) },
+    });
+
+    const responseEither = await updateSearchObject(
+      {
+        client: apiClient,
+        token: userToken,
+      },
+      { index: newPositiveInteger(1), userData: { keyword } }
+    );
+
+    expect(
+      isLeft(responseEither) && typeof responseEither.left != "string"
+    ).toBeTruthy();
+    if (isLeft(responseEither) && typeof responseEither.left != "string") {
+      expect(responseEither.left.status).toEqual(404);
+    }
   });
 });

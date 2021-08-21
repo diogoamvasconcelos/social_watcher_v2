@@ -5,15 +5,29 @@ import { isString } from "lodash";
 import { User } from "../../domain/models/user";
 import { GetUserFn } from "../../domain/ports/userStore/getUser";
 import { Logger } from "../../lib/logger";
-import { ApiErrorResponse, ApiRequestMetadata } from "./models/models";
+import {
+  ApiErrorResponse,
+  ApiRequestMetadata,
+  SearchObjectErrorCode,
+  SearchObjectRequest,
+} from "./models/models";
 import {
   makeForbiddenResponse,
   makeInternalErrorResponse,
+  makeNotFoundResponse,
   makeRequestMalformedResponse,
 } from "./responses";
 import { parseSafe } from "@diogovasconcelos/lib/json";
 import { decode } from "@diogovasconcelos/lib/iots";
-import { SearchObjectIo } from "../../domain/models/userItem";
+import {
+  SearchObjectDomain,
+  searchObjectIndexCodec,
+} from "../../domain/models/userItem";
+import {
+  JsonEncodable,
+  JsonObjectEncodable,
+} from "@diogovasconcelos/lib/models/jsonEncodable";
+import { GetSearchObjectFn } from "../../domain/ports/userStore/getSearchObject";
 
 export const apiGetUser = async ({
   logger,
@@ -38,30 +52,9 @@ export const apiGetUser = async ({
   return right(userEither.right);
 };
 
-export const validateSearchObjectIndex = ({
-  logger,
-  user,
-  request,
-}: {
-  logger: Logger;
-  user: User;
-  request: ApiRequestMetadata & { index: SearchObjectIo["index"] };
-}): Either<ApiErrorResponse<"FORBIDDEN">, "OK"> => {
-  if (request.index >= user.subscription.nofSearchObjects) {
-    logger.error(
-      `Trying to access a search object with index (${request.index}) higher than user's nofSearchObjects (${user.subscription.nofSearchObjects})`
-    );
-    return left(
-      makeForbiddenResponse("Provided Search Object index is forbidden.")
-    );
-  }
-
-  return right("OK");
-};
-
 export const toApigwRequestMetadata = (
   event: APIGatewayProxyEvent
-): Either<ApiErrorResponse, ApiRequestMetadata> => {
+): Either<ApiErrorResponse<"INTERNAL_ERROR">, ApiRequestMetadata> => {
   const id: string | undefined = event.requestContext.authorizer?.claims?.sub;
   const email: string | undefined =
     event.requestContext.authorizer?.claims?.email;
@@ -78,7 +71,10 @@ export const toRequestWithUserData = <U>(
   logger: Logger,
   event: APIGatewayProxyEvent,
   userDataDecoder: t.Decoder<unknown, U>
-): Either<ApiErrorResponse, U & ApiRequestMetadata> => {
+): Either<
+  ApiErrorResponse<"INTERNAL_ERROR" | "REQUEST_MALFORMED">,
+  U & ApiRequestMetadata
+> => {
   const metadataEither = toApigwRequestMetadata(event);
   if (isLeft(metadataEither)) {
     return metadataEither;
@@ -102,4 +98,114 @@ export const toRequestWithUserData = <U>(
     ...metadataEither.right,
     ...userDataEither.right,
   });
+};
+
+export const parseRequestBodyJSON = (
+  logger: Logger,
+  jsonBody: string | null
+): Either<ApiErrorResponse<"REQUEST_MALFORMED">, JsonEncodable> => {
+  const bodyEither = parseSafe(jsonBody);
+  if (isLeft(bodyEither)) {
+    logger.error("Failed to parse body to json.", { error: bodyEither.left });
+    return left(
+      makeRequestMalformedResponse("Request body is not a json file.")
+    );
+  }
+
+  return bodyEither;
+};
+
+export const buildApiRequestEvent = ({
+  user,
+  body,
+  pathParameters,
+}: {
+  user: User;
+  body?: JsonObjectEncodable;
+  pathParameters?: JsonObjectEncodable;
+}): APIGatewayProxyEvent => {
+  return {
+    requestContext: {
+      authorizer: {
+        claims: {
+          sub: user.id,
+          email: user.email,
+        },
+      },
+    },
+    body: JSON.stringify(body),
+    pathParameters,
+  } as unknown as APIGatewayProxyEvent;
+};
+
+// +++++++++++++++++
+// + :SearchObject +
+// +++++++++++++++++
+
+export const toSearchObjectRequest = (
+  logger: Logger,
+  event: APIGatewayProxyEvent
+): Either<ApiErrorResponse, SearchObjectRequest> => {
+  const metadataEither = toApigwRequestMetadata(event);
+  if (isLeft(metadataEither)) {
+    return metadataEither;
+  }
+
+  const indexEither = decode(
+    searchObjectIndexCodec,
+    event.pathParameters?.index
+  );
+  if (isLeft(indexEither)) {
+    logger.error("Failed to decode path paramters.", {
+      error: indexEither.left,
+    });
+    return left(
+      makeRequestMalformedResponse("Request pathParameters are invalid.")
+    );
+  }
+
+  return right({ ...metadataEither.right, index: indexEither.right });
+};
+
+export const getExistingSearchObject = async ({
+  logger,
+  getSearchObjectFn,
+  user,
+  request,
+}: {
+  logger: Logger;
+  getSearchObjectFn: GetSearchObjectFn;
+  user: User;
+  request: SearchObjectRequest;
+}): Promise<
+  Either<ApiErrorResponse<SearchObjectErrorCode>, SearchObjectDomain>
+> => {
+  if (request.index >= user.subscription.nofSearchObjects) {
+    logger.error(
+      `Trying to access a search object with index (${request.index}) higher than user's nofSearchObjects (${user.subscription.nofSearchObjects})`
+    );
+    return left(
+      makeForbiddenResponse("Provided Search Object index is forbidden.")
+    );
+  }
+
+  const existingSearchObjectEither = await getSearchObjectFn(
+    logger,
+    user.id,
+    request.index
+  );
+  if (isLeft(existingSearchObjectEither)) {
+    return left(
+      makeInternalErrorResponse("Failed to get existing SearchObject.")
+    );
+  }
+  if (existingSearchObjectEither.right === "NOT_FOUND") {
+    return left(
+      makeNotFoundResponse(
+        `SearchObject with index:${request.index} does not exist`
+      )
+    );
+  }
+
+  return right(existingSearchObjectEither.right);
 };

@@ -2,22 +2,22 @@ import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { Logger } from "../../lib/logger";
 import { UserData } from "../models/userItem";
-import { eitherListToDefaultOk } from "../ports/shared";
+import { DefaultOkReturn, eitherListToDefaultOk } from "../ports/shared";
 import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
-import { PutSearchObjectFn } from "../ports/userStore/putSearchObject";
+import { UpdateSearchObjectFn } from "../ports/userStore/updateSearchObject";
 
 export const propagateUserDataChanged = async (
   {
     logger,
     getSearchObjectsForUserFn,
-    putSearchObjectFn,
+    updateSearchObjectFn,
   }: {
     logger: Logger;
     getSearchObjectsForUserFn: GetSearchObjectsForUserFn;
-    putSearchObjectFn: PutSearchObjectFn;
+    updateSearchObjectFn: UpdateSearchObjectFn;
   },
   userData: UserData
-) => {
+): DefaultOkReturn => {
   // apply nofSearchObjects
   const searchObjectsEither = await getSearchObjectsForUserFn(
     logger,
@@ -41,7 +41,7 @@ export const propagateUserDataChanged = async (
         i >= userData.subscription.nofSearchObjects
       ) {
         logger.info(`Locking searchObject with index=${i}`);
-        return await putSearchObjectFn(logger, {
+        return await updateSearchObjectFn(logger, {
           ...searchObject,
           lockedStatus: "LOCKED",
         });
@@ -50,7 +50,7 @@ export const propagateUserDataChanged = async (
         i < userData.subscription.nofSearchObjects
       ) {
         logger.info(`Unlocking searchObject with index=${i}`);
-        return await putSearchObjectFn(logger, {
+        return await updateSearchObjectFn(logger, {
           ...searchObject,
           lockedStatus: "UNLOCKED",
         });

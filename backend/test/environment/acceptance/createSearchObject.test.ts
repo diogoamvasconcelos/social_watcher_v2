@@ -1,7 +1,7 @@
 import {
   createSearchObject,
   getClient as getApiClient,
-  getSearchObject,
+  getSearchObjects,
 } from "../../../src/lib/apiClient/apiClient";
 import {
   fromEither,
@@ -13,12 +13,11 @@ import { uuid } from "../../../src/lib/uuid";
 import { getEnvTestConfig } from "../../lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 import { SearchObjectUserDataIo } from "../../../src/domain/models/userItem";
-import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
-describe("get searchObject e2e test", () => {
+describe("create searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
   let userToken: string;
   const keyword = newLowerCase(uuid());
@@ -40,39 +39,21 @@ describe("get searchObject e2e test", () => {
     await deleteKeyword(keyword);
   });
 
-  it("getSearchObject returns 404", async () => {
-    const index = newPositiveInteger(0);
-    const responseEither = await getSearchObject(
-      {
-        client: apiClient,
-        token: userToken,
-      },
-      { index }
-    );
-
-    expect(
-      isLeft(responseEither) && typeof responseEither.left != "string"
-    ).toBeTruthy();
-    if (isLeft(responseEither) && typeof responseEither.left != "string") {
-      expect(responseEither.left.status).toEqual(404);
-    }
-  });
-
-  it("getSearchObject returns 200 on existing", async () => {
-    // similar to a updateSearchObject endpoint test
-    const index = newPositiveInteger(0);
+  it("createSearchObject works", async () => {
     const userData: SearchObjectUserDataIo = {
       keyword,
+      searchData: {
+        twitter: { enabledStatus: "ENABLED" },
+      },
+      notificationData: {},
     };
 
     const expectedResponse = expect.objectContaining({
-      index,
-      ...{
-        ...userData,
-        searchData: expect.any(Object),
-        notificationData: expect.any(Object),
-        reportData: expect.any(Object),
-      },
+      index: newPositiveInteger(0),
+      ...userData,
+      searchData: expect.objectContaining(userData.searchData),
+      notificationData: expect.objectContaining(userData.notificationData),
+      reportData: expect.any(Object),
     });
 
     const response = fromEither(
@@ -86,15 +67,14 @@ describe("get searchObject e2e test", () => {
     );
     expect(response).toEqual(expectedResponse);
 
-    const getSearchObjectResponse = fromEither(
-      await getSearchObject(
-        {
-          client: apiClient,
-          token: userToken,
-        },
-        { index }
-      )
+    const getSearchObjectsResponse = fromEither(
+      await getSearchObjects({
+        client: apiClient,
+        token: userToken,
+      })
     );
-    expect(getSearchObjectResponse).toEqual(expectedResponse);
+    expect(getSearchObjectsResponse).toEqual({
+      items: [expectedResponse],
+    });
   });
 });

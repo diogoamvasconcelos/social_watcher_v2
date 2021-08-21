@@ -11,15 +11,15 @@ import {
 } from "./responses";
 import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
 import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makePutSearchObject } from "../../adapters/userStore/putSearchObject";
+import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
 import {
   apiGetUser,
-  toApigwRequestMetadata,
-  validateSearchObjectIndex,
+  getExistingSearchObject,
+  parseRequestBodyJSON,
+  toSearchObjectRequest,
 } from "./shared";
 import { User } from "../../domain/models/user";
 import {
-  searchObjectIndexCodec,
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
 } from "../../domain/models/userItem";
@@ -30,7 +30,6 @@ import {
 } from "./models/updateSearchObject";
 import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
 import { decode } from "@diogovasconcelos/lib/iots";
-import { parseSafe } from "@diogovasconcelos/lib/json";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -42,7 +41,7 @@ export const handler = async (
 
   const userStoreClient = getUsersStoreClient();
   const getUserFn = makeGetUser(userStoreClient, config.usersTableName);
-  const putSearchObjectFn = makePutSearchObject(
+  const updateSearchObjectFn = makeUpdateSearchObject(
     userStoreClient,
     config.usersTableName
   );
@@ -51,7 +50,7 @@ export const handler = async (
     config.usersTableName
   );
 
-  const requestEither = toUpdateKeywordRequest(logger, event);
+  const requestEither = toUpdateSearchObjectRequest(logger, event);
   if (isLeft(requestEither)) {
     return requestEither;
   }
@@ -67,33 +66,19 @@ export const handler = async (
     return getUserEither;
   }
   const user: User = getUserEither.right;
-  const validateIndexEither = validateSearchObjectIndex({
+
+  const searchObjectEither = await getExistingSearchObject({
     logger,
+    getSearchObjectFn,
     user,
     request,
   });
-  if (isLeft(validateIndexEither)) {
-    return validateIndexEither;
+  if (isLeft(searchObjectEither)) {
+    return searchObjectEither;
   }
 
-  const currentSearchObjectEither = await getSearchObjectFn(
-    logger,
-    user.id,
-    request.index
-  );
-  if (isLeft(currentSearchObjectEither)) {
-    return left(
-      makeInternalErrorResponse("Failed to get current SearchObject.")
-    );
-  }
-
-  const currentSearchObject =
-    currentSearchObjectEither.right !== "NOT_FOUND"
-      ? currentSearchObjectEither.right
-      : undefined;
-
-  const putResultEither = await putSearchObjectFn(logger, {
-    ...searchObjectUserDataIoToDomain(request.data, currentSearchObject),
+  const putResultEither = await updateSearchObjectFn(logger, {
+    ...searchObjectUserDataIoToDomain(request.data, searchObjectEither.right),
     type: "SEARCH_OBJECT",
     id: user.id,
     index: request.index,
@@ -108,45 +93,31 @@ export const handler = async (
 
 export const lambdaHandler = apigwMiddlewareStack(handler);
 
-const toUpdateKeywordRequest = (
+const toUpdateSearchObjectRequest = (
   logger: Logger,
   event: APIGatewayProxyEvent
 ): Either<ApiErrorResponse, UpdateSearchObjectRequest> => {
-  const metadataEither = toApigwRequestMetadata(event);
-  if (isLeft(metadataEither)) {
-    return metadataEither;
+  const searchObjectRequestEither = toSearchObjectRequest(logger, event);
+  if (isLeft(searchObjectRequestEither)) {
+    return searchObjectRequestEither;
   }
 
-  const bodyEither = parseSafe(event.body);
+  const bodyEither = parseRequestBodyJSON(logger, event.body);
   if (isLeft(bodyEither)) {
-    logger.error("Failed to parse body to json.", { error: bodyEither.left });
-    return left(
-      makeRequestMalformedResponse("Request body is not a json file.")
-    );
+    return bodyEither;
   }
   const body = bodyEither.right;
+
   const dataEither = decode(searchObjectUserDataIoCodec, body);
   if (isLeft(dataEither)) {
-    logger.error("Failed to decode body.", { error: dataEither.left });
+    logger.error("Failed to decode data's property of body.", {
+      error: dataEither.left,
+    });
     return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
-  const indexEither = decode(
-    searchObjectIndexCodec,
-    event.pathParameters?.index
-  );
-  if (isLeft(indexEither)) {
-    logger.error("Failed to decode path paramters.", {
-      error: indexEither.left,
-    });
-    return left(
-      makeRequestMalformedResponse("Request pathParameters are invalid.")
-    );
-  }
-
   return right({
-    ...metadataEither.right,
+    ...searchObjectRequestEither.right,
     data: dataEither.right,
-    index: indexEither.right,
   });
 };

@@ -4,10 +4,10 @@ import { uuid } from "../../../src/lib/uuid";
 import {
   checkKeyword,
   createTestUser,
+  createUserSearchObject,
   deleteKeyword,
   deleteUser,
   getIdToken,
-  updateKeyword,
   updateUserSubscription,
 } from "./steps";
 
@@ -53,16 +53,14 @@ describe("changes to user subscription", () => {
     });
 
     // user adds keywords
-    await updateKeyword({
+    await createUserSearchObject({
       token: userToken,
       keyword: firstKeyword,
-      index: 0,
       twitterStatus: "ENABLED",
     });
-    await updateKeyword({
+    await createUserSearchObject({
       token: userToken,
       keyword: secondKeyword,
-      index: 1,
       twitterStatus: "ENABLED",
     });
 
