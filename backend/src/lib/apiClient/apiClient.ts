@@ -98,6 +98,14 @@ export const getSearchObjects = createClientMethod(
   getSearchObjectsResponseCodec
 );
 
+export const getDefaultSearchObject = createClientMethod(
+  {
+    method: "get",
+    url: "user/searchObject/default",
+  },
+  getSearchObjectResponseCodec
+);
+
 // special case (with extra args), don't use the helper function yet (can be done I guess)
 export const getSearchObject = async (
   deps: ApiClientDeps,

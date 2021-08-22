@@ -107,6 +107,41 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
+  user/searchObject/default:
+    get:
+      description: Get a default SearchObject
+      responses:
+        200:
+          description: A SearchObject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchObject"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${get_default_search_object_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /user/searchObject/{index}:
     parameters:
       - $ref: "#/components/parameters/searchObjectIndex"
