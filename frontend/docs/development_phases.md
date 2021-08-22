@@ -56,7 +56,5 @@
 # Misc TODO
 
 - handle unconfirmed user
-- only allow creation of one searchObject/keyword to keep track of index
-  - currently you can change index 0 and 9 (skipping in btween) and UI can't handle this if you reduce the nofSearchObject from 10 to 5 for example
 - goto stripe billing page, add loading widget when waiting for the portal creation
   - click, wait widget, navigate

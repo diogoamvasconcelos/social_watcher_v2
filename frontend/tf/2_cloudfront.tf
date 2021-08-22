@@ -20,7 +20,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled = true
 
-  default_root_object = "index.html"
+  default_root_object = local.index_document
 
   default_cache_behavior {
     allowed_methods  = ["HEAD", "GET", "OPTIONS"]
@@ -67,6 +67,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     geo_restriction {
       restriction_type = "none"
     }
+  }
+
+  custom_error_response {
+    # check docs/decisions/react_router_html_problem.md to know more
+    error_code         = 403 #Forbidden
+    response_code      = 200
+    response_page_path = "/${local.index_document}"
   }
 
   viewer_certificate {
