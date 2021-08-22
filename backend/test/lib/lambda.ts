@@ -1,5 +1,4 @@
 import util from "util";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { PromiseResult } from "aws-sdk/lib/request";
 import { right, left } from "fp-ts/lib/Either";
 import Lambda from "aws-sdk/clients/lambda";
@@ -7,10 +6,7 @@ import { AWSError } from "aws-sdk/lib/error";
 
 const lambdaClient = new Lambda();
 
-export const invokeLambda = async (
-  functionName: string,
-  payload: JsonEncodable
-) => {
+export const invokeLambda = async (functionName: string, payload: Object) => {
   const params = {
     FunctionName: functionName,
     Payload: JSON.stringify(payload),

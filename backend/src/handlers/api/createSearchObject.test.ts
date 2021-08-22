@@ -10,14 +10,19 @@ import {
 } from "../../domain/models/userItem";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
+import {
+  defaultSearchObjectDataDomain,
+  defaultSearchObjectDomain,
+} from "../../../test/lib/default";
 
+// mock: apiGetUser
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
   apiGetUser: jest.fn(),
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
+// mock: createSearchObject
 jest.mock("../../adapters/userStore/createSearchObject", () => ({
   ...jest.requireActual("../../adapters/userStore/createSearchObject"),
   makeCreateSearchObject: jest.fn(),
@@ -27,6 +32,7 @@ const makeCreateSearchObjectMock =
 const createSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
 makeCreateSearchObjectMock.mockReturnValue(createSearchObjectMock);
 
+// mock: getSearchObjectsForUser
 jest.mock("../../adapters/userStore/getSearchObjectsForUser", () => ({
   ...jest.requireActual("../../adapters/userStore/getSearchObjectsForUser"),
   makeGetSearchObjectsForUser: jest.fn(),
@@ -85,7 +91,7 @@ describe("handlers/api/createSearchObject", () => {
     const event = buildEvent(defaultUser, defaultRequestData);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
     getSearchObjectsForUserMock.mockResolvedValueOnce(
-      right([defaultSearchObjectDataDomain])
+      right([defaultSearchObjectDomain])
     );
 
     const response = fromEither(await handler(event));
@@ -110,7 +116,7 @@ describe("handlers/api/createSearchObject", () => {
 
     apiGetUserdMock.mockResolvedValueOnce(right(restrictedUser));
     getSearchObjectsForUserMock.mockResolvedValueOnce(
-      right([defaultSearchObjectDataDomain, defaultSearchObjectDataDomain])
+      right([defaultSearchObjectDomain, defaultSearchObjectDomain])
     );
 
     const response = await handler(event);
@@ -129,7 +135,7 @@ describe("handlers/api/createSearchObject", () => {
     } as SearchObjectUserDataIo);
     apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
     getSearchObjectsForUserMock.mockResolvedValueOnce(
-      right([defaultSearchObjectDataDomain]) // so it should put in index=1
+      right([defaultSearchObjectDomain]) // so it should put in index=1
     );
 
     fromEither(await handler(event));

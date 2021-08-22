@@ -1,4 +1,8 @@
-import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import {
+  newEmailFromString,
+  newLowerCase,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib/iots";
 import { uuid } from "../../src/lib/uuid";
 import {
   SearchObjectDomain,
@@ -36,18 +40,19 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
       },
     },
     slack: {
-      enabledStatus: "ENABLED",
-      channel: "slack-channel",
+      enabledStatus: "DISABLED",
+      channel: "",
       bot: {
         credentials: {
-          token: "slack-bot-token",
+          token: "",
         },
       },
     },
   },
   reportData: {
     email: {
-      status: "DISABLED",
+      status: "DAILY",
+      addresses: [newEmailFromString("default@email.com")],
     },
   },
 };

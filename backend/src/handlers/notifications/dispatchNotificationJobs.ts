@@ -27,7 +27,7 @@ import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 const config = getConfig();
 const logger = getLogger();
 
-const handler = async (event: SQSEvent) => {
+export const handler = async (event: SQSEvent) => {
   const userStoreClient = getUserStoreClient();
   const notificationJobsQueueClient = getNotificationJobsQueueClient();
   const getSearchObjectsForKeywordFn = makeGetSearchObjectsForKeyword(
@@ -107,6 +107,9 @@ const dispatchNotificationJobs: DispatchJobs = async (
     if (job.config.enabledStatus !== "ENABLED") {
       continue;
     }
+    if (!socialMediaAllowed(searchResult, searchObject)) {
+      continue;
+    }
 
     jobs.push(job);
   }
@@ -116,4 +119,38 @@ const dispatchNotificationJobs: DispatchJobs = async (
   }
 
   return await queueNotificationJobsFn(logger, notificationMedium, jobs);
+};
+
+const socialMediaAllowed = (
+  searchResult: SearchResult,
+  searchObject: SearchObjectDomain
+): boolean => {
+  if (
+    searchObject.searchData[searchResult.socialMedia].enabledStatus !==
+    "ENABLED"
+  ) {
+    return false;
+  }
+
+  switch (searchResult.socialMedia) {
+    case "twitter":
+      break;
+    case "reddit": {
+      if (
+        searchResult.data.over_18 &&
+        !searchObject.searchData[searchResult.socialMedia].over18
+      ) {
+        return false;
+      }
+      break;
+    }
+    case "hackernews":
+      break;
+    case "instagram":
+      break;
+    case "youtube":
+      break;
+  }
+
+  return true;
 };

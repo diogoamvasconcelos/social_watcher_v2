@@ -12,8 +12,9 @@ import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "../../src/lib/uuid";
+import { SQSEvent } from "aws-lambda";
 
-export const buildSQSEvent = (items: JsonEncodable[]): JsonEncodable => {
+export const buildSQSEvent = (items: JsonEncodable[]): SQSEvent => {
   return {
     Records: items.map((item) => ({
       body: JSON.stringify(item),
