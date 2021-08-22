@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ConfigWidgetProps } from "../SearchObjectConfigPage";
 import Text from "antd/lib/typography/Text";
 import { useAppDispatch } from "../../../../shared/store";
@@ -27,13 +27,15 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
 
   const handleKeywordChanged = (val: string) => {
     dispatch(updateKeyword(newLowerCase(val)));
+  };
 
-    if (val.length > 0) {
+  useEffect(() => {
+    if (searchObject.keyword.length > 0) {
       setStepState({ status: "finish", errorMessage: undefined });
     } else {
       setStepState({ status: "error", errorMessage: "keyword not valid" });
     }
-  };
+  }, [searchObject.keyword]);
 
   return (
     <MainContainer>

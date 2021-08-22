@@ -15,6 +15,7 @@ import {
   getSearchObject,
   createSearchObject,
   deleteSearchObject,
+  getDefaultSearchObject,
 } from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
@@ -78,6 +79,13 @@ export const apiDeleteSearchObject = async (index: SearchObjectIo["index"]) => {
     },
     { index }
   );
+};
+
+export const apiGetDefaultSearchObject = async () => {
+  return await getDefaultSearchObject({
+    client: apiClient,
+    token: getUserIdToken() ?? "",
+  });
 };
 
 export const apiCreatePaymentsPortal = async (

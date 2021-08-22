@@ -7,6 +7,7 @@ import {
   apiDeleteSearchObject,
   apiGetSearchObject,
   apiUpdateSearchObject,
+  apiGetDefaultSearchObject,
 } from "../../../shared/lib/apiClient";
 import { newLowerCase } from "@diogovasconcelos/lib";
 
@@ -63,31 +64,38 @@ export const deleteUserSearchObject = createAsyncThunk(
   }
 );
 
+export const getDefaultSearchObject = createAsyncThunk(
+  "get:defaultSearchObject",
+  async (_, { rejectWithValue }) => {
+    const res = await apiGetDefaultSearchObject();
+    if (isLeft(res)) {
+      return rejectWithValue(res.left);
+    }
+    return res.right;
+  }
+);
+
 export type SearchObjectConfigState = {
   searchObject: SearchObjectDomain | null;
   fetchedSearchObject: SearchObjectDomain | null;
   getStatus: ActionStatus;
-  putStatus: ActionStatus;
-  deleteStatus: ActionStatus;
+  writeStatus: ActionStatus;
 };
 
 const initialState: SearchObjectConfigState = {
   searchObject: null,
   fetchedSearchObject: null,
   getStatus: "INITAL",
-  putStatus: "INITAL",
-  deleteStatus: "INITAL",
+  writeStatus: "INITAL",
 };
-
-// TODO: fix this shit
-const newSearchObject: SearchObjectDomain = {
-  keyword: newLowerCase(""),
-} as SearchObjectDomain;
 
 const searchObjectConfigStateSlice = createSlice({
   name: "searchObjectConfigState",
   initialState: initialState,
   reducers: {
+    resetConfigState() {
+      return initialState;
+    },
     updateKeyword(state, action: PayloadAction<SearchObjectDomain["keyword"]>) {
       if (state.searchObject) {
         state.searchObject.keyword = action.payload;
@@ -117,9 +125,6 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject.reportData = action.payload;
       }
     },
-    resetSearchObject(state) {
-      state.searchObject = newSearchObject;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,36 +138,49 @@ const searchObjectConfigStateSlice = createSlice({
       .addCase(getUserSearchObject.rejected, (state, _action) => {
         state.getStatus = "REJECTED";
       })
+      .addCase(getDefaultSearchObject.pending, (state, _action) => {
+        state.getStatus = "PENDING";
+      })
+      .addCase(getDefaultSearchObject.fulfilled, (state, action) => {
+        state.searchObject = state.fetchedSearchObject = {
+          ...action.payload,
+          keyword: newLowerCase(""), // clear the keyword
+        };
+        state.getStatus = "FULFILLED";
+      })
+      .addCase(getDefaultSearchObject.rejected, (state, _action) => {
+        state.getStatus = "REJECTED";
+      })
       .addCase(createUserSearchObject.pending, (state, _action) => {
-        state.putStatus = "PENDING";
+        state.writeStatus = "PENDING";
       })
       .addCase(createUserSearchObject.fulfilled, (state, action) => {
         state.searchObject = state.fetchedSearchObject = action.payload;
-        state.putStatus = "FULFILLED";
+        state.writeStatus = "FULFILLED";
       })
       .addCase(createUserSearchObject.rejected, (state, _action) => {
-        state.putStatus = "REJECTED";
+        state.writeStatus = "REJECTED";
       })
       .addCase(updateUserSearchObject.pending, (state, _action) => {
-        state.putStatus = "PENDING";
+        state.writeStatus = "PENDING";
       })
       .addCase(updateUserSearchObject.fulfilled, (state, action) => {
         state.searchObject = state.fetchedSearchObject = action.payload;
-        state.putStatus = "FULFILLED";
+        state.writeStatus = "FULFILLED";
       })
       .addCase(updateUserSearchObject.rejected, (state, _action) => {
-        state.putStatus = "REJECTED";
+        state.writeStatus = "REJECTED";
       })
       .addCase(deleteUserSearchObject.pending, (state, _action) => {
-        state.deleteStatus = "PENDING";
+        state.writeStatus = "PENDING";
       })
       .addCase(deleteUserSearchObject.fulfilled, (state, _action) => {
         state.searchObject = state.fetchedSearchObject =
           initialState.searchObject;
-        state.deleteStatus = "FULFILLED";
+        state.writeStatus = "FULFILLED";
       })
       .addCase(deleteUserSearchObject.rejected, (state, _action) => {
-        state.deleteStatus = "REJECTED";
+        state.writeStatus = "REJECTED";
       });
   },
 });
@@ -172,5 +190,6 @@ export const {
   updateSearchData,
   updateNotificationData,
   updateReportData,
+  resetConfigState,
 } = searchObjectConfigStateSlice.actions;
 export const reducer = searchObjectConfigStateSlice.reducer;

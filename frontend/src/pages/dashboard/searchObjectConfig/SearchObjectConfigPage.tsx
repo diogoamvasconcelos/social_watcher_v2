@@ -14,7 +14,9 @@ import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import {
   createUserSearchObject,
   deleteUserSearchObject,
+  getDefaultSearchObject,
   getUserSearchObject,
+  resetConfigState,
   updateUserSearchObject,
 } from "./searchObjectConfigState";
 import { decode } from "@diogovasconcelos/lib";
@@ -23,13 +25,13 @@ import {
   searchObjectIndexCodec,
 } from "@backend/domain/models/userItem";
 import Spin from "antd/lib/spin";
-import { isRight } from "fp-ts/lib/Either";
+import { isLeft, isRight } from "fp-ts/lib/Either";
 import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
 import _every from "lodash/every";
 import _isEqual from "lodash/isEqual";
-import { KEYWORDS_NEW_PATH_ARG } from "src/shared/data/paths";
-import Modal from "antd/lib/modal/Modal";
+import { KEYWORDS_NEW_PATH_ARG } from "../../../shared/data/paths";
+import Modal, { ModalProps } from "antd/lib/modal/Modal";
 
 const { Step } = Steps;
 
@@ -95,13 +97,20 @@ export const SearchObjectConfigPage: React.FC = () => {
   );
 
   useEffect(() => {
+    // TODO: still buggy on revisting this page after a change
+    void dispatch(resetConfigState());
+
     if (isRight(indexEither) && indexEither.right !== KEYWORDS_NEW_PATH_ARG) {
       void dispatch(getUserSearchObject([indexEither.right]));
+    } else if (newIndex) {
+      void dispatch(getDefaultSearchObject());
     }
   }, []);
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const [confirmModalType, setConfirmModalType] =
+    useState<ConfirmModalProps["type"]>("save");
 
   // TODO: improve this boiler plate (hard one...)
   // hooks need to be called always on the same order, can't use hooks or map to initiate them
@@ -128,45 +137,69 @@ export const SearchObjectConfigPage: React.FC = () => {
   stepsContent[3].setState = setReportsStepState;
 
   useEffect(() => {
-    if (searchObjectConfig.deleteStatus === "FULFILLED") {
+    console.log(
+      `searchObjectConfig.writeStatus: ${searchObjectConfig.writeStatus}`
+    );
+    if (searchObjectConfig.writeStatus === "FULFILLED") {
       history.push(navigationConfig["keywords"].path);
-    } else if (searchObjectConfig.deleteStatus === "REJECTED") {
-      setDeleteModalVisible(false);
+    } else if (searchObjectConfig.writeStatus === "REJECTED") {
+      setConfirmModalVisible(false);
     }
-  }, [searchObjectConfig.deleteStatus]);
+  }, [searchObjectConfig.writeStatus]);
 
   const handleStepsChange: StepsProps["onChange"] = (current) => {
     setCurrentStep(current);
   };
 
   const handleSaveButton = () => {
-    if (searchObjectConfig.searchObject && isRight(indexEither)) {
-      if (indexEither.right === KEYWORDS_NEW_PATH_ARG) {
-        void dispatch(
-          createUserSearchObject([searchObjectConfig.searchObject])
-        );
-      } else {
-        void dispatch(
-          updateUserSearchObject([
-            indexEither.right,
-            searchObjectConfig.searchObject,
-          ])
-        );
-      }
-    }
+    setConfirmModalType(newIndex ? "add_new" : "save");
+    setConfirmModalVisible(true);
   };
   const handleDiscardButton = () => {
     history.push(navigationConfig["keywords"].path);
   };
   const handleDeleteButton = () => {
-    setDeleteModalVisible(true);
+    setConfirmModalType("delete");
+    setConfirmModalVisible(true);
+  };
+  const handleConfirmModalCancel = () => {
+    setConfirmModalVisible(false);
+  };
+  const handleConfirmModalOk = () => {
+    if (!searchObjectConfig.searchObject || isLeft(indexEither)) {
+      return;
+    }
+
+    if (indexEither.right !== KEYWORDS_NEW_PATH_ARG) {
+      switch (confirmModalType) {
+        case "save": {
+          void dispatch(
+            updateUserSearchObject([
+              indexEither.right,
+              searchObjectConfig.searchObject,
+            ])
+          );
+          return;
+        }
+        case "delete": {
+          void dispatch(deleteUserSearchObject([indexEither.right]));
+          return;
+        }
+        default: {
+          return;
+        }
+      }
+    } else {
+      // is new / add
+      void dispatch(createUserSearchObject([searchObjectConfig.searchObject]));
+    }
   };
 
   const isLoading = searchObjectConfig.getStatus === "PENDING";
-  const isSaving = searchObjectConfig.putStatus === "PENDING";
   const currentStepContent = stepsContent[currentStep];
   const CurrentConfigWidget = currentStepContent.configWidget; // need to be set to a Capitalized var
 
+  // TODO: fix bug when adding a new searchobject and just changing keywords makes it allowed to save even if no socialmedias
   const saveAllowed = _every(
     stepsContent.map((stepContent) => stepContent.state.status !== "error")
   );
@@ -196,7 +229,6 @@ export const SearchObjectConfigPage: React.FC = () => {
             <Button
               type="primary"
               onClick={handleSaveButton}
-              loading={isSaving}
               disabled={!saveAllowed || !searchObjectIsDirty}
             >
               {newIndex ? "Add" : "Save"}
@@ -208,7 +240,7 @@ export const SearchObjectConfigPage: React.FC = () => {
               type="text"
               danger={true}
               onClick={handleDeleteButton}
-              hidden={newIndex}
+              hidden={newIndex || searchObjectIsDirty}
             >
               Delete
             </Button>
@@ -222,20 +254,13 @@ export const SearchObjectConfigPage: React.FC = () => {
           ) : (
             <Spin />
           )}
-          <DeleteModal
-            visible={deleteModalVisible}
-            searchObject={searchObjectConfig.fetchedSearchObject}
-            isDeleting={searchObjectConfig.deleteStatus === "PENDING"}
-            onOk={() => {
-              if (
-                searchObjectConfig.searchObject &&
-                isRight(indexEither) &&
-                indexEither.right !== KEYWORDS_NEW_PATH_ARG
-              ) {
-                void dispatch(deleteUserSearchObject([indexEither.right]));
-              }
-            }}
-            onCancel={() => setDeleteModalVisible(false)}
+          <ConfirmModal
+            type={confirmModalType}
+            visible={confirmModalVisible}
+            searchObject={searchObjectConfig.searchObject}
+            isApplying={searchObjectConfig.writeStatus === "PENDING"}
+            onOk={handleConfirmModalOk}
+            onCancel={handleConfirmModalCancel}
           />
         </>
       ) : (
@@ -252,32 +277,61 @@ export type ConfigWidgetProps = {
 };
 
 // ++++++++++++++++
-// + DELETE MODAL +
+// + CONFIRM MODAL +
 // ++++++++++++++++
-type DeleteModalProps = {
+type ConfirmModalProps = {
   searchObject: SearchObjectDomain | null;
   visible: boolean;
-  isDeleting: boolean;
+  isApplying: boolean;
   onOk: () => void;
   onCancel: () => void;
+  type: "save" | "add_new" | "delete";
 };
-const DeleteModal: React.FC<DeleteModalProps> = ({
+const ConfirmModal: React.FC<ConfirmModalProps> = ({
   searchObject,
   visible,
-  isDeleting,
+  isApplying,
   onOk,
   onCancel,
+  type,
 }) => {
+  const getCustomProps = (
+    propType: ConfirmModalProps["type"]
+  ): Partial<ModalProps> => {
+    switch (propType) {
+      case "save":
+        return {
+          title: `Are you sure you want to apply you changes to ${
+            searchObject?.keyword ?? "n/a"
+          }?`,
+          okText: "Apply",
+          okType: "primary",
+        };
+      case "add_new":
+        return {
+          title: `Are you sure you want to add the keyword: ${
+            searchObject?.keyword ?? "n/a"
+          }?`,
+          okText: "Add",
+          okType: "primary",
+        };
+      case "delete":
+        return {
+          title: `Are you sure you want to delete the keyword: ${
+            searchObject?.keyword ?? "n/a"
+          }?`,
+          okText: "Delete",
+          okType: "danger",
+        };
+    }
+  };
+
   return (
     <Modal
-      title={`Are you sure you want to delete the keyword: ${
-        searchObject?.keyword ?? "n/a"
-      }?`}
+      {...getCustomProps(type)}
       visible={visible}
       onOk={onOk}
-      okText="Delete"
-      okType="danger"
-      confirmLoading={isDeleting}
+      confirmLoading={isApplying}
       onCancel={onCancel}
     ></Modal>
   );
