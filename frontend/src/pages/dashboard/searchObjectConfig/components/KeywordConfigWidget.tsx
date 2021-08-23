@@ -40,7 +40,7 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
   return (
     <MainContainer>
       <RowDiv>
-        <Text>current keyword:</Text>
+        <Text>Current keyword:</Text>
         <Text strong={true} editable={{ onChange: handleKeywordChanged }}>
           {searchObject.keyword}
         </Text>

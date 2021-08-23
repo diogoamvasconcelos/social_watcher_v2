@@ -32,6 +32,8 @@ import _every from "lodash/every";
 import _isEqual from "lodash/isEqual";
 import { KEYWORDS_NEW_PATH_ARG } from "../../../shared/data/paths";
 import Modal, { ModalProps } from "antd/lib/modal/Modal";
+import RightOutlined from "@ant-design/icons/lib/icons/RightOutlined";
+import LeftOutlined from "@ant-design/icons/lib/icons/LeftOutlined";
 
 const { Step } = Steps;
 
@@ -40,6 +42,12 @@ const MainContainer = styled.div`
 `;
 
 const TopBarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
+
+const BottomBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -137,9 +145,6 @@ export const SearchObjectConfigPage: React.FC = () => {
   stepsContent[3].setState = setReportsStepState;
 
   useEffect(() => {
-    console.log(
-      `searchObjectConfig.writeStatus: ${searchObjectConfig.writeStatus}`
-    );
     if (searchObjectConfig.writeStatus === "FULFILLED") {
       history.push(navigationConfig["keywords"].path);
     } else if (searchObjectConfig.writeStatus === "REJECTED") {
@@ -245,6 +250,20 @@ export const SearchObjectConfigPage: React.FC = () => {
               Delete
             </Button>
           </TopBarContainer>
+          <BottomBarContainer>
+            <Button
+              type="default"
+              onClick={() => setCurrentStep(currentStep - 1)}
+              disabled={currentStep == 0}
+              icon={<LeftOutlined />}
+            />
+            <Button
+              type="primary"
+              onClick={() => setCurrentStep(currentStep + 1)}
+              disabled={currentStep == stepsContent.length - 1}
+              icon={<RightOutlined />}
+            />
+          </BottomBarContainer>
           {searchObjectConfig.searchObject && !isLoading ? (
             <CurrentConfigWidget
               searchObject={searchObjectConfig.searchObject}
