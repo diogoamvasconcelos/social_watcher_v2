@@ -21,6 +21,7 @@ export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
     },
     hackernews: {
       enabledStatus: "DISABLED",
+      fuzzyMatch: false,
     },
     instagram: {
       enabledStatus: "DISABLED",

@@ -104,9 +104,9 @@ describe("hackernews", () => {
       );
 
       expect(searchResult).toEqual([
-        { ...responseData.hits[0], num_comments: 0 },
-        { ...responseData.hits[1], num_comments: 0 },
-        { ...responseData.hits[2], num_comments: 0 },
+        { ...responseData.hits[0], num_comments: 0, fuzzy_match: true },
+        { ...responseData.hits[1], num_comments: 0, fuzzy_match: false },
+        { ...responseData.hits[2], num_comments: 0, fuzzy_match: false },
       ]);
     });
 
@@ -154,7 +154,7 @@ describe("hackernews", () => {
       );
 
       expect(searchResult).toEqual([
-        { ...responseData.hits[0], num_comments: 4 },
+        { ...responseData.hits[0], num_comments: 4, fuzzy_match: false },
       ]);
     });
 
@@ -213,8 +213,8 @@ describe("hackernews", () => {
       );
 
       expect(searchResult).toEqual([
-        { ...responseData0.hits[0], num_comments: 0 },
-        { ...responseData1.hits[0], num_comments: 0 },
+        { ...responseData0.hits[0], num_comments: 0, fuzzy_match: false },
+        { ...responseData1.hits[0], num_comments: 0, fuzzy_match: false },
       ]);
     });
   });

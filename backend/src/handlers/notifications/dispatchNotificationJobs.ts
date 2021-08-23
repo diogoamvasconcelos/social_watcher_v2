@@ -145,6 +145,12 @@ const socialMediaAllowed = (
       break;
     }
     case "hackernews":
+      if (
+        searchResult.data.fuzzyMatch &&
+        !searchObject.searchData[searchResult.socialMedia].fuzzyMatch
+      ) {
+        return false;
+      }
       break;
     case "instagram":
       break;

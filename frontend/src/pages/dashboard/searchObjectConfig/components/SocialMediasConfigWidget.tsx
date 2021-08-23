@@ -85,11 +85,13 @@ export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
         {socialMedias.map((socialMedia) => {
           return (
             <SocialMediaContainer key={socialMedia}>
+              {/* common */}
               <SocialMediaEnabledSwitch
                 socialMedia={socialMedia}
                 searchData={searchObject.searchData}
                 onChange={(val) => handleEnabledStatusChanged(socialMedia, val)}
               />
+              {/* reddit */}
               {socialMedia === "reddit" ? (
                 <RedditCustomOptions
                   redditSearchData={searchObject.searchData.reddit}
@@ -98,6 +100,21 @@ export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
                       updateSearchData(
                         deepmergeSafe(searchObject.searchData, {
                           reddit: { over18: val },
+                        })
+                      )
+                    );
+                  }}
+                />
+              ) : null}
+              {/* hackernews */}
+              {socialMedia === "hackernews" ? (
+                <HackernewsCustomOptions
+                  hackernewsSearchData={searchObject.searchData.hackernews}
+                  onFuzzyMatchChange={(val) => {
+                    dispatch(
+                      updateSearchData(
+                        deepmergeSafe(searchObject.searchData, {
+                          hackernews: { fuzzyMatch: val },
                         })
                       )
                     );
@@ -162,6 +179,32 @@ const RedditCustomOptions: React.FC<RedditCustomOptionsProps> = ({
         checked={redditSearchData.over18}
         onChange={onOver18Change}
         disabled={redditSearchData.enabledStatus === "DISABLED"}
+      />
+    </RowDiv>
+  );
+};
+
+// ++++++++++
+// + Hackernews +
+// ++++++++++
+
+type HackernewsCustomOptionsProps = {
+  hackernewsSearchData: SearchObjectUserDataDomain["searchData"]["hackernews"];
+  onFuzzyMatchChange: (val: boolean) => void;
+};
+
+const HackernewsCustomOptions: React.FC<HackernewsCustomOptionsProps> = ({
+  hackernewsSearchData,
+  onFuzzyMatchChange,
+}) => {
+  return (
+    <RowDiv key="hackernews fuzzyMaych" style={{ paddingLeft: "10px" }}>
+      <Text style={{ gridColumnStart: "1" }}>Fuzzy Match (beta version)?</Text>
+      <Switch
+        style={{ gridColumnStart: "2", justifySelf: "end" }}
+        checked={hackernewsSearchData.fuzzyMatch}
+        onChange={onFuzzyMatchChange}
+        disabled={hackernewsSearchData.enabledStatus === "DISABLED"}
       />
     </RowDiv>
   );

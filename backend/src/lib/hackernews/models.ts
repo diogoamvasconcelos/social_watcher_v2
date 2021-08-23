@@ -29,6 +29,12 @@ export type SearchHackernewsResponse = t.TypeOf<
   typeof searchHackernewsResponseCodec
 >;
 
+export const searchHackernewsItemCodec = t.intersection([
+  searchHackernewsResponseItemCodec,
+  t.type({ fuzzy_match: t.boolean }),
+]);
+export type SearchHackernewsItem = t.TypeOf<typeof searchHackernewsItemCodec>;
+
 export const getItemHackernewsResponseCodec = t.exact(
   t.intersection([
     t.type({

@@ -1,5 +1,6 @@
 import { defaultSearchObjectDomain } from "../../../test/lib/default";
 import {
+  buildHackernewsSearchResult,
   buildRedditSearchResult,
   buildSQSEvent,
   buildTwitterSearchResult,
@@ -198,6 +199,19 @@ describe("handlers/dispatchNotificationJobs", () => {
           },
         }),
         true,
+      ],
+      [
+        "hackernews fuzzy match",
+        buildHackernewsSearchResult({ data: { fuzzyMatch: true } }),
+        deepmergeSafe(defaultSearchObjectDomain, {
+          searchData: {
+            hackernews: {
+              enabledStatus: "ENABLED",
+              fuzzyMatch: false,
+            },
+          },
+        }),
+        false,
       ],
     ];
 

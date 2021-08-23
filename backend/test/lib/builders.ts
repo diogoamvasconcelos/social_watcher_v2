@@ -141,6 +141,7 @@ export const buildHackernewsSearchResult = (
         storyId: "storyId",
         storyLink: "some-story-link",
         numComments: 0,
+        fuzzyMatch: false as boolean, // lol
       },
     },
     partial ?? {}

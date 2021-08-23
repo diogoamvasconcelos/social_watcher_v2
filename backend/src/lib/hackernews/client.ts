@@ -15,6 +15,7 @@ import { Logger } from "../logger";
 import {
   GetItemHackernewsResponse,
   getItemHackernewsResponseCodec,
+  SearchHackernewsItem,
   searchHackernewsResponseCodec,
   SearchHackernewsResponseItem,
 } from "./models";
@@ -51,10 +52,10 @@ export const search = async (
   { client, logger }: HackernewsDependencies,
   keyword: string,
   params?: PartialDeep<SearchParams>
-): Promise<Either<string[], SearchHackernewsResponseItem[]>> => {
+): Promise<Either<string[], SearchHackernewsItem[]>> => {
   const searchParams = deepmergeSafe(defaultSearchParams, params ?? {});
 
-  let results: SearchHackernewsResponseItem[] = [];
+  let results: SearchHackernewsItem[] = [];
   let page = 0;
 
   const timestamp = toUnixTimstamp(
@@ -97,22 +98,24 @@ export const search = async (
     const patchedItemsEither = toSingleEither(
       await Promise.all(
         filteredResults.map(async (item) => {
-          if (item.num_comments) {
-            return right(item);
-          }
+          let num_comments = item.num_comments;
+          if (!num_comments) {
+            // try to get the item of the parent to check it's num_comments
+            const fetchedItemEither = await getItem(
+              { client, logger },
+              item.parent_id ? item.parent_id.toString() : item.objectID
+            );
+            if (isLeft(fetchedItemEither)) {
+              return fetchedItemEither;
+            }
 
-          // try to get the item of the parent to check it's num_comments
-          const fetchedItemEither = await getItem(
-            { client, logger },
-            item.parent_id ? item.parent_id.toString() : item.objectID
-          );
-          if (isLeft(fetchedItemEither)) {
-            return fetchedItemEither;
+            num_comments = fetchedItemEither.right.numComments;
           }
 
           return right({
             ...item,
-            num_comments: fetchedItemEither.right.numComments,
+            num_comments,
+            fuzzy_match: isFuzzyMatch(keyword, item),
           });
         })
       )
@@ -179,15 +182,27 @@ const filterUnrelatedToKeyword = (
   items: SearchHackernewsResponseItem[]
 ) => {
   // https://fusejs.io/api/options.html
-  const options = {
+  const fuse = new Fuse(items, {
     includeScore: true,
     shouldSort: false,
     ignoreLocation: true,
-    threshold: 0.2, // 0 = exact match, 1 = match eveythin
+    threshold: 0.2, // 0 = exact match, 1 = match everything
     keys: ["comment_text", "title"],
-  };
-  const fuse = new Fuse(items, options);
+  });
 
   const result = fuse.search(keyword);
   return result.map((resultItem) => resultItem.item);
+};
+
+const isFuzzyMatch = (keyword: string, item: SearchHackernewsResponseItem) => {
+  // https://fusejs.io/api/options.html
+  const fuse = new Fuse([item], {
+    includeScore: true,
+    ignoreLocation: true,
+    threshold: 0, // 0 = exact match, 1 = match everything
+    keys: ["comment_text", "title"],
+  });
+
+  const result = fuse.search(keyword);
+  return result.length == 0;
 };

@@ -55,6 +55,7 @@ export const hackernewsSearchResultCodec = t.intersection([
         objectId: t.string,
         storyLink: t.string,
         numComments: t.number,
+        fuzzyMatch: t.boolean,
       }),
       t.partial({
         storyId: t.string,

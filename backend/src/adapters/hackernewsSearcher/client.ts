@@ -1,6 +1,6 @@
 import { Keyword } from "../../domain/models/keyword";
 import { HackernewsSearchResult } from "../../domain/models/searchResult";
-import { SearchHackernewsResponseItem } from "../../lib/hackernews/models";
+import { SearchHackernewsItem } from "../../lib/hackernews/models";
 import {
   getClient as getHackernewsClient,
   Client as HackernewsClient,
@@ -11,7 +11,7 @@ export type Client = HackernewsClient;
 
 export const outToDomain = (
   keyword: Keyword,
-  out: SearchHackernewsResponseItem
+  out: SearchHackernewsItem
 ): HackernewsSearchResult => ({
   socialMedia: "hackernews",
   id: out.objectID,
@@ -26,6 +26,7 @@ export const outToDomain = (
     storyLink: `https://news.ycombinator.com/item?id=${
       out.story_id ?? out.objectID
     }`,
+    fuzzyMatch: out.fuzzy_match,
   },
   link: `https://news.ycombinator.com/item?id=${out.objectID}`,
 });

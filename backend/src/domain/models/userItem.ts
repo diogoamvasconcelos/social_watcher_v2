@@ -53,7 +53,12 @@ export const redditSearchDataCodec = t.intersection([
     over18: t.boolean,
   }),
 ]);
-export const hackernewsSearchDataCodec = socialMediaSearchDataCodec;
+export const hackernewsSearchDataCodec = t.intersection([
+  socialMediaSearchDataCodec,
+  t.type({
+    fuzzyMatch: t.boolean,
+  }),
+]);
 export const instagramSearchDataCodec = socialMediaSearchDataCodec;
 export const youtubeSearchDataCodec = socialMediaSearchDataCodec;
 
@@ -114,7 +119,10 @@ export const searchObjectUserDataIoToDomain = (
           enabledStatus: "DISABLED",
           over18: false,
         },
-        hackernews: { enabledStatus: "DISABLED" },
+        hackernews: {
+          enabledStatus: "DISABLED",
+          fuzzyMatch: false,
+        },
         instagram: { enabledStatus: "DISABLED" },
         youtube: { enabledStatus: "DISABLED" },
       },
