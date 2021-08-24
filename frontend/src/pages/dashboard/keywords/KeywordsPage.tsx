@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { KEYWORDS_NEW_PATH } from "../../../shared/data/paths";
+import { KEYWORDS_NEW_PATH, USER_PATH } from "../../../shared/data/paths";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -46,6 +46,9 @@ export const KeywordsPage: React.FC = () => {
   const handleNewSearchObjectClicked = () => {
     history.push(KEYWORDS_NEW_PATH);
   };
+  const handleManageAccountClicked = () => {
+    history.push(USER_PATH);
+  };
 
   return (
     <MainContainer>
@@ -61,6 +64,7 @@ export const KeywordsPage: React.FC = () => {
                 searchObjects.length < user.subscription.nofSearchObjects
               }
               onNewSearchObjectClicked={handleNewSearchObjectClicked}
+              onManageAccountClicked={handleManageAccountClicked}
             />
           )}
         </>

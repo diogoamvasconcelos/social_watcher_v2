@@ -41,11 +41,13 @@ type SearchObjectsListProps = {
   searchObjects: SearchObjectDomain[];
   allowNewSearchObject: boolean;
   onNewSearchObjectClicked: () => void;
+  onManageAccountClicked: () => void;
 };
 export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
   searchObjects,
   allowNewSearchObject,
   onNewSearchObjectClicked,
+  onManageAccountClicked,
 }) => {
   return (
     <>
@@ -58,13 +60,29 @@ export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
         ))}
       </SearchObjectListContainer>
       <div style={{ margin: "20px" }}>
-        <Button
-          type="primary"
-          style={{ width: "200px", borderRadius: "4px" }}
-          onClick={onNewSearchObjectClicked}
-          disabled={!allowNewSearchObject}
+        <Tooltip
+          title={
+            allowNewSearchObject
+              ? ""
+              : "Subscription maximum reached. You can increase your account's subscription limit to allow more keywords."
+          }
         >
-          Add new keyword
+          <Button
+            type="primary"
+            style={{ width: "200px", borderRadius: "4px" }}
+            onClick={onNewSearchObjectClicked}
+            disabled={!allowNewSearchObject}
+          >
+            Add new keyword
+          </Button>
+        </Tooltip>
+        <Button
+          type="link"
+          // style={{ width: "200px", borderRadius: "4px" }}
+          onClick={onManageAccountClicked}
+          disabled={allowNewSearchObject}
+        >
+          Manage Account
         </Button>
       </div>
     </>
