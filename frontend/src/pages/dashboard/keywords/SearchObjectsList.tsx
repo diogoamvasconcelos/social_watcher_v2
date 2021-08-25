@@ -162,22 +162,26 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
         <Text
           style={{ gridColumnStart: "1" }}
         >{`Keyword#${searchObject.index}: ${searchObject.keyword}`}</Text>
-        <Button
-          style={{ gridColumnStart: "2", justifySelf: "end" }} // justifySelf:end aligns to right
-          type="default"
-          shape="circle"
-          icon={<SettingFilled />}
-          size="small"
-          onClick={handleConfigButtonClicked}
-        />
-        <Button
-          style={{ gridColumnStart: "3", justifySelf: "end" }}
-          type="default"
-          shape="circle"
-          icon={<SearchOutlined />}
-          size="small"
-          onClick={handleSearchButtonClicked}
-        />
+        <Tooltip title="Edit configuration">
+          <Button
+            style={{ gridColumnStart: "2", justifySelf: "end" }} // justifySelf:end aligns to right
+            type="default"
+            shape="circle"
+            icon={<SettingFilled />}
+            size="small"
+            onClick={handleConfigButtonClicked}
+          />
+        </Tooltip>
+        <Tooltip title="Go to search">
+          <Button
+            style={{ gridColumnStart: "3", justifySelf: "end" }}
+            type="default"
+            shape="circle"
+            icon={<SearchOutlined />}
+            size="small"
+            onClick={handleSearchButtonClicked}
+          />
+        </Tooltip>
       </SearchObjectTopItemRow>
       <SearchObjectItemRow>
         <Text>Social Medias:</Text>

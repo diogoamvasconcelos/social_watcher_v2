@@ -34,6 +34,7 @@ import { KEYWORDS_NEW_PATH_ARG } from "../../../shared/data/paths";
 import Modal, { ModalProps } from "antd/lib/modal/Modal";
 import RightOutlined from "@ant-design/icons/lib/icons/RightOutlined";
 import LeftOutlined from "@ant-design/icons/lib/icons/LeftOutlined";
+import Tooltip from "antd/lib/tooltip";
 
 const { Step } = Steps;
 
@@ -75,16 +76,18 @@ const stepsContent: ConfigStepContent[] = [
     configWidget: KeywordConfigWidget,
   } as ConfigStepContent,
   {
-    title: "Search",
-    description: "social medias",
+    title: "Social medias",
+    description: "where to search",
     configWidget: SocialMediasConfigWidget,
   } as ConfigStepContent,
   {
     title: "Notifications",
+    description: "get real-time notifications",
     configWidget: NotificationsConfigWidget,
   } as ConfigStepContent,
   {
     title: "Reports",
+    description: "daily or weekly",
     configWidget: ReportsConfigWidget,
   } as ConfigStepContent,
 ];
@@ -231,16 +234,28 @@ export const SearchObjectConfigPage: React.FC = () => {
                 );
               })}
             </Steps>
-            <Button
-              type="primary"
-              onClick={handleSaveButton}
-              disabled={!saveAllowed || !searchObjectIsDirty}
+            <Tooltip
+              title={
+                !saveAllowed
+                  ? "Errors need to be fixed"
+                  : !searchObjectIsDirty
+                  ? "No changes"
+                  : undefined
+              }
             >
-              {newIndex ? "Add" : "Save"}
-            </Button>
-            <Button type="default" onClick={handleDiscardButton}>
-              Discard
-            </Button>
+              <Button
+                type="primary"
+                onClick={handleSaveButton}
+                disabled={!saveAllowed || !searchObjectIsDirty}
+              >
+                {newIndex ? "Add" : "Apply"}
+              </Button>
+            </Tooltip>
+            <Tooltip title="Go back">
+              <Button type="default" onClick={handleDiscardButton}>
+                Discard
+              </Button>
+            </Tooltip>
             <Button
               type="text"
               danger={true}
@@ -320,7 +335,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     switch (propType) {
       case "save":
         return {
-          title: `Are you sure you want to apply you changes to ${
+          title: `Are you sure you want to apply your changes to ${
             searchObject?.keyword ?? "n/a"
           }?`,
           okText: "Apply",

@@ -14,6 +14,8 @@ import {
   notificationMediums,
 } from "@backend/domain/models/notificationMedium";
 import { capitalizeWord } from "../../../../shared/lib/text";
+import Tooltip from "antd/lib/tooltip";
+import InfoCircleOutlined from "@ant-design/icons/lib/icons/InfoCircleOutlined";
 
 // ++++++++++
 // + WIDGET +
@@ -70,6 +72,13 @@ const RowDiv = styled.div`
   grid-template-columns: 100px 1fr;
 `;
 
+const LabelDiv = styled.div`
+  grid-column-start: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
+
 type NotificationMediumConfigWidgetProps = {
   notificationMedium: NotificationMedium;
   notificationData: SearchObjectDomain["notificationData"];
@@ -100,6 +109,8 @@ const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetPro
         [notificationMedium]: { bot: { credentials: { token: val } } },
       });
 
+    const tooltips = getToolTips(notificationMedium);
+
     const isEnabled =
       notificationData[notificationMedium].enabledStatus === "ENABLED";
 
@@ -116,7 +127,12 @@ const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetPro
             />
           </RowDiv>
           <RowDiv>
-            <Text style={{ gridColumnStart: "1" }}>Channel ID</Text>
+            <LabelDiv>
+              <Text>Channel ID</Text>
+              <Tooltip title={tooltips.channel}>
+                <InfoCircleOutlined />
+              </Tooltip>
+            </LabelDiv>
             <Text
               style={{ gridColumnStart: "2", justifySelf: "end" }}
               strong={true}
@@ -129,7 +145,12 @@ const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetPro
             </Text>
           </RowDiv>
           <RowDiv>
-            <Text style={{ gridColumnStart: "1" }}>Bot Token</Text>
+            <LabelDiv>
+              <Text>Bot Token</Text>
+              <Tooltip title={tooltips.botToken}>
+                <InfoCircleOutlined />
+              </Tooltip>
+            </LabelDiv>
             <Text
               style={{
                 gridColumnStart: "2",
@@ -150,3 +171,24 @@ const NotificationMediumConfigWidget: React.FC<NotificationMediumConfigWidgetPro
       </>
     );
   };
+
+const getToolTips = (
+  notificationMedium: NotificationMedium
+): { channel: string; botToken: string } => {
+  switch (notificationMedium) {
+    case "discord":
+      return {
+        channel:
+          "To find the Channel ID, right-click on the required channel name in the left sidebar and click on 'Copy ID' (you must enable Developer Mode on Discord's User Settings). Remember to add the bot to the channel as member.",
+        botToken:
+          "Get the token from the Discord Developers page > Your app > OAuth2 > Client Secret.",
+      };
+    case "slack":
+      return {
+        channel:
+          "To find the Channel ID, right-click on the required channel name in the left sidebar and click 'Open channel details' and you will find the 'Channel ID' at the bottom. Remember to add the bot to the channel using an '@' mention.",
+        botToken:
+          "Go to 'https://api.slack.com/apps', select your App > OAuth & Permissions > Bot User OAuth Token (starts with 'xoxb' or 'xoxp'). Also, remember to enable the 'chat:write' User Token Scope on that same page.",
+      };
+  }
+};

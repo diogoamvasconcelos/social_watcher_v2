@@ -10,6 +10,8 @@ import { updateSearchData } from "../searchObjectConfigState";
 import { SearchObjectUserDataDomain } from "@backend/domain/models/userItem";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import _some from "lodash/some";
+import Tooltip from "antd/lib/tooltip";
+import InfoCircleOutlined from "@ant-design/icons/lib/icons/InfoCircleOutlined";
 
 // ++++++++++
 // + WIDGET +
@@ -42,6 +44,13 @@ const SocialMediaContainer = styled.div`
 const RowDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 40px;
+`;
+
+const LabelDiv = styled.div`
+  grid-column-start: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
 `;
 
 export const SocialMediasConfigWidget: React.FC<ConfigWidgetProps> = ({
@@ -144,11 +153,29 @@ const SocialMediaEnabledSwitch: React.FC<SocialMediaEnabledSwitchProps> = ({
   searchData,
   onChange,
 }) => {
+  const getTooltip = (socialMedia: SocialMedia) => {
+    switch (socialMedia) {
+      case "twitter":
+        return "Searches hashtags and text in tweets";
+      case "reddit":
+        return "Searches text in threads and posts";
+      case "hackernews":
+        return "Searches text posts and comments";
+      case "instagram":
+        return "Searches for hashtags in comments";
+      case "youtube":
+        return "Searches for text in video title and descriptions";
+    }
+  };
+
   return (
     <RowDiv>
-      <Text style={{ gridColumnStart: "1" }}>
-        {capitalizeWord(socialMedia)}
-      </Text>
+      <LabelDiv>
+        <Text>{capitalizeWord(socialMedia)}</Text>
+        <Tooltip title={getTooltip(socialMedia)}>
+          <InfoCircleOutlined />
+        </Tooltip>
+      </LabelDiv>
       <Switch
         style={{ gridColumnStart: "2", justifySelf: "end" }}
         checked={searchData[socialMedia].enabledStatus === "ENABLED"}
@@ -199,7 +226,12 @@ const HackernewsCustomOptions: React.FC<HackernewsCustomOptionsProps> = ({
 }) => {
   return (
     <RowDiv key="hackernews fuzzyMaych" style={{ paddingLeft: "10px" }}>
-      <Text style={{ gridColumnStart: "1" }}>Fuzzy Match (beta version)?</Text>
+      <LabelDiv>
+        <Text>Fuzzy Match?</Text>
+        <Tooltip title="beta version">
+          <InfoCircleOutlined />
+        </Tooltip>
+      </LabelDiv>
       <Switch
         style={{ gridColumnStart: "2", justifySelf: "end" }}
         checked={hackernewsSearchData.fuzzyMatch}

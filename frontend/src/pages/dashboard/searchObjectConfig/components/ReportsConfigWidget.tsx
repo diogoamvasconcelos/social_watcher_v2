@@ -69,6 +69,13 @@ const RowDiv = styled.div`
   grid-template-columns: 200px 1fr;
 `;
 
+const LabelDiv = styled.div`
+  grid-column-start: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
+
 type EmailConfigWidgetProps = {
   reportData: SearchObjectDomain["reportData"];
 };
@@ -145,12 +152,12 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
       <Text>Email</Text>
       <ConfigContainer>
         <RowDiv>
-          <div style={{ gridColumnStart: "1" }}>
+          <LabelDiv>
             <Text>Frequency</Text>
-            <Tooltip title="daily: sent once a day at 12:00, weekly: sent on fridays">
+            <Tooltip title="Daily: sent once a day at 12:00, Weekly: sent every friday">
               <InfoCircleOutlined />
             </Tooltip>
-          </div>
+          </LabelDiv>
           <Radio.Group
             style={{ gridColumnStart: "2", justifySelf: "end" }}
             onChange={handleFrequencyRadioChange}
