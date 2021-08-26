@@ -15,3 +15,6 @@ echo "Deploying..."
 $THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env dev
 echo "Env testing"
 yarn run test:environment
+echo "Reverting yarn"
+yarn
+yarn compile-ts4fe

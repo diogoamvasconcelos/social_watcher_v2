@@ -7,8 +7,9 @@ THIS_PATH="$(dirname "$(realpath "$0")")"
 
 cd $THIS_PATH/..
 
-mkdir -p .build
+
+rm -rf .build
 
 yarn install --frozen-lockfile # required to compile with ts
-yarn tsc --build
+yarn build:lambdas
 yarn --prod # prune node_modules dev packages

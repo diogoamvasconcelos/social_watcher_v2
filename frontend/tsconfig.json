@@ -7,7 +7,6 @@
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types", "./typings"],
     "paths": {
-      "@backend": ["../backend/src"],
       "@backend/*": ["../backend/src/*"]
     }
   },

@@ -6,6 +6,7 @@
   "scripts": {
     "with-local-stack": "scripts/with_env.js scripts/local_stack/with_elasticsearch_local.sh scripts/local_stack/with_dynamodb_local.sh",
     "check-all": "yarn lint:check && yarn build && yarn test",
+    "build:lambdas": "tsc --project tsconfig.lambdas.json",
     "build": "tsc --noEmit",
     "build:watch": "tsc --noEmit --watch",
     "lint:check": "eslint --ext .ts .",

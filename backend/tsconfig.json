@@ -1,10 +1,13 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": ".build",
     "rootDir": ".",
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./typings"]
+    "typeRoots": ["./node_modules/@types", "./typings"],
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@test/*": ["./test/*"]
+    }
   },
   "include": ["src/", "scripts/**/*.ts", "test/", "typings/"],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**"]
