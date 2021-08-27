@@ -3,7 +3,7 @@ import { KeywordData } from "@src/domain/models/keyword";
 import { SocialMedia } from "@src/domain/models/socialMedia";
 import { DateISOString, newLowerCase } from "@diogovasconcelos/lib/iots";
 import _ from "lodash";
-import { filterKeywords } from "./dispatchSearchJobs";
+import { filterKeywords } from "./dispatchSearchJobsHandler";
 import { getHoursAgo } from "@src/lib/date";
 
 describe("dispatchSearchJobs", () => {

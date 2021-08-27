@@ -8,7 +8,7 @@ import _ from "lodash";
 import { KeywordData } from "@src/domain/models/keyword";
 import { makeQueueSearchJobs } from "@src/adapters/searchJobsQueue/queueSearchJobs";
 import { getLogger } from "@src/lib/logger";
-import { defaultMiddlewareStack } from "./middlewares/common";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 import { eitherListToDefaultOk } from "@src/domain/ports/shared";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { throwUnexpectedCase } from "@src/lib/runtime";

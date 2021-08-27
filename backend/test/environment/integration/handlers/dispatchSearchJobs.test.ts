@@ -4,7 +4,7 @@ import { invokeLambda } from "@test/lib/lambda";
 
 const lambdaName = getEnvTestConfig().dispatchSearchJobsLambdaName;
 
-describe("handler/dispatchSearchJobs", () => {
+describe("handler/searchers/dispatchSearchJobsHandler", () => {
   beforeAll(async () => {
     jest.setTimeout(10000);
   });
