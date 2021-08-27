@@ -1,4 +1,4 @@
-## make search more fuzzy to allow plural
+## make search (on ES) more fuzzy to allow plural
 
 eg.: keyword: gaivota didn't find
 
