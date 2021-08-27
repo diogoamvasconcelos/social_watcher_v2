@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lambdaHandler } from "@src/handlers/searchers/searchTwitter";
+import { lambdaHandler } from "@src/handlers/searchers/searchTwitterHandler";
 
 // scripts/with_env.js yarn ts-node scripts/run_handlers/searchTwitter.ts
 const main = async () => {

@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "get_search_objects" {
   filename         = local.lambda_file
   function_name    = local.get_search_objects_lambda_name
-  handler          = ".build/src/handlers/api/getSearchObjects.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

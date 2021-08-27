@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "search_instagram" {
   filename         = local.lambda_file
   function_name    = local.search_instagram_lambda_name
-  handler          = ".build/src/handlers/searchers/searchInstagram.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

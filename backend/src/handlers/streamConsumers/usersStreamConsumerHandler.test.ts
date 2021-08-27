@@ -2,7 +2,7 @@ import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { userItemToDocument } from "@src/adapters/userStore/client";
-import { handler } from "./usersStreamConsumer";
+import { handler } from "./usersStreamConsumerHandler";
 
 describe("handlers/usersStreamConsumer", () => {
   const event: DynamoDBStreamEvent = {

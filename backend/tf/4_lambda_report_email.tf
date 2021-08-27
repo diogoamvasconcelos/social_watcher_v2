@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "report_email" {
   filename         = local.lambda_file
   function_name    = local.report_email_lambda_name
-  handler          = ".build/src/handlers/reports/reportEmail.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "256"

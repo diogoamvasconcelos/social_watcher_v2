@@ -3,7 +3,7 @@ import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "@src/adapters/searchResultsStore/client";
 import { getNow } from "@src/lib/date";
-import { handler } from "./searchResultsStreamConsumer";
+import { handler } from "./searchResultsStreamConsumerHandler";
 
 describe("handlers/searchResultsStreamConsumer", () => {
   const event: DynamoDBStreamEvent = {

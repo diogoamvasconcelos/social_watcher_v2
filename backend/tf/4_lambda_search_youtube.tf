@@ -6,7 +6,7 @@ locals {
 resource "aws_lambda_function" "search_youtube" {
   filename         = local.lambda_file
   function_name    = local.search_youtube_lambda_name
-  handler          = ".build/src/handlers/searchers/searchYoutube.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"

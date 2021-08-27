@@ -1,7 +1,7 @@
 import { isLeft, right } from "fp-ts/lib/Either";
 import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
-import { handler } from "./updateSearchObject";
+import { handler } from "./updateSearchObjectHandler";
 import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
 import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import {

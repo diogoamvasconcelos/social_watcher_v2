@@ -6,7 +6,7 @@ import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { isLeft, right } from "fp-ts/lib/Either";
-import { handler } from "./deleteSearchObject";
+import { handler } from "./deleteSearchObjectHandler";
 import { defaultSearchObjectDomain } from "@test/lib/default";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 

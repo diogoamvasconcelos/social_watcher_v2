@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { handler } from "./stripeWebhook";
+import { handler } from "./stripeWebhookHandler";
 import * as stripeClient from "@src/lib/stripe/client";
 import { isLeft, right } from "fp-ts/lib/Either";
 import * as logger from "@src/lib/logger";
