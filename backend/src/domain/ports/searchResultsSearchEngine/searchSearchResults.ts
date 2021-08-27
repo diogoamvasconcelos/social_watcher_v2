@@ -1,9 +1,9 @@
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
-import { Logger } from "../../../lib/logger";
-import { keywordCodec } from "../../models/keyword";
-import { searchResultCodec } from "../../models/searchResult";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { keywordCodec } from "@src/domain/models/keyword";
+import { searchResultCodec } from "@src/domain/models/searchResult";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export const paginationRequestCodec = t.type({
   limit: positiveInteger,

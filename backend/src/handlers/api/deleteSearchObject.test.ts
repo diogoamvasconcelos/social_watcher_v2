@@ -1,13 +1,13 @@
 // TODOOO: test it only tries to delete if it exists and it is allowed
 
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { deleteSearchObjectAndPrune } from "../../domain/controllers/deleteSearchObjectAndPrune";
-import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
-import { User } from "../../domain/models/user";
+import { deleteSearchObjectAndPrune } from "@src/domain/controllers/deleteSearchObjectAndPrune";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
+import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { handler } from "./deleteSearchObject";
-import { defaultSearchObjectDomain } from "../../../test/lib/default";
+import { defaultSearchObjectDomain } from "@test/lib/default";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 jest.mock("./shared", () => ({
@@ -16,8 +16,8 @@ jest.mock("./shared", () => ({
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
-jest.mock("../../adapters/userStore/getSearchObject", () => ({
-  ...jest.requireActual("../../adapters/userStore/getSearchObject"),
+jest.mock("@src/adapters/userStore/getSearchObject", () => ({
+  ...jest.requireActual("@src/adapters/userStore/getSearchObject"),
   makeGetSearchObject: jest.fn(),
 }));
 const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<
@@ -26,7 +26,7 @@ const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<
 const getSearchObjectMock = jest.fn();
 makeGetSearchObjectMock.mockReturnValue(getSearchObjectMock);
 
-jest.mock("../../domain/controllers/deleteSearchObjectAndPrune");
+jest.mock("@src/domain/controllers/deleteSearchObjectAndPrune");
 const deleteSearchObjectAndPruneMock =
   deleteSearchObjectAndPrune as jest.MockedFunction<
     typeof deleteSearchObjectAndPrune

@@ -1,12 +1,12 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Converter } from "aws-sdk/clients/dynamodb";
-import { makeQueueSearchResults } from "../../adapters/searchResultsQueue/queueSearchJobs";
-import { unknownToSearchResult } from "../../adapters/searchResultsStore/client";
-import { eitherListToDefaultOk } from "../../domain/ports/shared";
-import { getConfig } from "../../lib/config";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { getClient as getSearchResultsQueueClient } from "../../adapters/searchResultsQueue/client";
+import { makeQueueSearchResults } from "@src/adapters/searchResultsQueue/queueSearchJobs";
+import { unknownToSearchResult } from "@src/adapters/searchResultsStore/client";
+import { eitherListToDefaultOk } from "@src/domain/ports/shared";
+import { getConfig } from "@src/lib/config";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { getClient as getSearchResultsQueueClient } from "@src/adapters/searchResultsQueue/client";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();

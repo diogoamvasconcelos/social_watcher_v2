@@ -1,19 +1,19 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { getLogger } from "../../lib/logger";
+import { getLogger } from "@src/lib/logger";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { makeInternalErrorResponse, makeSuccessResponse } from "./responses";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { getConfig } from "../../lib/config";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { getConfig } from "@src/lib/config";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import { toApigwRequestMetadata } from "./shared";
 import {
   GetSearchObjectsErrorCode,
   GetSearchObjectsRequest,
   GetSearchObjectsResponse,
 } from "./models/getSearchObjects";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { SearchObjectDomain } from "../../domain/models/userItem";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
 
 const handler = async (
   event: APIGatewayProxyEvent

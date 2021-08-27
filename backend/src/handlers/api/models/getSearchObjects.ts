@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { searchObjectDomainCodec } from "../../../domain/models/userItem";
+import { searchObjectDomainCodec } from "@src/domain/models/userItem";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export type GetSearchObjectsRequest = ApiRequestMetadata;

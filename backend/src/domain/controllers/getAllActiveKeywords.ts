@@ -1,10 +1,10 @@
 import { isLeft, right, left } from "fp-ts/lib/Either";
-import { socialMedias } from "../models/socialMedia";
-import { Logger } from "../../lib/logger";
-import { GetActiveKeywordsFn } from "../ports/keywordStore/getActiveKeywords";
-import { Keyword } from "../models/keyword";
+import { socialMedias } from "@src/domain/models/socialMedia";
+import { Logger } from "@src/lib/logger";
+import { GetActiveKeywordsFn } from "@src/domain/ports/keywordStore/getActiveKeywords";
+import { Keyword } from "@src/domain/models/keyword";
 import { toSingleEither } from "@diogovasconcelos/lib/iots";
-import { CustomRightReturn } from "../ports/shared";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 type GetAllActiveKeywordsDeps = {
   logger: Logger;

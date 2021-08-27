@@ -3,16 +3,16 @@ import { isLeft } from "fp-ts/lib/Either";
 import {
   redditCredentialsCodec,
   SearchListingItem,
-} from "../../lib/reddit/models";
-import { Logger } from "../../lib/logger";
+} from "@src/lib/reddit/models";
+import { Logger } from "@src/lib/logger";
 import {
   getClient as getRedditClient,
   Client as RedditClient,
-} from "../../lib/reddit/client";
-import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { Keyword } from "../../domain/models/keyword";
-import { RedditSearchResult } from "../../domain/models/searchResult";
-import { fromUnix } from "../../lib/date";
+} from "@src/lib/reddit/client";
+import { Client as SSMClient, getParameter } from "@src/lib/ssm";
+import { Keyword } from "@src/domain/models/keyword";
+import { RedditSearchResult } from "@src/domain/models/searchResult";
+import { fromUnix } from "@src/lib/date";
 
 export const getClient = getRedditClient;
 export type Client = RedditClient;

@@ -1,8 +1,8 @@
 import { Client } from "@elastic/elasticsearch";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
-import { Logger } from "../logger";
+import { Logger } from "@src/lib/logger";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { applyTransformToItem } from "../iots";
+import { applyTransformToItem } from "@src/lib/iots";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { config } from "aws-sdk";
 

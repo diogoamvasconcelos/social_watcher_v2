@@ -1,16 +1,16 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { getConfig } from "../../lib/config";
-import { getLogger, Logger } from "../../lib/logger";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getConfig } from "@src/lib/config";
+import { getLogger, Logger } from "@src/lib/logger";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import {
   CreateSearchObjectErrorCode,
   CreateSearchObjectRequest,
   createSearchObjectResponse,
 } from "./models/createSearchObject";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makeCreateSearchObject } from "../../adapters/userStore/createSearchObject";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { makeGetUser } from "@src/adapters/userStore/getUser";
+import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import {
   makeForbiddenResponse,
@@ -28,9 +28,9 @@ import {
   SearchObjectDomain,
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
-} from "../../domain/models/userItem";
-import { User } from "../../domain/models/user";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
+} from "@src/domain/models/userItem";
+import { User } from "@src/domain/models/user";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import _ from "lodash";
 
 export const handler = async (

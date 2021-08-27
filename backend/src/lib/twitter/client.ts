@@ -8,10 +8,10 @@ import {
   searchRecentResponseCodec,
   TwitterCredentials,
 } from "./models";
-import { getMinutesAgo } from "../date";
-import { doRequest } from "../axios";
+import { getMinutesAgo } from "@src/lib/date";
+import { doRequest } from "@src/lib/axios";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { Logger } from "../logger";
+import { Logger } from "@src/lib/logger";
 
 export const getClient = (credentials: TwitterCredentials) => {
   // Look into https://www.npmjs.com/package/oauth if we want to use the key/secret to fetch the token

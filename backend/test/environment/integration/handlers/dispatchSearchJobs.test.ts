@@ -1,6 +1,6 @@
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { getEnvTestConfig } from "../../../lib/config";
-import { invokeLambda } from "../../../lib/lambda";
+import { getEnvTestConfig } from "@test/lib/config";
+import { invokeLambda } from "@test/lib/lambda";
 
 const lambdaName = getEnvTestConfig().dispatchSearchJobsLambdaName;
 

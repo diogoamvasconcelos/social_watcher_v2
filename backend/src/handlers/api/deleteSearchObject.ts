@@ -1,27 +1,27 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { getLogger } from "../../lib/logger";
+import { getLogger } from "@src/lib/logger";
 import { ApiResponse } from "./models/models";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { makeInternalErrorResponse, makeSuccessResponse } from "./responses";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { getConfig } from "../../lib/config";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { getConfig } from "@src/lib/config";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import {
   apiGetUser,
   getExistingSearchObject,
   toSearchObjectRequest,
 } from "./shared";
-import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
-import { SearchObjectDomain } from "../../domain/models/userItem";
-import { User } from "../../domain/models/user";
+import { makeGetUser } from "@src/adapters/userStore/getUser";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { User } from "@src/domain/models/user";
 import {
   DeleteSearchObjectErrorCode,
   DeleteSearchObjectResponse,
 } from "./models/deleteSearchObject";
-import { deleteSearchObjectAndPrune } from "../../domain/controllers/deleteSearchObjectAndPrune";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { makeMoveSearchObject } from "../../adapters/userStore/moveSearchObject";
+import { deleteSearchObjectAndPrune } from "@src/domain/controllers/deleteSearchObjectAndPrune";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
+import { makeMoveSearchObject } from "@src/adapters/userStore/moveSearchObject";
 
 export const handler = async (
   event: APIGatewayProxyEvent

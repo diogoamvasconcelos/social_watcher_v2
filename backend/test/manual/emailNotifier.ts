@@ -1,7 +1,7 @@
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import SES from "aws-sdk/clients/ses";
-import { getLogger } from "../../src/lib/logger";
-import { getClient, sendEmail } from "../../src/lib/ses";
+import { getLogger } from "@src/lib/logger";
+import { getClient, sendEmail } from "@src/lib/ses";
 
 const logger = getLogger();
 

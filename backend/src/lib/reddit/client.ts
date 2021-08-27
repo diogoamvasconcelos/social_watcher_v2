@@ -5,14 +5,14 @@ import {
   searchListingCodec,
   SearchListingItem,
 } from "./models";
-import { Logger } from "../logger";
+import { Logger } from "@src/lib/logger";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { DefaultOkReturn } from "../../domain/ports/shared";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 import qs from "qs";
 import { DateISOString, decode } from "@diogovasconcelos/lib/iots";
-import { getSecondsAfter } from "../date";
+import { getSecondsAfter } from "@src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { doRequest } from "../axios";
+import { doRequest } from "@src/lib/axios";
 
 export const getClient = (
   credentials: RedditCredentials

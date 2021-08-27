@@ -1,17 +1,17 @@
 import { Either, isLeft, left } from "fp-ts/lib/Either";
-import { Logger } from "../../lib/logger";
-import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { Keyword } from "../../domain/models/keyword";
-import { InstagramSearchResult } from "../../domain/models/searchResult";
-import { fromUnix } from "../../lib/date";
+import { Logger } from "@src/lib/logger";
+import { Client as SSMClient, getParameter } from "@src/lib/ssm";
+import { Keyword } from "@src/domain/models/keyword";
+import { InstagramSearchResult } from "@src/domain/models/searchResult";
+import { fromUnix } from "@src/lib/date";
 import {
   instagramApiKeyCodec,
   InstagramMediaNode,
-} from "../../lib/instagram/models";
+} from "@src/lib/instagram/models";
 import {
   getClient as getInstagramClient,
   Client as InstagramClient,
-} from "../../lib/instagram/client";
+} from "@src/lib/instagram/client";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getInstagramClient;

@@ -1,6 +1,6 @@
-import { Logger } from "../../../lib/logger";
-import { User, UserId } from "../../models/user";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { User, UserId } from "@src/domain/models/user";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type GetUserFn = (
   logger: Logger,

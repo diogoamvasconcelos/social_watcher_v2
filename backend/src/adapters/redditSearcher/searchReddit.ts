@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { SearchRedditFn } from "../../domain/ports/redditSearcher/searchReddit";
-import { searchAll } from "../../lib/reddit/client";
+import { SearchRedditFn } from "@src/domain/ports/redditSearcher/searchReddit";
+import { searchAll } from "@src/lib/reddit/client";
 import { Client, outToDomain } from "./client";
 
 // TODO: respect user's searchObject "over_18" when notifying and searching (filter out at that point)

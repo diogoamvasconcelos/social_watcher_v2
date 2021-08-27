@@ -1,10 +1,10 @@
-import { Keyword } from "../../domain/models/keyword";
-import { HackernewsSearchResult } from "../../domain/models/searchResult";
-import { SearchHackernewsItem } from "../../lib/hackernews/models";
+import { Keyword } from "@src/domain/models/keyword";
+import { HackernewsSearchResult } from "@src/domain/models/searchResult";
+import { SearchHackernewsItem } from "@src/lib/hackernews/models";
 import {
   getClient as getHackernewsClient,
   Client as HackernewsClient,
-} from "../../lib/hackernews/client";
+} from "@src/lib/hackernews/client";
 
 export const getClient = getHackernewsClient;
 export type Client = HackernewsClient;

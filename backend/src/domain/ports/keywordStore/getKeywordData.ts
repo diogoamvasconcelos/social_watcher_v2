@@ -1,7 +1,7 @@
-import { Logger } from "../../../lib/logger";
-import { Keyword, KeywordData } from "../../models/keyword";
-import { SocialMedia } from "../../models/socialMedia";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { Keyword, KeywordData } from "@src/domain/models/keyword";
+import { SocialMedia } from "@src/domain/models/socialMedia";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type GetKeywordDataFn = (
   logger: Logger,

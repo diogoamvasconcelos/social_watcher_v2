@@ -1,7 +1,7 @@
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { getClientAPIKey } from "../../../../../src/adapters/instagramSearcher/client";
-import { getLogger } from "../../../../../src/lib/logger";
-import { getClient as getSsmClient } from "../../../../../src/lib/ssm";
+import { getClientAPIKey } from "@src/adapters/instagramSearcher/client";
+import { getLogger } from "@src/lib/logger";
+import { getClient as getSsmClient } from "@src/lib/ssm";
 
 const logger = getLogger();
 

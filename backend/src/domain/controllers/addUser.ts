@@ -1,11 +1,11 @@
 import { isLeft, right } from "fp-ts/lib/Either";
-import { Logger } from "../../lib/logger";
-import { User, UserId } from "../models/user";
-import { PaymentData } from "../models/userItem";
-import { InitiateUserSubscriptionFn } from "../ports/paymentsManager/initiateUserSubscription";
-import { DefaultOkReturn } from "../ports/shared";
-import { PutPaymentDataFn } from "../ports/userStore/putPaymentData";
-import { PutUserFn } from "../ports/userStore/putUser";
+import { Logger } from "@src/lib/logger";
+import { User, UserId } from "@src/domain/models/user";
+import { PaymentData } from "@src/domain/models/userItem";
+import { InitiateUserSubscriptionFn } from "@src/domain/ports/paymentsManager/initiateUserSubscription";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
+import { PutPaymentDataFn } from "@src/domain/ports/userStore/putPaymentData";
+import { PutUserFn } from "@src/domain/ports/userStore/putUser";
 
 type dependencies = {
   logger: Logger;

@@ -1,10 +1,13 @@
 import { SQSEvent } from "aws-lambda/trigger/sqs";
-import { getConfig } from "../lib/config";
-import { getClient as getSearchResultSearchEngineClient } from "../adapters/searchResultsSearchEngine/client";
-import { getLogger } from "../lib/logger";
+import { getConfig } from "@src/lib/config";
+import { getClient as getSearchResultSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
+import { getLogger } from "@src/lib/logger";
 import { defaultMiddlewareStack } from "./middlewares/common";
-import { makeIndexSearchResults } from "../adapters/searchResultsSearchEngine/indexSearchResults";
-import { SearchResult, searchResultCodec } from "../domain/models/searchResult";
+import { makeIndexSearchResults } from "@src/adapters/searchResultsSearchEngine/indexSearchResults";
+import {
+  SearchResult,
+  searchResultCodec,
+} from "@src/domain/models/searchResult";
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();

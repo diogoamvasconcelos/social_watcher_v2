@@ -1,7 +1,7 @@
 import { Callback, Context } from "aws-lambda";
 import { right } from "fp-ts/lib/Either";
-import logger from "../../lib/logger";
-import { makeSuccessResponse } from "../api/responses";
+import logger from "@src/lib/logger";
+import { makeSuccessResponse } from "@src/handlers/api/responses";
 import { apigwMiddlewareStack } from "./apigwMiddleware";
 
 describe("apigwMiddleware", () => {

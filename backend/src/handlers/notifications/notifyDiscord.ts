@@ -1,12 +1,12 @@
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { isLeft } from "fp-ts/lib/Either";
-import { getClient as getDiscordNotifierClient } from "../../adapters/discordNotifier/client";
-import { makeSendMessageToChannel } from "../../adapters/discordNotifier/sendMessageToChannel";
-import { notifySearchResultToDiscord } from "../../domain/controllers/notifySearchResultToDiscord";
-import { discordNotificationJobCodec } from "../../domain/models/notificationJob";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
+import { getClient as getDiscordNotifierClient } from "@src/adapters/discordNotifier/client";
+import { makeSendMessageToChannel } from "@src/adapters/discordNotifier/sendMessageToChannel";
+import { notifySearchResultToDiscord } from "@src/domain/controllers/notifySearchResultToDiscord";
+import { discordNotificationJobCodec } from "@src/domain/models/notificationJob";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 
 const logger = getLogger();
 

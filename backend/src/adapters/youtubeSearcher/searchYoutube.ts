@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { SearchYoutubeFn } from "../../domain/ports/youtubeSearcher/searchYoutube";
-import { search } from "../../lib/youtube/client";
+import { SearchYoutubeFn } from "@src/domain/ports/youtubeSearcher/searchYoutube";
+import { search } from "@src/lib/youtube/client";
 import { Client, outToDomain } from "./client";
 
 export const makeSearchYoutube = (client: Client): SearchYoutubeFn => {

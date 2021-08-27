@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { QueueSearchResultsFn } from "../../domain/ports/searchResultsQueue/queueSearchResults";
-import { sendMessages } from "../../lib/sqs";
+import { QueueSearchResultsFn } from "@src/domain/ports/searchResultsQueue/queueSearchResults";
+import { sendMessages } from "@src/lib/sqs";
 import { Client } from "./client";
 
 export const makeQueueSearchResults = (

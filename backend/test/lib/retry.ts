@@ -1,5 +1,5 @@
 import { left, right } from "fp-ts/lib/Either";
-import { getLogger } from "../../src/lib/logger";
+import { getLogger } from "@src/lib/logger";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 const logger = getLogger();

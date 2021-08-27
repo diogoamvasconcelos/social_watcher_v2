@@ -1,10 +1,10 @@
-import { uuid } from "../lib/uuid";
-import { KeywordData } from "../domain/models/keyword";
-import { SocialMedia } from "../domain/models/socialMedia";
+import { uuid } from "@src/lib/uuid";
+import { KeywordData } from "@src/domain/models/keyword";
+import { SocialMedia } from "@src/domain/models/socialMedia";
 import { DateISOString, newLowerCase } from "@diogovasconcelos/lib/iots";
 import _ from "lodash";
 import { filterKeywords } from "./dispatchSearchJobs";
-import { getHoursAgo } from "../lib/date";
+import { getHoursAgo } from "@src/lib/date";
 
 describe("dispatchSearchJobs", () => {
   describe("filterKeywords", () => {

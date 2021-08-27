@@ -1,5 +1,5 @@
-import { GetKeywordDataFn } from "../../domain/ports/keywordStore/getKeywordData";
-import { getItem } from "../../lib/dynamoDb";
+import { GetKeywordDataFn } from "@src/domain/ports/keywordStore/getKeywordData";
+import { getItem } from "@src/lib/dynamoDb";
 import { Client, toDocumentPrimaryKeys, unknownToKeywordData } from "./client";
 
 export const makeGetKeywordData = (

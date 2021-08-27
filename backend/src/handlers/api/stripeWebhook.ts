@@ -6,31 +6,31 @@ import {
   makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
-import { getLogger, Logger } from "../../lib/logger";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
+import { getLogger, Logger } from "@src/lib/logger";
 import Stripe from "stripe";
 import {
   verifyWebhookEvent,
   getClient as getPaymentsClient,
-} from "../../lib/stripe/client";
-import { getClientCredentials as getPaymentsCredentials } from "../../adapters/paymentsManager/client";
-import { getClient as getSsmClient } from "../../lib/ssm";
-import { DefaultOkReturn } from "../../domain/ports/shared";
-import { customerSubscriptionEventDataCodec } from "../../lib/stripe/models";
+} from "@src/lib/stripe/client";
+import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
+import { customerSubscriptionEventDataCodec } from "@src/lib/stripe/models";
 import {
   getUserByCustomerId,
   GetUserByCustomerIdDeps,
-} from "../../domain/controllers/getUserByCustomerId";
-import { makeGetPaymentData } from "../../adapters/userStore/getPaymentData";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { getConfig } from "../../lib/config";
-import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makeGetUserIdByCustomerId } from "../../adapters/paymentsManager/getUserIdByCustomerId";
-import { PutPaymentDataFn } from "../../domain/ports/userStore/putPaymentData";
-import { PutUserFn } from "../../domain/ports/userStore/putUser";
-import { makePutPaymentData } from "../../adapters/userStore/putPayment";
-import { makePutUser } from "../../adapters/userStore/putUser";
-import { fromUnix } from "../../lib/date";
+} from "@src/domain/controllers/getUserByCustomerId";
+import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { getConfig } from "@src/lib/config";
+import { makeGetUser } from "@src/adapters/userStore/getUser";
+import { makeGetUserIdByCustomerId } from "@src/adapters/paymentsManager/getUserIdByCustomerId";
+import { PutPaymentDataFn } from "@src/domain/ports/userStore/putPaymentData";
+import { PutUserFn } from "@src/domain/ports/userStore/putUser";
+import { makePutPaymentData } from "@src/adapters/userStore/putPayment";
+import { makePutUser } from "@src/adapters/userStore/putUser";
+import { fromUnix } from "@src/lib/date";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import {
   dateISOString,

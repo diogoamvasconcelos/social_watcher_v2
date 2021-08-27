@@ -5,10 +5,10 @@ import {
   SearchRecentResponseItem,
 } from "./models";
 import { PartialDeep } from "type-fest";
-import { buildTwitterSearchResult } from "../../../test/lib/builders";
+import { buildTwitterSearchResult } from "@test/lib/builders";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../logger";
+import { getLogger } from "@src/lib/logger";
 
 const logger = getLogger();
 

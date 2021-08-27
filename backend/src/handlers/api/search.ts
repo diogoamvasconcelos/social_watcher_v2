@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { getLogger } from "../../lib/logger";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getLogger } from "@src/lib/logger";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import { ApiResponse } from "./models/models";
 import {
   makeForbiddenResponse,
@@ -9,12 +9,12 @@ import {
   makeSuccessResponse,
 } from "./responses";
 import { toRequestWithUserData } from "./shared";
-import { getConfig } from "../../lib/config";
-import { isKeywordAllowed } from "../../domain/controllers/isKeywordAllowed";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
+import { getConfig } from "@src/lib/config";
+import { isKeywordAllowed } from "@src/domain/controllers/isKeywordAllowed";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { getClient as getSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
+import { makeSearchSearchResults } from "@src/adapters/searchResultsSearchEngine/searchSearchResults";
 import {
   SearchErrorCode,
   searchRequestUserDataCodec,

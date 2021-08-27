@@ -6,9 +6,9 @@ import {
   Middleware,
   stackMiddlewares,
 } from "./common";
-import logger from "../../lib/logger";
+import logger from "@src/lib/logger";
 
-jest.mock("../../lib/logger");
+jest.mock("@src/lib/logger");
 
 describe("stackMiddlewares", () => {
   it("applies from left to right", async () => {

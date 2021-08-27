@@ -4,21 +4,21 @@ import { Either, isLeft, left } from "fp-ts/lib/Either";
 import {
   SearchObjectIo,
   SearchObjectUserDataIo,
-} from "../../domain/models/userItem";
-import { getUserResponseCodec } from "../../handlers/api/models/getUser";
-import { updateSearchObjectResponseCodec } from "../../handlers/api/models/updateSearchObject";
+} from "@src/domain/models/userItem";
+import { getUserResponseCodec } from "@src/handlers/api/models/getUser";
+import { updateSearchObjectResponseCodec } from "@src/handlers/api/models/updateSearchObject";
 import {
   SearchRequestUserData,
   searchResponseCodec,
-} from "../../handlers/api/models/search";
-import { getSearchObjectsResponseCodec } from "../../handlers/api/models/getSearchObjects";
+} from "@src/handlers/api/models/search";
+import { getSearchObjectsResponseCodec } from "@src/handlers/api/models/getSearchObjects";
 import {
   createPaymentsPortalResponseCodec,
   CreatePaymentsPortalUserData,
-} from "../../handlers/api/models/createPaymentsPortal";
+} from "@src/handlers/api/models/createPaymentsPortal";
 import { decode } from "@diogovasconcelos/lib/iots";
-import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
-import { createSearchObjectResponseCodec } from "../../handlers/api/models/createSearchObject";
+import { getSearchObjectResponseCodec } from "@src/handlers/api/models/getSearchObject";
+import { createSearchObjectResponseCodec } from "@src/handlers/api/models/createSearchObject";
 
 export const getClient = (baseURL: string) => {
   return axios.create({

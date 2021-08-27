@@ -1,31 +1,31 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
 import { Either, left, right } from "fp-ts/lib/Either";
-import { makeGetKeywordData } from "../../adapters/keywordStore/getKeywordData";
-import { unknownToUserItem } from "../../adapters/userStore/client";
+import { makeGetKeywordData } from "@src/adapters/keywordStore/getKeywordData";
+import { unknownToUserItem } from "@src/adapters/userStore/client";
 import {
   SearchObjectDomain,
   UserData,
   UserItemDomain,
-} from "../../domain/models/userItem";
-import { getConfig } from "../../lib/config";
-import { getLogger, Logger } from "../../lib/logger";
-import { throwUnexpectedCase } from "../../lib/runtime";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { getClient as getKeywordStoreClient } from "../../adapters/keywordStore/client";
-import { getClient as getUserStoreClient } from "../../adapters/userStore/client";
-import { makeUpdateKeywordData } from "../../adapters/keywordStore/updateKeywordData";
-import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
-import { GetKeywordDataFn } from "../../domain/ports/keywordStore/getKeywordData";
-import { UpdateKeywordDataFn } from "../../domain/ports/keywordStore/updateKeywordData";
-import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
+} from "@src/domain/models/userItem";
+import { getConfig } from "@src/lib/config";
+import { getLogger, Logger } from "@src/lib/logger";
+import { throwUnexpectedCase } from "@src/lib/runtime";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { getClient as getKeywordStoreClient } from "@src/adapters/keywordStore/client";
+import { getClient as getUserStoreClient } from "@src/adapters/userStore/client";
+import { makeUpdateKeywordData } from "@src/adapters/keywordStore/updateKeywordData";
+import { makeGetSearchObjectsForKeyword } from "@src/adapters/userStore/getSearchObjectsForKeyword";
+import { GetKeywordDataFn } from "@src/domain/ports/keywordStore/getKeywordData";
+import { UpdateKeywordDataFn } from "@src/domain/ports/keywordStore/updateKeywordData";
+import { GetSearchObjectsForKeywordFn } from "@src/domain/ports/userStore/getSearchObjectsForKeyword";
 import { Converter } from "aws-sdk/clients/dynamodb";
-import { propagateSearchObjectUpdated } from "../../domain/controllers/propagateSearchObjectUpdated";
-import { eitherListToDefaultOk } from "../../domain/ports/shared";
-import { propagateUserDataChanged } from "../../domain/controllers/propagateUserDataChanged";
-import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearchObjectsForUser";
-import { UpdateSearchObjectFn } from "../../domain/ports/userStore/updateSearchObject";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
-import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
+import { propagateSearchObjectUpdated } from "@src/domain/controllers/propagateSearchObjectUpdated";
+import { eitherListToDefaultOk } from "@src/domain/ports/shared";
+import { propagateUserDataChanged } from "@src/domain/controllers/propagateUserDataChanged";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
+import { UpdateSearchObjectFn } from "@src/domain/ports/userStore/updateSearchObject";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
+import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 

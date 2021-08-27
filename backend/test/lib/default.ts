@@ -3,11 +3,11 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { uuid } from "../../src/lib/uuid";
+import { uuid } from "@src/lib/uuid";
 import {
   SearchObjectDomain,
   SearchObjectUserDataDomain,
-} from "../../src/domain/models/userItem";
+} from "@src/domain/models/userItem";
 
 export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
   keyword: newLowerCase("some_keyword"),

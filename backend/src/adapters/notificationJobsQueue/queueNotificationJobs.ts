@@ -1,6 +1,6 @@
-import { NotificationMedium } from "../../domain/models/notificationMedium";
-import { QueueNotificationJobsFn } from "../../domain/ports/notificationJobsQueue/queueNotificationJobs";
-import { makeQueueJobs } from "../queueShared";
+import { NotificationMedium } from "@src/domain/models/notificationMedium";
+import { QueueNotificationJobsFn } from "@src/domain/ports/notificationJobsQueue/queueNotificationJobs";
+import { makeQueueJobs } from "@src/adapters/queueShared";
 import { Client } from "./client";
 
 export const makeQueueNotificationJobs = (

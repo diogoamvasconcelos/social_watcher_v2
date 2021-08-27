@@ -2,29 +2,26 @@ import "jest-extended";
 import {
   createSearchResultIndex,
   getClient,
-} from "../../../../../src/adapters/searchResultsSearchEngine/client";
-import { makeIndexSearchResults } from "../../../../../src/adapters/searchResultsSearchEngine/indexSearchResults";
-import { makeSearchSearchResults } from "../../../../../src/adapters/searchResultsSearchEngine/searchSearchResults";
-import { SearchResult } from "../../../../../src/domain/models/searchResult";
-import {
-  deleteIndex,
-  refreshIndices,
-} from "../../../../../src/lib/elasticsearch/client";
+} from "@src/adapters/searchResultsSearchEngine/client";
+import { makeIndexSearchResults } from "@src/adapters/searchResultsSearchEngine/indexSearchResults";
+import { makeSearchSearchResults } from "@src/adapters/searchResultsSearchEngine/searchSearchResults";
+import { SearchResult } from "@src/domain/models/searchResult";
+import { deleteIndex, refreshIndices } from "@src/lib/elasticsearch/client";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../../../../../src/lib/logger";
-import { uuid } from "../../../../../src/lib/uuid";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
 import {
   buildRedditSearchResult,
   buildTwitterSearchResult,
   buildHackernewsSearchResult,
   buildInstagramSearchResult,
   buildYoutubeSearchResult,
-} from "../../../../lib/builders";
-import { getLocalTestConfig } from "../../../../lib/config";
+} from "@test/lib/builders";
+import { getLocalTestConfig } from "@test/lib/config";
 
 const config = getLocalTestConfig();
 const logger = getLogger();

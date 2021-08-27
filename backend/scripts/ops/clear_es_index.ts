@@ -8,10 +8,10 @@ import {
   createSearchResultIndex,
   getClient,
   getSearchResultIndexName,
-} from "../../src/adapters/searchResultsSearchEngine/client";
-import { getConfig } from "../../src/lib/config";
-import { deleteIndex, indexExists } from "../../src/lib/elasticsearch/client";
-import { getLogger } from "../../src/lib/logger";
+} from "@src/adapters/searchResultsSearchEngine/client";
+import { getConfig } from "@src/lib/config";
+import { deleteIndex, indexExists } from "@src/lib/elasticsearch/client";
+import { getLogger } from "@src/lib/logger";
 
 const config = getConfig();
 const logger = getLogger();

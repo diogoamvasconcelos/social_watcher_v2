@@ -1,7 +1,7 @@
-import { Logger } from "../../../lib/logger";
-import { Keyword } from "../../models/keyword";
-import { SearchObjectDomain } from "../../models/userItem";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { Keyword } from "@src/domain/models/keyword";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type GetSearchObjectsForKeywordFn = (
   logger: Logger,

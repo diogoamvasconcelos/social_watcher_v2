@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayProxyResult, Callback, Context, Handler } from "aws-lambda";
 import { isLeft, left } from "fp-ts/lib/Either";
-import { ApiResponse } from "../api/models/models";
-import { makeInternalErrorResponse } from "../api/responses";
+import { ApiResponse } from "@src/handlers/api/models/models";
+import { makeInternalErrorResponse } from "@src/handlers/api/responses";
 import {
   ErrorMiddlewareErrorReturnFn,
   LoggerMiddlewareUpdateFn,

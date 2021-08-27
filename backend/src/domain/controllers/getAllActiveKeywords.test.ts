@@ -1,12 +1,12 @@
 import "jest-extended";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
-import { uuid } from "../../lib/uuid";
-import { getLogger } from "../../lib/logger";
-import { KeywordData } from "../models/keyword";
-import { GetActiveKeywordsFn } from "../ports/keywordStore/getActiveKeywords";
+import { uuid } from "@src/lib/uuid";
+import { getLogger } from "@src/lib/logger";
+import { KeywordData } from "@src/domain/models/keyword";
+import { GetActiveKeywordsFn } from "@src/domain/ports/keywordStore/getActiveKeywords";
 import { getAllActiveKeywords } from "./getAllActiveKeywords";
 import _ from "lodash";
-import { socialMedias } from "../models/socialMedia";
+import { socialMedias } from "@src/domain/models/socialMedia";
 import { right } from "fp-ts/lib/Either";
 
 const logger = getLogger();

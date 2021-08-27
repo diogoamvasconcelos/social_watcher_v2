@@ -1,6 +1,6 @@
 import { right } from "fp-ts/lib/Either";
-import { TranslateToEnglishFn } from "../../domain/ports/translater/translateToEnglish";
-import { translateText } from "../../lib/translate";
+import { TranslateToEnglishFn } from "@src/domain/ports/translater/translateToEnglish";
+import { translateText } from "@src/lib/translate";
 import { Client } from "./client";
 
 const languageMap: Record<string, string> = { in: "id" };

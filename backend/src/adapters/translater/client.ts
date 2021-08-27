@@ -1,4 +1,4 @@
-import { getClient as getTranslateClient } from "../../lib/translate";
+import { getClient as getTranslateClient } from "@src/lib/translate";
 
 export const getClient = getTranslateClient;
 export type Client = ReturnType<typeof getClient>;

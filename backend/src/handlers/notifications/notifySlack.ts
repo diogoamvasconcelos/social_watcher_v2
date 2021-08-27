@@ -1,11 +1,11 @@
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 import { SQSEvent } from "aws-lambda/trigger/sqs";
-import { getClient as getSlackNotifierClient } from "../../adapters/slackNotifier/client";
-import { makeSendMessageToChannel } from "../../adapters/slackNotifier/sendMessageToChannel";
-import { notifySearchResultToSlack } from "../../domain/controllers/notifySearchResultToSlack";
-import { slackNotificationJobCodec } from "../../domain/models/notificationJob";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
+import { getClient as getSlackNotifierClient } from "@src/adapters/slackNotifier/client";
+import { makeSendMessageToChannel } from "@src/adapters/slackNotifier/sendMessageToChannel";
+import { notifySearchResultToSlack } from "@src/domain/controllers/notifySearchResultToSlack";
+import { slackNotificationJobCodec } from "@src/domain/models/notificationJob";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 
 const logger = getLogger();
 

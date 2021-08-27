@@ -1,5 +1,5 @@
-import { Logger } from "../../../lib/logger";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type TranslateToEnglishFn = (
   logger: Logger,

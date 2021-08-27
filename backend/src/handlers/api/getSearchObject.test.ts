@@ -1,10 +1,10 @@
 import { isLeft, right } from "fp-ts/lib/Either";
-import { User } from "../../domain/models/user";
+import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { handler } from "./getSearchObject";
-import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { defaultSearchObjectDomain } from "../../../test/lib/default";
+import { defaultSearchObjectDomain } from "@test/lib/default";
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -12,8 +12,8 @@ jest.mock("./shared", () => ({
 }));
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
-jest.mock("../../adapters/userStore/getSearchObject", () => ({
-  ...jest.requireActual("../../adapters/userStore/getSearchObject"),
+jest.mock("@src/adapters/userStore/getSearchObject", () => ({
+  ...jest.requireActual("@src/adapters/userStore/getSearchObject"),
   makeGetSearchObject: jest.fn(),
 }));
 const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<

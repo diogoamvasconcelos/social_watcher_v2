@@ -1,22 +1,22 @@
-import { defaultSearchObjectDomain } from "../../../test/lib/default";
+import { defaultSearchObjectDomain } from "@test/lib/default";
 import {
   buildHackernewsSearchResult,
   buildRedditSearchResult,
   buildSQSEvent,
   buildTwitterSearchResult,
-} from "../../../test/lib/builders";
-import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
-import { makeQueueNotificationJobs } from "../../adapters/notificationJobsQueue/queueNotificationJobs";
+} from "@test/lib/builders";
+import { makeGetSearchObjectsForKeyword } from "@src/adapters/userStore/getSearchObjectsForKeyword";
+import { makeQueueNotificationJobs } from "@src/adapters/notificationJobsQueue/queueNotificationJobs";
 import { right } from "fp-ts/lib/Either";
 import { handler } from "./dispatchNotificationJobs";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { SearchObjectDomain } from "../../domain/models/userItem";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
 import { SearchResult } from "src/domain/models/searchResult";
 
 // mock: getSearchObjectsForKeyword
-jest.mock("../../adapters/userStore/getSearchObjectsForKeyword", () => ({
-  ...jest.requireActual("../../adapters/userStore/getSearchObjectsForKeyword"),
+jest.mock("@src/adapters/userStore/getSearchObjectsForKeyword", () => ({
+  ...jest.requireActual("@src/adapters/userStore/getSearchObjectsForKeyword"),
   makeGetSearchObjectsForKeyword: jest.fn(),
 }));
 const makeGetSearchObjectsForKeywordMock =
@@ -29,9 +29,9 @@ makeGetSearchObjectsForKeywordMock.mockReturnValue(
 );
 
 // mock: makeQueueNotificationJobs
-jest.mock("../../adapters/notificationJobsQueue/queueNotificationJobs", () => ({
+jest.mock("@src/adapters/notificationJobsQueue/queueNotificationJobs", () => ({
   ...jest.requireActual(
-    "../../adapters/notificationJobsQueue/queueNotificationJobs"
+    "@src/adapters/notificationJobsQueue/queueNotificationJobs"
   ),
   makeQueueNotificationJobs: jest.fn(),
 }));

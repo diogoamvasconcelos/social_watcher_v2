@@ -1,20 +1,17 @@
-import { getLogger } from "../../src/lib/logger";
+import { getLogger } from "@src/lib/logger";
 import {
   attachPaymentMethod,
   getClient as getPaymentsClient,
   getCustomerById,
-} from "../../src/lib/stripe/client";
-import { getClient as getSsmClient } from "../../src/lib/ssm";
-import { getClientCredentials as getPaymentsCredentials } from "../../src/adapters/paymentsManager/client";
-import {
-  updateCustomer,
-  updateSubscription,
-} from "../../src/lib/stripe/client";
+} from "@src/lib/stripe/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
+import { updateCustomer, updateSubscription } from "@src/lib/stripe/client";
 import {
   createTestUser,
   deleteUser,
   getPaymentData,
-} from "../environment/acceptance/steps";
+} from "@test/environment/acceptance/steps";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 

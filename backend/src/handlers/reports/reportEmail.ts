@@ -1,11 +1,11 @@
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 import { SQSEvent } from "aws-lambda/trigger/sqs";
-import { makeSendEmail } from "../../adapters/emailReporter/sendEmail";
-import { emailReportJobCodec } from "../../domain/models/reportJob";
-import { getLogger } from "../../lib/logger";
-import { getClient as getEmailReporterClient } from "../../adapters/emailReporter/client";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { capitalizeWord } from "../../lib/text";
+import { makeSendEmail } from "@src/adapters/emailReporter/sendEmail";
+import { emailReportJobCodec } from "@src/domain/models/reportJob";
+import { getLogger } from "@src/lib/logger";
+import { getClient as getEmailReporterClient } from "@src/adapters/emailReporter/client";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { capitalizeWord } from "@src/lib/text";
 
 const logger = getLogger();
 

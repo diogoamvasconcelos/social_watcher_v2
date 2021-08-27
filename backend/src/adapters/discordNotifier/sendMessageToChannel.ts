@@ -1,6 +1,6 @@
 import { isLeft, right } from "fp-ts/lib/Either";
-import { SendMessageToChannelFn } from "../../domain/ports/discordNotifier/sendMessageToChannel";
-import { messageToChannel } from "../../lib/discord/client";
+import { SendMessageToChannelFn } from "@src/domain/ports/discordNotifier/sendMessageToChannel";
+import { messageToChannel } from "@src/lib/discord/client";
 import { Client } from "./client";
 
 export const makeSendMessageToChannel = (

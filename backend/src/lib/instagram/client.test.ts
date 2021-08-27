@@ -1,10 +1,10 @@
 import { scrapeTag } from "instagram-scraping";
-import { getLogger } from "../logger";
+import { getLogger } from "@src/lib/logger";
 import { getClient, search } from "./client";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { InstagramMediaNode } from "./models";
-import { uuid } from "../uuid";
-import { getMinutesAgo, toUnixTimstamp, fromUnix } from "../date";
+import { uuid } from "@src/lib/uuid";
+import { getMinutesAgo, toUnixTimstamp, fromUnix } from "@src/lib/date";
 import _ from "lodash";
 import "jest-extended";
 

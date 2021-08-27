@@ -1,5 +1,5 @@
-import { GetActiveKeywordsFn } from "../../domain/ports/keywordStore/getActiveKeywords";
-import { queryItems } from "../../lib/dynamoDb";
+import { GetActiveKeywordsFn } from "@src/domain/ports/keywordStore/getActiveKeywords";
+import { queryItems } from "@src/lib/dynamoDb";
 import { Client, toGSI1PK, unknownToKeywordData } from "./client";
 
 export const makeGetActiveKeywords = (

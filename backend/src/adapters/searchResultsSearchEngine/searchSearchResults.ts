@@ -3,11 +3,11 @@ import {
   esUnknownToSearchResult,
   searchResultIndexAlias,
 } from "./client";
-import { RequestParamsSearch, search } from "../../lib/elasticsearch/client";
+import { RequestParamsSearch, search } from "@src/lib/elasticsearch/client";
 import {
   SearchSearchResultsFn,
   searchSearchResultsResultCodec,
-} from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
+} from "@src/domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { isLeft, left } from "fp-ts/lib/Either";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { decode } from "@diogovasconcelos/lib/iots";

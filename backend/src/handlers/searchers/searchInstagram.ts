@@ -1,14 +1,14 @@
 import { SQSEvent } from "aws-lambda/trigger/sqs";
-import { getClient as getSsmClient } from "../../lib/ssm";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 import { makeSearcherHandler } from "./shared";
-import { makeSearchInstagram } from "../../adapters/instagramSearcher/searchInstagram";
+import { makeSearchInstagram } from "@src/adapters/instagramSearcher/searchInstagram";
 import { isLeft } from "fp-ts/lib/Either";
 import {
   getClient as getInstagramClient,
   getClientAPIKey,
-} from "../../adapters/instagramSearcher/client";
+} from "@src/adapters/instagramSearcher/client";
 
 const logger = getLogger();
 

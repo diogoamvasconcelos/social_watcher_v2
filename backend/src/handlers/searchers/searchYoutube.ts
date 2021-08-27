@@ -2,11 +2,11 @@ import { SQSEvent } from "aws-lambda/trigger/sqs";
 import {
   getClient as getYoutubeClient,
   getClientCredentials as getYoutubeCredentials,
-} from "../../adapters/youtubeSearcher/client";
-import { getClient as getSsmClient } from "../../lib/ssm";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { makeSearchYoutube } from "../../adapters/youtubeSearcher/searchYoutube";
+} from "@src/adapters/youtubeSearcher/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { makeSearchYoutube } from "@src/adapters/youtubeSearcher/searchYoutube";
 import { makeSearcherHandler } from "./shared";
 
 const logger = getLogger();

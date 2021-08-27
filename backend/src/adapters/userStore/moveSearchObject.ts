@@ -3,10 +3,10 @@ import {
   toSearchObjectDocumentPartitionKeys,
   userItemToDocument,
 } from "./client";
-import { MoveSearchObjectFn } from "../../domain/ports/userStore/moveSearchObject";
+import { MoveSearchObjectFn } from "@src/domain/ports/userStore/moveSearchObject";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { deleteItem, transactWriteItems } from "../../lib/dynamoDb";
+import { deleteItem, transactWriteItems } from "@src/lib/dynamoDb";
 
 export const makeMoveSearchObject = (
   client: Client,

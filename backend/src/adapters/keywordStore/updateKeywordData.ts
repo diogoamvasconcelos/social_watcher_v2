@@ -1,6 +1,6 @@
 import { isLeft, right, left } from "fp-ts/lib/Either";
-import { UpdateKeywordDataFn } from "../../domain/ports/keywordStore/updateKeywordData";
-import { putItem } from "../../lib/dynamoDb";
+import { UpdateKeywordDataFn } from "@src/domain/ports/keywordStore/updateKeywordData";
+import { putItem } from "@src/lib/dynamoDb";
 import { Client, keywordDataToDocument } from "./client";
 
 export const makeUpdateKeywordData = (

@@ -1,12 +1,12 @@
 import { SQSEvent } from "aws-lambda/trigger/sqs";
-import { makeSearchTwitter } from "../../adapters/twitterSearcher/searchTwitter";
+import { makeSearchTwitter } from "@src/adapters/twitterSearcher/searchTwitter";
 import {
   getClient as getTwitterClient,
   getClientCredentials as getTwitterCredentials,
-} from "../../adapters/twitterSearcher/client";
-import { getClient as getSsmClient } from "../../lib/ssm";
-import { getLogger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
+} from "@src/adapters/twitterSearcher/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getLogger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 import { makeSearcherHandler } from "./shared";
 
 const logger = getLogger();

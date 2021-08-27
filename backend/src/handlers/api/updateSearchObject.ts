@@ -1,34 +1,34 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { getConfig } from "../../lib/config";
-import { getLogger, Logger } from "../../lib/logger";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getConfig } from "@src/lib/config";
+import { getLogger, Logger } from "@src/lib/logger";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { makeGetUser } from "../../adapters/userStore/getUser";
-import { makeUpdateSearchObject } from "../../adapters/userStore/updateSearchObject";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { makeGetUser } from "@src/adapters/userStore/getUser";
+import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
 import {
   apiGetUser,
   getExistingSearchObject,
   parseRequestBodyJSON,
   toSearchObjectRequest,
 } from "./shared";
-import { User } from "../../domain/models/user";
+import { User } from "@src/domain/models/user";
 import {
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
-} from "../../domain/models/userItem";
+} from "@src/domain/models/userItem";
 import {
   UpdateSearchObjectErrorCode,
   UpdateSearchObjectRequest,
   UpdateSearchObjectResponse,
 } from "./models/updateSearchObject";
-import { makeGetSearchObject } from "../../adapters/userStore/getSearchObject";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const handler = async (

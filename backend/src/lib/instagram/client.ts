@@ -2,9 +2,9 @@ import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { ScrapeMediaNode } from "instagram-scraping";
-import { fromUnix, getMinutesAgo } from "../date";
-import { Logger } from "../logger";
-import { Awaited } from "../types";
+import { fromUnix, getMinutesAgo } from "@src/lib/date";
+import { Logger } from "@src/lib/logger";
+import { Awaited } from "@src/lib/types";
 import {
   InstagramApiKey,
   InstagramMediaNode,

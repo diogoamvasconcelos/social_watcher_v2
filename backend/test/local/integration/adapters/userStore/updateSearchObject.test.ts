@@ -1,10 +1,10 @@
-import { makeGetSearchObject } from "../../../../../src/adapters/userStore/getSearchObject";
-import { makeCreateSearchObject } from "../../../../../src/adapters/userStore/createSearchObject";
-import { getLogger } from "../../../../../src/lib/logger";
-import { uuid } from "../../../../../src/lib/uuid";
-import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
-import { defaultSearchObjectDomain } from "../../../../lib/default";
-import { makeUpdateSearchObject } from "../../../../../src/adapters/userStore/updateSearchObject";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
+import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
+import { client, preparesGenericTable } from "@test/lib/dynamoDb";
+import { defaultSearchObjectDomain } from "@test/lib/default";
+import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";

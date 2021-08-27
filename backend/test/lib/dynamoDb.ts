@@ -1,5 +1,5 @@
 import DynamoDB from "aws-sdk/clients/dynamodb";
-import { getClient as getDynamoDBClient } from "../../src/lib/dynamoDb";
+import { getClient as getDynamoDBClient } from "@src/lib/dynamoDb";
 import { getLocalTestConfig } from "./config";
 
 const endpoint = getLocalTestConfig().dynamoDbUrl;

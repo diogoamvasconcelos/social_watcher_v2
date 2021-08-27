@@ -1,8 +1,8 @@
-import { getClient as getStripeClient } from "../../lib/stripe/client";
-import { Client as SSMClient, getParameter } from "../../lib/ssm";
+import { getClient as getStripeClient } from "@src/lib/stripe/client";
+import { Client as SSMClient, getParameter } from "@src/lib/ssm";
 import { isLeft } from "fp-ts/lib/Either";
-import { Logger } from "../../lib/logger";
-import { stripeCredentialsCodec } from "../../lib/stripe/models";
+import { Logger } from "@src/lib/logger";
+import { stripeCredentialsCodec } from "@src/lib/stripe/models";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 // This for some reason doesn't work, so use direclty the client from the lib:

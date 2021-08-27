@@ -1,15 +1,15 @@
 import {
   getClient as getApiClient,
   getDefaultSearchObject,
-} from "../../../src/lib/apiClient/apiClient";
+} from "@src/lib/apiClient/apiClient";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "../../../src/lib/types";
-import { uuid } from "../../../src/lib/uuid";
-import { getEnvTestConfig } from "../../lib/config";
+import { Awaited } from "@src/lib/types";
+import { uuid } from "@src/lib/uuid";
+import { getEnvTestConfig } from "@test/lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 
 const config = getEnvTestConfig();

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lambdaHandler } from "../../src/handlers/dispatchSearchJobs";
+import { lambdaHandler } from "@src/handlers/dispatchSearchJobs";
 
 // scripts/with_env.js yarn ts-node scripts/run_handlers/dispatchSearchJobs.ts
 const main = async () => {

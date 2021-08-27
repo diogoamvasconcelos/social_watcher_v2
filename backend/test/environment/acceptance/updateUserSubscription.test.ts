@@ -1,6 +1,6 @@
 import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "../../../src/lib/types";
-import { uuid } from "../../../src/lib/uuid";
+import { Awaited } from "@src/lib/types";
+import { uuid } from "@src/lib/uuid";
 import {
   checkKeyword,
   createTestUser,

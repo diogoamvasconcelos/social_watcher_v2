@@ -1,5 +1,5 @@
-import { GetSearchObjectsForUserFn } from "../../domain/ports/userStore/getSearchObjectsForUser";
-import { queryItems } from "../../lib/dynamoDb";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
+import { queryItems } from "@src/lib/dynamoDb";
 import { Client, unknownToSearchObject } from "./client";
 
 export const makeGetSearchObjectsForUser = (

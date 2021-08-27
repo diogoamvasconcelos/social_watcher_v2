@@ -2,26 +2,26 @@ import { SQSEvent } from "aws-lambda/trigger/sqs";
 import {
   SearchResult,
   searchResultCodec,
-} from "../../domain/models/searchResult";
-import { getLogger, Logger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
-import { getClient as getUserStoreClient } from "../../adapters/userStore/client";
-import { getConfig } from "../../lib/config";
+} from "@src/domain/models/searchResult";
+import { getLogger, Logger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { makeGetSearchObjectsForKeyword } from "@src/adapters/userStore/getSearchObjectsForKeyword";
+import { getClient as getUserStoreClient } from "@src/adapters/userStore/client";
+import { getConfig } from "@src/lib/config";
 import {
   NotificationMedium,
   notificationMediums,
-} from "../../domain/models/notificationMedium";
-import { SearchObjectDomain } from "../../domain/models/userItem";
+} from "@src/domain/models/notificationMedium";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
 import { isLeft, right } from "fp-ts/lib/Either";
 import {
   DefaultOkReturn,
   eitherListToDefaultOk,
-} from "../../domain/ports/shared";
-import { makeQueueNotificationJobs } from "../../adapters/notificationJobsQueue/queueNotificationJobs";
-import { getClient as getNotificationJobsQueueClient } from "../../adapters/notificationJobsQueue/client";
-import { QueueNotificationJobsFn } from "../../domain/ports/notificationJobsQueue/queueNotificationJobs";
-import { NotificationJob } from "../../domain/models/notificationJob";
+} from "@src/domain/ports/shared";
+import { makeQueueNotificationJobs } from "@src/adapters/notificationJobsQueue/queueNotificationJobs";
+import { getClient as getNotificationJobsQueueClient } from "@src/adapters/notificationJobsQueue/client";
+import { QueueNotificationJobsFn } from "@src/domain/ports/notificationJobsQueue/queueNotificationJobs";
+import { NotificationJob } from "@src/domain/models/notificationJob";
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();

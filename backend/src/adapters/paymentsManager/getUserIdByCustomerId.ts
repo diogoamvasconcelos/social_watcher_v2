@@ -1,7 +1,7 @@
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { GetUserIdByCustomerIdFn } from "../../domain/ports/paymentsManager/getUserIdByCustomerId";
-import { getCustomerById } from "../../lib/stripe/client";
+import { GetUserIdByCustomerIdFn } from "@src/domain/ports/paymentsManager/getUserIdByCustomerId";
+import { getCustomerById } from "@src/lib/stripe/client";
 import { Client } from "./client";
 
 export const makeGetUserIdByCustomerId = (

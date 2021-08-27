@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { handler } from "./stripeWebhook";
-import * as stripeClient from "../../lib/stripe/client";
+import * as stripeClient from "@src/lib/stripe/client";
 import { isLeft, right } from "fp-ts/lib/Either";
-import * as logger from "../../lib/logger";
-import { loggerMock } from "../../../test/lib/mocks";
+import * as logger from "@src/lib/logger";
+import { loggerMock } from "@test/lib/mocks";
 
 jest.spyOn(logger, "getLogger").mockReturnValue(loggerMock);
 

@@ -4,8 +4,8 @@ import { Either } from "fp-ts/lib/Either";
 import {
   searchObjectDomainCodec,
   SearchObjectIo,
-} from "../../../domain/models/userItem";
-import { User } from "../../../domain/models/user";
+} from "@src/domain/models/userItem";
+import { User } from "@src/domain/models/user";
 
 // ++++++++++
 // + SHARED +

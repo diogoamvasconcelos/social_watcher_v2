@@ -4,46 +4,46 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { uuid } from "../../../src/lib/uuid";
-import { getEnvTestConfig } from "../../lib/config";
-import { getLogger } from "../../../src/lib/logger";
+import { uuid } from "@src/lib/uuid";
+import { getEnvTestConfig } from "@test/lib/config";
+import { getLogger } from "@src/lib/logger";
 import {
   adminConfirmSignUp,
   adminDeleteUser,
   getClient as getCognitoClient,
   initiateAuth,
   signUp,
-} from "../../../src/lib/cognito";
+} from "@src/lib/cognito";
 import {
   deleteItem,
   getClient as getDynamoDbClient,
   queryItems,
-} from "../../../src/lib/dynamoDb";
-import { makeGetUser } from "../../../src/adapters/userStore/getUser";
-import { SubscriptionData, UserId } from "../../../src/domain/models/user";
+} from "@src/lib/dynamoDb";
+import { makeGetUser } from "@src/adapters/userStore/getUser";
+import { SubscriptionData, UserId } from "@src/domain/models/user";
 import _ from "lodash";
 import {
   toUserDataDocumentKeys,
   userItemDocumentCodec,
-} from "../../../src/adapters/userStore/client";
+} from "@src/adapters/userStore/client";
 import {
   PaymentData,
   SocialMediaSearchData,
-} from "../../../src/domain/models/userItem";
+} from "@src/domain/models/userItem";
 import {
   getClient as getApiClient,
   updateSearchObject,
   createSearchObject,
-} from "../../../src/lib/apiClient/apiClient";
-import { KeywordData } from "../../../src/domain/models/keyword";
-import { makeGetKeywordData } from "../../../src/adapters/keywordStore/getKeywordData";
-import { retryUntil } from "../../lib/retry";
+} from "@src/lib/apiClient/apiClient";
+import { KeywordData } from "@src/domain/models/keyword";
+import { makeGetKeywordData } from "@src/adapters/keywordStore/getKeywordData";
+import { retryUntil } from "@test/lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
-import { socialMedias } from "../../../src/domain/models/socialMedia";
-import { toDocumentPrimaryKeys } from "../../../src/adapters/keywordStore/client";
+import { socialMedias } from "@src/domain/models/socialMedia";
+import { toDocumentPrimaryKeys } from "@src/adapters/keywordStore/client";
 import { PartialDeep } from "type-fest";
-import { SearchResult } from "../../../src/domain/models/searchResult";
-import { makePutSearchResults } from "../../../src/adapters/searchResultsStore/putSearchResults";
+import { SearchResult } from "@src/domain/models/searchResult";
+import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
 import {
   attachPaymentMethod,
   createSubscription,
@@ -51,13 +51,13 @@ import {
   deleteSubscription,
   updateCustomer,
   updateSubscription,
-} from "../../../src/lib/stripe/client";
-import { getClient as getPaymentsClient } from "../../../src/lib/stripe/client";
-import { getClient as getSsmClient } from "../../../src/lib/ssm";
-import { getClientCredentials as getPaymentsCredentials } from "../../../src/adapters/paymentsManager/client";
-import { makeGetPaymentData } from "../../../src/adapters/userStore/getPaymentData";
+} from "@src/lib/stripe/client";
+import { getClient as getPaymentsClient } from "@src/lib/stripe/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
+import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
-import { buildSearchResult } from "../../lib/builders";
+import { buildSearchResult } from "@test/lib/builders";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 

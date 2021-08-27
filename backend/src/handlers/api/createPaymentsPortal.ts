@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { getConfig } from "../../lib/config";
-import { getLogger } from "../../lib/logger";
-import { apigwMiddlewareStack } from "../middlewares/apigwMiddleware";
+import { getConfig } from "@src/lib/config";
+import { getLogger } from "@src/lib/logger";
+import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import {
   CreatePaymentsPortalErrorCode,
   CreatePaymentsPortalResponse,
@@ -10,12 +10,12 @@ import {
 } from "./models/createPaymentsPortal";
 import { ApiResponse } from "./models/models";
 import { toRequestWithUserData } from "./shared";
-import { getClient as getPaymentsClient } from "../../lib/stripe/client";
-import { getClient as getSsmClient } from "../../lib/ssm";
-import { getClientCredentials as getPaymentsCredentials } from "../../adapters/paymentsManager/client";
-import { makeCreatePaymentsPortalSession } from "../../adapters/paymentsManager/createPaymentsPortalSession";
-import { getClient as getUsersStoreClient } from "../../adapters/userStore/client";
-import { makeGetPaymentData } from "../../adapters/userStore/getPaymentData";
+import { getClient as getPaymentsClient } from "@src/lib/stripe/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
+import { makeCreatePaymentsPortalSession } from "@src/adapters/paymentsManager/createPaymentsPortalSession";
+import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
+import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import { makeInternalErrorResponse, makeSuccessResponse } from "./responses";
 
 const handler = async (

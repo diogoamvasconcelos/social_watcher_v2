@@ -1,4 +1,4 @@
-import { InstagramSearchResult } from "../../models/searchResult";
-import { SearchSocialMediaFn } from "../shared";
+import { InstagramSearchResult } from "@src/domain/models/searchResult";
+import { SearchSocialMediaFn } from "@src/domain/ports/shared";
 
 export type SearchInstagramFn = SearchSocialMediaFn<InstagramSearchResult>;

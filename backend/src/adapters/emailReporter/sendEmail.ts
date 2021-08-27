@@ -1,8 +1,8 @@
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import SES from "aws-sdk/clients/ses";
 import { isLeft, right } from "fp-ts/lib/Either";
-import { SendEmailFn } from "../../domain/ports/emailReporter/sendEmail";
-import { sendEmail } from "../../lib/ses";
+import { SendEmailFn } from "@src/domain/ports/emailReporter/sendEmail";
+import { sendEmail } from "@src/lib/ses";
 import { Client } from "./client";
 
 export const makeSendEmail = (client: Client): SendEmailFn => {

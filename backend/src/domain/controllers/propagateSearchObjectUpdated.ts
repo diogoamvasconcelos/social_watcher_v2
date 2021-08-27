@@ -1,14 +1,17 @@
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
-import { Logger } from "../../lib/logger";
-import { KeywordData } from "../models/keyword";
-import { socialMedias } from "../models/socialMedia";
-import { SearchObjectDomain } from "../models/userItem";
-import { GetKeywordDataFn } from "../ports/keywordStore/getKeywordData";
-import { UpdateKeywordDataFn } from "../ports/keywordStore/updateKeywordData";
-import { DefaultOkReturn, eitherListToDefaultOk } from "../ports/shared";
-import { GetSearchObjectsForKeywordFn } from "../ports/userStore/getSearchObjectsForKeyword";
+import { Logger } from "@src/lib/logger";
+import { KeywordData } from "@src/domain/models/keyword";
+import { socialMedias } from "@src/domain/models/socialMedia";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { GetKeywordDataFn } from "@src/domain/ports/keywordStore/getKeywordData";
+import { UpdateKeywordDataFn } from "@src/domain/ports/keywordStore/updateKeywordData";
+import {
+  DefaultOkReturn,
+  eitherListToDefaultOk,
+} from "@src/domain/ports/shared";
+import { GetSearchObjectsForKeywordFn } from "@src/domain/ports/userStore/getSearchObjectsForKeyword";
 
 export const propagateSearchObjectUpdated = async (
   {

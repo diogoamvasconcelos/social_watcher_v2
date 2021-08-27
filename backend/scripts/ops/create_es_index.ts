@@ -7,9 +7,9 @@ import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import {
   getClient,
   createSearchResultIndex,
-} from "../../src/adapters/searchResultsSearchEngine/client";
-import { getConfig } from "../../src/lib/config";
-import { getLogger } from "../../src/lib/logger";
+} from "@src/adapters/searchResultsSearchEngine/client";
+import { getConfig } from "@src/lib/config";
+import { getLogger } from "@src/lib/logger";
 
 const config = getConfig();
 const logger = getLogger();

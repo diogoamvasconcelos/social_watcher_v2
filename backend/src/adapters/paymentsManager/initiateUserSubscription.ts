@@ -5,10 +5,10 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { SubscriptionConfig } from "../../domain/models/subscriptionConfig";
-import { InitiateUserSubscriptionFn } from "../../domain/ports/paymentsManager/initiateUserSubscription";
-import { fromUnix } from "../../lib/date";
-import { createCustomer, createSubscription } from "../../lib/stripe/client";
+import { SubscriptionConfig } from "@src/domain/models/subscriptionConfig";
+import { InitiateUserSubscriptionFn } from "@src/domain/ports/paymentsManager/initiateUserSubscription";
+import { fromUnix } from "@src/lib/date";
+import { createCustomer, createSubscription } from "@src/lib/stripe/client";
 import { Client } from "./client";
 
 export const makeInitiateUserSubscription = (

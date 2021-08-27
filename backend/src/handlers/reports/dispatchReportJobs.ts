@@ -1,40 +1,40 @@
-import { getAllActiveKeywords } from "../../domain/controllers/getAllActiveKeywords";
-import { getConfig } from "../../lib/config";
-import { getLogger, Logger } from "../../lib/logger";
-import { defaultMiddlewareStack } from "../middlewares/common";
-import { getClient as getKeywordStoreClient } from "../../adapters/keywordStore/client";
-import { getClient as getUserStoreClient } from "../../adapters/userStore/client";
-import { makeGetActiveKeywords } from "../../adapters/keywordStore/getActiveKeywords";
+import { getAllActiveKeywords } from "@src/domain/controllers/getAllActiveKeywords";
+import { getConfig } from "@src/lib/config";
+import { getLogger, Logger } from "@src/lib/logger";
+import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
+import { getClient as getKeywordStoreClient } from "@src/adapters/keywordStore/client";
+import { getClient as getUserStoreClient } from "@src/adapters/userStore/client";
+import { makeGetActiveKeywords } from "@src/adapters/keywordStore/getActiveKeywords";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { Keyword } from "../../domain/models/keyword";
-import { GetSearchObjectsForKeywordFn } from "../../domain/ports/userStore/getSearchObjectsForKeyword";
+import { Keyword } from "@src/domain/models/keyword";
+import { GetSearchObjectsForKeywordFn } from "@src/domain/ports/userStore/getSearchObjectsForKeyword";
 import _ from "lodash";
-import { makeGetSearchObjectsForKeyword } from "../../adapters/userStore/getSearchObjectsForKeyword";
+import { makeGetSearchObjectsForKeyword } from "@src/adapters/userStore/getSearchObjectsForKeyword";
 import {
   ReportFrequency,
   ReportJob,
   ReportJobBase,
-} from "../../domain/models/reportJob";
+} from "@src/domain/models/reportJob";
 import {
   SearchSearchResultsFn,
   SearchSearchResultsParams,
-} from "../../domain/ports/searchResultsSearchEngine/searchSearchResults";
-import { getClient as getSearchEngineClient } from "../../adapters/searchResultsSearchEngine/client";
-import { makeSearchSearchResults } from "../../adapters/searchResultsSearchEngine/searchSearchResults";
+} from "@src/domain/ports/searchResultsSearchEngine/searchSearchResults";
+import { getClient as getSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
+import { makeSearchSearchResults } from "@src/adapters/searchResultsSearchEngine/searchSearchResults";
 import {
   fromEither,
   newPositiveInteger,
   PositiveInteger,
   toSingleEither,
 } from "@diogovasconcelos/lib/iots";
-import { getHoursAgo } from "../../lib/date";
-import { throwUnexpectedCase } from "../../lib/runtime";
-import { ReportMedium, reportMediums } from "../../domain/models/reportMedium";
-import { SearchObjectDomain } from "../../domain/models/userItem";
-import { getClient as getReportJobsQueueClient } from "../../adapters/reportJobsQueue/client";
-import { makeQueueReportJobs } from "../../adapters/reportJobsQueue/queueReportJobs";
-import { QueueReportJobsFn } from "../../domain/ports/reportJobsQueue/queueReportJobs";
-import { eitherListToDefaultOk } from "../../domain/ports/shared";
+import { getHoursAgo } from "@src/lib/date";
+import { throwUnexpectedCase } from "@src/lib/runtime";
+import { ReportMedium, reportMediums } from "@src/domain/models/reportMedium";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { getClient as getReportJobsQueueClient } from "@src/adapters/reportJobsQueue/client";
+import { makeQueueReportJobs } from "@src/adapters/reportJobsQueue/queueReportJobs";
+import { QueueReportJobsFn } from "@src/domain/ports/reportJobsQueue/queueReportJobs";
+import { eitherListToDefaultOk } from "@src/domain/ports/shared";
 
 const config = getConfig();
 const logger = getLogger();

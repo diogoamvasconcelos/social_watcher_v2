@@ -1,4 +1,4 @@
-import { Logger } from "../../src/lib/logger";
+import { Logger } from "@src/lib/logger";
 
 export const loggerMock: Logger = {
   addToContext: jest.fn(),

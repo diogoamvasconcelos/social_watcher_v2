@@ -1,19 +1,19 @@
 import { isLeft, right } from "fp-ts/lib/Either";
-import { User } from "../../domain/models/user";
+import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { handler } from "./createSearchObject";
-import { makeCreateSearchObject } from "../../adapters/userStore/createSearchObject";
-import { makeGetSearchObjectsForUser } from "../../adapters/userStore/getSearchObjectsForUser";
+import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import {
   SearchObjectUserDataDomain,
   SearchObjectUserDataIo,
-} from "../../domain/models/userItem";
+} from "@src/domain/models/userItem";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import {
   defaultSearchObjectDataDomain,
   defaultSearchObjectDomain,
-} from "../../../test/lib/default";
+} from "@test/lib/default";
 
 // mock: apiGetUser
 jest.mock("./shared", () => ({
@@ -23,8 +23,8 @@ jest.mock("./shared", () => ({
 const apiGetUserdMock = apiGetUser as jest.MockedFunction<typeof apiGetUser>;
 
 // mock: createSearchObject
-jest.mock("../../adapters/userStore/createSearchObject", () => ({
-  ...jest.requireActual("../../adapters/userStore/createSearchObject"),
+jest.mock("@src/adapters/userStore/createSearchObject", () => ({
+  ...jest.requireActual("@src/adapters/userStore/createSearchObject"),
   makeCreateSearchObject: jest.fn(),
 }));
 const makeCreateSearchObjectMock =
@@ -33,8 +33,8 @@ const createSearchObjectMock = jest.fn().mockResolvedValue(right("OK"));
 makeCreateSearchObjectMock.mockReturnValue(createSearchObjectMock);
 
 // mock: getSearchObjectsForUser
-jest.mock("../../adapters/userStore/getSearchObjectsForUser", () => ({
-  ...jest.requireActual("../../adapters/userStore/getSearchObjectsForUser"),
+jest.mock("@src/adapters/userStore/getSearchObjectsForUser", () => ({
+  ...jest.requireActual("@src/adapters/userStore/getSearchObjectsForUser"),
   makeGetSearchObjectsForUser: jest.fn(),
 }));
 const makeGetSearchObjectsForUserMock =
