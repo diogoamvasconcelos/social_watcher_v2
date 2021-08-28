@@ -2,7 +2,7 @@ import * as t from "io-ts";
 import {
   searchObjectDomainCodec,
   SearchObjectUserDataIo,
-} from "@src/domain/models/userItem";
+} from "../../../domain/models/userItem";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export type CreateSearchObjectRequest = ApiRequestMetadata & {

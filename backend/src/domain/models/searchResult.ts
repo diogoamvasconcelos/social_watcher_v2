@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import { keywordCodec } from "./keyword";
-import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "@src/lib/twitter/models";
-import { searchListingItemCodec as redditSearchItemCodec } from "@src/lib/reddit/models";
+import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
+import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
 
 export const searchResultMetadaCodec = t.type({

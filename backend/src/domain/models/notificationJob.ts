@@ -1,6 +1,6 @@
 import * as t from "io-ts";
-import { slackCredentialsCodec } from "@src/lib/slack/models";
-import { discordCredentialsCodec } from "@src/lib/discord/models";
+import { slackCredentialsCodec } from "../../lib/slack/models";
+import { discordCredentialsCodec } from "../../lib/discord/models";
 import { searchResultCodec } from "./searchResult";
 
 const notificationConfigBaseCodec = t.type({

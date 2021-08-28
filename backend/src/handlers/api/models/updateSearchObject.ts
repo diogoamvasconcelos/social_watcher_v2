@@ -1,4 +1,4 @@
-import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
+import { SearchObjectUserDataIo } from "../../../domain/models/userItem";
 import {
   SearchObjectErrorCode,
   SearchObjectRequest,

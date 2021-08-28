@@ -2,7 +2,7 @@ import * as t from "io-ts";
 import {
   SearchSearchResultParamsCodec,
   searchSearchResultsResultCodec,
-} from "@src/domain/ports/searchResultsSearchEngine/searchSearchResults";
+} from "../../../domain/ports/searchResultsSearchEngine/searchSearchResults";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export const searchRequestUserDataCodec = t.exact(

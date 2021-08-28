@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { userCodec } from "@src/domain/models/user";
+import { userCodec } from "../../../domain/models/user";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export type GetUserRequest = ApiRequestMetadata;
