@@ -1,9 +1,9 @@
 import { isLeft, left } from "fp-ts/lib/Either";
-import { Logger } from "../../lib/logger";
-import { SearchObjectDomain } from "../models/userItem";
-import { DefaultOkReturn } from "../ports/shared";
-import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
-import { MoveSearchObjectFn } from "../ports/userStore/moveSearchObject";
+import { Logger } from "@src/lib/logger";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
+import { MoveSearchObjectFn } from "@src/domain/ports/userStore/moveSearchObject";
 
 export type DeleteSearchObjectAndPruneDeps = {
   logger: Logger;

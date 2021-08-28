@@ -1,6 +1,6 @@
-import { Logger } from "../../../lib/logger";
-import { SearchObjectDomain } from "../../models/userItem";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type UpdateSearchObjectFn = (
   logger: Logger,

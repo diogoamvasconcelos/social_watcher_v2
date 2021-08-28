@@ -1,6 +1,6 @@
-import { SocialMedia } from "../../domain/models/socialMedia";
-import { QueueSearchJobsFn } from "../..//domain/ports/searchJobsQueue/queueSearchJobs";
-import { makeQueueJobs } from "../queueShared";
+import { SocialMedia } from "@src/domain/models/socialMedia";
+import { QueueSearchJobsFn } from "@src//domain/ports/searchJobsQueue/queueSearchJobs";
+import { makeQueueJobs } from "@src/adapters/queueShared";
 import { Client } from "./client";
 
 export const makeQueueSearchJobs = (

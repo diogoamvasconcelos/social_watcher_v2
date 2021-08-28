@@ -1,18 +1,18 @@
-import { DiscordNotificationConfig } from "../../../src/domain/models/notificationJob";
+import { DiscordNotificationConfig } from "@src/domain/models/notificationJob";
 import {
   getClient as getApiClient,
   getSearchObjects,
   updateSearchObject,
-} from "../../../src/lib/apiClient/apiClient";
+} from "@src/lib/apiClient/apiClient";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
   PositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "../../../src/lib/types";
-import { uuid } from "../../../src/lib/uuid";
-import { getEnvTestConfig } from "../../lib/config";
+import { Awaited } from "@src/lib/types";
+import { uuid } from "@src/lib/uuid";
+import { getEnvTestConfig } from "@test/lib/config";
 import {
   createTestUser,
   createUserSearchObject,
@@ -21,7 +21,7 @@ import {
   getIdToken,
   updateUserSubscription,
 } from "./steps";
-import { SearchObjectUserDataIo } from "../../../src/domain/models/userItem";
+import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();

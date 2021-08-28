@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { Logger } from "../../lib/logger";
-import { throwUnexpectedCase } from "../../lib/runtime";
-import { DiscordNotificationConfig } from "../models/notificationJob";
+import { Logger } from "@src/lib/logger";
+import { throwUnexpectedCase } from "@src/lib/runtime";
+import { DiscordNotificationConfig } from "@src/domain/models/notificationJob";
 import {
   HackernewsSearchResult,
   InstagramSearchResult,
@@ -9,9 +9,9 @@ import {
   SearchResult,
   TwitterSearchResult,
   YoutubeSearchResult,
-} from "../models/searchResult";
-import { SendMessageToChannelFn } from "../ports/discordNotifier/sendMessageToChannel";
-import { DefaultOkReturn } from "../ports/shared";
+} from "@src/domain/models/searchResult";
+import { SendMessageToChannelFn } from "@src/domain/ports/discordNotifier/sendMessageToChannel";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 
 export const notifySearchResultToDiscord = async (
   {

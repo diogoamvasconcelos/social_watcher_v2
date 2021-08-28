@@ -1,6 +1,6 @@
-import { KeywordData, keywordDataCodec } from "../../domain/models/keyword";
-import { SocialMedia } from "../../domain/models/socialMedia";
-import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
+import { KeywordData, keywordDataCodec } from "@src/domain/models/keyword";
+import { SocialMedia } from "@src/domain/models/socialMedia";
+import { getClient as getDynamodbClient } from "@src/lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
 import { map } from "fp-ts/lib/Either";

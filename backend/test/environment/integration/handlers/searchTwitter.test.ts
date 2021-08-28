@@ -1,10 +1,10 @@
 import { PartialDeep } from "type-fest";
-import { TwitterSearchJob } from "../../../../src/domain/models/searchJob";
+import { TwitterSearchJob } from "@src/domain/models/searchJob";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
-import { buildSQSEvent } from "../../../lib/builders";
-import { getEnvTestConfig } from "../../../lib/config";
-import { invokeLambda } from "../../../lib/lambda";
+import { buildSQSEvent } from "@test/lib/builders";
+import { getEnvTestConfig } from "@test/lib/config";
+import { invokeLambda } from "@test/lib/lambda";
 
 const lambdaName = getEnvTestConfig().searchTwitterLambdaName;
 

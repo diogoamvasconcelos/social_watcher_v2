@@ -1,18 +1,18 @@
-import { Client as SSMClient, getParameter } from "../../lib/ssm";
-import { Logger } from "../../lib/logger";
+import { Client as SSMClient, getParameter } from "@src/lib/ssm";
+import { Logger } from "@src/lib/logger";
 import { decode, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import {
   youtubeCredentialsCodec,
   YoutubeVideosResponseItem,
-} from "../../lib/youtube/models";
+} from "@src/lib/youtube/models";
 import { isLeft } from "fp-ts/lib/Either";
 import {
   getClient as getYoutubeClient,
   Client as YoutubeClient,
-} from "../../lib/youtube/client";
-import { Keyword } from "../../domain/models/keyword";
-import { YoutubeSearchResult } from "../../domain/models/searchResult";
-import { iso8061DurationToSeconds } from "../../lib/date";
+} from "@src/lib/youtube/client";
+import { Keyword } from "@src/domain/models/keyword";
+import { YoutubeSearchResult } from "@src/domain/models/searchResult";
+import { iso8061DurationToSeconds } from "@src/lib/date";
 
 export const getClient = getYoutubeClient;
 export type Client = YoutubeClient;

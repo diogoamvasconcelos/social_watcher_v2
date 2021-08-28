@@ -1,6 +1,6 @@
-import { PutSearchResultsFn } from "../../domain/ports/searchResultsStore/putSearchResults";
-import { eitherListToDefaultOk } from "../../domain/ports/shared";
-import { putItem } from "../../lib/dynamoDb";
+import { PutSearchResultsFn } from "@src/domain/ports/searchResultsStore/putSearchResults";
+import { eitherListToDefaultOk } from "@src/domain/ports/shared";
+import { putItem } from "@src/lib/dynamoDb";
 import { Client, searchResultToDocument } from "./client";
 
 export const makePutSearchResults = (

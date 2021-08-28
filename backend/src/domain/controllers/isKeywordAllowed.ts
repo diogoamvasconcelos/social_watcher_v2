@@ -1,10 +1,10 @@
 import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
-import { Logger } from "../../lib/logger";
-import { Keyword } from "../models/keyword";
-import { UserId } from "../models/user";
-import { CustomRightReturn } from "../ports/shared";
-import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
+import { Logger } from "@src/lib/logger";
+import { Keyword } from "@src/domain/models/keyword";
+import { UserId } from "@src/domain/models/user";
+import { CustomRightReturn } from "@src/domain/ports/shared";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
 
 export const isKeywordAllowed = async (
   {

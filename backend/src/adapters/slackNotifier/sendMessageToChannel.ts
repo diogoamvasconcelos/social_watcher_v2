@@ -1,6 +1,6 @@
 import { isLeft, right } from "fp-ts/lib/Either";
-import { SendMessageToChannelFn } from "../../domain/ports/slackNotifier/sendMessageToChannel";
-import { postMessage } from "../../lib/slack/client";
+import { SendMessageToChannelFn } from "@src/domain/ports/slackNotifier/sendMessageToChannel";
+import { postMessage } from "@src/lib/slack/client";
 import { Client } from "./client";
 
 export const makeSendMessageToChannel = (

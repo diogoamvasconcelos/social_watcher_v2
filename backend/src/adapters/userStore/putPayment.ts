@@ -1,7 +1,7 @@
-import { putItem } from "../../lib/dynamoDb";
+import { putItem } from "@src/lib/dynamoDb";
 import { Client, userItemToDocument } from "./client";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { PutPaymentDataFn } from "../../domain/ports/userStore/putPaymentData";
+import { PutPaymentDataFn } from "@src/domain/ports/userStore/putPaymentData";
 
 export const makePutPaymentData = (
   client: Client,

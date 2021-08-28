@@ -5,13 +5,13 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { right } from "fp-ts/lib/Either";
 import _ from "lodash";
-import { SearchObjectDomain } from "../models/userItem";
-import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { defaultSearchObjectDomain } from "../../../test/lib/default";
+import { defaultSearchObjectDomain } from "@test/lib/default";
 import { deleteSearchObjectAndPrune } from "./deleteSearchObjectAndPrune";
-import { MoveSearchObjectFn } from "../ports/userStore/moveSearchObject";
-import { getLogger } from "../../lib/logger";
+import { MoveSearchObjectFn } from "@src/domain/ports/userStore/moveSearchObject";
+import { getLogger } from "@src/lib/logger";
 
 const logger = getLogger();
 

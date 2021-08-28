@@ -1,10 +1,10 @@
-import { getLogger } from "../../src/lib/logger";
-import { getClient, search } from "../../src/lib/instagram/client";
+import { getLogger } from "@src/lib/logger";
+import { getClient, search } from "@src/lib/instagram/client";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import util from "util";
-import { buildSQSEvent } from "../../test/lib/builders";
-import { InstagramSearchJob } from "../../src/domain/models/searchJob";
-import { lambdaHandler } from "../../src/handlers/searchers/searchInstagram";
+import { buildSQSEvent } from "@test/lib/builders";
+import { InstagramSearchJob } from "@src/domain/models/searchJob";
+import { lambdaHandler } from "@src/handlers/searchers/searchInstagramHandler";
 
 const logger = getLogger();
 

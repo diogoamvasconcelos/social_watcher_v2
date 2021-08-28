@@ -3,9 +3,9 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "../../../src/lib/types";
-import { uuid } from "../../../src/lib/uuid";
-import { getEnvTestConfig } from "../../lib/config";
+import { Awaited } from "@src/lib/types";
+import { uuid } from "@src/lib/uuid";
+import { getEnvTestConfig } from "@test/lib/config";
 import {
   addSearchResultDirectly,
   createTestUser,
@@ -18,10 +18,10 @@ import {
 import {
   getClient as getApiClient,
   search,
-} from "../../../src/lib/apiClient/apiClient";
-import { retryUntil, sleep } from "../../lib/retry";
+} from "@src/lib/apiClient/apiClient";
+import { retryUntil, sleep } from "@test/lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
-import { getMinutesAgo } from "../../../src/lib/date";
+import { getMinutesAgo } from "@src/lib/date";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

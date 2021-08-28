@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { search } from "../../lib/instagram/client";
-import { SearchInstagramFn } from "../../domain/ports/instagramSearcher/searchInstagram";
+import { search } from "@src/lib/instagram/client";
+import { SearchInstagramFn } from "@src/domain/ports/instagramSearcher/searchInstagram";
 import { Client, outToDomain } from "./client";
 
 export const makeSearchInstagram = (client: Client): SearchInstagramFn => {

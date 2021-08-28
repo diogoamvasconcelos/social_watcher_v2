@@ -1,7 +1,7 @@
 import {
   getClient as getQueueClient,
   Client as QueueClient,
-} from "../queueShared";
+} from "@src/adapters/queueShared";
 
 export const getClient = getQueueClient;
 export type Client = QueueClient;

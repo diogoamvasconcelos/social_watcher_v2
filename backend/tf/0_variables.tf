@@ -8,7 +8,7 @@ variable "tf_dir" {}
 # config-specific envinoment vars
 variable "stripe_product_normal_id" {}
 locals {
-  lambda_file = "${var.out_dir}/lambda_artifact.zip"
+  lambda_handler = "index.lambdaHandler"
 
   lambda_env_vars = {
     ENV                                    = var.env

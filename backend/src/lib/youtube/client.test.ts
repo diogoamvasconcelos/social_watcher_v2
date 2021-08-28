@@ -1,9 +1,9 @@
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { PartialDeep } from "type-fest";
-import { getNow } from "../date";
-import { getLogger } from "../logger";
-import { uuid } from "../uuid";
+import { getNow } from "@src/lib/date";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
 import { Client, search } from "./client";
 import { YoutubeSearchResponse, YoutubeVideosResponse } from "./models";
 

@@ -1,12 +1,12 @@
-import { defaultSearchObjectDomain } from "../../../../lib/default";
-import { makeGetSearchObject } from "../../../../../src/adapters/userStore/getSearchObject";
-import { makeGetSearchObjectsForUser } from "../../../../../src/adapters/userStore/getSearchObjectsForUser";
-import { makeMoveSearchObject } from "../../../../../src/adapters/userStore/moveSearchObject";
-import { makeCreateSearchObject } from "../../../../../src/adapters/userStore/createSearchObject";
-import { getLogger } from "../../../../../src/lib/logger";
-import { SearchObjectDomain } from "../../../../../src/domain/models/userItem";
-import { uuid } from "../../../../../src/lib/uuid";
-import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
+import { defaultSearchObjectDomain } from "@test/lib/default";
+import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
+import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
+import { makeMoveSearchObject } from "@src/adapters/userStore/moveSearchObject";
+import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
+import { getLogger } from "@src/lib/logger";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { uuid } from "@src/lib/uuid";
+import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import {
   fromEither,

@@ -9,9 +9,9 @@ import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { PartialDeep } from "type-fest";
-import { doRequest } from "../axios";
-import { getMinutesAgo, toUnixTimstamp } from "../date";
-import { Logger } from "../logger";
+import { doRequest } from "@src/lib/axios";
+import { getMinutesAgo, toUnixTimstamp } from "@src/lib/date";
+import { Logger } from "@src/lib/logger";
 import {
   GetItemHackernewsResponse,
   getItemHackernewsResponseCodec,

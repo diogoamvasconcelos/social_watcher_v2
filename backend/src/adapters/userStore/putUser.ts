@@ -1,6 +1,6 @@
-import { PutUserFn } from "../../domain/ports/userStore/putUser";
+import { PutUserFn } from "@src/domain/ports/userStore/putUser";
 import { Client, userItemToDocument } from "./client";
-import { putItem } from "../../lib/dynamoDb";
+import { putItem } from "@src/lib/dynamoDb";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 
 export const makePutUser = (

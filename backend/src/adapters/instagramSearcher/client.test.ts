@@ -1,6 +1,6 @@
 import { newLowerCase } from "@diogovasconcelos/lib/iots";
-import { fromUnix, toUnixTimstamp } from "../../lib/date";
-import { InstagramMediaNode } from "../../lib/instagram/models";
+import { fromUnix, toUnixTimstamp } from "@src/lib/date";
+import { InstagramMediaNode } from "@src/lib/instagram/models";
 import { outToDomain } from "./client";
 
 describe("instagramSearcher client", () => {

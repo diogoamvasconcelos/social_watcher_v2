@@ -22,6 +22,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   default_root_object = local.index_document
 
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.frontent_logs.bucket_domain_name
+    prefix          = "cloudfront"
+  }
+
   default_cache_behavior {
     allowed_methods  = ["HEAD", "GET", "OPTIONS"]
     cached_methods   = ["HEAD", "GET", "OPTIONS"]

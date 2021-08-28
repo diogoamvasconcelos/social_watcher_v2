@@ -161,3 +161,9 @@
 
 - upgrade to terraform v1.0.0 <DONE>
 - add cypress tests (FE)
+- Add webpack for lambda bundling
+  - refs:
+    - https://github.com/lifeomic/lambda-typescript-webpack-babel-starter/blob/master/webpack.config.js
+    - https://gist.github.com/juliankrispel/029ac27325488fde614b321972bd6525
+    - https://blog.dennisokeeffe.com/blog/2020-10-15-webpack-for-lambdas
+    - https://stackoverflow.com/questions/65361338/bundling-aws-v3-sdk-with-webpack-in-an-aws-lambda-w-serverless-framework

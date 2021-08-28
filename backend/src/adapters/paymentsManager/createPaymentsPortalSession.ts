@@ -1,6 +1,6 @@
 import { Client } from "./client";
-import { CreatePaymentsPortalSessionFn } from "../../domain/ports/paymentsManager/createPaymentsPortalSession";
-import { createBillingPortalSession } from "../../lib/stripe/client";
+import { CreatePaymentsPortalSessionFn } from "@src/domain/ports/paymentsManager/createPaymentsPortalSession";
+import { createBillingPortalSession } from "@src/lib/stripe/client";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 
 export const makeCreatePaymentsPortalSession = (

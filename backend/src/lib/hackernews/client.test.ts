@@ -1,5 +1,5 @@
 import { fromEither, newDateISOString } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../logger";
+import { getLogger } from "@src/lib/logger";
 import { Client, search } from "./client";
 import {
   GetItemHackernewsResponse,

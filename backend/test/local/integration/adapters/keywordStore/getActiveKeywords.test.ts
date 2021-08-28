@@ -1,12 +1,12 @@
-import { keywordDataToDocument } from "../../../../../src/adapters/keywordStore/client";
-import { makeGetActiveKeywords } from "../../../../../src/adapters/keywordStore/getActiveKeywords";
-import { KeywordData } from "../../../../../src/domain/models/keyword";
-import { SocialMedia } from "../../../../../src/domain/models/socialMedia";
-import { putItem } from "../../../../../src/lib/dynamoDb";
+import { keywordDataToDocument } from "@src/adapters/keywordStore/client";
+import { makeGetActiveKeywords } from "@src/adapters/keywordStore/getActiveKeywords";
+import { KeywordData } from "@src/domain/models/keyword";
+import { SocialMedia } from "@src/domain/models/socialMedia";
+import { putItem } from "@src/lib/dynamoDb";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../../../../../src/lib/logger";
-import { uuid } from "../../../../../src/lib/uuid";
-import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
+import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 
 describe("getActiveKeywords", () => {
   const logger = getLogger();

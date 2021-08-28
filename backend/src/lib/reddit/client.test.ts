@@ -1,8 +1,8 @@
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { buildRedditSearchResult } from "../../../test/lib/builders";
+import { buildRedditSearchResult } from "@test/lib/builders";
 import { PartialDeep } from "type-fest";
-import { getLogger } from "../logger";
+import { getLogger } from "@src/lib/logger";
 import { Client, searchAll } from "./client";
 import { SearchListing } from "./models";
 

@@ -1,17 +1,18 @@
 
 locals {
   notify_slack_lambda_name = "notify_slack"
+  notify_slack_lambda_file = "${var.out_dir}/notifySlackHandler.zip"
 }
 
 resource "aws_lambda_function" "notify_slack" {
-  filename         = local.lambda_file
+  filename         = local.notify_slack_lambda_file
   function_name    = local.notify_slack_lambda_name
-  handler          = ".build/src/handlers/notifications/notifySlack.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "15"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.notify_slack_lambda_file)
   description      = "Notify to Slack the searchResults/Notification jobs"
   depends_on       = [aws_cloudwatch_log_group.notify_slack]
 

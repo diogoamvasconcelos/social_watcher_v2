@@ -1,12 +1,12 @@
-import { EmailReportJob } from "../../../../src/domain/models/reportJob";
-import { buildSearchResult, buildSQSEvent } from "../../../lib/builders";
-import { getEnvTestConfig } from "../../../lib/config";
+import { EmailReportJob } from "@src/domain/models/reportJob";
+import { buildSearchResult, buildSQSEvent } from "@test/lib/builders";
+import { getEnvTestConfig } from "@test/lib/config";
 import {
   fromEither,
   newEmailFromString,
   newLowerCase,
 } from "@diogovasconcelos/lib/iots";
-import { invokeLambda } from "../../../lib/lambda";
+import { invokeLambda } from "@test/lib/lambda";
 
 const lambdaName = getEnvTestConfig().reportEmailLambdaName;
 

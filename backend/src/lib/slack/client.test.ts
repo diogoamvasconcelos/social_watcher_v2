@@ -1,5 +1,5 @@
 import { postMessage, Client } from "./client";
-import { getLogger } from "../logger";
+import { getLogger } from "@src/lib/logger";
 import { isRight, left } from "fp-ts/lib/Either";
 
 const logger = getLogger();

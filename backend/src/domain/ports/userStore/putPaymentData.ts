@@ -1,6 +1,6 @@
-import { Logger } from "../../../lib/logger";
-import { PaymentData } from "../../models/userItem";
-import { DefaultOkReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { PaymentData } from "@src/domain/models/userItem";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 
 export type PutPaymentDataFn = (
   logger: Logger,

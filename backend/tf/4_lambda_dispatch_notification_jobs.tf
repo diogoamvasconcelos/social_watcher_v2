@@ -1,17 +1,18 @@
 
 locals {
   dispatch_notification_jobs_lambda_name = "dispatch_notification_jobs"
+  dispatch_notification_jobs_lambda_file = "${var.out_dir}/dispatchNotificationJobsHandler.zip"
 }
 
 resource "aws_lambda_function" "dispatch_notification_jobs" {
-  filename         = local.lambda_file
+  filename         = local.dispatch_notification_jobs_lambda_file
   function_name    = local.dispatch_notification_jobs_lambda_name
-  handler          = ".build/src/handlers/notifications/dispatchNotificationJobs.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "15"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.dispatch_notification_jobs_lambda_file)
   description      = "Dispatches Notification jobs for the different notification mediums"
   depends_on       = [aws_cloudwatch_log_group.dispatch_notification_jobs]
 

@@ -1,7 +1,7 @@
-import { Logger } from "../../../lib/logger";
-import { UserId } from "../../models/user";
-import { PaymentData } from "../../models/userItem";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { UserId } from "@src/domain/models/user";
+import { PaymentData } from "@src/domain/models/userItem";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type GetPaymentDataFn = (
   logger: Logger,

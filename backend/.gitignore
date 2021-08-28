@@ -1,1 +1,16 @@
+# duplicating root gitignore for vscode to use it for search filtering
+.build
+.tmp
+.out
+.DS_store
+
+coverage
+dist
+
+**/node_modules
+**/.terraform
+
+tsconfig.tsbuildinfo
+
+# custom
 **/docker

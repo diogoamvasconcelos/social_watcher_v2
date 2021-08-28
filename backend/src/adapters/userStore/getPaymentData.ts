@@ -3,8 +3,8 @@ import {
   toPaymentDataDocumentKeys,
   unknownToPaymentData,
 } from "./client";
-import { getItem } from "../../lib/dynamoDb";
-import { GetPaymentDataFn } from "../../domain/ports/userStore/getPaymentData";
+import { getItem } from "@src/lib/dynamoDb";
+import { GetPaymentDataFn } from "@src/domain/ports/userStore/getPaymentData";
 
 export const makeGetPaymentData = (
   client: Client,

@@ -1,5 +1,5 @@
 import { Either, left, right } from "fp-ts/lib/Either";
-import { Logger } from "../logger";
+import { Logger } from "@src/lib/logger";
 import { SlackCredentials } from "./models";
 import {
   WebClient,

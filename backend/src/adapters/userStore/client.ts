@@ -1,4 +1,4 @@
-import { getClient as getDynamodbClient } from "../../lib/dynamoDb";
+import { getClient as getDynamodbClient } from "@src/lib/dynamoDb";
 import * as t from "io-ts";
 import _ from "lodash";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
@@ -9,8 +9,8 @@ import {
   UserData,
   UserItemDomain,
   userItemIoCodec,
-} from "../../domain/models/userItem";
-import { throwUnexpectedCase } from "../../lib/runtime";
+} from "@src/domain/models/userItem";
+import { throwUnexpectedCase } from "@src/lib/runtime";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getDynamodbClient;

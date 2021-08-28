@@ -1,6 +1,6 @@
-import { Logger } from "../../../lib/logger";
-import { SearchObjectDomain } from "../../models/userItem";
-import { DefaultOkReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 
 // moves to new index (no duplication, it deletes from the previous position)
 export type MoveSearchObjectFn = (

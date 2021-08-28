@@ -6,12 +6,12 @@ import {
   YoutubeVideosResponseItem,
 } from "./models";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { Logger } from "../logger";
+import { Logger } from "@src/lib/logger";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { doRequest } from "../axios";
+import { doRequest } from "@src/lib/axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { decode, toSingleEither } from "@diogovasconcelos/lib/iots";
-import { getMinutesAgo } from "../date";
+import { getMinutesAgo } from "@src/lib/date";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export const getClient = (

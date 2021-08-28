@@ -1,9 +1,9 @@
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import _ from "lodash";
-import { Logger } from "../../lib/logger";
-import { Keyword } from "../models/keyword";
-import { SearchResult } from "../models/searchResult";
+import { Logger } from "@src/lib/logger";
+import { Keyword } from "@src/domain/models/keyword";
+import { SearchResult } from "@src/domain/models/searchResult";
 
 export type DefaultOkReturn = CustomRightReturn<"OK">;
 

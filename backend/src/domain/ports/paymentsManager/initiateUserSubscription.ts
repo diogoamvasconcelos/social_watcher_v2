@@ -1,7 +1,7 @@
-import { Logger } from "../../../lib/logger";
-import { User, UserId } from "../../models/user";
-import { PaymentData, UserData } from "../../models/userItem";
-import { CustomRightReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { User, UserId } from "@src/domain/models/user";
+import { PaymentData, UserData } from "@src/domain/models/userItem";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type InitiateUserSubscriptionFn = (
   logger: Logger,

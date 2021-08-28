@@ -1,17 +1,18 @@
 
 locals {
   report_email_lambda_name = "report_email"
+  report_email_lambda_file = "${var.out_dir}/reportEmailHandler.zip"
 }
 
 resource "aws_lambda_function" "report_email" {
-  filename         = local.lambda_file
+  filename         = local.report_email_lambda_file
   function_name    = local.report_email_lambda_name
-  handler          = ".build/src/handlers/reports/reportEmail.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "15"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.report_email_lambda_file)
   description      = "Send reports by Email for report jobs"
   depends_on       = [aws_cloudwatch_log_group.report_email]
 

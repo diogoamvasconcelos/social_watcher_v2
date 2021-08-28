@@ -1,7 +1,7 @@
-import { makeSearchSearchResults } from "../../../../src/adapters/searchResultsSearchEngine/searchSearchResults";
+import { makeSearchSearchResults } from "@src/adapters/searchResultsSearchEngine/searchSearchResults";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../../../../src/lib/logger";
-import { uuid } from "../../../../src/lib/uuid";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
 import {
   buildHackernewsSearchResult,
   buildInstagramSearchResult,
@@ -9,12 +9,12 @@ import {
   buildSQSEvent,
   buildTwitterSearchResult,
   buildYoutubeSearchResult,
-} from "../../../lib/builders";
-import { getEnvTestConfig } from "../../../lib/config";
-import { invokeLambda } from "../../../lib/lambda";
-import { retryUntil } from "../../../lib/retry";
-import { getClient as getSearchResultSearchEngineClient } from "../../../../src/adapters/searchResultsSearchEngine/client";
-import { refreshIndices } from "../../../../src/lib/elasticsearch/client";
+} from "@test/lib/builders";
+import { getEnvTestConfig } from "@test/lib/config";
+import { invokeLambda } from "@test/lib/lambda";
+import { retryUntil } from "@test/lib/retry";
+import { getClient as getSearchResultSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
+import { refreshIndices } from "@src/lib/elasticsearch/client";
 
 const config = getEnvTestConfig();
 const logger = getLogger();

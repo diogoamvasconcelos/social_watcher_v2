@@ -2,9 +2,9 @@ import {
   getClient as getSQSClient,
   getQueueUrlFromName,
   sendMessages,
-} from "../lib/sqs";
+} from "@src/lib/sqs";
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { QueueJobsFn } from "../domain/ports/shared";
+import { QueueJobsFn } from "@src/domain/ports/shared";
 import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export const getClient = getSQSClient;

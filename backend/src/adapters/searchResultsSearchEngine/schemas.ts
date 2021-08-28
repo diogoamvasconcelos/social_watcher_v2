@@ -1,4 +1,4 @@
-import { IndexSchema } from "../../lib/elasticsearch/client";
+import { IndexSchema } from "@src/lib/elasticsearch/client";
 
 export const SEARCH_RESULT_SCHEMA: Record<string, IndexSchema | undefined> = {
   v1: {

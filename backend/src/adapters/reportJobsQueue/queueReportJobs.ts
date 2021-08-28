@@ -1,6 +1,6 @@
-import { ReportMedium } from "../../domain/models/reportMedium";
-import { QueueReportJobsFn } from "../../domain/ports/reportJobsQueue/queueReportJobs";
-import { makeQueueJobs } from "../queueShared";
+import { ReportMedium } from "@src/domain/models/reportMedium";
+import { QueueReportJobsFn } from "@src/domain/ports/reportJobsQueue/queueReportJobs";
+import { makeQueueJobs } from "@src/adapters/queueShared";
 import { Client } from "./client";
 
 export const makeQueueReportJobs = (

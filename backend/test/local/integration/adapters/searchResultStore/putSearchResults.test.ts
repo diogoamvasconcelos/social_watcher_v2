@@ -1,18 +1,18 @@
 import "jest-extended";
-import { unknownToSearchResult } from "../../../../../src/adapters/searchResultsStore/client";
-import { makePutSearchResults } from "../../../../../src/adapters/searchResultsStore/putSearchResults";
-import { scanItems } from "../../../../../src/lib/dynamoDb";
+import { unknownToSearchResult } from "@src/adapters/searchResultsStore/client";
+import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
+import { scanItems } from "@src/lib/dynamoDb";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { getLogger } from "../../../../../src/lib/logger";
-import { uuid } from "../../../../../src/lib/uuid";
+import { getLogger } from "@src/lib/logger";
+import { uuid } from "@src/lib/uuid";
 import {
   buildHackernewsSearchResult,
   buildInstagramSearchResult,
   buildRedditSearchResult,
   buildTwitterSearchResult,
   buildYoutubeSearchResult,
-} from "../../../../lib/builders";
-import { client, preparesGenericTable } from "../../../../lib/dynamoDb";
+} from "@test/lib/builders";
+import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();

@@ -1,7 +1,7 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { CreateSearchObjectFn } from "../../domain/ports/userStore/createSearchObject";
+import { CreateSearchObjectFn } from "@src/domain/ports/userStore/createSearchObject";
 import { Client, userItemToDocument } from "./client";
-import { putItem } from "../../lib/dynamoDb";
+import { putItem } from "@src/lib/dynamoDb";
 
 export const makeCreateSearchObject = (
   client: Client,

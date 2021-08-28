@@ -1,17 +1,18 @@
 
 locals {
   get_search_objects_lambda_name = "get_search_objects"
+  get_search_objects_lambda_file = "${var.out_dir}/getSearchObjectsHandler.zip"
 }
 
 resource "aws_lambda_function" "get_search_objects" {
-  filename         = local.lambda_file
+  filename         = local.get_search_objects_lambda_file
   function_name    = local.get_search_objects_lambda_name
-  handler          = ".build/src/handlers/api/getSearchObjects.lambdaHandler"
+  handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.get_search_objects_lambda_file)
   description      = "Gets user's search objects"
   depends_on       = [aws_cloudwatch_log_group.get_search_objects]
 

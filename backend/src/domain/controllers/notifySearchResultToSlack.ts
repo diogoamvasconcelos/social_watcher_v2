@@ -1,8 +1,8 @@
 // TODO
 import _ from "lodash";
-import { Logger } from "../../lib/logger";
-import { throwUnexpectedCase } from "../../lib/runtime";
-import { SlackNotificationConfig } from "../models/notificationJob";
+import { Logger } from "@src/lib/logger";
+import { throwUnexpectedCase } from "@src/lib/runtime";
+import { SlackNotificationConfig } from "@src/domain/models/notificationJob";
 import {
   HackernewsSearchResult,
   InstagramSearchResult,
@@ -10,9 +10,9 @@ import {
   SearchResult,
   TwitterSearchResult,
   YoutubeSearchResult,
-} from "../models/searchResult";
-import { SendMessageToChannelFn } from "../ports/slackNotifier/sendMessageToChannel";
-import { DefaultOkReturn } from "../ports/shared";
+} from "@src/domain/models/searchResult";
+import { SendMessageToChannelFn } from "@src/domain/ports/slackNotifier/sendMessageToChannel";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 
 export const notifySearchResultToSlack = async (
   {

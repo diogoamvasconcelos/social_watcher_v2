@@ -1,5 +1,5 @@
-import { GetSearchObjectFn } from "../../domain/ports/userStore/getSearchObject";
-import { getItem } from "../../lib/dynamoDb";
+import { GetSearchObjectFn } from "@src/domain/ports/userStore/getSearchObject";
+import { getItem } from "@src/lib/dynamoDb";
 import {
   Client,
   toSearchObjectDocumentPartitionKeys,

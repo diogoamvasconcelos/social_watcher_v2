@@ -1,8 +1,8 @@
-import { getClient, searchAll } from "../../src/lib/reddit/client";
-import { getClient as getSSMClient, getParameter } from "../../src/lib/ssm";
-import { getLogger } from "../../src/lib/logger";
+import { getClient, searchAll } from "@src/lib/reddit/client";
+import { getClient as getSSMClient, getParameter } from "@src/lib/ssm";
+import { getLogger } from "@src/lib/logger";
 import { decode, fromEither } from "@diogovasconcelos/lib/iots";
-import { redditCredentialsCodec } from "../../src/lib/reddit/models";
+import { redditCredentialsCodec } from "@src/lib/reddit/models";
 
 const logger = getLogger();
 

@@ -1,6 +1,6 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { searchRecent } from "../../lib/twitter/client";
-import { SearchTwitterFn } from "../../domain/ports/twitterSearcher/searchTwitter";
+import { searchRecent } from "@src/lib/twitter/client";
+import { SearchTwitterFn } from "@src/domain/ports/twitterSearcher/searchTwitter";
 import { Client, outToDomain } from "./client";
 
 export const makeSearchTwitter = (client: Client): SearchTwitterFn => {

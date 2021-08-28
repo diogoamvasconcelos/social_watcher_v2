@@ -1,9 +1,10 @@
+// can't have "@src" imports because it's referenced for the api, thus used in the frontend
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 import { Logger } from "../../../lib/logger";
-import { keywordCodec } from "../../models/keyword";
-import { searchResultCodec } from "../../models/searchResult";
-import { CustomRightReturn } from "../shared";
+import { keywordCodec } from "../../../domain/models/keyword";
+import { searchResultCodec } from "../../../domain/models/searchResult";
+import { CustomRightReturn } from "../../../domain/ports/shared";
 
 export const paginationRequestCodec = t.type({
   limit: positiveInteger,

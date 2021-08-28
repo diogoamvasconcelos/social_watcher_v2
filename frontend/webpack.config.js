@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-//const CompressionPlugin = require("compression-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const prod = process.env.ENV === "prod";
 
@@ -25,7 +25,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js(x)?$/,
         use: "babel-loader",
         exclude: /node_modules/,
       },
@@ -90,6 +90,7 @@ const config = {
       "API_ENDPOINT",
       "APP_URL",
     ]),
+    new CleanWebpackPlugin(), // clean up dist folder before build
   ].concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : []),
   //.concat(prod ? [new CompressionPlugin()] : []),
 };

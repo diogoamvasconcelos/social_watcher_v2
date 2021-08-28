@@ -1,11 +1,11 @@
-import { Logger } from "../../lib/logger";
+import { Logger } from "@src/lib/logger";
 import { isLeft, right } from "fp-ts/lib/Either";
-import { GetUserIdByCustomerIdFn } from "../ports/paymentsManager/getUserIdByCustomerId";
-import { PaymentData } from "../models/userItem";
-import { GetUserFn } from "../ports/userStore/getUser";
-import { GetPaymentDataFn } from "../ports/userStore/getPaymentData";
-import { User } from "../models/user";
-import { CustomRightReturn } from "../ports/shared";
+import { GetUserIdByCustomerIdFn } from "@src/domain/ports/paymentsManager/getUserIdByCustomerId";
+import { PaymentData } from "@src/domain/models/userItem";
+import { GetUserFn } from "@src/domain/ports/userStore/getUser";
+import { GetPaymentDataFn } from "@src/domain/ports/userStore/getPaymentData";
+import { User } from "@src/domain/models/user";
+import { CustomRightReturn } from "@src/domain/ports/shared";
 
 export type GetUserByCustomerIdDeps = {
   logger: Logger;

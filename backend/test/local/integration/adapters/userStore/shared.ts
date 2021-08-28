@@ -1,8 +1,8 @@
-import { client } from "../../../../lib/dynamoDb";
-import { putItem } from "../../../../../src/lib/dynamoDb";
-import { userItemToDocument } from "../../../../../src/adapters/userStore/client";
-import { UserItemDomain } from "../../../../../src/domain/models/userItem";
-import { Logger } from "../../../../../src/lib/logger";
+import { client } from "@test/lib/dynamoDb";
+import { putItem } from "@src/lib/dynamoDb";
+import { userItemToDocument } from "@src/adapters/userStore/client";
+import { UserItemDomain } from "@src/domain/models/userItem";
+import { Logger } from "@src/lib/logger";
 
 export const directlyPutUserItemInTable = async (
   logger: Logger,

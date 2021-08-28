@@ -6,12 +6,12 @@ import {
   SearchResult,
   TwitterSearchResult,
   YoutubeSearchResult,
-} from "../../src/domain/models/searchResult";
-import { getNow, toUnixTimstamp } from "../../src/lib/date";
+} from "@src/domain/models/searchResult";
+import { getNow, toUnixTimstamp } from "@src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
-import { uuid } from "../../src/lib/uuid";
+import { uuid } from "@src/lib/uuid";
 import { SQSEvent } from "aws-lambda";
 
 export const buildSQSEvent = (items: JsonEncodable[]): SQSEvent => {

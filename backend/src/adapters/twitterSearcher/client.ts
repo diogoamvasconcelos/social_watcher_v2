@@ -1,16 +1,16 @@
-import { Keyword } from "../../domain/models/keyword";
-import { TwitterSearchResult } from "../../domain/models/searchResult";
-import { Logger } from "../../lib/logger";
+import { Keyword } from "@src/domain/models/keyword";
+import { TwitterSearchResult } from "@src/domain/models/searchResult";
+import { Logger } from "@src/lib/logger";
 import {
   getClient as getTwitterClient,
   Client as TwitterClient,
-} from "../../lib/twitter/client";
-import { Client as SSMClient, getParameter } from "../../lib/ssm";
+} from "@src/lib/twitter/client";
+import { Client as SSMClient, getParameter } from "@src/lib/ssm";
 import { isLeft } from "fp-ts/lib/Either";
 import {
   SearchRecentResponseItem,
   twitterCredentialsCodec,
-} from "../../lib/twitter/models";
+} from "@src/lib/twitter/models";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getTwitterClient;

@@ -1,5 +1,5 @@
-import { Awaited } from "../../../../src/lib/types";
-import { getEnvTestConfig } from "../../../lib/config";
+import { Awaited } from "@src/lib/types";
+import { getEnvTestConfig } from "@test/lib/config";
 import {
   addNewNormalSubscription,
   createTestUser,
@@ -7,15 +7,15 @@ import {
   deleteUser,
   getIdToken,
   getPaymentData,
-} from "../steps";
+} from "@test/environment/acceptance/steps";
 import {
   getClient as getApiClient,
   getUser as getUserApi,
-} from "../../../../src/lib/apiClient/apiClient";
+} from "@src/lib/apiClient/apiClient";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { retryUntil } from "../../../lib/retry";
-import { addDays } from "../../../../src/lib/date";
-import { getSubscriptionConfig } from "../../../../src/domain/models/subscriptionConfig";
+import { retryUntil } from "@test/lib/retry";
+import { addDays } from "@src/lib/date";
+import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 
 const config = getEnvTestConfig();
 const subscriptionConfig = getSubscriptionConfig();

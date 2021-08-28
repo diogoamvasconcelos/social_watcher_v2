@@ -1,11 +1,11 @@
-import { Awaited } from "../../../src/lib/types";
-import { uuid } from "../../../src/lib/uuid";
+import { Awaited } from "@src/lib/types";
+import { uuid } from "@src/lib/uuid";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { getEnvTestConfig } from "../../lib/config";
+import { getEnvTestConfig } from "@test/lib/config";
 import {
   createTestUser,
   createUserSearchObject,
@@ -17,7 +17,7 @@ import {
   getClient as getApiClient,
   deleteSearchObject,
   getSearchObject,
-} from "../../../src/lib/apiClient/apiClient";
+} from "@src/lib/apiClient/apiClient";
 import { isLeft } from "fp-ts/lib/Either";
 
 const config = getEnvTestConfig();

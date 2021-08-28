@@ -1,16 +1,16 @@
 import { SQSEvent } from "aws-lambda/trigger/sqs";
 import { isLeft } from "fp-ts/lib/Either";
-import { searchJobCodec } from "../../domain/models/searchJob";
-import { Logger } from "../../lib/logger";
-import { translateSearchResults } from "../../domain/controllers/translateSearchResults";
-import { SearchResult } from "../../domain/models/searchResult";
+import { searchJobCodec } from "@src/domain/models/searchJob";
+import { Logger } from "@src/lib/logger";
+import { translateSearchResults } from "@src/domain/controllers/translateSearchResults";
+import { SearchResult } from "@src/domain/models/searchResult";
 import { decode } from "@diogovasconcelos/lib/iots";
-import { makePutSearchResults } from "../../adapters/searchResultsStore/putSearchResults";
-import { getClient as getSearchResultStoreClient } from "../../adapters/searchResultsStore/client";
-import { SearchSocialMediaFn } from "../../domain/ports/shared";
-import { getClient as getTranslateClient } from "../../lib/translate";
-import { makeTranslateToEnglish } from "../../adapters/translater/translateToEnglish";
-import { getConfig } from "../../lib/config";
+import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
+import { getClient as getSearchResultStoreClient } from "@src/adapters/searchResultsStore/client";
+import { SearchSocialMediaFn } from "@src/domain/ports/shared";
+import { getClient as getTranslateClient } from "@src/lib/translate";
+import { makeTranslateToEnglish } from "@src/adapters/translater/translateToEnglish";
+import { getConfig } from "@src/lib/config";
 
 export const makeSearcherHandler = <T extends SearchResult>({
   logger,

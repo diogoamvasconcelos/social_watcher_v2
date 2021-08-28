@@ -1,14 +1,14 @@
 import { right } from "fp-ts/lib/Either";
-import { getLogger } from "../../lib/logger";
-import { GetSearchObjectsForUserFn } from "../ports/userStore/getSearchObjectsForUser";
+import { getLogger } from "@src/lib/logger";
+import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
 import { isKeywordAllowed } from "./isKeywordAllowed";
-import { SearchObjectDomain } from "../models/userItem";
+import { SearchObjectDomain } from "@src/domain/models/userItem";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { defaultSearchObjectDataDomain } from "../../../test/lib/default";
+import { defaultSearchObjectDataDomain } from "@test/lib/default";
 
 const logger = getLogger();
 const getSearchObjectsForUserFnMocked =

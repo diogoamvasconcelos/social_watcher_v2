@@ -1,7 +1,7 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { SearchHackernewsFn } from "../../domain/ports/hackernewsSearcher/searchHackernews";
+import { SearchHackernewsFn } from "@src/domain/ports/hackernewsSearcher/searchHackernews";
 import { Client, outToDomain } from "./client";
-import { search } from "../../lib/hackernews/client";
+import { search } from "@src/lib/hackernews/client";
 
 export const makeSearchHackernews = (client: Client): SearchHackernewsFn => {
   return async (logger, keyword) => {

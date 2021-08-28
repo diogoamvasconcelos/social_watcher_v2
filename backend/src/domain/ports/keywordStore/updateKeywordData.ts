@@ -1,6 +1,6 @@
-import { Logger } from "../../../lib/logger";
-import { KeywordData } from "../../models/keyword";
-import { DefaultOkReturn } from "../shared";
+import { Logger } from "@src/lib/logger";
+import { KeywordData } from "@src/domain/models/keyword";
+import { DefaultOkReturn } from "@src/domain/ports/shared";
 
 export type UpdateKeywordDataFn = (
   logger: Logger,

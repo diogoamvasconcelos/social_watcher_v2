@@ -5,15 +5,15 @@ import {
   createIndex,
   getClient as getElasticsearchClient,
   indexExists,
-} from "../../lib/elasticsearch/client";
-import { Logger } from "../../lib/logger";
+} from "@src/lib/elasticsearch/client";
+import { Logger } from "@src/lib/logger";
 import { SEARCH_RESULT_SCHEMA } from "./schemas";
 import {
   SearchResult,
   searchResultCodec,
   searchResultMetadaCodec,
-} from "../../domain/models/searchResult";
-import { socialMediaCodec } from "../../domain/models/socialMedia";
+} from "@src/domain/models/searchResult";
+import { socialMediaCodec } from "@src/domain/models/socialMedia";
 import { decode, PositiveInteger } from "@diogovasconcelos/lib/iots";
 
 export const getClient = getElasticsearchClient;

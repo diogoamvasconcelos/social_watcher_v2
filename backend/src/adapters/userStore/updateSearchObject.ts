@@ -1,7 +1,7 @@
 import { isLeft, left, right } from "fp-ts/lib/Either";
-import { UpdateSearchObjectFn } from "../../domain/ports/userStore/updateSearchObject";
+import { UpdateSearchObjectFn } from "@src/domain/ports/userStore/updateSearchObject";
 import { Client, userItemToDocument } from "./client";
-import { putItem } from "../../lib/dynamoDb";
+import { putItem } from "@src/lib/dynamoDb";
 
 export const makeUpdateSearchObject = (
   client: Client,

@@ -2,9 +2,9 @@ import * as t from "io-ts";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { isString } from "lodash";
-import { User } from "../../domain/models/user";
-import { GetUserFn } from "../../domain/ports/userStore/getUser";
-import { Logger } from "../../lib/logger";
+import { User } from "@src/domain/models/user";
+import { GetUserFn } from "@src/domain/ports/userStore/getUser";
+import { Logger } from "@src/lib/logger";
 import {
   ApiErrorResponse,
   ApiRequestMetadata,
@@ -22,12 +22,12 @@ import { decode } from "@diogovasconcelos/lib/iots";
 import {
   SearchObjectDomain,
   searchObjectIndexCodec,
-} from "../../domain/models/userItem";
+} from "@src/domain/models/userItem";
 import {
   JsonEncodable,
   JsonObjectEncodable,
 } from "@diogovasconcelos/lib/models/jsonEncodable";
-import { GetSearchObjectFn } from "../../domain/ports/userStore/getSearchObject";
+import { GetSearchObjectFn } from "@src/domain/ports/userStore/getSearchObject";
 
 export const apiGetUser = async ({
   logger,

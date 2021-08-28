@@ -1,8 +1,8 @@
-import { getLogger } from "../../src/lib/logger";
+import { getLogger } from "@src/lib/logger";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { getClient, search } from "../../src/lib/youtube/client";
-import { getClient as getSsmClient } from "../../src/lib/ssm";
-import { getClientCredentials as getYoutubeCredentials } from "../../src/adapters/youtubeSearcher/client";
+import { getClient, search } from "@src/lib/youtube/client";
+import { getClient as getSsmClient } from "@src/lib/ssm";
+import { getClientCredentials as getYoutubeCredentials } from "@src/adapters/youtubeSearcher/client";
 
 const logger = getLogger();
 

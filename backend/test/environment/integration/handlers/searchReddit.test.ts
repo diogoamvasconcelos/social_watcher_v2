@@ -1,10 +1,10 @@
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { PartialDeep } from "type-fest";
-import { RedditSearchJob } from "../../../../src/domain/models/searchJob";
-import { buildSQSEvent } from "../../../lib/builders";
-import { getEnvTestConfig } from "../../../lib/config";
-import { invokeLambda } from "../../../lib/lambda";
+import { RedditSearchJob } from "@src/domain/models/searchJob";
+import { buildSQSEvent } from "@test/lib/builders";
+import { getEnvTestConfig } from "@test/lib/config";
+import { invokeLambda } from "@test/lib/lambda";
 
 const lambdaName = getEnvTestConfig().searchRedditLambdaName;
 

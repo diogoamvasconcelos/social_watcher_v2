@@ -10,6 +10,12 @@ resource "aws_cloudfront_distribution" "www_redirect" {
     origin_id   = aws_s3_bucket.fe_page.id
   }
 
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.frontent_logs.bucket_domain_name
+    prefix          = "cloudfront-www"
+  }
+
   default_cache_behavior {
     allowed_methods  = ["HEAD", "GET", "OPTIONS"]
     cached_methods   = ["HEAD", "GET", "OPTIONS"]
