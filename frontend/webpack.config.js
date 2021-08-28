@@ -5,7 +5,6 @@ const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-//const CompressionPlugin = require("compression-webpack-plugin");
 
 const prod = process.env.ENV === "prod";
 
