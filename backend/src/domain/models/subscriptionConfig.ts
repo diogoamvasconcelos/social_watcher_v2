@@ -1,12 +1,10 @@
 import * as t from "io-ts";
-import yaml from "js-yaml";
-import fs from "fs";
-import path from "path";
 import {
   decode,
   fromEither,
   positiveInteger,
 } from "@diogovasconcelos/lib/iots";
+import subscriptionConfig from "@config/subscription";
 
 export const subscriptionConfigCodec = t.type({
   trial: t.type({
@@ -16,13 +14,6 @@ export const subscriptionConfigCodec = t.type({
 });
 export type SubscriptionConfig = t.TypeOf<typeof subscriptionConfigCodec>;
 
-export const getSubscriptionConfig = (
-  configFile: string = "../../../config/subscription.yaml"
-): SubscriptionConfig => {
-  return fromEither(
-    decode(
-      subscriptionConfigCodec,
-      yaml.load(fs.readFileSync(path.join(__dirname, configFile)).toString())
-    )
-  );
+export const getSubscriptionConfig = (): SubscriptionConfig => {
+  return fromEither(decode(subscriptionConfigCodec, subscriptionConfig));
 };

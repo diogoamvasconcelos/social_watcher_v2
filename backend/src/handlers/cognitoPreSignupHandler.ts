@@ -63,7 +63,7 @@ const handler = async (event: PreSignUpTriggerEvent) => {
   );
 
   if (isLeft(result)) {
-    throw new Error("Failed to add user");
+    throw new Error("Failed to add user...");
   }
 
   return event;

@@ -1,7 +1,7 @@
 
 locals {
   create_search_object_lambda_name = "create_search_object"
-  create_search_object_lambda_file = "${var.out_dir}/createSearchObjectHandler"
+  create_search_object_lambda_file = "${var.out_dir}/createSearchObjectHandler.zip"
 }
 
 resource "aws_lambda_function" "create_search_object" {

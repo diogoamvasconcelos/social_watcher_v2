@@ -1,7 +1,7 @@
 
 locals {
   dispatch_search_jobs_lambda_name = "dispatch_search_jobs"
-  dispatch_search_jobs_lambda_file = "${var.out_dir}/dispatchSearchJobsHandler"
+  dispatch_search_jobs_lambda_file = "${var.out_dir}/dispatchSearchJobsHandler.zip"
 }
 
 resource "aws_lambda_function" "dispatch_search_jobs" {

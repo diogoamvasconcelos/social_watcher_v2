@@ -12,7 +12,7 @@ import { handler } from "./dispatchNotificationJobsHandler";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { SearchObjectDomain } from "@src/domain/models/userItem";
-import { SearchResult } from "src/domain/models/searchResult";
+import { SearchResult } from "@src/domain/models/searchResult";
 
 // mock: getSearchObjectsForKeyword
 jest.mock("@src/adapters/userStore/getSearchObjectsForKeyword", () => ({

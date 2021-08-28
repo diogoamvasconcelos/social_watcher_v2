@@ -1,17 +1,18 @@
 
 locals {
   search_reddit_lambda_name = "search_reddit"
+  search_reddit_lambda_file = "${var.out_dir}/searchRedditHandler.zip"
 }
 
 resource "aws_lambda_function" "search_reddit" {
-  filename         = local.lambda_file
+  filename         = local.search_reddit_lambda_file
   function_name    = local.search_reddit_lambda_name
   handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "15"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.search_reddit_lambda_file)
   description      = "Searches reddit for specifc keyword"
   depends_on       = [aws_cloudwatch_log_group.search_reddit]
 

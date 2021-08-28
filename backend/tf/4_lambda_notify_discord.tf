@@ -1,17 +1,18 @@
 
 locals {
   notify_discord_lambda_name = "notify_discord"
+  notify_discord_lambda_file = "${var.out_dir}/notifyDiscordHandler.zip"
 }
 
 resource "aws_lambda_function" "notify_discord" {
-  filename         = local.lambda_file
+  filename         = local.notify_discord_lambda_file
   function_name    = local.notify_discord_lambda_name
   handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "15"
-  source_code_hash = filebase64sha256(local.lambda_file)
+  source_code_hash = filebase64sha256(local.notify_discord_lambda_file)
   description      = "Notify to Discord the searchResults/Notification jobs"
   depends_on       = [aws_cloudwatch_log_group.notify_discord]
 

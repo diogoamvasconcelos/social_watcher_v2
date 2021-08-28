@@ -1,7 +1,7 @@
 
 locals {
   create_payments_portal_lambda_name = "create_payments_portal"
-  create_payments_portal_lambda_file = "${var.out_dir}/createPaymentsPortalHandler"
+  create_payments_portal_lambda_file = "${var.out_dir}/createPaymentsPortalHandler.zip"
 }
 
 resource "aws_lambda_function" "create_payments_portal" {

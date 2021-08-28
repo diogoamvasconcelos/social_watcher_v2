@@ -7,9 +7,10 @@
     "typeRoots": ["./node_modules/@types", "./typings"],
     "paths": {
       "@src/*": ["./src/*"],
-      "@test/*": ["./test/*"]
+      "@test/*": ["./test/*"],
+      "@config/*": ["./config/*"]
     }
   },
-  "include": ["src/", "scripts/**/*.ts", "test/", "typings/"],
+  "include": ["src/", "scripts/**/*.ts", "test/", "typings/", "config/"],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**"]
 }

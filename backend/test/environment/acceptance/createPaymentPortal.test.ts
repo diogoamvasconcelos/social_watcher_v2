@@ -1,12 +1,12 @@
-import { Awaited } from "src/lib/types";
+import { Awaited } from "@src/lib/types";
 import { createTestUser, deleteUser, getIdToken } from "./steps";
 import {
   getClient as getApiClient,
   createPaymentsPortal,
-} from "src/lib/apiClient/apiClient";
-import { getEnvTestConfig } from "test/lib/config";
+} from "@src/lib/apiClient/apiClient";
+import { getEnvTestConfig } from "@test/lib/config";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import logger from "src/lib/logger";
+import logger from "@src/lib/logger";
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

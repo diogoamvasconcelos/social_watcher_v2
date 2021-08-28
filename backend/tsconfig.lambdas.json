@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": ".build"
   },
-  "include": ["src/", "typings/"],
+  "include": ["src/", "typings/", "config/"],
   "exclude": [
     "**/node_modules",
     ".build/*",

@@ -1,7 +1,7 @@
 
 locals {
   dispatch_report_jobs_lambda_name = "dispatch_report_jobs"
-  dispatch_report_jobs_lambda_file = "${var.out_dir}/dispatchReportJobsHandler"
+  dispatch_report_jobs_lambda_file = "${var.out_dir}/dispatchReportJobsHandler.zip"
 }
 
 resource "aws_lambda_function" "dispatch_report_jobs" {

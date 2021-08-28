@@ -1,7 +1,7 @@
 
 locals {
   delete_search_object_lambda_name = "delete_search_object"
-  delete_search_object_lambda_file = "${var.out_dir}/deleteSearchObjectHandler"
+  delete_search_object_lambda_file = "${var.out_dir}/deleteSearchObjectHandler.zip"
 }
 
 resource "aws_lambda_function" "delete_search_object" {

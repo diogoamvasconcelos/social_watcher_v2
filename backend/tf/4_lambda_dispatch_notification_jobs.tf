@@ -1,7 +1,7 @@
 
 locals {
   dispatch_notification_jobs_lambda_name = "dispatch_notification_jobs"
-  dispatch_notification_jobs_lambda_file = "${var.out_dir}/dispatchNotificationJobsHandler"
+  dispatch_notification_jobs_lambda_file = "${var.out_dir}/dispatchNotificationJobsHandler.zip"
 }
 
 resource "aws_lambda_function" "dispatch_notification_jobs" {
