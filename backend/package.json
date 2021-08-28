@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "with-local-stack": "scripts/with_env.js scripts/local_stack/with_elasticsearch_local.sh scripts/local_stack/with_dynamodb_local.sh",
-    "check-all": "yarn lint:check && yarn build && yarn test",
+    "check-all": "yarn lint:check && yarn typecheck && yarn test",
     "build:lambdas": "webpack",
-    "build": "tsc --noEmit",
-    "build:watch": "tsc --noEmit --watch",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc --noEmit --watch",
     "lint:check": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
     "test": "yarn with-local-stack \"jest -i --testPathIgnorePatterns 'test/environment'\"",

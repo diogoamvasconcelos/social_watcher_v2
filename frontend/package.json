@@ -4,7 +4,7 @@
     "dev": "scripts/with_env.js 'webpack serve'",
     "analyze": "ANALYZE=1 scripts/with_env.js 'webpack serve'",
     "check-all": "yarn lint:check && yarn typecheck && yarn test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "lint:check": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "test": "jest",
