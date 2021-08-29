@@ -90,9 +90,9 @@ const config = {
       "API_ENDPOINT",
       "APP_URL",
     ]),
-    new CleanWebpackPlugin(), // clean up dist folder before build
-  ].concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : []),
-  //.concat(prod ? [new CompressionPlugin()] : []),
+  ]
+    .concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : [])
+    .concat(prod ? [new CleanWebpackPlugin()] : []), // clean up dist folder before build
 };
 
 module.exports = config;

@@ -1,5 +1,5 @@
 import { SocialMedia, socialMedias } from "@backend/domain/models/socialMedia";
-import { searchKeyword, SearchRequestData, SearchState } from "./searchState";
+import { searchKeyword, SearchState } from "./searchState";
 import Table, {
   ColumnsType,
   TablePaginationConfig,
@@ -8,7 +8,7 @@ import Table, {
 import styled from "styled-components";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
-import React, { ChangeEvent, useReducer, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   newDateISOString,
   newLowerCase,
@@ -24,51 +24,11 @@ import Button from "antd/lib/button";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
-import { AnyAction, createAction, createReducer } from "@reduxjs/toolkit";
+import { AnyAction } from "@reduxjs/toolkit";
+import { SearchRequestState, updateSearchRequestAction } from "./SearchPage";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-
-// +++++++++
-// + STATE +
-// +++++++++
-
-type SearchRequestState = SearchRequestData;
-const searchRequestInitialState: SearchRequestState = {
-  keyword: newLowerCase(""),
-  pagination: {
-    limit: newPositiveInteger(20),
-    offset: newPositiveInteger(0),
-  },
-};
-
-const changeKeywordAction =
-  createAction<SearchRequestState["keyword"]>("CHANGE_KEYWORD");
-const changeDataQueryAction =
-  createAction<SearchRequestState["dataQuery"]>("CHANGE_DATA_QUERY");
-const changeTimeQueryAction =
-  createAction<SearchRequestState["timeQuery"]>("CHANGE_TIME_QUERY");
-const changePaginationAction =
-  createAction<SearchRequestState["pagination"]>("CHANGE_PAGINATION");
-
-const searchRequestStateReducer = createReducer<SearchRequestState>(
-  searchRequestInitialState,
-  (builder) => {
-    builder
-      .addCase(changeKeywordAction, (state, action) => {
-        state.keyword = action.payload;
-      })
-      .addCase(changeDataQueryAction, (state, action) => {
-        state.dataQuery = action.payload;
-      })
-      .addCase(changeTimeQueryAction, (state, action) => {
-        state.timeQuery = action.payload;
-      })
-      .addCase(changePaginationAction, (state, action) => {
-        state.pagination = action.payload;
-      });
-  }
-);
 
 // +++++++++++++
 // + CONTAINER +
@@ -81,18 +41,17 @@ const TableContainer = styled.div`
 `;
 type SearchResultsTableProps = {
   searchObjects: SearchObjectDomain[];
+  searchRequestState: SearchRequestState;
+  dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
 };
 export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   searchObjects,
+  searchRequestState,
+  dispatchSearchRequestStateAction,
 }) => {
   const dispatch = useAppDispatch();
   const searchResult = useAppSelector((state) => state.search);
   const [isSearcing, setIsSearching] = useState(false);
-
-  const [searchRequestState, dispatchSearchRequestStateAction] = useReducer(
-    searchRequestStateReducer,
-    searchRequestInitialState
-  );
 
   useEffect(() => {
     // hacky way to know how when the search has ended...probably worth improving
@@ -185,7 +144,9 @@ const ResultsTable: React.FC<SearchTableProps> = ({
 
     const offset = newPositiveInteger((current - 1) * pageSize);
     const limit = newPositiveInteger(pageSize);
-    dispatchSearchRequestStateAction(changePaginationAction({ offset, limit }));
+    dispatchSearchRequestStateAction(
+      updateSearchRequestAction({ pagination: { offset, limit } })
+    );
   };
 
   const paginationConfig: TablePaginationConfig = {
@@ -259,7 +220,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   // TODO: allow search for multiple keywords
   const handleSelectKeyword = (val: string) => {
-    dispatchSearchRequestStateAction(changeKeywordAction(newLowerCase(val)));
+    dispatchSearchRequestStateAction(
+      updateSearchRequestAction({ keyword: newLowerCase(val) })
+    );
     setSearchEnabled(val != initialKeyword);
   };
 
@@ -274,9 +237,11 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     [startDate, endDate]
   ) => {
     dispatchSearchRequestStateAction(
-      changeTimeQueryAction({
-        happenedAtStart: startDate ? newDateISOString(startDate) : undefined,
-        happenedAtEnd: endDate ? newDateISOString(endDate) : undefined,
+      updateSearchRequestAction({
+        timeQuery: {
+          happenedAtStart: startDate ? newDateISOString(startDate) : undefined,
+          happenedAtEnd: endDate ? newDateISOString(endDate) : undefined,
+        },
       })
     );
   };
@@ -284,7 +249,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   const handleSearchTextChanged = (event: ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
 
-    dispatchSearchRequestStateAction(changeDataQueryAction(val || undefined));
+    dispatchSearchRequestStateAction(
+      updateSearchRequestAction({ dataQuery: val || undefined })
+    );
   };
 
   const handleSearchClicked = () => {

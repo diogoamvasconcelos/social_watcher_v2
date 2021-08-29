@@ -6,7 +6,7 @@ yarn install --frozen-lockfile
 echo "Testing..."
 yarn check-all
 echo "Building..."
-$THIS_PATH/with_env.js "yarn build:lambdas" --env dev
+$THIS_PATH/with_env.js "yarn build" --env dev
 echo "Deploying..."
 $THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env dev
 echo "Env testing"
