@@ -53,6 +53,7 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   const dispatch = useAppDispatch();
   const searchResult = useAppSelector((state) => state.search);
   const [isSearcing, setIsSearching] = useState(false);
+  const [searchEnabled, setSearchEnabled] = useState(false);
 
   useEffect(() => {
     // hacky way to know how when the search has ended...probably worth improving
@@ -60,7 +61,7 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   }, [searchResult]);
 
   const dispatchSearch = () => {
-    if (searchRequestState.keyword) {
+    if (searchEnabled && searchRequestState.keyword) {
       setIsSearching(true);
       void dispatch(
         searchKeyword({
@@ -71,23 +72,29 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
     }
   };
 
-  const handleOnSearchRequested = () => {
-    dispatchSearch();
-  };
+  useEffect(() => {
+    // search only enabled if selected keyword is valid
+    setSearchEnabled(
+      searchObjects
+        .map((searchObject) => searchObject.keyword)
+        .includes(newLowerCase(searchRequestState.keyword ?? ""))
+    );
+  }, [searchRequestState.keyword, searchObjects]);
 
   useEffect(() => {
     // hacky way to search when table pagination changes
     dispatchSearch();
-  }, [searchRequestState.pagination]);
+  }, [searchRequestState.pagination, searchEnabled]);
 
   return (
     <>
       <TableContainer>
         <TableHeader
           searchObjects={searchObjects}
-          onSearch={handleOnSearchRequested}
+          onSearch={dispatchSearch}
           searchRequestState={searchRequestState}
           dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
+          searchEnabled={searchEnabled}
         />
         <ResultsTable
           searchResults={searchResult}
@@ -213,6 +220,7 @@ type TableHeaderProps = {
   onSearch: () => void;
   searchRequestState: SearchRequestState; // not used atm
   dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
+  searchEnabled: boolean;
 };
 
 const TableHeader: React.FC<TableHeaderProps> = ({
@@ -220,17 +228,15 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   onSearch,
   searchRequestState,
   dispatchSearchRequestStateAction,
+  searchEnabled,
 }) => {
   const initialKeyword = newLowerCase("choose a keyword");
-
-  const [searchEnabled, setSearchEnabled] = useState(false);
 
   // TODO: allow search for multiple keywords
   const handleSelectKeyword = (val: string) => {
     dispatchSearchRequestStateAction(
       updateSearchRequestAction({ keyword: newLowerCase(val) })
     );
-    setSearchEnabled(val != initialKeyword);
   };
 
   const handleSelectFilterSocialMedia = (vals: string[]) => {
@@ -262,10 +268,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   };
 
   const handleSearchClicked = () => {
-    if (!searchEnabled) {
-      return;
-    }
-
     onSearch();
   };
 
@@ -277,28 +279,18 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <TableHeaderContainer>
-      <TableHeaderRow>
-        <Select
-          defaultValue={initialKeyword}
-          value={searchRequestState.keyword}
-          onChange={handleSelectKeyword}
-          style={{ minWidth: 200 }}
-        >
-          {allowedKeywords.map((keyword) => (
-            <Option value={keyword} key={keyword}>
-              {keyword}
-            </Option>
-          ))}
-        </Select>
-        <Button
-          type="primary"
-          style={{ width: "60px", height: "100%", borderRadius: "4px" }}
-          icon={<SearchOutlined />}
-          size="small"
-          onClick={handleSearchClicked}
-          disabled={!searchEnabled}
-        />
-      </TableHeaderRow>
+      <Select
+        defaultValue={initialKeyword}
+        value={searchRequestState.keyword}
+        onChange={handleSelectKeyword}
+        style={{ minWidth: 200 }}
+      >
+        {allowedKeywords.map((keyword) => (
+          <Option value={keyword} key={keyword}>
+            {keyword}
+          </Option>
+        ))}
+      </Select>
       <TableHeaderRow>
         <Text>Filters</Text>
       </TableHeaderRow>
@@ -320,17 +312,27 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           </Option>
         ))}
       </Select>
-      <RangePicker
-        format="YYYY-MM-DD HH:mm"
-        showTime={true}
-        allowEmpty={[true, true]}
-        onChange={handleRangePickerChanged}
-        value={[
-          moment(searchRequestState.timeQuery?.happenedAtStart),
-          moment(searchRequestState.timeQuery?.happenedAtEnd),
-        ]}
-        style={{ width: "240px" }}
-      />
+      <TableHeaderRow>
+        <RangePicker
+          format="YYYY-MM-DD HH:mm"
+          showTime={true}
+          allowEmpty={[true, true]}
+          onChange={handleRangePickerChanged}
+          value={[
+            moment(searchRequestState.timeQuery?.happenedAtStart),
+            moment(searchRequestState.timeQuery?.happenedAtEnd),
+          ]}
+          style={{ width: "240px" }}
+        />
+        <Button
+          type="primary"
+          style={{ width: "60px", height: "100%", borderRadius: "4px" }}
+          icon={<SearchOutlined />}
+          size="small"
+          onClick={handleSearchClicked}
+          disabled={!searchEnabled}
+        />
+      </TableHeaderRow>
     </TableHeaderContainer>
   );
 };
