@@ -26,6 +26,7 @@ import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
 import { AnyAction } from "@reduxjs/toolkit";
 import { SearchRequestState, updateSearchRequestAction } from "./SearchPage";
+import moment from "moment";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -59,9 +60,14 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   }, [searchResult]);
 
   const dispatchSearch = () => {
-    if (searchRequestState.keyword.length > 0) {
+    if (searchRequestState.keyword) {
       setIsSearching(true);
-      void dispatch(searchKeyword(searchRequestState));
+      void dispatch(
+        searchKeyword({
+          ...searchRequestState,
+          keyword: searchRequestState.keyword, // tsc is dumb here...
+        })
+      );
     }
   };
 
@@ -212,9 +218,10 @@ type TableHeaderProps = {
 const TableHeader: React.FC<TableHeaderProps> = ({
   searchObjects,
   onSearch,
+  searchRequestState,
   dispatchSearchRequestStateAction,
 }) => {
-  const initialKeyword = "choose a keyword";
+  const initialKeyword = newLowerCase("choose a keyword");
 
   const [searchEnabled, setSearchEnabled] = useState(false);
 
@@ -272,7 +279,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     <TableHeaderContainer>
       <TableHeaderRow>
         <Select
-          defaultValue="chose a keyword"
+          defaultValue={initialKeyword}
+          value={searchRequestState.keyword}
           onChange={handleSelectKeyword}
           style={{ minWidth: 200 }}
         >
@@ -297,8 +305,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       <Input
         placeholder="search for specific text"
         allowClear={true}
-        // enterButton
-        // onSearch={handleSearchClicked}
+        value={searchRequestState.dataQuery}
         onChange={handleSearchTextChanged}
       />
       <Select
@@ -318,6 +325,10 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         showTime={true}
         allowEmpty={[true, true]}
         onChange={handleRangePickerChanged}
+        value={[
+          moment(searchRequestState.timeQuery?.happenedAtStart),
+          moment(searchRequestState.timeQuery?.happenedAtEnd),
+        ]}
         style={{ width: "240px" }}
       />
     </TableHeaderContainer>

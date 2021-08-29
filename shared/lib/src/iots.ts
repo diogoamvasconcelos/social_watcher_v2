@@ -32,6 +32,10 @@ export const toSingleEither = <L, R>(
   }
 };
 
+export const toRightOrUndefined = <L, R>(either: Either<L, R>) => {
+  return isRight(either) ? either.right : undefined;
+};
+
 // Useful sometimes, but doens't solve all the problems, as it doesn't create the "?" field
 // more info: https://github.com/gcanti/io-ts/issues/56
 export const optional = <T extends t.Mixed>(T: T) => t.union([t.undefined, T]);

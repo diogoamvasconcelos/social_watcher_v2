@@ -20,7 +20,7 @@
     "compile-ts4fe": "yarn tsc -b"
   },
   "dependencies": {
-    "@diogovasconcelos/lib": "^0.1.11",
+    "@diogovasconcelos/lib": "^0.1.12",
     "@elastic/elasticsearch": "^7.13.0",
     "@slack/web-api": "^6.3.0",
     "aws-elasticsearch-connector": "^9.0.3",

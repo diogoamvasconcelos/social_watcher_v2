@@ -1,3 +1,4 @@
+import * as t from "io-ts";
 import React, { useEffect, useReducer } from "react";
 import styled from "styled-components";
 import { getUserSearchObjects } from "@src/shared/reducers/userState";
@@ -7,23 +8,22 @@ import qs from "query-string";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { SearchRequestData } from "./searchState";
 import {
+  dateISOString,
   decode,
-  newLowerCase,
   newPositiveInteger,
+  toRightOrUndefined,
 } from "@diogovasconcelos/lib/iots";
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
-import { PartialDeep } from "type-fest";
+import { PartialDeep, SetOptional } from "type-fest";
 import { keywordCodec } from "@backend/domain/models/keyword";
-import { isRight } from "fp-ts/lib/Either";
 
 // +++++++++
 // + STATE +
 // +++++++++
 
-export type SearchRequestState = SearchRequestData;
+export type SearchRequestState = SetOptional<SearchRequestData, "keyword">;
 const searchRequestInitialState: SearchRequestState = {
-  keyword: newLowerCase(""),
   pagination: {
     limit: newPositiveInteger(20),
     offset: newPositiveInteger(0),
@@ -38,8 +38,6 @@ const searchRequestStateReducer = createReducer<SearchRequestState>(
   searchRequestInitialState,
   (builder) => {
     builder.addCase(updateSearchRequestAction, (state, action) => {
-      console.log("updateSearchRequestAction");
-      console.log(action.payload);
       return deepmergeSafe(state, action.payload);
     });
   }
@@ -49,13 +47,25 @@ const searchRequestStateReducer = createReducer<SearchRequestState>(
 // + Query String +
 // ++++++++++++++++
 
-const getParamsFromQueryString = (queryString: string) => {
+const getParamsFromQueryString = (
+  queryString: string
+): PartialDeep<SearchRequestState> => {
   const s = qs.parse(queryString);
 
   const keywordEither = decode(keywordCodec, s.keyword);
-  console.log(keywordEither);
+  const textEither = decode(t.string, s.text);
+  // const socialMediaEither = decode(keywordCodec, s.keyword); // TODO: improve this when implemented
+  const timeStartEither = decode(dateISOString, s.timeStart);
+  const timeEndEither = decode(dateISOString, s.timeEnd);
+
   return {
-    keyword: isRight(keywordEither) ? keywordEither.right : undefined,
+    keyword: toRightOrUndefined(keywordEither),
+    timeQuery: {
+      happenedAtStart: toRightOrUndefined(timeStartEither),
+      happenedAtEnd: toRightOrUndefined(timeEndEither),
+    },
+    dataQuery: toRightOrUndefined(textEither),
+    // socialMedia: toRightOrUndefined(socialMediaEither),
   };
 };
 
@@ -82,6 +92,8 @@ export const SearchPage: React.FC<RouteComponentProps> = ({
   useEffect(() => {
     void dispatch(getUserSearchObjects());
 
+    console.log(`search: ${search}`);
+
     dispatchSearchRequestStateAction(
       updateSearchRequestAction(getParamsFromQueryString(search))
     );
@@ -89,14 +101,14 @@ export const SearchPage: React.FC<RouteComponentProps> = ({
 
   useEffect(() => {
     // Update QueryString
-    console.log("updateQueryString");
-    console.log(searchRequestState);
-
     const newSearch = qs.parse(search, { parseNumbers: true });
     history.replace({
       search: qs.stringify({
         ...newSearch,
-        keyword: searchRequestState.keyword || undefined,
+        keyword: searchRequestState.keyword,
+        text: searchRequestState.dataQuery,
+        timeStart: searchRequestState.timeQuery?.happenedAtStart,
+        timeEnd: searchRequestState.timeQuery?.happenedAtEnd,
       }),
     });
   }, [searchRequestState]);
