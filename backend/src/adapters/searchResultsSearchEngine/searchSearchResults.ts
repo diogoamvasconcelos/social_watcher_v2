@@ -18,8 +18,12 @@ const DEFAULT_OFFSET = 0;
 export const makeSearchSearchResults = (
   client: Client
 ): SearchSearchResultsFn => {
-  return async (logger, { keyword, dataQuery, timeQuery, pagination }) => {
+  return async (
+    logger,
+    { keyword, dataQuery, timeQuery, socialMediaQuery, pagination }
+  ) => {
     const queriesMust: JsonObjectEncodable[] = [];
+    // keyword
     queriesMust.push({
       constant_score: {
         filter: {
@@ -29,7 +33,7 @@ export const makeSearchSearchResults = (
         },
       },
     });
-
+    // data / text
     if (dataQuery) {
       queriesMust.push({
         multi_match: {
@@ -39,7 +43,7 @@ export const makeSearchSearchResults = (
         },
       });
     }
-
+    // timerange
     if (timeQuery) {
       queriesMust.push(
         makeGreaterLessThanQuery({
@@ -48,6 +52,18 @@ export const makeSearchSearchResults = (
           lte: timeQuery.happenedAtEnd,
         })
       );
+    }
+    // socialMedia
+    if (socialMediaQuery) {
+      queriesMust.push({
+        constant_score: {
+          filter: {
+            terms: {
+              socialMedia: socialMediaQuery,
+            },
+          },
+        },
+      });
     }
 
     const searchParams: RequestParamsSearch = {
