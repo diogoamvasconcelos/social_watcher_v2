@@ -145,6 +145,31 @@ describe("search endpoint e2e (nearly)", () => {
       expect(responseEither.left.status).toEqual(403);
     }
   });
+
+  it("can search with social media", async () => {
+    // add syntetic twitter search result
+    await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+    });
+    // add syntetic reddit result withing range
+    const searchResultReddit = await addSearchResultDirectly({
+      keyword,
+      socialMedia: "reddit",
+    });
+
+    const searchResponse = await trySearchUsingApi(
+      { client: apiClient, token: userToken },
+      {
+        userData: {
+          keyword,
+          socialMediaQuery: ["reddit"],
+        },
+      }
+    );
+
+    expect(searchResponse.items).toEqual([searchResultReddit]);
+  });
 });
 
 const trySearchUsingApi = async (...searchArgs: Parameters<typeof search>) => {

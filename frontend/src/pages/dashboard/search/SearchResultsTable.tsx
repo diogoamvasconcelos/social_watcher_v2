@@ -1,4 +1,8 @@
-import { SocialMedia, socialMedias } from "@backend/domain/models/socialMedia";
+import {
+  SocialMedia,
+  socialMediaCodec,
+  socialMedias,
+} from "@backend/domain/models/socialMedia";
 import { searchKeyword, SearchState } from "./searchState";
 import Table, {
   ColumnsType,
@@ -9,11 +13,6 @@ import styled from "styled-components";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import React, { ChangeEvent, useState } from "react";
-import {
-  newDateISOString,
-  newLowerCase,
-  newPositiveInteger,
-} from "@diogovasconcelos/lib";
 import { toLocalTimestamp } from "../../../shared/lib/formatting";
 import { SearchResult } from "@backend/domain/models/searchResult";
 import Select from "antd/lib/select";
@@ -26,7 +25,16 @@ import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
 import { AnyAction } from "@reduxjs/toolkit";
 import { SearchRequestState, updateSearchRequestAction } from "./SearchPage";
-import moment from "moment";
+import {
+  decode,
+  fromEither,
+  newDateISOString,
+  newLowerCase,
+  newPositiveInteger,
+  toSingleEither,
+} from "@diogovasconcelos/lib/iots";
+import { isNonEmpty } from "fp-ts/lib/Array";
+import { momentOrNull } from "@src/shared/lib/moment";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -240,13 +248,19 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   };
 
   const handleSelectFilterSocialMedia = (vals: string[]) => {
-    // TODO: decode to SocialMedia type
-    // TODO: propagate state changes (once this feature is possible on the backend)
-    console.log(`selected filter socialMedia: ${vals}`);
+    const socialMedias = fromEither(
+      toSingleEither(vals.map((val) => decode(socialMediaCodec, val)))
+    );
+
+    dispatchSearchRequestStateAction(
+      updateSearchRequestAction({
+        socialMediaQuery: isNonEmpty(socialMedias) ? socialMedias : undefined,
+      })
+    );
   };
 
   const handleRangePickerChanged: RangePickerProps["onChange"] = (
-    _dates,
+    dates,
     [startDate, endDate]
   ) => {
     dispatchSearchRequestStateAction(
@@ -301,7 +315,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         onChange={handleSearchTextChanged}
       />
       <Select
-        placeholder="all social media"
+        placeholder="all social medias"
         mode="multiple"
         allowClear
         onChange={handleSelectFilterSocialMedia}
@@ -319,8 +333,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           allowEmpty={[true, true]}
           onChange={handleRangePickerChanged}
           value={[
-            moment(searchRequestState.timeQuery?.happenedAtStart),
-            moment(searchRequestState.timeQuery?.happenedAtEnd),
+            momentOrNull(searchRequestState.timeQuery?.happenedAtStart),
+            momentOrNull(searchRequestState.timeQuery?.happenedAtEnd),
           ]}
           style={{ width: "240px" }}
         />

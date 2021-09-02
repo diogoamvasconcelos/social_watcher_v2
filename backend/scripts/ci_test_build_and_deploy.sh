@@ -11,3 +11,5 @@ echo "Deploying..."
 $THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env dev
 echo "Env testing"
 yarn run test:environment
+echo "Prep types for FE"
+yarn compile-ts4fe
