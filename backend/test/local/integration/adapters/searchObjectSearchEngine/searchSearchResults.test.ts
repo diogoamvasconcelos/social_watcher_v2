@@ -14,9 +14,15 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
-import { buildSearchResult } from "@test/lib/builders";
+import {
+  buildInstagramSearchResult,
+  buildRedditSearchResult,
+  buildSearchResult,
+  buildTwitterSearchResult,
+} from "@test/lib/builders";
 import { getLocalTestConfig } from "@test/lib/config";
 import { getMinutesAgo } from "@src/lib/date";
+import { PartialDeep } from "type-fest";
 
 const config = getLocalTestConfig();
 const logger = getLogger();
@@ -39,6 +45,10 @@ describe("indexSearchResults", () => {
         newPositiveInteger(config.searchResultIndexVersion)
       )
     ).name;
+  });
+
+  afterEach(async () => {
+    fromEither(await deleteIndex({ logger, client }, indexName));
   });
 
   it("can search using dataQuery", async () => {
@@ -170,8 +180,78 @@ describe("indexSearchResults", () => {
     ).toIncludeAllMembers([beforeEndSearchResult]);
   });
 
-  afterEach(async () => {
-    fromEither(await deleteIndex({ logger, client }, indexName));
+  it("can search using socialMediaQuery", async () => {
+    const keyword = newLowerCase(uuid());
+
+    const goodSearchResult: PartialDeep<SearchResult> = {
+      keyword,
+      data: { text: "good" },
+    };
+    const badSearchResult: PartialDeep<SearchResult> = {
+      keyword,
+      data: { text: "bad" },
+    };
+
+    const twitterGoodSearchResult = buildTwitterSearchResult({
+      ...goodSearchResult,
+      socialMedia: "twitter",
+    });
+    const twitterBadSearchResult = buildTwitterSearchResult({
+      ...badSearchResult,
+      socialMedia: "twitter",
+    });
+    const redditGoodSearchResult = buildRedditSearchResult({
+      ...goodSearchResult,
+      socialMedia: "reddit",
+    });
+    const redditBadSearchResult = buildRedditSearchResult({
+      ...badSearchResult,
+      socialMedia: "reddit",
+    });
+    const instgramGoodSearchResult = buildInstagramSearchResult({
+      ...goodSearchResult,
+      socialMedia: "instagram",
+    });
+    const instagramBadSearchResult = buildInstagramSearchResult({
+      ...badSearchResult,
+      socialMedia: "instagram",
+    });
+
+    await indexSearchResults([
+      twitterGoodSearchResult,
+      twitterBadSearchResult,
+      redditGoodSearchResult,
+      redditBadSearchResult,
+      instgramGoodSearchResult,
+      instagramBadSearchResult,
+    ]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          socialMediaQuery: ["twitter"],
+        })
+      ).items
+    ).toIncludeAllMembers([twitterGoodSearchResult]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          socialMediaQuery: ["twitter", "reddit"],
+        })
+      ).items
+    ).toIncludeAllMembers([twitterGoodSearchResult, redditGoodSearchResult]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keyword,
+          socialMediaQuery: ["instagram", "reddit"],
+        })
+      ).items
+    ).toIncludeAllMembers([instgramGoodSearchResult, redditGoodSearchResult]);
   });
 });
 

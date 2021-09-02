@@ -5,6 +5,8 @@ import { Logger } from "../../../lib/logger";
 import { keywordCodec } from "../../../domain/models/keyword";
 import { searchResultCodec } from "../../../domain/models/searchResult";
 import { CustomRightReturn } from "../../../domain/ports/shared";
+import { socialMediaCodec } from "../../../domain/models/socialMedia";
+import { nonEmptyArray } from "io-ts-types";
 
 export const paginationRequestCodec = t.type({
   limit: positiveInteger,
@@ -36,6 +38,7 @@ export const SearchSearchResultParamsCodec = t.intersection([
       happenedAtStart: dateISOString,
       happenedAtEnd: dateISOString,
     }),
+    socialMediaQuery: nonEmptyArray(socialMediaCodec),
     pagination: paginationRequestCodec,
   }),
 ]);

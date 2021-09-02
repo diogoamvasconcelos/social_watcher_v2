@@ -92,8 +92,6 @@ export const SearchPage: React.FC<RouteComponentProps> = ({
   useEffect(() => {
     void dispatch(getUserSearchObjects());
 
-    console.log(`search: ${search}`);
-
     dispatchSearchRequestStateAction(
       updateSearchRequestAction(getParamsFromQueryString(search))
     );
