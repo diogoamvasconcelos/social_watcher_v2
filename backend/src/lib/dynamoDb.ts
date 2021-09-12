@@ -9,7 +9,7 @@ import _ from "lodash";
 import { applyTransformToItem } from "./iots";
 import { Logger } from "./logger";
 
-export const getClient = (endpoint: string | undefined = undefined) => {
+export const getClient = (endpoint?: string) => {
   return new DocumentClient({ endpoint });
 };
 export type Client = ReturnType<typeof getClient>;
@@ -72,15 +72,15 @@ export const queryItems = async <T>(
   logger: Logger
 ): Promise<Either<"ERROR", T[]>> => {
   try {
-    let cursor: DocumentClient.Key | undefined = undefined;
-    const items: unknown[] = [];
+    let cursor: DocumentClient.Key | undefined;
+    let items: unknown[] = [];
 
     do {
       const result: DocumentClient.QueryOutput = await client
         .query({ ...params, ExclusiveStartKey: cursor })
         .promise();
 
-      items.push(...(result.Items ?? []));
+      items = items.concat(result.Items ?? []);
 
       cursor = result.LastEvaluatedKey;
     } while (cursor);

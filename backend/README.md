@@ -27,3 +27,9 @@ scripts/with_env.js yarn 'jest -t="some text"'
 ```
 yarn tsc -b
 ```
+
+## Run ts-node
+
+```
+scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register test/manual/youtube.ts' --env dev
+```
