@@ -12,6 +12,9 @@ export function parseSafe<T extends JsonEncodable>(
     const x = JSON.parse(s) as T;
     return right(x);
   } catch (error) {
-    return left(error.message);
+    if (error instanceof Error) {
+      return left(error.message);
+    }
+    return left("unknown error while parsing JSON");
   }
 }
