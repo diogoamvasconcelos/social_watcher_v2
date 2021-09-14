@@ -13,6 +13,7 @@
     "paths": {
       "@backend": ["./backend"],
       "@frontend": ["./frontend"]
-    }
+    },
+    "useUnknownInCatchVariables": false // too annoying to deal with right now
   }
 }

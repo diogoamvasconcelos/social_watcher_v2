@@ -50,27 +50,27 @@ const logger: Logger = {
     }
   },
 
-  info(message: string, context?: JsonObjectEncodable) {
+  info(message, context) {
     pinoLogger.info(context ?? {}, message);
   },
 
-  fatal(message: string, context?: JsonObjectEncodable) {
+  fatal(message, context) {
     pinoLogger.fatal(context ?? {}, message);
   },
 
-  warn(message: string, context?: JsonObjectEncodable) {
+  warn(message, context) {
     pinoLogger.warn(context ?? {}, message);
   },
 
-  error(message: string, context?: JsonObjectEncodable) {
+  error(message, context) {
     pinoLogger.error(context ?? {}, message);
   },
 
-  debug(message: string, context?: JsonObjectEncodable) {
+  debug(message, context) {
     pinoLogger.debug(context ?? {}, message);
   },
 
-  trace(message: string, context?: JsonObjectEncodable) {
+  trace(message, context) {
     pinoLogger.trace(context ?? {}, message);
   },
 };
