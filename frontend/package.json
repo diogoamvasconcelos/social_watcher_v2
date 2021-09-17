@@ -1,5 +1,8 @@
 {
-  "version": "0.0.1",
+  "name": "social_watcher_frontend",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
     "build": "webpack",
     "dev": "scripts/with_env.js 'webpack serve'",

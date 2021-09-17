@@ -8,6 +8,10 @@
     - https://github.com/ant-design/v2.preview.pro.ant.design
     - https://github.com/ant-design/ant-design-pro-layout/blob/master/src/SiderMenu/SiderMenu.tsx
 
+- ref for landing page:
+
+  - https://oclif.io/
+
 - SEO and content
   - use gatsby for the static site genration of landing/markting page to be SEOable and also faster!
   - content markting: buy content from fiverr.com
