@@ -20,6 +20,7 @@ import {
   ABOUT_PATH,
   SIGNUP_PATH,
 } from "./shared/data/paths";
+import { LandingPage } from "./pages/landing/LandingPage";
 
 const App: React.FC = () => (
   <StrictMode>
@@ -30,9 +31,7 @@ const App: React.FC = () => (
           <Navbar />
           <Layout.Content>
             <Switch>
-              <Route path={ROOT_PATH} exact>
-                <p>Work in Progress</p>
-              </Route>
+              <Route path={ROOT_PATH} exact component={LandingPage} />
               <Route path={DASHBOARD_PATH} component={DashboardPage} />
               <Route path={USER_PATH} component={UserPage} />
               <Route path={GUIDES_PATH} component={TodoPage} />

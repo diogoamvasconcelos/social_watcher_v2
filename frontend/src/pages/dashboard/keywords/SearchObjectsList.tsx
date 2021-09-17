@@ -14,12 +14,6 @@ import {
 import { ReportFrequency, ReportJob } from "@backend/domain/models/reportJob";
 import SettingFilled from "@ant-design/icons/lib/icons/SettingFilled";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
-import TwitterOutlined from "@ant-design/icons/lib/icons/TwitterOutlined";
-import RedditOutlined from "@ant-design/icons/lib/icons/RedditOutlined";
-import WarningOutlined from "@ant-design/icons/lib/icons/WarningOutlined";
-import InstagramOutlined from "@ant-design/icons/lib/icons/InstagramOutlined";
-import YoutubeOutlined from "@ant-design/icons/lib/icons/YoutubeOutlined";
-import SlackOutlined from "@ant-design/icons/lib/icons/SlackOutlined";
 import MailOutlined from "@ant-design/icons/lib/icons/MailOutlined";
 import CalendarOutlined from "@ant-design/icons/lib/icons/CalendarOutlined";
 import Button from "antd/lib/button";
@@ -27,6 +21,10 @@ import { useHistory } from "react-router-dom";
 import Tooltip from "antd/lib/tooltip";
 import { capitalizeWord } from "../../../shared/lib/text";
 import { SEARCH_PATH } from "../../../shared/data/paths";
+import {
+  getNotificationMediumIcon,
+  getSocialMediaIcon,
+} from "@src/shared/components/Icons";
 
 // ++++++++
 // + LIST +
@@ -208,29 +206,6 @@ const getActiveSocialMedias = (
   );
 };
 
-const getSocialMediaIcon = (socialMedia: SocialMedia): React.ReactNode => {
-  const getIcon = () => {
-    switch (socialMedia) {
-      case "twitter":
-        return <TwitterOutlined />;
-      case "reddit":
-        return <RedditOutlined />;
-      case "hackernews":
-        return <WarningOutlined />;
-      case "instagram":
-        return <InstagramOutlined />;
-      case "youtube":
-        return <YoutubeOutlined />;
-    }
-  };
-
-  return (
-    <Tooltip title={capitalizeWord(socialMedia)} key={socialMedia}>
-      {getIcon()}
-    </Tooltip>
-  );
-};
-
 const getActiveNotificationMediums = (
   searchObject: SearchObjectDomain
 ): NotificationMedium[] => {
@@ -238,28 +213,6 @@ const getActiveNotificationMediums = (
     (notificationMedium) =>
       searchObject.notificationData[notificationMedium].enabledStatus ===
       "ENABLED"
-  );
-};
-
-const getNotificationMediumIcon = (
-  notificationMedium: NotificationMedium
-): React.ReactNode => {
-  const getIcon = () => {
-    switch (notificationMedium) {
-      case "discord":
-        return <WarningOutlined />;
-      case "slack":
-        return <SlackOutlined />;
-    }
-  };
-
-  return (
-    <Tooltip
-      title={capitalizeWord(notificationMedium)}
-      key={notificationMedium}
-    >
-      {getIcon()}
-    </Tooltip>
   );
 };
 
