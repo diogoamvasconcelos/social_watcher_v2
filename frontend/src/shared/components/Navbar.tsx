@@ -16,7 +16,7 @@ import Dropdown from "antd/lib/dropdown";
 import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
 import { Header } from "antd/lib/layout/layout";
 import {
-  ABOUT_PATH,
+  FAQ_PATH,
   DASHBOARD_PATH,
   GUIDES_PATH,
   PRICING_PATH,
@@ -30,7 +30,7 @@ const config = getConfig();
 const navigationConfig: Record<string, string> = {
   product: ROOT_PATH,
   pricing: PRICING_PATH,
-  about: ABOUT_PATH,
+  faq: FAQ_PATH,
   guides: GUIDES_PATH,
   dashboard: DASHBOARD_PATH,
 };
@@ -61,7 +61,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
     buttons.push(
       <Menu.Item key="product">Product</Menu.Item>,
       <Menu.Item key="pricing">Pricing</Menu.Item>,
-      <Menu.Item key="about">About</Menu.Item>
+      <Menu.Item key="faq">FAQ</Menu.Item>
     );
   }
 

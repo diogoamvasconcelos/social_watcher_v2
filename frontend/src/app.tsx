@@ -16,8 +16,6 @@ import {
   DASHBOARD_PATH,
   ROOT_PATH,
   GUIDES_PATH,
-  PRICING_PATH,
-  ABOUT_PATH,
   SIGNUP_PATH,
 } from "./shared/data/paths";
 import { LandingPage } from "./pages/landing/LandingPage";
@@ -35,8 +33,6 @@ const App: React.FC = () => (
               <Route path={DASHBOARD_PATH} component={DashboardPage} />
               <Route path={USER_PATH} component={UserPage} />
               <Route path={GUIDES_PATH} component={TodoPage} />
-              <Route path={PRICING_PATH} component={TodoPage} />
-              <Route path={ABOUT_PATH} component={TodoPage} />
               <Route path={SIGNUP_PATH} component={SignupPage} />
               <Route component={NotFoundPage} />
             </Switch>

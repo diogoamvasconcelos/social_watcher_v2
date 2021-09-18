@@ -1,6 +1,6 @@
 export const ROOT_PATH = "/";
-export const PRICING_PATH = "/pricing";
-export const ABOUT_PATH = "/about";
+export const PRICING_PATH = `${ROOT_PATH}#pricing`;
+export const FAQ_PATH = `${ROOT_PATH}#faq`;
 export const SIGNUP_PATH = "/signup";
 export const USER_PATH = "/user/account";
 export const GUIDES_PATH = "/user/guides";

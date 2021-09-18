@@ -14,6 +14,8 @@ import {
 } from "@src/shared/components/Icons";
 import { notificationMediums } from "@backend/domain/models/notificationMedium";
 import { reportMediums } from "@backend/domain/models/reportMedium";
+import { useRef } from "react";
+import { useEffect } from "react";
 
 // ++++++++++
 // + Banner +
@@ -114,6 +116,7 @@ const HiW: React.FC = () => {
             <HiWListItem
               text={capitalizeWord(socialMedia)}
               Icon={getSocialMediaIcon(socialMedia)}
+              key={socialMedia}
             />
           ))}
         </HiWBox>
@@ -123,12 +126,14 @@ const HiW: React.FC = () => {
             <HiWListItem
               text={capitalizeWord(notificationMedium)}
               Icon={getNotificationMediumIcon(notificationMedium)}
+              key={notificationMedium}
             />
           ))}
           {reportMediums.map((reportMedium) => (
             <HiWListItem
               text={capitalizeWord(reportMedium)}
               Icon={getReportMediumIcon(reportMedium)}
+              key={reportMedium}
             />
           ))}
         </HiWBox>
@@ -214,6 +219,65 @@ const Pricing: React.FC = () => {
   );
 };
 
+// +++++++
+// + FAQ +
+// +++++++
+
+const FAQContainer = styled.div`
+  background: aliceblue;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+`;
+
+const FAQListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+type FAQQuestion = {
+  question: string;
+  answer: string;
+};
+
+const FAQ: React.FC<{ questions: FAQQuestion[] }> = ({ questions }) => {
+  return (
+    <FAQContainer>
+      <Text>FAQ - Frequenlty asked Questions</Text>
+      <FAQListContainer>
+        {questions.map((question) => (
+          <FAQItem data={question} key={question.question} />
+        ))}
+      </FAQListContainer>
+      <FAQListItemContainer>
+        <Text>Have more questions?</Text>
+        <Button> Contact us</Button>
+      </FAQListItemContainer>
+    </FAQContainer>
+  );
+};
+
+const FAQListItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const FAQItem: React.FC<{ data: FAQQuestion }> = ({
+  data: { question, answer },
+}) => {
+  return (
+    <FAQListItemContainer>
+      <Text>{question}</Text>
+      <Text>{answer}</Text>
+    </FAQListItemContainer>
+  );
+};
+
 // ++++++++
 // + PAGE +
 // ++++++++
@@ -225,11 +289,57 @@ const MainContainer = styled.div`
 `;
 
 export const LandingPage: React.FC = () => {
+  const history = useHistory();
+
+  const howItWorksRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
+  const faqRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const delayScrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
+      setTimeout(() => {
+        if (ref.current) {
+          ref.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 200);
+    };
+
+    switch (history.location.hash) {
+      case "#how-it-works": {
+        delayScrollToRef(howItWorksRef);
+        break;
+      }
+      case "#pricing": {
+        delayScrollToRef(pricingRef);
+        break;
+      }
+      case "#faq": {
+        delayScrollToRef(faqRef);
+        break;
+      }
+    }
+  }, [history.location.hash]);
+
   return (
     <MainContainer>
       <Banner />
-      <HiW />
-      <Pricing />
+      <div ref={howItWorksRef}>
+        <HiW />
+      </div>
+      <div ref={pricingRef}>
+        <Pricing />
+      </div>
+      <div ref={faqRef}>
+        <FAQ
+          questions={[
+            {
+              question: "How often are the keywords search?",
+              answer:
+                "It depends on the social media platform, but usually every minute",
+            },
+          ]}
+        />
+      </div>
     </MainContainer>
   );
 };
