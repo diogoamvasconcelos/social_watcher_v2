@@ -8,7 +8,7 @@ import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { KeywordsPage } from "./keywords/KeywordsPage";
 import { SearchPage } from "./search/SearchPage";
-import { useLocationPathChanged } from "../../shared/lib/react";
+import { useLocationChanged } from "../../shared/lib/react";
 import _findKey from "lodash/findKey";
 import { mapRecord } from "../../shared/lib/collections";
 import { SearchObjectConfigPage } from "./searchObjectConfig/SearchObjectConfigPage";
@@ -54,9 +54,9 @@ const SideBar: React.FC = () => {
     history.push(navigationConfig[key.toString()].path);
   };
 
-  useLocationPathChanged((newPath: string) => {
+  useLocationChanged((location) => {
     const currentKey = _findKey(navigationConfig, (item) =>
-      newPath.includes(item.path)
+      location.pathname.includes(item.path)
     );
     setselectedKeys(currentKey ? [currentKey] : []);
   });

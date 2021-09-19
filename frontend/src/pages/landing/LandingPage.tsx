@@ -15,6 +15,7 @@ import {
 import { notificationMediums } from "@backend/domain/models/notificationMedium";
 import { reportMediums } from "@backend/domain/models/reportMedium";
 import { useRef } from "react";
+import { useLocationChanged } from "@src/shared/lib/react";
 import { useEffect } from "react";
 
 // ++++++++++
@@ -295,30 +296,34 @@ export const LandingPage: React.FC = () => {
   const pricingRef = useRef<HTMLDivElement>(null);
   const faqRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const delayScrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
-      setTimeout(() => {
-        if (ref.current) {
-          ref.current.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 200);
+  const scrollToHash = (hash: string) => {
+    const scrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: "smooth" });
+      }
     };
 
-    switch (history.location.hash) {
+    switch (hash) {
       case "#how-it-works": {
-        delayScrollToRef(howItWorksRef);
+        scrollToRef(howItWorksRef);
         break;
       }
       case "#pricing": {
-        delayScrollToRef(pricingRef);
+        scrollToRef(pricingRef);
         break;
       }
       case "#faq": {
-        delayScrollToRef(faqRef);
+        scrollToRef(faqRef);
         break;
       }
     }
-  }, [history.location.hash]);
+  };
+
+  useLocationChanged((location) => scrollToHash(location.hash));
+  useEffect(() => {
+    // Hacky way to scroll on page reload, but need to wait for the browser scroll restoration to finish
+    setTimeout(() => scrollToHash(history.location.hash), 300);
+  });
 
   return (
     <MainContainer>

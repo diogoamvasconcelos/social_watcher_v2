@@ -6,7 +6,7 @@ import Auth from "@aws-amplify/auth/lib";
 import { useAppSelector } from "../store";
 import { UserState } from "../reducers/userState";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
-import { useLocationPathChanged } from "../lib/react";
+import { useLocationChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
 import _findKey from "lodash/findKey";
 import Text from "antd/lib/typography/Text";
@@ -46,8 +46,11 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
     selectedKeys: [],
   });
 
-  useLocationPathChanged((newPath: string) => {
-    const currentKey = _findKey(navigationConfig, (path) => newPath == path);
+  useLocationChanged((location) => {
+    const currentKey = _findKey(
+      navigationConfig,
+      (path) => location.pathname == path
+    );
     setState({ selectedKeys: currentKey ? [currentKey] : [] });
   });
 
@@ -194,8 +197,8 @@ export const Navbar: React.FC = () => {
 
   const [inUserSubPage, setInUserSubPage] = useState(false);
 
-  useLocationPathChanged((newPath: string) => {
-    setInUserSubPage(newPath.includes("user"));
+  useLocationChanged((location) => {
+    setInUserSubPage(location.pathname.includes("user"));
   });
 
   return (
