@@ -21,7 +21,8 @@ export const makeLoggerMiddleware =
     return async (event: T, context: Context, callback: Callback<U>) => {
       const eventCopy = _.cloneDeep(event) as unknown as JsonEncodable;
 
-      logger.createContext({
+      logger.resetContext();
+      logger.addToContext({
         functionName: context.functionName,
         functionVersion: context.functionVersion,
         invokedFunctionArn: context.invokedFunctionArn,
@@ -38,10 +39,10 @@ export const makeLoggerMiddleware =
       const result = await handler(event, context, callback);
       if (result) {
         logger.info("Lambda finished.", {
-          returnValue: result as unknown as JsonEncodable,
+          returnValue: result,
         });
       }
-      logger.resetContext();
+
       return result;
     };
   };

@@ -3,7 +3,6 @@ How to run:
 - scripts/with_env.js yarn ts-node scripts/ops/create_es_index.ts  --env de
 */
 
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import {
   getClient,
   createSearchResultIndex,
@@ -20,9 +19,7 @@ const main = async () => {
     { logger, client },
     config.searchResultIndexVersion
   );
-  logger.info("createSearchResultIndex completed", {
-    res: res as unknown as JsonEncodable,
-  });
+  logger.info("createSearchResultIndex completed", { res });
 };
 
 void main();

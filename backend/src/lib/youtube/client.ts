@@ -12,7 +12,6 @@ import { doRequest } from "@src/lib/axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { decode, toSingleEither } from "@diogovasconcelos/lib/iots";
 import { getMinutesAgo } from "@src/lib/date";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export const getClient = (
   credentials: YoutubeCredentials
@@ -73,7 +72,7 @@ export const search = async (
       method: "GET",
     };
 
-    logger.debug("search request", { request: request as JsonEncodable });
+    logger.debug("search request", { request });
 
     if (nextPageToken) {
       request.params = { ...request.params, pageToken: nextPageToken };

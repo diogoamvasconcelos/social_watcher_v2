@@ -7,7 +7,6 @@ import SQS, {
 import { left, right, Either, isLeft } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
 import { uuid } from "./uuid";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { decode } from "@diogovasconcelos/lib/iots";
 
 export const getClient = () => {
@@ -97,7 +96,7 @@ export const sendMessages = async (
     return right(result);
   } catch (error) {
     logger.error("sqs/sendMessageBatch failed", {
-      messages: messages as JsonEncodable,
+      messages,
       queueUrl,
       error,
     });

@@ -1,4 +1,3 @@
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { Either, left, right } from "fp-ts/lib/Either";
 import Stripe from "stripe";
@@ -146,7 +145,7 @@ export const getCustomerById = async (
     const res = await client.customers.retrieve(customerId);
     if (res.deleted) {
       logger.error("stripe::customers.retrieve retrieved a deleted user", {
-        res: res as unknown as JsonObjectEncodable,
+        res,
       });
       return left("ERROR");
     }

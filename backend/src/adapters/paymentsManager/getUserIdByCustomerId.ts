@@ -1,4 +1,3 @@
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { GetUserIdByCustomerIdFn } from "@src/domain/ports/paymentsManager/getUserIdByCustomerId";
 import { getCustomerById } from "@src/lib/stripe/client";
@@ -19,9 +18,7 @@ export const makeGetUserIdByCustomerId = (
 
     const userId = customer.metadata.userId;
     if (!userId) {
-      logger.error("couldn't find userId in metadata", {
-        customer: customer as unknown as JsonObjectEncodable,
-      });
+      logger.error("couldn't find userId in metadata", { customer });
     }
 
     return right(userId);

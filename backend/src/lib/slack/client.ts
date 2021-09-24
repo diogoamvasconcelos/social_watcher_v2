@@ -6,7 +6,6 @@ import {
   ChatPostMessageArguments,
   ChatPostMessageResponse,
 } from "@slack/web-api";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 export const getClient = ({ token }: SlackCredentials) => {
   return new WebClient(token, {
@@ -33,9 +32,7 @@ export const postMessage = async (
   try {
     const result = await client.chat.postMessage(args);
     if (!result.ok || result.error) {
-      logger.error("slack:postMessage has errors", {
-        result: result as JsonEncodable,
-      });
+      logger.error("slack:postMessage has errors", { result });
       return left("ERROR");
     }
     return right(result);

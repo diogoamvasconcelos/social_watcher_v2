@@ -1,4 +1,3 @@
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import SES from "aws-sdk/clients/ses";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { SendEmailFn } from "@src/domain/ports/emailReporter/sendEmail";
@@ -19,9 +18,7 @@ export const makeSendEmail = (client: Client): SendEmailFn => {
       },
     };
 
-    logger.info("Going to send email", {
-      params: params as unknown as JsonEncodable,
-    });
+    logger.info("Going to send email", { params: params });
 
     const res = await sendEmail({ client, logger }, params);
     if (isLeft(res)) {

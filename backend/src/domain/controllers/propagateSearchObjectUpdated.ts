@@ -1,4 +1,3 @@
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { isLeft, right } from "fp-ts/lib/Either";
 import _ from "lodash";
 import { Logger } from "@src/lib/logger";
@@ -57,9 +56,7 @@ export const propagateSearchObjectUpdated = async (
         return keywordDataEither;
       }
 
-      logger.debug("controllers/onSearchObjectUpdated", {
-        keywordDataEither: keywordDataEither as unknown as JsonObjectEncodable,
-      });
+      logger.debug("controllers/onSearchObjectUpdated", { keywordDataEither });
 
       // Skip if already has the new status
       if (
@@ -104,7 +101,7 @@ export const propagateSearchObjectUpdated = async (
         status: newKeywordStatus,
       });
       logger.info(`${socialMedia}: updateKeyword completed with result.`, {
-        updateKeywordResult: updateResult as unknown as JsonObjectEncodable,
+        updateKeywordResult: updateResult,
       });
 
       return updateResult;

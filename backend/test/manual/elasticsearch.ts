@@ -1,4 +1,3 @@
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import {
   getClient,
   searchResultToEsDocument,
@@ -27,7 +26,7 @@ export const main = async () => {
     }
   );
 
-  logger.info("done", { result: result as unknown as JsonObjectEncodable });
+  logger.info("done", { result });
 };
 
 //void main();

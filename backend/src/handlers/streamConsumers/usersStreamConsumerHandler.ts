@@ -26,7 +26,6 @@ import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearch
 import { UpdateSearchObjectFn } from "@src/domain/ports/userStore/updateSearchObject";
 import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 
 const config = getConfig();
@@ -62,9 +61,7 @@ export const handler = async (event: DynamoDBStreamEvent) => {
   const results = await Promise.all(
     event.Records.map(async (record) => {
       if (!record.eventName) {
-        logger.error("Missing eventName in record", {
-          record: record as JsonObjectEncodable,
-        });
+        logger.error("Missing eventName in record", { record });
         return left("ERROR");
       }
 

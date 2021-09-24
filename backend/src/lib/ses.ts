@@ -1,4 +1,3 @@
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import SES from "aws-sdk/clients/ses";
 import { right, left, Either } from "fp-ts/lib/Either";
 import { Logger } from "./logger";
@@ -27,7 +26,7 @@ export const sendEmail = async (
   } catch (error) {
     logger.error("SES sendEmail failed", {
       error,
-      params: params as unknown as JsonEncodable,
+      params: params,
     });
     return left("ERROR");
   }

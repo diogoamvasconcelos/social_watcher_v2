@@ -13,7 +13,6 @@ import {
   getPaymentData,
 } from "@test/environment/acceptance/steps";
 import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 
 const logger = getLogger();
 
@@ -100,9 +99,7 @@ export const getCustomer = async () => {
     )
   );
 
-  logger.info("customer get", {
-    customer: customer as unknown as JsonObjectEncodable,
-  });
+  logger.info("customer get", { customer });
 
   /*
   const response = {

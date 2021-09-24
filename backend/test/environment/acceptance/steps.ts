@@ -58,7 +58,6 @@ import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/pa
 import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
 import { buildSearchResult } from "@test/lib/builders";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 const config = getEnvTestConfig();
@@ -314,9 +313,7 @@ export const checkKeyword = async ({
       return await getKeywordDataFn(logger, socialMedia, newLowerCase(keyword));
     },
     (res) => {
-      logger.info("checkKeyword:getKeywordDataFn attempt", {
-        res: res as unknown as JsonObjectEncodable,
-      });
+      logger.info("checkKeyword:getKeywordDataFn attempt", { res });
       if (isLeft(res)) {
         return false;
       }

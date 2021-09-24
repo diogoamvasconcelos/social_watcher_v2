@@ -31,7 +31,6 @@ import { PutUserFn } from "@src/domain/ports/userStore/putUser";
 import { makePutPaymentData } from "@src/adapters/userStore/putPayment";
 import { makePutUser } from "@src/adapters/userStore/putUser";
 import { fromUnix } from "@src/lib/date";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import {
   dateISOString,
   decode,
@@ -113,7 +112,7 @@ const handleWebhookEvent = async (
     default:
       deps.logger.info("Unhandled event type", {
         type: webhookEvent.type,
-        event: webhookEvent as unknown as JsonObjectEncodable,
+        event: webhookEvent,
       });
       return right("OK");
   }

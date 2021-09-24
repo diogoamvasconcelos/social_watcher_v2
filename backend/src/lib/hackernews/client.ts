@@ -5,7 +5,6 @@
 
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode, toSingleEither } from "@diogovasconcelos/lib/iots";
-import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import axios, { AxiosRequestConfig } from "axios";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { PartialDeep } from "type-fest";
@@ -77,7 +76,7 @@ export const search = async (
 
     const responseRaw = await doRequest(client, request);
     logger.debug("hackernews search response", {
-      response: responseRaw as unknown as JsonEncodable,
+      response: responseRaw,
       keyword,
     });
     if (responseRaw.status != 200) {
@@ -145,7 +144,7 @@ export const getItem = async (
 
   const responseRaw = await doRequest(client, request);
   logger.debug("hackernews getItem response", {
-    response: responseRaw as unknown as JsonEncodable,
+    response: responseRaw,
     id,
   });
   if (responseRaw.status != 200) {
