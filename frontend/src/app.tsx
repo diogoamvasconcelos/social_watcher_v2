@@ -9,7 +9,7 @@ import { store } from "./shared/store";
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
 import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
-import { SignupPage } from "./pages/signup/SignupPage";
+import { SigninPage } from "./pages/signin/SigninPage";
 import Layout from "antd/lib/layout";
 import {
   USER_PATH,
@@ -17,6 +17,7 @@ import {
   ROOT_PATH,
   GUIDES_PATH,
   SIGNUP_PATH,
+  LOGIN_PATH,
 } from "./shared/data/paths";
 import { LandingPage } from "./pages/landing/LandingPage";
 
@@ -33,7 +34,7 @@ const App: React.FC = () => (
               <Route path={DASHBOARD_PATH} component={DashboardPage} />
               <Route path={USER_PATH} component={UserPage} />
               <Route path={GUIDES_PATH} component={TodoPage} />
-              <Route path={SIGNUP_PATH} component={SignupPage} />
+              <Route path={[SIGNUP_PATH, LOGIN_PATH]} component={SigninPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Layout.Content>

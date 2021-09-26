@@ -92,7 +92,17 @@ const stepsContent: ConfigStepContent[] = [
   } as ConfigStepContent,
 ];
 
-export const SearchObjectConfigPage: React.FC = () => {
+export type ConfigWidgetProps = {
+  searchObject: SearchObjectDomain;
+  stepState: ConfigStepState;
+  setStepState: React.Dispatch<React.SetStateAction<ConfigStepState>>;
+};
+
+// ++++++++
+// + PAGE +
+// ++++++++
+
+const Page: React.FC = () => {
   const history = useHistory();
   const { index } = useParams<{ index: string }>();
   const indexEither = decode(
@@ -304,11 +314,7 @@ export const SearchObjectConfigPage: React.FC = () => {
   );
 };
 
-export type ConfigWidgetProps = {
-  searchObject: SearchObjectDomain;
-  stepState: ConfigStepState;
-  setStepState: React.Dispatch<React.SetStateAction<ConfigStepState>>;
-};
+export const SearchObjectConfigPage = Page;
 
 // ++++++++++++++++
 // + CONFIRM MODAL +

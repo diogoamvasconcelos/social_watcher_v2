@@ -32,7 +32,7 @@ const MainContainer = styled.div`
   padding: 8px;
 `;
 
-export const KeywordsPage: React.FC = () => {
+const Page: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.details);
@@ -74,3 +74,5 @@ export const KeywordsPage: React.FC = () => {
     </MainContainer>
   );
 };
+
+export const KeywordsPage = Page;

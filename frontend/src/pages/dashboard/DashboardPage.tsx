@@ -17,6 +17,7 @@ import {
   KEYWORDS_PATH,
   SEARCH_PATH,
 } from "../../shared/data/paths";
+import { withLoggedUser } from "@src/shared/components/Auth";
 
 // ref: https://preview.pro.ant.design/dashboard/analysis/
 
@@ -83,7 +84,7 @@ const SideBar: React.FC = () => {
 // + PAGE +
 // ++++++++
 
-export const DashboardPage: React.FC = () => {
+const Page: React.FC = () => {
   return (
     <Layout>
       <SideBar />
@@ -103,3 +104,5 @@ export const DashboardPage: React.FC = () => {
     </Layout>
   );
 };
+
+export const DashboardPage = withLoggedUser(Page);

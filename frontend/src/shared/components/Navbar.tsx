@@ -4,7 +4,6 @@ import logo from "../../../assets/logo-navbar.jpg";
 import styled from "styled-components";
 import Auth from "@aws-amplify/auth/lib";
 import { useAppSelector } from "../store";
-import { UserState } from "../reducers/userState";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { useLocationChanged } from "../lib/react";
 import { getConfig } from "../lib/config";
@@ -23,7 +22,9 @@ import {
   ROOT_PATH,
   SIGNUP_PATH,
   USER_PATH,
+  LOGIN_PATH,
 } from "../data/paths";
+import { UserAuthStateDetails } from "../reducers/userAuthState";
 
 const config = getConfig();
 
@@ -96,10 +97,10 @@ const LoginButton = styled(Button)`
 `;
 
 type UserProfileProps = {
-  user: Required<UserState>["details"];
+  userDetails: UserAuthStateDetails;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userDetails }) => {
   const history = useHistory();
 
   const handleItemClicked: MenuClickEventHandler = async ({ key }) => {
@@ -119,7 +120,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     <Menu onClick={handleItemClicked}>
       <Menu.Item style={{ pointerEvents: "none" }}>
         {/*makes it not clickable/selectable*/}
-        <Text>{user.email}</Text>
+        <Text>{userDetails.email}</Text>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="account">
@@ -140,6 +141,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   );
 };
 
+// deprecated, using @aws-amplify/ui-react instead to handle login
 export const gotoCognitoLogin = () => {
   const cognitoDomain = config.cognitoClientDomain;
   const cognitoClientId = config.cognitoClientId;
@@ -150,6 +152,7 @@ export const gotoCognitoLogin = () => {
   location.assign(loginUrl);
 };
 
+// deprecated, using @aws-amplify/ui-react instead to handle login
 export const gotoCognitoSignup = () => {
   const cognitoDomain = config.cognitoClientDomain;
   const cognitoClientId = config.cognitoClientId;
@@ -164,7 +167,7 @@ const LoginButtons: React.FC = () => {
   const history = useHistory();
 
   const handleLoginClicked = () => {
-    gotoCognitoLogin();
+    history.push(LOGIN_PATH);
   };
 
   const handleSignupClicked = () => {
@@ -193,7 +196,7 @@ const LogoContainer = styled.div`
 `;
 
 export const Navbar: React.FC = () => {
-  const user = useAppSelector((state) => state.user.details);
+  const userAuthState = useAppSelector((state) => state.userAuth);
 
   const [inUserSubPage, setInUserSubPage] = useState(false);
 
@@ -211,9 +214,13 @@ export const Navbar: React.FC = () => {
         </LogoContainer>
         <TopMenu
           inUserSubPage={inUserSubPage}
-          userLoggedIn={user != undefined}
+          userLoggedIn={userAuthState.status !== "NULL"}
         />
-        {user ? <UserProfile user={user} /> : <LoginButtons />}
+        {userAuthState.status !== "NULL" ? (
+          <UserProfile userDetails={userAuthState} />
+        ) : (
+          <LoginButtons />
+        )}
       </NavbarContainer>
     </Header>
   );

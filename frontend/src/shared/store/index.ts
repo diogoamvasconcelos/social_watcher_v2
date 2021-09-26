@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { reducer as userAuthStateReducer } from "../reducers/userAuthState";
 import { reducer as userStateReducer } from "../reducers/userState";
+import { reducer as redirectStateReducer } from "../reducers/redirectState";
 import { reducer as searchStateReducer } from "../../pages/dashboard/search/searchState";
 import { reducer as userPageStateReducer } from "../../pages/user/userPageState";
 import { reducer as searchObjectConfigStateReducer } from "../../pages/dashboard/searchObjectConfig/searchObjectConfigState";
@@ -18,6 +19,7 @@ export const store = configureStore({
     search: searchStateReducer,
     userPage: userPageStateReducer,
     searchObjectConfig: searchObjectConfigStateReducer,
+    redirect: redirectStateReducer,
   },
 });
 

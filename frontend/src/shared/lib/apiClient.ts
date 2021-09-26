@@ -16,6 +16,7 @@ import {
   createSearchObject,
   deleteSearchObject,
   getDefaultSearchObject,
+  ApiClientDeps,
 } from "@backend/lib/apiClient/apiClient";
 import { getConfig } from "./config";
 import { getUserIdToken } from "./userSession";
@@ -24,75 +25,52 @@ const config = getConfig();
 
 export const apiClient: Client = getClient(config.apiEndpoint);
 
+const getApiDeps = async (): Promise<ApiClientDeps> => {
+  return {
+    token: await getUserIdToken(),
+    client: apiClient,
+  };
+};
+
 export const apiGetUser = async () => {
-  return await getUser({ client: apiClient, token: getUserIdToken() ?? "" });
+  return await getUser(await getApiDeps());
 };
 
 export const apiGetSearchObjects = async () => {
-  return await getSearchObjects({
-    client: apiClient,
-    token: getUserIdToken() ?? "",
-  });
+  return await getSearchObjects(await getApiDeps());
 };
 
 export const apiGetSearchObject = async (index: SearchObjectIo["index"]) => {
-  return await getSearchObject(
-    {
-      client: apiClient,
-      token: getUserIdToken() ?? "",
-    },
-    { index }
-  );
+  return await getSearchObject(await getApiDeps(), { index });
 };
 
 export const apiSearch = async (userData: SearchRequestUserData) => {
-  return search(
-    { client: apiClient, token: getUserIdToken() ?? "" },
-    { userData }
-  );
+  return search(await getApiDeps(), { userData });
 };
 
 export const apiCreateSearchObject = async (
   userData: SearchObjectUserDataIo
 ) => {
-  return createSearchObject(
-    { client: apiClient, token: getUserIdToken() ?? "" },
-    { userData }
-  );
+  return createSearchObject(await getApiDeps(), { userData });
 };
 
 export const apiUpdateSearchObject = async (
   index: SearchObjectIo["index"],
   userData: SearchObjectUserDataIo
 ) => {
-  return updateSearchObject(
-    { client: apiClient, token: getUserIdToken() ?? "" },
-    { index, userData }
-  );
+  return updateSearchObject(await getApiDeps(), { index, userData });
 };
 
 export const apiDeleteSearchObject = async (index: SearchObjectIo["index"]) => {
-  return await deleteSearchObject(
-    {
-      client: apiClient,
-      token: getUserIdToken() ?? "",
-    },
-    { index }
-  );
+  return await deleteSearchObject(await getApiDeps(), { index });
 };
 
 export const apiGetDefaultSearchObject = async () => {
-  return await getDefaultSearchObject({
-    client: apiClient,
-    token: getUserIdToken() ?? "",
-  });
+  return await getDefaultSearchObject(await getApiDeps());
 };
 
 export const apiCreatePaymentsPortal = async (
   userData: CreatePaymentsPortalUserData
 ) => {
-  return createPaymentsPortal(
-    { client: apiClient, token: getUserIdToken() ?? "" },
-    { userData }
-  );
+  return createPaymentsPortal(await getApiDeps(), { userData });
 };

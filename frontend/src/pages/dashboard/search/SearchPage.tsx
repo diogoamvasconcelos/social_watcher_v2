@@ -69,18 +69,16 @@ const getParamsFromQueryString = (
   };
 };
 
-// +++++++++++++
-// + CONTAINER +
-// +++++++++++++
+// ++++++++
+// + PAGE +
+// ++++++++
 
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export const SearchPage: React.FC<RouteComponentProps> = ({
-  location: { search },
-}) => {
+const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const searchObjects = useAppSelector((state) => state.user.searchObjects);
@@ -121,3 +119,5 @@ export const SearchPage: React.FC<RouteComponentProps> = ({
     </MainContainer>
   );
 };
+
+export const SearchPage = Page;

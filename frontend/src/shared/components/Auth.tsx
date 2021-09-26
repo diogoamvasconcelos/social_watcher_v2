@@ -1,14 +1,17 @@
 // ref: https://gist.github.com/groundedSAGE/995dc2e14845980fdc547c8ba510169c
 
+import React from "react";
 import { Amplify, Hub } from "@aws-amplify/core";
 import Auth from "@aws-amplify/auth/lib";
 import { HubCallback } from "@aws-amplify/core/lib/Hub";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import { useAppDispatch } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import { onLogin, onLogout } from "../reducers/userAuthState";
 import { getConfig } from "../lib/config";
-import { DASHBOARD_PATH, ROOT_PATH } from "../data/paths";
+import { DASHBOARD_PATH, LOGIN_PATH, ROOT_PATH } from "../data/paths";
+import { hasUserSession } from "../lib/userSession";
+import { Redirect } from "react-router-dom";
 
 const config = getConfig();
 
@@ -35,6 +38,7 @@ Auth.configure({
 export const WithAuth: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const redirectState = useAppSelector((state) => state.redirect);
 
   const authListener: HubCallback = ({ payload: { event, data } }) => {
     switch (event) {
@@ -43,11 +47,17 @@ export const WithAuth: React.FC = () => {
           onLogin({
             id: data?.username,
             email: data?.signInUserSession?.idToken?.payload?.email,
-            verified: data?.signInUserSession?.idToken?.payload?.email_verified,
+            status: data?.signInUserSession?.idToken?.payload?.email_verified
+              ? "VERIFIED"
+              : "NOT_VERIFIED",
           })
         );
 
-        history.push(DASHBOARD_PATH);
+        history.push(
+          redirectState.loginRedirectUrl
+            ? `${DASHBOARD_PATH}/${redirectState.loginRedirectUrl}`
+            : DASHBOARD_PATH
+        );
         break;
       case "signOut":
         dispatch(onLogout());
@@ -158,3 +168,18 @@ const data_example = {
     "CognitoIdentityServiceProvider.3am3e9e4ho7r9timp1ejv91np9.cd1c1590-ed19-4c89-86d6-de9ecbdd84cc.userData",
 };
 */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const withLoggedUser = <T extends Object>(
+  WrappedComponent: React.ComponentType<T>
+) => {
+  return (props: T) => {
+    const history = useHistory();
+
+    return hasUserSession() ? (
+      <WrappedComponent {...props} />
+    ) : (
+      <Redirect to={`${LOGIN_PATH}?redirectUrl=${history.location.pathname}`} />
+    );
+  };
+};

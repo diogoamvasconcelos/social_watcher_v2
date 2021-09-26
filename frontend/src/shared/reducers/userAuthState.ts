@@ -1,14 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Not used atm
-
-export type UserAuthState = {
+export type UserAuthStateDetails = {
   id: string;
   email: string;
-  verified: boolean;
+  status: "NOT_VERIFIED" | "VERIFIED";
 };
 
-const initialState: UserAuthState = { id: "", email: "", verified: false };
+export type UserAuthState =
+  | UserAuthStateDetails
+  | {
+      status: "NULL";
+    };
+
+const initialState: UserAuthState = { status: "NULL" } as UserAuthState; // force the more generic UserAuthState type
 const userAuthStateSlice = createSlice({
   name: "userAuthState",
   initialState,
