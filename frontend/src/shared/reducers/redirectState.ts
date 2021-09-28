@@ -12,7 +12,7 @@ const redirectStateSlice = createSlice({
       state,
       action: PayloadAction<RedirectState["loginRedirectUrl"]>
     ) {
-      return { ...state, redirectUrl: action.payload };
+      state.loginRedirectUrl = action.payload;
     },
   },
 });

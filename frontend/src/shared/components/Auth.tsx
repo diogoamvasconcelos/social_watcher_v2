@@ -12,6 +12,7 @@ import { getConfig } from "../lib/config";
 import { DASHBOARD_PATH, LOGIN_PATH, ROOT_PATH } from "../data/paths";
 import { hasUserSession } from "../lib/userSession";
 import { Redirect } from "react-router-dom";
+import { useRef } from "react";
 
 const config = getConfig();
 
@@ -39,6 +40,12 @@ export const WithAuth: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const redirectState = useAppSelector((state) => state.redirect);
+  const redirectStateRef = useRef(redirectState);
+
+  // need to useRef to access the up-to-date state from the auth callback
+  useEffect(() => {
+    redirectStateRef.current = redirectState;
+  }, [redirectState]);
 
   const authListener: HubCallback = ({ payload: { event, data } }) => {
     switch (event) {
@@ -54,9 +61,7 @@ export const WithAuth: React.FC = () => {
         );
 
         history.push(
-          redirectState.loginRedirectUrl
-            ? `${DASHBOARD_PATH}/${redirectState.loginRedirectUrl}`
-            : DASHBOARD_PATH
+          redirectStateRef.current.loginRedirectUrl ?? DASHBOARD_PATH
         );
         break;
       case "signOut":
