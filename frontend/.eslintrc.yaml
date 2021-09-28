@@ -6,6 +6,8 @@ extends:
   - "plugin:@typescript-eslint/eslint-recommended"
   - prettier
   - plugin:prettier/recommended
+ignorePatterns:
+  - "*.config.ts"
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
