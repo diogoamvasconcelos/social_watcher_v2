@@ -9,7 +9,9 @@ import {
 export type UpdateSearchObjectRequest = SearchObjectRequest & {
   data: SearchObjectUserDataIo;
 };
-export type UpdateSearchObjectErrorCode = SearchObjectErrorCode;
+export type UpdateSearchObjectErrorCode =
+  | SearchObjectErrorCode
+  | "INVALID_KEYWORD";
 
 export const updateSearchObjectResponseCodec = searchObjectResponseCodec;
 export type UpdateSearchObjectResponse = SearchObjectResponse;

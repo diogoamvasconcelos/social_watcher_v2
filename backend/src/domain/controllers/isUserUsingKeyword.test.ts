@@ -1,7 +1,7 @@
 import { right } from "fp-ts/lib/Either";
 import { getLogger } from "@src/lib/logger";
 import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
-import { isKeywordAllowed } from "./isKeywordAllowed";
+import { isUserUsingKeyword } from "./isUserUsingKeyword";
 import { SearchObjectDomain } from "@src/domain/models/userItem";
 import {
   fromEither,
@@ -14,7 +14,7 @@ const logger = getLogger();
 const getSearchObjectsForUserFnMocked =
   jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
 
-describe("controllers/isKeywordAllowed", () => {
+describe("controllers/isUserUsingKeyword", () => {
   beforeEach(() => {
     getSearchObjectsForUserFnMocked.mockReset();
   });
@@ -56,18 +56,18 @@ describe("controllers/isKeywordAllowed", () => {
   ];
 
   test.each(testCases)(
-    "%p isKeyAllowed test",
+    "%p isUserUsingKeyword test",
     async (
       _title: string,
       returnedSearchObjects: SearchObjectDomain[],
-      expectsAllowed: boolean
+      expectsOutput: boolean
     ) => {
       getSearchObjectsForUserFnMocked.mockResolvedValueOnce(
         right(returnedSearchObjects)
       );
 
-      const isAllowed = fromEither(
-        await isKeywordAllowed(
+      const isUsing = fromEither(
+        await isUserUsingKeyword(
           {
             logger,
             getSearchObjectsForUserFn: getSearchObjectsForUserFnMocked,
@@ -77,7 +77,7 @@ describe("controllers/isKeywordAllowed", () => {
         )
       );
 
-      expect(isAllowed).toEqual(expectsAllowed);
+      expect(isUsing).toEqual(expectsOutput);
     }
   );
 });

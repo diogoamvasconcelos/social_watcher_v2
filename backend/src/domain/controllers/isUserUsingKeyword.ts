@@ -6,7 +6,7 @@ import { UserId } from "@src/domain/models/user";
 import { CustomRightReturn } from "@src/domain/ports/shared";
 import { GetSearchObjectsForUserFn } from "@src/domain/ports/userStore/getSearchObjectsForUser";
 
-export const isKeywordAllowed = async (
+export const isUserUsingKeyword = async (
   {
     logger,
     getSearchObjectsForUserFn,

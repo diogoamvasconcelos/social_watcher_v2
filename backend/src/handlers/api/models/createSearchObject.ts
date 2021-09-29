@@ -9,7 +9,7 @@ export type CreateSearchObjectRequest = ApiRequestMetadata & {
   data: SearchObjectUserDataIo;
 };
 
-export type CreateSearchObjectErrorCode = ApiBaseErrorCode;
+export type CreateSearchObjectErrorCode = ApiBaseErrorCode | "INVALID_KEYWORD";
 
 export const createSearchObjectResponseCodec = searchObjectDomainCodec;
 export type createSearchObjectResponse = t.TypeOf<

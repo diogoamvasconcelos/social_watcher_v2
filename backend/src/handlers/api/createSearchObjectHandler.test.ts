@@ -8,7 +8,11 @@ import {
   SearchObjectUserDataDomain,
   SearchObjectUserDataIo,
 } from "@src/domain/models/userItem";
-import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import {
+  fromEither,
+  newLowerCase,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import {
   defaultSearchObjectDataDomain,
@@ -192,5 +196,22 @@ describe("handlers/api/createSearchObject", () => {
         ),
       })
     );
+  });
+
+  it("validates keyword", async () => {
+    const event = buildEvent(defaultUser, {
+      ...defaultRequestData,
+      keyword: newLowerCase("too many words invalid keyword"),
+    });
+    apiGetUserdMock.mockResolvedValueOnce(right(defaultUser));
+
+    const response = await handler(event);
+
+    expect(isLeft(response)).toBeTruthy();
+    if (isLeft(response)) {
+      expect(response.left.statusCode).toEqual(400);
+      expect(response.left.errorCode).toEqual("INVALID_KEYWORD");
+    }
+    expect(createSearchObjectMock).not.toHaveBeenCalled();
   });
 });

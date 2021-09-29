@@ -10,7 +10,7 @@ import {
 } from "./responses";
 import { toRequestWithUserData } from "./shared";
 import { getConfig } from "@src/lib/config";
-import { isKeywordAllowed } from "@src/domain/controllers/isKeywordAllowed";
+import { isUserUsingKeyword } from "@src/domain/controllers/isUserUsingKeyword";
 import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
 import { getClient as getSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
 import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
@@ -46,17 +46,17 @@ const handler = async (
   }
   const request = requestEither.right;
 
-  const keywordAllowedEither = await isKeywordAllowed(
+  const isUsingKeywordEither = await isUserUsingKeyword(
     { logger, getSearchObjectsForUserFn },
     request.keyword,
     request.authData.id
   );
-  if (isLeft(keywordAllowedEither)) {
+  if (isLeft(isUsingKeywordEither)) {
     return left(
-      makeInternalErrorResponse("Failed to check if keyword is allowed.")
+      makeInternalErrorResponse("Failed to check if keyword is being used.")
     );
   }
-  if (!keywordAllowedEither.right) {
+  if (!isUsingKeywordEither.right) {
     return left(
       makeForbiddenResponse("Keyword not part of user's SearchObjects.")
     );

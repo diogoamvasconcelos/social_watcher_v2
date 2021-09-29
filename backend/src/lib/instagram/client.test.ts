@@ -58,7 +58,7 @@ describe("instagram", () => {
 const buildRandomMediaNode = (maxMinutesAgo: number): InstagramMediaNode => ({
   id: uuid().toString(),
   taken_at_timestamp: toUnixTimstamp(
-    new Date(getMinutesAgo(_.random(0, maxMinutesAgo, true)))
+    new Date(getMinutesAgo(_.random(1, maxMinutesAgo, true)))
   ),
   __typename: "GraphImage",
   owner: { id: "owner-id" },

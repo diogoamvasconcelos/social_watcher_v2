@@ -5,6 +5,7 @@ import { getLogger, Logger } from "@src/lib/logger";
 import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
+  makeBadRequestResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
   makeSuccessResponse,
@@ -30,6 +31,7 @@ import {
 } from "./models/updateSearchObject";
 import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { decode } from "@diogovasconcelos/lib/iots";
+import { validateKeyword } from "@src/domain/controllers/validateKeyword";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -55,6 +57,17 @@ export const handler = async (
     return requestEither;
   }
   const request = requestEither.right;
+
+  // validate keyword
+  const validateKeywordEither = validateKeyword(request.data.keyword);
+  if (isLeft(validateKeywordEither)) {
+    return left(
+      makeBadRequestResponse(
+        "INVALID_KEYWORD",
+        `Invalid keyword, reason: ${validateKeywordEither.left}`
+      )
+    );
+  }
 
   const getUserEither = await apiGetUser({
     logger,

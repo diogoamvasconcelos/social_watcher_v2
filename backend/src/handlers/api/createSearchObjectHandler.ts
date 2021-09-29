@@ -13,6 +13,7 @@ import { makeGetUser } from "@src/adapters/userStore/getUser";
 import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import {
+  makeBadRequestResponse,
   makeForbiddenResponse,
   makeInternalErrorResponse,
   makeRequestMalformedResponse,
@@ -32,6 +33,7 @@ import {
 import { User } from "@src/domain/models/user";
 import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import _ from "lodash";
+import { validateKeyword } from "@src/domain/controllers/validateKeyword";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -57,6 +59,17 @@ export const handler = async (
     return requestEither;
   }
   const request = requestEither.right;
+
+  // validate keyword
+  const validateKeywordEither = validateKeyword(request.data.keyword);
+  if (isLeft(validateKeywordEither)) {
+    return left(
+      makeBadRequestResponse(
+        "INVALID_KEYWORD",
+        `Invalid keyword, reason: ${validateKeywordEither.left}`
+      )
+    );
+  }
 
   const getUserEither = await apiGetUser({
     logger,
