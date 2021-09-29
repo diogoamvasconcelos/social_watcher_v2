@@ -8,13 +8,11 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { invokeLambda } from "@test/lib/lambda";
 
+jest.setTimeout(30000);
+
 const lambdaName = getEnvTestConfig().reportEmailLambdaName;
 
 describe("handlers/reportEmail", () => {
-  beforeAll(async () => {
-    jest.setTimeout(30000);
-  });
-
   it("can report an email", async () => {
     const searchJobEvent = buildEmailReportJobEvent();
 

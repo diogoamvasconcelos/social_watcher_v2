@@ -23,6 +23,8 @@ import {
 } from "@test/lib/builders";
 import { getLocalTestConfig } from "@test/lib/config";
 
+jest.setTimeout(10000);
+
 const config = getLocalTestConfig();
 const logger = getLogger();
 const client = getClient(config.mainElasticSearchUrl);
@@ -33,10 +35,6 @@ const searchSearchResultsFn = makeSearchSearchResults(client);
 let indexName: string;
 
 describe("indexSearchResults", () => {
-  beforeAll(() => {
-    jest.setTimeout(10000);
-  });
-
   beforeEach(async () => {
     indexName = fromEither(
       await createSearchResultIndex(

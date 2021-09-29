@@ -14,6 +14,8 @@ import {
   updateUserSearchObject,
 } from "./steps";
 
+jest.setTimeout(45000);
+
 describe("keyword interaction between multiple users", () => {
   let testUserA: Awaited<ReturnType<typeof createTestUser>>;
   let testUserB: Awaited<ReturnType<typeof createTestUser>>;
@@ -26,8 +28,6 @@ describe("keyword interaction between multiple users", () => {
   const anotherKeyword = uuid();
 
   beforeAll(async () => {
-    jest.setTimeout(45000);
-
     testUserA = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

@@ -15,6 +15,8 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import _ from "lodash";
 
+jest.setTimeout(45000);
+
 describe("moveSearchObject", () => {
   const logger = getLogger();
   const tableName: string = uuid();
@@ -26,10 +28,6 @@ describe("moveSearchObject", () => {
   );
   const createSearchObjectFn = makeCreateSearchObject(client, tableName);
   const moveSearchObjectFn = makeMoveSearchObject(client, tableName);
-
-  beforeAll(() => {
-    jest.setTimeout(45000);
-  });
 
   beforeEach(async () => {
     await preparesGenericTable(tableName);

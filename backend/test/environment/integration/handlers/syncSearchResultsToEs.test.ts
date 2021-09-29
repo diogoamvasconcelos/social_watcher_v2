@@ -16,6 +16,8 @@ import { retryUntil } from "@test/lib/retry";
 import { getClient as getSearchResultSearchEngineClient } from "@src/adapters/searchResultsSearchEngine/client";
 import { refreshIndices } from "@src/lib/elasticsearch/client";
 
+jest.setTimeout(30000);
+
 const config = getEnvTestConfig();
 const logger = getLogger();
 const client = getSearchResultSearchEngineClient(config.mainElasticSearchUrl);
@@ -24,10 +26,6 @@ const lambdaName = config.syncSearchResultsToEs;
 const searchSearchResultsFn = makeSearchSearchResults(client);
 
 describe("handlers/syncSearchResultsToEs", () => {
-  beforeAll(async () => {
-    jest.setTimeout(30000);
-  });
-
   it("syncs multiple search results to es", async () => {
     const keyword = newLowerCase(uuid());
     const searchResults = [

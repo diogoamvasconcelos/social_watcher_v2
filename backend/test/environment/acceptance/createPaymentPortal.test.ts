@@ -8,6 +8,8 @@ import { getEnvTestConfig } from "@test/lib/config";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import logger from "@src/lib/logger";
 
+jest.setTimeout(30000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -16,7 +18,6 @@ describe("e2e/createPaymentPortal", () => {
   let userToken: string;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
     testUser = await createTestUser();
 
     userToken = await getIdToken({

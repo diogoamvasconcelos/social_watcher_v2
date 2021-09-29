@@ -14,6 +14,8 @@ import { getEnvTestConfig } from "@test/lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 
+jest.setTimeout(10000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -23,7 +25,6 @@ describe("create searchObject e2e test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

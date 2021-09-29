@@ -23,6 +23,8 @@ import { retryUntil, sleep } from "@test/lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
 import { getMinutesAgo } from "@src/lib/date";
 
+jest.setTimeout(45000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -32,7 +34,6 @@ describe("search endpoint e2e (nearly)", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(45000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

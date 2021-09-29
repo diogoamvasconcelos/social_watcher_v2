@@ -8,6 +8,8 @@ import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 
+jest.setTimeout(45000);
+
 describe("getActiveKeywords", () => {
   const logger = getLogger();
   const tableName: string = uuid();
@@ -24,10 +26,6 @@ describe("getActiveKeywords", () => {
       logger
     );
   };
-
-  beforeAll(() => {
-    jest.setTimeout(45000);
-  });
 
   beforeEach(async () => {
     await preparesGenericTable(tableName);

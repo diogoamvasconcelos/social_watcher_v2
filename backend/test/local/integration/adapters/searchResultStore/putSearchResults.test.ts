@@ -14,15 +14,13 @@ import {
 } from "@test/lib/builders";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 
+jest.setTimeout(60000);
+
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();
   const tableName: string = uuid();
 
   const putSearchResultsFn = makePutSearchResults(client, tableName);
-
-  beforeAll(() => {
-    jest.setTimeout(60000);
-  });
 
   beforeEach(async () => {
     await preparesGenericTable(tableName);

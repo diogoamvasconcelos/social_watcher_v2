@@ -12,6 +12,8 @@ import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
 import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 
+jest.setTimeout(10000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -21,7 +23,6 @@ describe("get default searchObject endpoint test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

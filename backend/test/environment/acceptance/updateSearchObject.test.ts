@@ -27,6 +27,8 @@ import { isLeft } from "fp-ts/lib/Either";
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
+jest.setTimeout(20000);
+
 describe("update searchObject e2e test", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
   let userToken: string;
@@ -34,7 +36,6 @@ describe("update searchObject e2e test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(20000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

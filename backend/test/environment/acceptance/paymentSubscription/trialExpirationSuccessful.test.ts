@@ -16,6 +16,8 @@ import { retryUntil } from "@test/lib/retry";
 import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 import { addDays } from "@src/lib/date";
 
+jest.setTimeout(30000);
+
 const config = getEnvTestConfig();
 const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -25,7 +27,6 @@ describe("Trial expiration successful", () => {
   let userToken: string;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
     testUser = await createTestUser();
 
     userToken = await getIdToken({

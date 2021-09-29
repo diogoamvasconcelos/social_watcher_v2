@@ -15,6 +15,8 @@ import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 import { isLeft } from "fp-ts/lib/Either";
 
+jest.setTimeout(10000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -24,7 +26,6 @@ describe("get searchObject e2e test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

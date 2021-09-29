@@ -11,6 +11,8 @@ import {
   updateUserSubscription,
 } from "./steps";
 
+jest.setTimeout(45000);
+
 describe("changes to user subscription", () => {
   let testUser: Awaited<ReturnType<typeof createTestUser>>;
   let userToken: string;
@@ -19,8 +21,6 @@ describe("changes to user subscription", () => {
   const secondKeyword = uuid();
 
   beforeAll(async () => {
-    jest.setTimeout(45000);
-
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(2),
     });

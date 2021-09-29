@@ -6,13 +6,11 @@ import { buildSQSEvent } from "@test/lib/builders";
 import { getEnvTestConfig } from "@test/lib/config";
 import { invokeLambda } from "@test/lib/lambda";
 
+jest.setTimeout(30000);
+
 const lambdaName = getEnvTestConfig().searchRedditLambdaName;
 
 describe("handler/searchReddit", () => {
-  beforeAll(async () => {
-    jest.setTimeout(30000);
-  });
-
   it("can handle a reddit search job", async () => {
     const searchJobEvent = buildRedditSearchJobEvent();
 

@@ -20,6 +20,8 @@ import {
 } from "@src/lib/apiClient/apiClient";
 import { isLeft } from "fp-ts/lib/Either";
 
+jest.setTimeout(20000);
+
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
@@ -29,7 +31,6 @@ describe("deleteSearchObject endpoint e2e test", () => {
   const keyword = newLowerCase(uuid());
 
   beforeAll(async () => {
-    jest.setTimeout(20000);
     testUser = await createTestUser({
       nofSearchObjects: newPositiveInteger(1),
     });

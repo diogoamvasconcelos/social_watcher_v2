@@ -6,13 +6,11 @@ import { buildSQSEvent } from "@test/lib/builders";
 import { getEnvTestConfig } from "@test/lib/config";
 import { invokeLambda } from "@test/lib/lambda";
 
+jest.setTimeout(30000);
+
 const lambdaName = getEnvTestConfig().searchInstagramLambdaName;
 
 describe("handler/searchInstagram", () => {
-  beforeAll(async () => {
-    jest.setTimeout(30000);
-  });
-
   // TODO: when RapidAPI allow this test we can re-enable it
   it.skip("can handle a instagram search job", async () => {
     const searchJobEvent = buildInstagramSearchJobEvent();

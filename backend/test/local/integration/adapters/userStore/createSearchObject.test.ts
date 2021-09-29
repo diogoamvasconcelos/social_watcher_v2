@@ -9,16 +9,14 @@ import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
 import { directlyPutUserItemInTable } from "./shared";
 
+jest.setTimeout(45000);
+
 describe("createSearchObject", () => {
   const logger = getLogger();
   const tableName: string = uuid();
 
   const getSearchObjectFn = makeGetSearchObject(client, tableName);
   const createSearchObjectFn = makeCreateSearchObject(client, tableName);
-
-  beforeAll(() => {
-    jest.setTimeout(45000);
-  });
 
   beforeEach(async () => {
     await preparesGenericTable(tableName);

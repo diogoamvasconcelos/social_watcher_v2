@@ -17,6 +17,8 @@ import { retryUntil } from "@test/lib/retry";
 import { addDays } from "@src/lib/date";
 import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 
+jest.setTimeout(45000);
+
 const config = getEnvTestConfig();
 const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -26,7 +28,6 @@ describe("Trial cancellation and re-activation", () => {
   let userToken: string;
 
   beforeAll(async () => {
-    jest.setTimeout(45000);
     testUser = await createTestUser();
 
     userToken = await getIdToken({
