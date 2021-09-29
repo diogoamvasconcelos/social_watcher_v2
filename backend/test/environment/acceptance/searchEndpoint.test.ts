@@ -110,43 +110,6 @@ describe("search endpoint e2e (nearly)", () => {
     expect(searchResponse.items).toEqual([searchResultWithin]);
   });
 
-  // run this test last as it disables the keyword
-  it("can't search for not allowed keywords", async () => {
-    const anotherKeyword = newLowerCase(uuid());
-
-    let responseEither = await search(
-      { client: apiClient, token: userToken },
-      { userData: { keyword: anotherKeyword } }
-    );
-
-    expect(
-      isLeft(responseEither) && typeof responseEither.left != "string"
-    ).toBeTruthy();
-    if (isLeft(responseEither) && typeof responseEither.left != "string") {
-      expect(responseEither.left.status).toEqual(403);
-    }
-
-    // Change user subscription to disable the keyword
-    await updateUserSubscription({
-      userId: testUser.id,
-      updatedData: { nofSearchObjects: newPositiveInteger(0) },
-    });
-
-    await sleep(15000); // wait to propagate (otherwise can be flaky)
-
-    responseEither = await search(
-      { client: apiClient, token: userToken },
-      { userData: { keyword } }
-    );
-
-    expect(
-      isLeft(responseEither) && typeof responseEither.left != "string"
-    ).toBeTruthy();
-    if (isLeft(responseEither) && typeof responseEither.left != "string") {
-      expect(responseEither.left.status).toEqual(403);
-    }
-  });
-
   it("can search with social media", async () => {
     // add syntetic twitter search result
     await addSearchResultDirectly({
@@ -170,6 +133,44 @@ describe("search endpoint e2e (nearly)", () => {
     );
 
     expect(searchResponse.items).toEqual([searchResultReddit]);
+  });
+
+  // IMPORTANT:
+  // run this test last as it disables the keyword
+  it("can't search for not allowed keywords", async () => {
+    const anotherKeyword = newLowerCase(uuid());
+
+    let responseEither = await search(
+      { client: apiClient, token: userToken },
+      { userData: { keyword: anotherKeyword } }
+    );
+
+    expect(
+      isLeft(responseEither) && typeof responseEither.left != "string"
+    ).toBeTruthy();
+    if (isLeft(responseEither) && typeof responseEither.left != "string") {
+      expect(responseEither.left.status).toEqual(403);
+    }
+
+    //  Change user subscription to disable the keyword
+    await updateUserSubscription({
+      userId: testUser.id,
+      updatedData: { nofSearchObjects: newPositiveInteger(0) },
+    });
+
+    await sleep(15000); // wait to propagate (otherwise can be flaky)
+
+    responseEither = await search(
+      { client: apiClient, token: userToken },
+      { userData: { keyword } }
+    );
+
+    expect(
+      isLeft(responseEither) && typeof responseEither.left != "string"
+    ).toBeTruthy();
+    if (isLeft(responseEither) && typeof responseEither.left != "string") {
+      expect(responseEither.left.status).toEqual(403);
+    }
   });
 });
 
