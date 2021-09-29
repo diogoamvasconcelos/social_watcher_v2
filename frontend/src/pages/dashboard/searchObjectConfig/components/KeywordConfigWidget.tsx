@@ -4,7 +4,12 @@ import Text from "antd/lib/typography/Text";
 import { useAppDispatch } from "../../../../shared/store";
 import { updateKeyword } from "../searchObjectConfigState";
 import { newLowerCase } from "@diogovasconcelos/lib";
+import {
+  validateKeyword,
+  ValidateKeywordErrors,
+} from "@backend/domain/controllers/validateKeyword";
 import styled from "styled-components";
+import { isLeft } from "fp-ts/lib/Either";
 
 const MainContainer = styled.div`
   display: flex;
@@ -30,10 +35,27 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
   };
 
   useEffect(() => {
-    if (searchObject.keyword.length > 0) {
-      setStepState({ status: "finish", errorMessage: undefined });
+    const validateKeywordEither = validateKeyword(searchObject.keyword);
+
+    if (isLeft(validateKeywordEither)) {
+      const getErrorMessage = (error: ValidateKeywordErrors) => {
+        switch (error) {
+          case "TOO_MANY_WORDS":
+            return "Can't have more than 3 words";
+          case "TOO_LONG":
+            return "Can't be more than 40 characters long";
+          case "STARTS_WITH_SPACE":
+            return "Can't start with a 'space'";
+          case "ENDS_WITH_SPACE":
+            return "Can't end with a 'space'";
+        }
+      };
+      setStepState({
+        status: "error",
+        errorMessage: getErrorMessage(validateKeywordEither.left),
+      });
     } else {
-      setStepState({ status: "error", errorMessage: "keyword not valid" });
+      setStepState({ status: "finish", errorMessage: undefined });
     }
   }, [searchObject.keyword]);
 

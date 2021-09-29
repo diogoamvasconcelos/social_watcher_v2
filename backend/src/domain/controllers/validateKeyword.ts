@@ -6,7 +6,7 @@ export const keywordLimits = {
   words: 3,
 };
 
-type ValidateKeywordErrors =
+export type ValidateKeywordErrors =
   | "TOO_MANY_WORDS"
   | "STARTS_WITH_SPACE"
   | "ENDS_WITH_SPACE"
