@@ -47,10 +47,14 @@ export const SearchObjectsList: React.FC<SearchObjectsListProps> = ({
   onNewSearchObjectClicked,
   onManageAccountClicked,
 }) => {
+  const sortedSearchObjects = [...searchObjects].sort((soA, soB) =>
+    soA.createdAt > soB.createdAt ? 1 : -1
+  ); // sort olders first
+
   return (
     <>
       <SearchObjectListContainer>
-        {searchObjects.map((searchObject) => (
+        {sortedSearchObjects.map((searchObject) => (
           <SearchObjectItem
             key={searchObject.index}
             searchObject={searchObject}
