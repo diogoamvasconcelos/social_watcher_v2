@@ -9,6 +9,7 @@ import {
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
 import { defaultSearchObjectDataDomain } from "@test/lib/default";
+import { getNow } from "@src/lib/date";
 
 const logger = getLogger();
 const getSearchObjectsForUserFnMocked =
@@ -28,6 +29,7 @@ describe("controllers/isUserUsingKeyword", () => {
     index: newPositiveInteger(0),
     lockedStatus: "UNLOCKED",
     keyword,
+    createdAt: getNow(),
   };
 
   const testCases: [string, SearchObjectDomain[], boolean][] = [

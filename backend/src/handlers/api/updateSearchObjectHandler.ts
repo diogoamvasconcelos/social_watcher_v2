@@ -21,6 +21,7 @@ import {
 } from "./shared";
 import { User } from "@src/domain/models/user";
 import {
+  SearchObjectDomain,
   searchObjectUserDataIoCodec,
   searchObjectUserDataIoToDomain,
 } from "@src/domain/models/userItem";
@@ -80,23 +81,26 @@ export const handler = async (
   }
   const user: User = getUserEither.right;
 
-  const searchObjectEither = await getExistingSearchObject({
+  const existingSearchObjectEither = await getExistingSearchObject({
     logger,
     getSearchObjectFn,
     user,
     request,
   });
-  if (isLeft(searchObjectEither)) {
-    return searchObjectEither;
+  if (isLeft(existingSearchObjectEither)) {
+    return existingSearchObjectEither;
   }
+  const existingSearchObject = existingSearchObjectEither.right;
 
-  const putResultEither = await updateSearchObjectFn(logger, {
-    ...searchObjectUserDataIoToDomain(request.data, searchObjectEither.right),
-    type: "SEARCH_OBJECT",
-    id: user.id,
-    index: request.index,
-    lockedStatus: "UNLOCKED",
-  });
+  const mergedSearchObject: SearchObjectDomain = {
+    ...existingSearchObject,
+    ...searchObjectUserDataIoToDomain(request.data, existingSearchObject),
+  };
+
+  const putResultEither = await updateSearchObjectFn(
+    logger,
+    mergedSearchObject
+  );
   if (isLeft(putResultEither)) {
     return left(makeInternalErrorResponse("Failed to put SearchObject."));
   }

@@ -1,4 +1,4 @@
-import { positiveInteger } from "@diogovasconcelos/lib/iots";
+import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
 import { keywordCodec } from "./keyword";
@@ -181,6 +181,7 @@ const searchObjectBaseCodec = t.type({
   id: userIdCodec,
   index: searchObjectIndexCodec,
   lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+  createdAt: dateISOString,
 });
 
 export const searchObjectIoCodec = t.intersection([
