@@ -47,7 +47,7 @@ const getSearchObjectMock = jest.fn();
 makeGetSearchObjectMock.mockReturnValue(getSearchObjectMock);
 
 const defaultUser: User = {
-  id: "some-id",
+  id: defaultSearchObjectDomain.id,
   email: "some-email",
   subscription: {
     status: "ACTIVE",

@@ -106,6 +106,7 @@ describe("handlers/api/createSearchObject", () => {
       expect.objectContaining({
         ...defaultRequestData,
         index: 1,
+        createdAt: expect.any(String),
       })
     );
   });

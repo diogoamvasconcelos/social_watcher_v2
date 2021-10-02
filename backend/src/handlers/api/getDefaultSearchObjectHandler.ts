@@ -13,6 +13,7 @@ import {
   searchObjectUserDataIoToDomain,
 } from "@src/domain/models/userItem";
 import { newLowerCase, newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import { getNow } from "@src/lib/date";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -30,6 +31,7 @@ export const handler = async (
     id: requestEither.right.authData.id,
     index: newPositiveInteger(0),
     lockedStatus: "LOCKED",
+    createdAt: getNow(),
   };
 
   return right(makeSuccessResponse(200, defaultSearchObject));

@@ -8,6 +8,7 @@ import {
   SearchObjectDomain,
   SearchObjectUserDataDomain,
 } from "@src/domain/models/userItem";
+import { getNow } from "@src/lib/date";
 
 export const defaultSearchObjectDataDomain: SearchObjectUserDataDomain = {
   keyword: newLowerCase("some_keyword"),
@@ -64,4 +65,5 @@ export const defaultSearchObjectDomain: SearchObjectDomain = {
   id: uuid(),
   lockedStatus: "LOCKED",
   index: newPositiveInteger(0),
+  createdAt: getNow(),
 };

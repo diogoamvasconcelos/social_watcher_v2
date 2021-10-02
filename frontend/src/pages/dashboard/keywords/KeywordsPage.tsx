@@ -10,6 +10,7 @@ import { SearchObjectsList } from "./SearchObjectsList";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { KEYWORDS_NEW_PATH, USER_PATH } from "../../../shared/data/paths";
+import Button from "antd/lib/button";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -19,6 +20,28 @@ const LoadingUserWidget: React.FC = () => {
     </div>
   );
 };
+
+// TODO: Improve this with a nice "onboarding" touch
+const NoSearchObjectsWidget: React.FC<{
+  onNewSearchObjectClicked: () => void;
+}> = ({ onNewSearchObjectClicked }) => {
+  return (
+    <>
+      <Text>Create your first item</Text>
+      <Button
+        type="primary"
+        style={{ width: "200px", borderRadius: "4px" }}
+        onClick={onNewSearchObjectClicked}
+      >
+        Add new keyword
+      </Button>
+    </>
+  );
+};
+
+// ++++++++
+// + PAGE +
+// ++++++++
 
 const MainContainer = styled.div`
   display: flex;
@@ -56,7 +79,9 @@ const Page: React.FC = () => {
         <>
           <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
           {searchObjects.length == 0 ? (
-            <p>TODO no items</p>
+            <NoSearchObjectsWidget
+              onNewSearchObjectClicked={handleNewSearchObjectClicked}
+            />
           ) : (
             <SearchObjectsList
               searchObjects={searchObjects}

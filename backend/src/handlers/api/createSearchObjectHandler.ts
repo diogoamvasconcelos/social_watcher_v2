@@ -34,6 +34,7 @@ import { User } from "@src/domain/models/user";
 import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import _ from "lodash";
 import { validateKeyword } from "@src/domain/controllers/validateKeyword";
+import { getNow } from "@src/lib/date";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -122,6 +123,7 @@ export const handler = async (
     id: user.id,
     index: freeIndex,
     lockedStatus: "UNLOCKED",
+    createdAt: getNow(),
   });
   if (isLeft(putResultEither)) {
     return left(makeInternalErrorResponse("Failed to put SearchObject."));
