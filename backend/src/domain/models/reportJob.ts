@@ -16,9 +16,9 @@ const reportJobBaseCodec = t.intersection([
     keyword: keywordCodec,
     searchResults: t.array(searchResultCodec),
     searchFrequency: reportFrequencyCodec,
+    searchStart: dateISOString,
   }),
   t.partial({
-    searchStart: dateISOString,
     searchEnd: dateISOString,
   }),
 ]);
