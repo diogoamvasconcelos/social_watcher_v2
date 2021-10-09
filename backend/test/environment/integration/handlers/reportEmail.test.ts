@@ -7,6 +7,7 @@ import {
   newLowerCase,
 } from "@diogovasconcelos/lib/iots";
 import { invokeLambda } from "@test/lib/lambda";
+import { getNow } from "@src/lib/date";
 
 jest.setTimeout(30000);
 
@@ -34,6 +35,7 @@ const buildEmailReportJobEvent = () => {
       status: "DAILY",
       addresses: [newEmailFromString("success@simulator.amazonses.com")],
     },
+    searchStart: getNow(),
   };
 
   return buildSQSEvent([reportJob]);

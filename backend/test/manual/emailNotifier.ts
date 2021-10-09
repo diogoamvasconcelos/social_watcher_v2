@@ -14,7 +14,7 @@ import { formatEmailReport } from "@src/domain/controllers/formatEmailReport";
 
 const logger = getLogger();
 
-const generateHtml = () => {
+const generateHtml = async () => {
   const keyword = newLowerCase("somekeyword");
   const searchResult0 = buildTwitterSearchResult({
     keyword,
@@ -29,9 +29,9 @@ const generateHtml = () => {
   const searchResult1 = buildTwitterSearchResult({
     keyword,
     data: {
-      text: "Exemplo do texto em Portugues, e preciso traduzir",
+      text: "Exemplo do texto em Portugues, que vai ser repito.".repeat(10),
       translatedText:
-        "Nice translation, everything good, we can read, life's nice",
+        "Nice translation, everything good, we can read, life's".repeat(10),
       lang: "pt",
     },
     link: "https://twitter.com",
@@ -70,7 +70,7 @@ const sendTestEmail = async () => {
     Message: {
       Subject: { Data: "Social Watcher test" },
       Body: {
-        Html: { Data: generateHtml() },
+        Html: { Data: await generateHtml() },
       },
     },
   };
@@ -83,4 +83,4 @@ export const main = async () => {
   await sendTestEmail();
 };
 
-void main();
+// void main();

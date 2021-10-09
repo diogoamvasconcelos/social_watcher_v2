@@ -21,7 +21,7 @@ const handlersZipPlugin = {
     compiler.hooks.done.tap("HandlersZipPlugin", (..._args) => {
       Object.keys(entryMap).forEach((handlerName) => {
         child_process.execSync(
-          `zip -Xj ${outputPath}/${handlerName}.zip -r ${outputPath}/${handlerName}/*.js`
+          `zip -Xj ${outputPath}/${handlerName}.zip -r ${outputPath}/${handlerName}/*.js ${outputPath}/${handlerName}/*.map`
         );
       });
     });
@@ -30,7 +30,7 @@ const handlersZipPlugin = {
 
 const config = {
   target: "node14",
-  mode: "production",
+  mode: "development",
   entry: entryMap,
   output: {
     path: outputPath,
@@ -40,9 +40,20 @@ const config = {
   module: {
     rules: [
       {
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader",
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(ts|js)$/,
         use: "babel-loader",
         exclude: /node_modules/,
+      },
+      {
+        // mjml imports html-minifier that does not work witb es6 (but it's not used so okay to remove)
+        test: path.resolve(__dirname, "node_modules/html-minifier/src"),
+        use: "null-loader",
       },
     ],
   },
@@ -54,7 +65,10 @@ const config = {
     new CleanWebpackPlugin({}), // clean up dist folder before build
     handlersZipPlugin,
   ],
-  externals: ["pino-pretty"], // exclude this pino dep
+  externals: [
+    "pino-pretty", // exclude this pino dep
+  ],
+  devtool: "source-map",
 };
 
 module.exports = config;

@@ -6,6 +6,7 @@ import { getLogger } from "@src/lib/logger";
 import { getClient as getEmailReporterClient } from "@src/adapters/emailReporter/client";
 import { defaultMiddlewareStack } from "@src/handlers/middlewares/common";
 import { capitalizeWord } from "@src/lib/text";
+import { formatEmailReport } from "@src/domain/controllers/formatEmailReport";
 
 const logger = getLogger();
 
@@ -27,21 +28,13 @@ const handler = async (event: SQSEvent) => {
     }
 
     fromEither(
-      // TODO: improve this email formatting
       await sendEmailFn(logger, {
         addresses: emailReportJob.config.addresses,
         subject: `${capitalizeWord(
           emailReportJob.searchFrequency
         )} report for keyword: ${emailReportJob.keyword}`,
         body: {
-          text: emailReportJob.searchResults
-            .map((searchResult) => JSON.stringify(searchResult))
-            .join("\n next result: \n"),
-          html:
-            "<h1> REPORT </h1>" +
-            emailReportJob.searchResults
-              .map((searchResult) => JSON.stringify(searchResult))
-              .join("<p> next result: </p>"),
+          html: await formatEmailReport(emailReportJob),
         },
       })
     );

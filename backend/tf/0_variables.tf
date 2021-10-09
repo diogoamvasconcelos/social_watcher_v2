@@ -13,6 +13,7 @@ locals {
   lambda_env_vars = {
     ENV                                    = var.env
     AWS_NODEJS_CONNECTION_REUSE_ENABLED    = 1
+    NODE_OPTIONS                           = "--enable-source-maps"
     USERS_TABLE_NAME                       = aws_dynamodb_table.users.name
     KEYWORDS_TABLE_NAME                    = aws_dynamodb_table.keywords.name
     SEARCH_RESULTS_TABLE_NAME              = aws_dynamodb_table.search_results.name
