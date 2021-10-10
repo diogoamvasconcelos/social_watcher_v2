@@ -168,6 +168,13 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
             <Radio value={"WEEKLY"}>Weekly</Radio>
           </Radio.Group>
         </RowDiv>
+        {reportData.email.addresses?.map((address) => (
+          <EmailAddressItem
+            address={address}
+            onDelete={handleAddressDelete}
+            key={address}
+          />
+        ))}
         <RowDiv>
           <Text style={{ gridColumnStart: "1" }}>Add Email address</Text>
           <Input.Group
@@ -190,13 +197,6 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
             </Button>
           </Input.Group>
         </RowDiv>
-        {reportData.email.addresses?.map((address) => (
-          <EmailAddressItem
-            address={address}
-            onDelete={handleAddressDelete}
-            key={address}
-          />
-        ))}
       </ConfigContainer>
     </>
   );

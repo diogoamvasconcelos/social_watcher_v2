@@ -9,7 +9,6 @@ export type SendEmailFn = (
     addresses: PickRequired<EmailReportConfig, "addresses">;
     subject: string;
     body: {
-      text: string;
       html: string;
     };
   }

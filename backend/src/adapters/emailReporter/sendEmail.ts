@@ -12,7 +12,6 @@ export const makeSendEmail = (client: Client): SendEmailFn => {
       Message: {
         Subject: { Data: subject },
         Body: {
-          Text: { Data: body.text },
           Html: { Data: body.html },
         },
       },
