@@ -12,14 +12,21 @@ import { getSearchResultText } from "../utils/searchResultUtils";
 // TODO:
 // - host all necessary images (social media, accordion arrows, main icon/title, cool header section bg image)
 
-export const formatEmailReport = async (reportJob: EmailReportJob) => {
+type EmailReportOptions = {
+  maxNumberResults: number;
+};
+
+export const formatEmailReport = async (
+  reportJob: EmailReportJob,
+  { maxNumberResults }: EmailReportOptions = { maxNumberResults: 10 }
+) => {
   const rawMjml = `
 	<mjml>
 		${head}
 		<mj-body>
 			${buildHeaderSection(reportJob)}
 			${buildSummarySection(reportJob)}
-			${buildResultsSection(reportJob)}
+			${buildResultsSection(reportJob, maxNumberResults)}
 		</mj-body>
 	</mjml>
 `;
@@ -134,7 +141,10 @@ ${divider(colors.strongBg)}
 `;
 };
 
-const buildResultsSection = ({ keyword, searchResults }: EmailReportJob) => {
+const buildResultsSection = (
+  { keyword, searchResults }: EmailReportJob,
+  maxNumberResults: EmailReportOptions["maxNumberResults"]
+) => {
   const header = `
 <mj-section background-color="#F0F4F8" padding="12px 0px 2px 0px">
 	<mj-column>
@@ -143,7 +153,11 @@ const buildResultsSection = ({ keyword, searchResults }: EmailReportJob) => {
 </mj-section>
 `;
 
-  const body = searchResults
+  const latestSearchResults = [...searchResults]
+    .sort((a, b) => (a.happenedAt > b.happenedAt ? 1 : -1))
+    .slice(0, maxNumberResults); // sort olders first
+
+  const body = latestSearchResults
     .map((result, i) => buildResultItem(result, i % 2 == 0))
     .join(divider(colors.strongBg));
 
