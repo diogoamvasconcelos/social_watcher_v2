@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_event_rule" "trigger_cron_report_jobs" {
   name = "trigger_cron_report_jobs"
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-  schedule_expression = "cron(16 0 * * ? *)" // runs once a day at 16:00 UTC
+  schedule_expression = "cron(0 16 * * ? *)" // runs once a day at 16:00 UTC
 
   tags = local.tags
 }
