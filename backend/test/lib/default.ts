@@ -5,6 +5,7 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { uuid } from "@src/lib/uuid";
 import {
+  ResultTag,
   SearchObjectDomain,
   SearchObjectUserDataDomain,
 } from "@src/domain/models/userItem";
@@ -65,5 +66,13 @@ export const defaultSearchObjectDomain: SearchObjectDomain = {
   id: uuid(),
   lockedStatus: "LOCKED",
   index: newPositiveInteger(0),
+  createdAt: getNow(),
+};
+
+export const defaultResultTag: ResultTag = {
+  type: "RESULT_TAG",
+  id: uuid(),
+  tagId: uuid(),
+  tagType: "FAVORITE",
   createdAt: getNow(),
 };

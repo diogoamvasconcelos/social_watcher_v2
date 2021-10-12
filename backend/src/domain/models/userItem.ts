@@ -226,7 +226,8 @@ export const resultTagCodec = t.intersection([
   t.type({
     type: t.literal("RESULT_TAG"),
     tagId: searchResultTagCodec,
-    tagType: t.union([t.literal("favorite"), t.literal("custom")]),
+    tagType: t.union([t.literal("FAVORITE"), t.literal("CUSTOM")]),
+    createdAt: dateISOString,
   }),
 ]);
 export type ResultTag = t.TypeOf<typeof resultTagCodec>;

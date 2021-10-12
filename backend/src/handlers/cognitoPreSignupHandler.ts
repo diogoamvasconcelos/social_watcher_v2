@@ -14,6 +14,7 @@ import { getClient as getPaymentsClient } from "@src/lib/stripe/client";
 import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 import { getClient as getSsmClient } from "@src/lib/ssm";
 import { decode } from "@diogovasconcelos/lib/iots";
+import { makeCreateResultTag } from "@src/adapters/userStore/createResultTag";
 
 const config = getConfig();
 const logger = getLogger();
@@ -38,6 +39,10 @@ const handler = async (event: PreSignUpTriggerEvent) => {
     config.stripeNormalProductId,
     subscriptionConfig
   );
+  const createResultTagFn = makeCreateResultTag(
+    userStoreClient,
+    config.usersTableName
+  );
 
   const usernameDecoded = decode(UUIDCodec, event.userName);
   if (isLeft(usernameDecoded)) {
@@ -55,6 +60,7 @@ const handler = async (event: PreSignUpTriggerEvent) => {
       putUserFn,
       putPaymentDataFn,
       initiateUserSubscriptionFn,
+      createResultTagFn,
     },
     {
       id: usernameDecoded.right,

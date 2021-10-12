@@ -182,7 +182,8 @@ export const deleteItem = async (
   logger: Logger
 ): Promise<Either<"ERROR", "OK">> => {
   try {
-    await client.delete(params).promise();
+    const result = await client.delete(params).promise();
+    logger.debug("Delete item result", { result });
     return right("OK");
   } catch (error) {
     logger.error("Call to DynamoDB delete exited with error", { error });

@@ -165,3 +165,21 @@ export const unknownToPaymentData = (
   }
   return right(userItem);
 };
+
+export const unknownToResultTag = (
+  item: unknown
+): Either<string[], ResultTag> => {
+  const userItemEither = unknownToUserItem(item);
+  if (isLeft(userItemEither)) {
+    return userItemEither;
+  }
+  const userItem = userItemEither.right;
+  if (userItem.type !== "RESULT_TAG") {
+    return left([
+      "ERROR",
+      `User item is of type ${userItem.type}`,
+      "Expected to be RESULT_TAG",
+    ]);
+  }
+  return right(userItem);
+};
