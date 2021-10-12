@@ -3,13 +3,26 @@ import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
+import { UUID } from "io-ts-types";
 
-export const searchResultMetadaCodec = t.type({
+export const searchResultCategoryCodec = UUID;
+export type SearchResultCategory = t.TypeOf<typeof searchResultCategoryCodec>;
+
+const searchResultMetadataCodec = t.type({
   id: t.string,
   keyword: keywordCodec,
   happenedAt: dateISOString,
   link: t.string,
 });
+
+const searchResultUserDataCodec = t.partial({
+  categories: t.array(searchResultCategoryCodec),
+});
+
+export const searchResultBaseCodec = t.intersection([
+  searchResultMetadataCodec,
+  searchResultUserDataCodec,
+]);
 
 const searchResultDataBaseCodec = t.partial({
   translatedText: t.string,
@@ -20,7 +33,7 @@ const searchResultDataBaseCodec = t.partial({
 // + Twitter +
 // +++++++++++
 export const twitterSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("twitter"),
     data: t.intersection([searchResultDataBaseCodec, twitterSearchItemCodec]),
@@ -32,7 +45,7 @@ export type TwitterSearchResult = t.TypeOf<typeof twitterSearchResultCodec>;
 // + Reddit +
 // ++++++++++
 export const redditSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("reddit"),
     data: t.intersection([searchResultDataBaseCodec, redditSearchItemCodec]),
@@ -44,7 +57,7 @@ export type RedditSearchResult = t.TypeOf<typeof redditSearchResultCodec>;
 // + Hackernews +
 // ++++++++++++++
 export const hackernewsSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("hackernews"),
     data: t.intersection([
@@ -71,7 +84,7 @@ export type HackernewsSearchResult = t.TypeOf<
 // + Instagram +
 // +++++++++++++
 export const instagramSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("instagram"),
     data: t.intersection([
@@ -99,7 +112,7 @@ export type InstagramSearchResult = t.TypeOf<typeof instagramSearchResultCodec>;
 // +++++++++++
 
 export const youtubeSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("youtube"),
     data: t.intersection([

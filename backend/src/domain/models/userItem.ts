@@ -7,29 +7,40 @@ import {
   slackNotificationConfigCodec,
 } from "./notificationJob";
 import { emailReportConfigCodec } from "./reportJob";
+import { searchResultCategoryCodec } from "./searchResult";
 import { userCodec, userIdCodec } from "./user";
+
+// ++++++++
+// + BASE +
+// ++++++++
+const userItemBaseCodec = t.type({
+  id: userIdCodec,
+});
 
 // +++++++++++++
 // + USER DATA +
 // +++++++++++++
 export const userDataCodec = t.intersection([
+  userItemBaseCodec,
   t.type({ type: t.literal("USER_DATA") }),
   userCodec,
 ]);
 export type UserData = t.TypeOf<typeof userDataCodec>;
 
-// +++++++++++++
+// ++++++++++++++++
 // + PAYMENT DATA +
-// +++++++++++++
+// ++++++++++++++++
 export const paymentDataCodec = t.exact(
-  t.type({
-    type: t.literal("PAYMENT_DATA"),
-    id: userIdCodec,
-    stripe: t.type({
-      customerId: t.string,
-      subscriptionId: t.string,
+  t.intersection([
+    userItemBaseCodec,
+    t.type({
+      type: t.literal("PAYMENT_DATA"),
+      stripe: t.type({
+        customerId: t.string,
+        subscriptionId: t.string,
+      }),
     }),
-  })
+  ])
 );
 export type PaymentData = t.TypeOf<typeof paymentDataCodec>;
 
@@ -110,7 +121,7 @@ export const searchObjectUserDataIoToDomain = (
   io: SearchObjectUserDataIo,
   defaultData?: Omit<SearchObjectUserDataDomain, "keyword">
 ): SearchObjectUserDataDomain => {
-  // adds defaults do Io
+  // adds defaults to Io
   if (!defaultData) {
     defaultData = {
       searchData: {
@@ -176,13 +187,15 @@ export const searchObjectIndexCodec = t.union([
   NumberFromString.pipe(positiveInteger),
   positiveInteger,
 ]);
-const searchObjectBaseCodec = t.type({
-  type: t.literal("SEARCH_OBJECT"),
-  id: userIdCodec,
-  index: searchObjectIndexCodec,
-  lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
-  createdAt: dateISOString,
-});
+const searchObjectBaseCodec = t.intersection([
+  userItemBaseCodec,
+  t.type({
+    type: t.literal("SEARCH_OBJECT"),
+    index: searchObjectIndexCodec,
+    lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+    createdAt: dateISOString,
+  }),
+]);
 
 export const searchObjectIoCodec = t.intersection([
   searchObjectBaseCodec,
@@ -204,6 +217,20 @@ export const searchObjectIoToDomain = (
   };
 };
 
+// ++++++++++++++++++++++++
+// + RESULT CATEGORY ITEM +
+// ++++++++++++++++++++++++
+
+export const resultCategoryItemCodec = t.intersection([
+  userItemBaseCodec,
+  t.type({
+    type: t.literal("RESULT_CATEGORY_ITEM"),
+    categoryId: searchResultCategoryCodec,
+    categoryType: t.union([t.literal("favorite"), t.literal("custom")]),
+  }),
+]);
+export type ResultCategoryItem = t.TypeOf<typeof resultCategoryItemCodec>;
+
 // +++++++++++++
 // + USER ITEM +
 // +++++++++++++
@@ -212,8 +239,10 @@ export const userItemIoCodec = t.union([
   userDataCodec,
   searchObjectIoCodec,
   paymentDataCodec,
+  resultCategoryItemCodec,
 ]);
 export type UserItemDomain =
-  | t.TypeOf<typeof userDataCodec>
+  | UserData
   | SearchObjectDomain
-  | t.TypeOf<typeof paymentDataCodec>;
+  | PaymentData
+  | ResultCategoryItem;

@@ -4,6 +4,7 @@ import _ from "lodash";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
   PaymentData,
+  ResultCategoryItem,
   SearchObjectDomain,
   searchObjectIoToDomain,
   UserData,
@@ -37,6 +38,8 @@ export const toUserItemDocumentKeys = (userItem: UserItemDomain) => {
       return toSearchObjectDocumentKeys(userItem);
     case "PAYMENT_DATA":
       return toPaymentDataDocumentKeys(userItem);
+    case "RESULT_CATEGORY_ITEM":
+      return toResultCategoryItemDocumentKeys(userItem);
     default:
       return throwUnexpectedCase(userItem, "toUserItemDocKeys");
   }
@@ -69,6 +72,14 @@ export const toPaymentDataDocumentKeys = ({ id }: Pick<PaymentData, "id">) => ({
   sk: "payment",
 });
 
+export const toResultCategoryItemDocumentKeys = ({
+  id,
+  categoryId,
+}: Pick<ResultCategoryItem, "id" | "categoryId">) => ({
+  pk: id,
+  sk: `resultCategory#${categoryId}`,
+});
+
 export const userItemToDocument = (
   domainItem: UserItemDomain
 ): UserItemDocument => {
@@ -89,6 +100,8 @@ export const documentToUserItem = (
         _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"])
       );
     case "PAYMENT_DATA":
+      return _.omit(docItem, ["pk", "sk"]);
+    case "RESULT_CATEGORY_ITEM":
       return _.omit(docItem, ["pk", "sk"]);
     default:
       return throwUnexpectedCase(docItem, "documentToUserItem");
