@@ -7,7 +7,7 @@ import {
   slackNotificationConfigCodec,
 } from "./notificationJob";
 import { emailReportConfigCodec } from "./reportJob";
-import { searchResultCategoryCodec } from "./searchResult";
+import { searchResultTagCodec } from "./searchResult";
 import { userCodec, userIdCodec } from "./user";
 
 // ++++++++
@@ -217,19 +217,19 @@ export const searchObjectIoToDomain = (
   };
 };
 
-// ++++++++++++++++++++++++
-// + RESULT CATEGORY ITEM +
-// ++++++++++++++++++++++++
+// ++++++++++++++
+// + RESULT TAG +
+// ++++++++++++++
 
-export const resultCategoryItemCodec = t.intersection([
+export const resultTagCodec = t.intersection([
   userItemBaseCodec,
   t.type({
-    type: t.literal("RESULT_CATEGORY_ITEM"),
-    categoryId: searchResultCategoryCodec,
-    categoryType: t.union([t.literal("favorite"), t.literal("custom")]),
+    type: t.literal("RESULT_TAG"),
+    tagId: searchResultTagCodec,
+    tagType: t.union([t.literal("favorite"), t.literal("custom")]),
   }),
 ]);
-export type ResultCategoryItem = t.TypeOf<typeof resultCategoryItemCodec>;
+export type ResultTag = t.TypeOf<typeof resultTagCodec>;
 
 // +++++++++++++
 // + USER ITEM +
@@ -239,10 +239,10 @@ export const userItemIoCodec = t.union([
   userDataCodec,
   searchObjectIoCodec,
   paymentDataCodec,
-  resultCategoryItemCodec,
+  resultTagCodec,
 ]);
 export type UserItemDomain =
   | UserData
   | SearchObjectDomain
   | PaymentData
-  | ResultCategoryItem;
+  | ResultTag;

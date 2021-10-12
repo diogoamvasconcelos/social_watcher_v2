@@ -5,8 +5,8 @@ import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddi
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
 import { UUID } from "io-ts-types";
 
-export const searchResultCategoryCodec = UUID;
-export type SearchResultCategory = t.TypeOf<typeof searchResultCategoryCodec>;
+export const searchResultTagCodec = UUID;
+export type SearchResultTag = t.TypeOf<typeof searchResultTagCodec>;
 
 const searchResultMetadataCodec = t.type({
   id: t.string,
@@ -16,7 +16,7 @@ const searchResultMetadataCodec = t.type({
 });
 
 const searchResultUserDataCodec = t.partial({
-  categories: t.array(searchResultCategoryCodec),
+  categories: t.array(searchResultTagCodec),
 });
 
 export const searchResultBaseCodec = t.intersection([
