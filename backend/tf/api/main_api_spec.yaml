@@ -222,6 +222,41 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
+  /user/resultTag:
+    get:
+      description: Get Result Tags
+      responses:
+        200:
+          description: Result Tag list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultTagsList"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${get_result_tags_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /search:
     post:
       description: Search
@@ -418,6 +453,23 @@ components:
                   enum:
                     - DISABLED
                     - ENABLED
+
+    TagId:
+      type: string
+
+    ResultTag:
+      type: object
+      properties:
+        tagId:
+          $ref: "#/components/schemas/TagId"
+
+    ResultTagsList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultTag"
 
     SearchResult:
       type: object
