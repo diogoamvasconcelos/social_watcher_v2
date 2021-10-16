@@ -257,6 +257,50 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
+  /searchResult/{resultId}/tag/add:
+    parameters:
+      - $ref: "#/components/parameters/SearchResultId"
+
+     post:
+      description: Adds a user result tag to a search result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddTagToResultRequestBody"
+      responses:
+        200:
+          description: A SearchResult
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${add_tag_to_result_invoke_arn}}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
   /search:
     post:
       description: Search
@@ -471,17 +515,28 @@ components:
           items:
             $ref: "#/components/schemas/ResultTag"
 
+    SearchResultId:
+      type: string
+
     SearchResult:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/SearchResultId"
         keyword:
           type: string
         happenedAt:
           type: string
         socialMedia:
           type: string
+
+    AddTagToResultRequestBody:
+      type: object
+      required:
+        - tagId
+      properties:
+        tagId:
+          $ref: "#/components/schemas/TagId"
 
     SearchRequestBody:
       type: object

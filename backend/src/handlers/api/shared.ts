@@ -23,10 +23,7 @@ import {
   SearchObjectDomain,
   searchObjectIndexCodec,
 } from "@src/domain/models/userItem";
-import {
-  JsonEncodable,
-  JsonObjectEncodable,
-} from "@diogovasconcelos/lib/models/jsonEncodable";
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { GetSearchObjectFn } from "@src/domain/ports/userStore/getSearchObject";
 
 export const apiGetUser = async ({
@@ -100,10 +97,15 @@ export const toRequestWithUserData = <U>(
   });
 };
 
-export const parseRequestBodyJSON = (
-  logger: Logger,
-  jsonBody: string | null
-): Either<ApiErrorResponse<"REQUEST_MALFORMED">, JsonEncodable> => {
+export const decodeBodyJSON = <U>({
+  logger,
+  body: jsonBody,
+  decoder: bodyDecoder,
+}: {
+  logger: Logger;
+  body: string | null;
+  decoder: t.Decoder<unknown, U>;
+}): Either<ApiErrorResponse<"REQUEST_MALFORMED">, U> => {
   const bodyEither = parseSafe(jsonBody);
   if (isLeft(bodyEither)) {
     logger.error("Failed to parse body to json.", { error: bodyEither.left });
@@ -112,7 +114,15 @@ export const parseRequestBodyJSON = (
     );
   }
 
-  return bodyEither;
+  const dataEither = decode(bodyDecoder, bodyEither.right);
+  if (isLeft(dataEither)) {
+    logger.error("Failed to decode data's property of body.", {
+      error: dataEither.left,
+    });
+    return left(makeRequestMalformedResponse("Request body is invalid."));
+  }
+
+  return dataEither;
 };
 
 export const buildApiRequestEvent = ({

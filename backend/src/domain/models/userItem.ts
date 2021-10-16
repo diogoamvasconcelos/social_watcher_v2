@@ -1,6 +1,6 @@
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
 import * as t from "io-ts";
-import { NumberFromString } from "io-ts-types";
+import { NumberFromString, UUID } from "io-ts-types";
 import { keywordCodec } from "./keyword";
 import {
   discordNotificationConfigCodec,
@@ -221,11 +221,13 @@ export const searchObjectIoToDomain = (
 // + RESULT TAG +
 // ++++++++++++++
 
+export const resultTagIdCodec = UUID;
+
 export const resultTagCodec = t.intersection([
   userItemBaseCodec,
   t.type({
     type: t.literal("RESULT_TAG"),
-    tagId: searchResultTagCodec,
+    tagId: resultTagIdCodec,
     tagType: t.union([t.literal("FAVORITE"), t.literal("CUSTOM")]),
     createdAt: dateISOString,
   }),

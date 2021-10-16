@@ -3,10 +3,7 @@ import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
-import { UUID } from "io-ts-types";
-
-export const searchResultTagCodec = UUID;
-export type SearchResultTag = t.TypeOf<typeof searchResultTagCodec>;
+import { resultTagIdCodec } from "./userItem";
 
 const searchResultMetadataCodec = t.type({
   id: t.string,
@@ -16,7 +13,7 @@ const searchResultMetadataCodec = t.type({
 });
 
 const searchResultUserDataCodec = t.partial({
-  categories: t.array(searchResultTagCodec),
+  tags: t.array(resultTagIdCodec),
 });
 
 export const searchResultBaseCodec = t.intersection([

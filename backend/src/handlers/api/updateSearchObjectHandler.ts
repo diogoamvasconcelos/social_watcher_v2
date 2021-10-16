@@ -7,7 +7,6 @@ import { ApiErrorResponse, ApiResponse } from "./models/models";
 import {
   makeBadRequestResponse,
   makeInternalErrorResponse,
-  makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
 import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client";
@@ -16,7 +15,7 @@ import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObje
 import {
   apiGetUser,
   getExistingSearchObject,
-  parseRequestBodyJSON,
+  decodeBodyJSON,
   toSearchObjectRequest,
 } from "./shared";
 import { User } from "@src/domain/models/user";
@@ -31,7 +30,6 @@ import {
   UpdateSearchObjectResponse,
 } from "./models/updateSearchObject";
 import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
-import { decode } from "@diogovasconcelos/lib/iots";
 import { validateKeyword } from "@src/domain/controllers/validateKeyword";
 
 export const handler = async (
@@ -119,22 +117,17 @@ const toUpdateSearchObjectRequest = (
     return searchObjectRequestEither;
   }
 
-  const bodyEither = parseRequestBodyJSON(logger, event.body);
+  const bodyEither = decodeBodyJSON({
+    logger,
+    body: event.body,
+    decoder: searchObjectUserDataIoCodec,
+  });
   if (isLeft(bodyEither)) {
     return bodyEither;
-  }
-  const body = bodyEither.right;
-
-  const dataEither = decode(searchObjectUserDataIoCodec, body);
-  if (isLeft(dataEither)) {
-    logger.error("Failed to decode data's property of body.", {
-      error: dataEither.left,
-    });
-    return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
   return right({
     ...searchObjectRequestEither.right,
-    data: dataEither.right,
+    data: bodyEither.right,
   });
 };
