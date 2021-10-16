@@ -59,6 +59,7 @@ import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
 import { buildSearchResult } from "@test/lib/builders";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -183,6 +184,13 @@ export const getUser = async (id: string) => {
 
 export const getPaymentData = async (id: string) => {
   return await makeGetPaymentData(dynamoDbClient, config.usersTableName)(
+    logger,
+    id
+  );
+};
+
+export const getResultTags = async (id: string) => {
+  return await makeGetResultTagsForUser(dynamoDbClient, config.usersTableName)(
     logger,
     id
   );

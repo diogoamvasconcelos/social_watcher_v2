@@ -11,6 +11,7 @@ import {
   deleteUser,
   getIdToken,
   getPaymentData,
+  getResultTags,
   getUser,
 } from "./steps";
 
@@ -45,6 +46,13 @@ describe("signup e2e test", () => {
         },
       })
     );
+
+    const resultTags = fromEither(await getResultTags(testUser.id));
+    expect(resultTags).toEqual([
+      expect.objectContaining({
+        tagType: "FAVORITE",
+      }),
+    ]);
   });
 
   it("token can be used to access API", async () => {
