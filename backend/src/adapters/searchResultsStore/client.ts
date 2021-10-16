@@ -23,12 +23,22 @@ export const searchResultDocumentCodec = t.intersection([
 ]);
 export type SearchResultDocument = t.TypeOf<typeof searchResultDocumentCodec>;
 
+export const searchResultToPrimaryKey = (
+  id: SearchResult["id"],
+  index: number = 0 // to be used as a version/history index in case of future event sourcing approach or post-process that aggregates data
+) => ({
+  pk: id,
+  sk: index.toString(),
+});
 export const toDocumentKeys = (
-  { socialMedia, id, keyword, happenedAt }: SearchResult,
+  {
+    id,
+    keyword,
+    happenedAt,
+  }: Pick<SearchResult, "id" | "keyword" | "happenedAt">,
   index: number = 0
 ) => ({
-  pk: `${socialMedia}|${id}`,
-  sk: index.toString(),
+  ...searchResultToPrimaryKey(id, index),
   gsi1pk: keyword,
   gsi1sk: happenedAt,
 });

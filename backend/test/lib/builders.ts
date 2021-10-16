@@ -4,6 +4,7 @@ import {
   InstagramSearchResult,
   RedditSearchResult,
   SearchResult,
+  toUniqueId,
   TwitterSearchResult,
   YoutubeSearchResult,
 } from "@src/domain/models/searchResult";
@@ -13,6 +14,7 @@ import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "@src/lib/uuid";
 import { SQSEvent } from "aws-lambda";
+import { SocialMedia } from "@src/domain/models/socialMedia";
 
 export const buildSQSEvent = (items: JsonEncodable[]): SQSEvent => {
   return {
@@ -66,17 +68,19 @@ export const buildTwitterSearchResult = (
   partial?: PartialDeep<TwitterSearchResult>
 ): TwitterSearchResult => {
   const now = getNow();
-  const id = uuid();
+  const localId = uuid();
+  const socialMedia: SocialMedia = "twitter";
 
   return deepmergeSafe(
     {
-      id,
+      id: toUniqueId({ socialMedia, localId }),
+      localId,
       keyword: newLowerCase(uuid()),
-      socialMedia: "twitter",
+      socialMedia,
       happenedAt: now,
       link: "some-link",
       data: {
-        id,
+        id: localId,
         text: "some-text",
         created_at: now,
         conversation_id: "conversation-id",
@@ -92,17 +96,19 @@ export const buildRedditSearchResult = (
   partial?: PartialDeep<RedditSearchResult>
 ): RedditSearchResult => {
   const now = getNow();
-  const id = uuid();
+  const localId = uuid();
+  const socialMedia: SocialMedia = "reddit";
 
   return deepmergeSafe(
     {
-      id,
+      id: toUniqueId({ socialMedia, localId }),
+      localId,
       keyword: newLowerCase(uuid()),
-      socialMedia: "reddit",
+      socialMedia,
       happenedAt: now,
       link: "some-link",
       data: {
-        id,
+        id: localId,
         author: "author",
         selftext: "some-text",
         title: "some-title",
@@ -124,17 +130,19 @@ export const buildHackernewsSearchResult = (
   partial?: PartialDeep<HackernewsSearchResult>
 ): HackernewsSearchResult => {
   const now = getNow();
-  const id = uuid();
+  const localId = uuid();
+  const socialMedia: SocialMedia = "hackernews";
 
   return deepmergeSafe(
     {
-      id,
+      id: toUniqueId({ socialMedia, localId }),
+      localId,
       keyword: newLowerCase(uuid()),
-      socialMedia: "hackernews",
+      socialMedia,
       happenedAt: now,
       link: "some-link",
       data: {
-        id,
+        id: localId,
         text: "some-text",
         author: "author",
         objectId: "objectId",
@@ -152,17 +160,19 @@ export const buildInstagramSearchResult = (
   partial?: PartialDeep<InstagramSearchResult>
 ): InstagramSearchResult => {
   const now = getNow();
-  const id = uuid();
+  const localId = uuid();
+  const socialMedia: SocialMedia = "instagram";
 
   return deepmergeSafe(
     {
-      id,
+      id: toUniqueId({ socialMedia, localId }),
+      localId,
       keyword: newLowerCase(uuid()),
-      socialMedia: "instagram",
+      socialMedia,
       happenedAt: now,
       link: "some-link",
       data: {
-        id,
+        id: localId,
         caption: "some-caption",
         owner: "owner",
         shortcode: "shortcode",
@@ -181,17 +191,19 @@ export const buildYoutubeSearchResult = (
   partial?: PartialDeep<YoutubeSearchResult>
 ): YoutubeSearchResult => {
   const now = getNow();
-  const id = uuid();
+  const localId = uuid();
+  const socialMedia: SocialMedia = "youtube";
 
   return deepmergeSafe(
     {
-      id,
+      id: toUniqueId({ socialMedia, localId }),
+      localId,
       keyword: newLowerCase(uuid()),
-      socialMedia: "youtube",
+      socialMedia,
       happenedAt: now,
       link: "some-link",
       data: {
-        id,
+        id: localId,
         title: "title",
         description: "decription",
         viewCount: newNumberFromStringy("0"),

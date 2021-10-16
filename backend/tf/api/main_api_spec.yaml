@@ -257,7 +257,7 @@ paths:
         200:
           $ref: "#/components/responses/cors"
 
-  /searchResult/{resultId}/tag/add:
+  /searchResult/{id}/tag/add:
     parameters:
       - $ref: "#/components/parameters/SearchResultId"
 

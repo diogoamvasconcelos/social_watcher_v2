@@ -5,8 +5,11 @@ import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddi
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
 import { resultTagIdCodec } from "./userItem";
 
+export const searchResultIdCodec = t.string;
+
 const searchResultMetadataCodec = t.type({
-  id: t.string,
+  id: searchResultIdCodec, // unique Id, built from social media and local Id
+  localId: t.string, // id within the social media (could collide across social medias)
   keyword: keywordCodec,
   happenedAt: dateISOString,
   link: t.string,
@@ -142,3 +145,10 @@ export const searchResultCodec = t.union([
   youtubeSearchResultCodec,
 ]);
 export type SearchResult = t.TypeOf<typeof searchResultCodec>;
+
+export const toUniqueId = ({
+  socialMedia,
+  localId,
+}: Pick<SearchResult, "socialMedia" | "localId">): SearchResult["id"] => {
+  return `${socialMedia}|${localId}`;
+};

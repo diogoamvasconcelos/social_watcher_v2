@@ -23,7 +23,7 @@ export const makeCreateSearchObject = (
     }
 
     if (result.right === "CONDITION_CHECK_FAILED") {
-      logger.error(`Trying to create searchObject, but it already exists`, {
+      logger.error("Trying to create searchObject, but it already exists", {
         searchObject,
       });
       return left("ERROR");

@@ -11,7 +11,10 @@ import {
 } from "@src/lib/reddit/client";
 import { Client as SSMClient, getParameter } from "@src/lib/ssm";
 import { Keyword } from "@src/domain/models/keyword";
-import { RedditSearchResult } from "@src/domain/models/searchResult";
+import {
+  RedditSearchResult,
+  toUniqueId,
+} from "@src/domain/models/searchResult";
 import { fromUnix } from "@src/lib/date";
 
 export const getClient = getRedditClient;
@@ -39,11 +42,16 @@ export const getClientCredentials = async (
 export const outToDomain = (
   keyword: Keyword,
   out: SearchListingItem
-): RedditSearchResult => ({
-  socialMedia: "reddit",
-  id: out.id,
-  keyword,
-  happenedAt: fromUnix(out.created_utc),
-  data: out,
-  link: `https://reddit.com${out.permalink}`,
-});
+): RedditSearchResult => {
+  const socialMedia = "reddit";
+  const localId = out.id;
+  return {
+    id: toUniqueId({ socialMedia, localId }),
+    socialMedia,
+    localId,
+    keyword,
+    happenedAt: fromUnix(out.created_utc),
+    data: out,
+    link: `https://reddit.com${out.permalink}`,
+  };
+};

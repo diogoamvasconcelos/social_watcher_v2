@@ -19,9 +19,15 @@ export const makeInternalErrorResponse = (
 
 export const makeNotFoundResponse = (
   errorMessage: string
-): ApiErrorResponse<"NOT_FOUND"> => ({
+): ApiErrorResponse<"NOT_FOUND"> =>
+  makeCustomNotFoundResponse("NOT_FOUND", errorMessage);
+
+export const makeCustomNotFoundResponse = <T extends string>(
+  errorCode: T,
+  errorMessage: string
+): ApiErrorResponse<T> => ({
   statusCode: 404,
-  errorCode: "NOT_FOUND",
+  errorCode,
   errorMessage,
 });
 

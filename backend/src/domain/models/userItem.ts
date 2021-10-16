@@ -7,7 +7,6 @@ import {
   slackNotificationConfigCodec,
 } from "./notificationJob";
 import { emailReportConfigCodec } from "./reportJob";
-import { searchResultTagCodec } from "./searchResult";
 import { userCodec, userIdCodec } from "./user";
 
 // ++++++++

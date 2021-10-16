@@ -26,9 +26,7 @@ export const makePutUser = (
     }
 
     if (result.right == "CONDITION_CHECK_FAILED") {
-      logger.error(
-        `Failed to add user to db (email=${user.email}): User already exists`
-      );
+      logger.error("Failed to add user to db: User already exists", { user });
       return left("ERROR");
     }
 

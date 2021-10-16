@@ -182,11 +182,35 @@ export const deleteItem = async (
   logger: Logger
 ): Promise<Either<"ERROR", "OK">> => {
   try {
-    const result = await client.delete(params).promise();
-    logger.debug("Delete item result", { result });
+    const deleteResult = await client.delete(params).promise();
+    logger.debug("Delete item result", { result: deleteResult });
     return right("OK");
   } catch (error) {
     logger.error("Call to DynamoDB delete exited with error", { error });
+    return left("ERROR");
+  }
+};
+
+export const updateItem = async <T>(
+  client: Client,
+  params: DocumentClient.UpdateItemInput,
+  transformFn: (item: unknown) => Either<string[], T>,
+  logger: Logger
+): Promise<Either<"ERROR", T | "CONDITION_CHECK_FAILED">> => {
+  try {
+    const updateResult = await client.update(params).promise();
+    return applyTransformToItem(transformFn, updateResult.Attributes, logger);
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message == "The conditional request failed"
+    ) {
+      return right("CONDITION_CHECK_FAILED");
+    }
+
+    logger.error("Call to DynamoDB update exited with following error", {
+      error,
+    });
     return left("ERROR");
   }
 };

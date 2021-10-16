@@ -10,7 +10,7 @@ import { CreateResultTagFn } from "../ports/userStore/createResultTag";
 import { uuid } from "@src/lib/uuid";
 import { getNow } from "@src/lib/date";
 
-type dependencies = {
+type Dependencies = {
   logger: Logger;
   putUserFn: PutUserFn;
   putPaymentDataFn: PutPaymentDataFn;
@@ -26,7 +26,7 @@ export const addUser = async (
     putPaymentDataFn,
     initiateUserSubscriptionFn,
     createResultTagFn,
-  }: dependencies,
+  }: Dependencies,
   data: { email: User["email"]; id: UserId }
 ): DefaultOkReturn => {
   const userSubscriptionEither = await initiateUserSubscriptionFn(
