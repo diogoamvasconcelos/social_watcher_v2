@@ -1,6 +1,7 @@
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
+import { uuidCodec } from "@src/lib/uuid";
 import * as t from "io-ts";
-import { NumberFromString, UUID } from "io-ts-types";
+import { NumberFromString } from "io-ts-types";
 import { keywordCodec } from "./keyword";
 import {
   discordNotificationConfigCodec,
@@ -220,7 +221,9 @@ export const searchObjectIoToDomain = (
 // + RESULT TAG +
 // ++++++++++++++
 
-export const resultTagIdCodec = UUID;
+// Important: due to io-ts bug, `resultTagIdCodec` can't be used for searchResult["tags"] type
+// when changing this type, please duplicate the changes there too
+export const resultTagIdCodec = uuidCodec;
 
 export const resultTagCodec = t.intersection([
   userItemBaseCodec,

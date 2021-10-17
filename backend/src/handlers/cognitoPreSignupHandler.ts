@@ -6,7 +6,7 @@ import { getClient as getUserStoreClient } from "@src/adapters/userStore/client"
 import { getConfig } from "@src/lib/config";
 import { isLeft } from "fp-ts/lib/Either";
 import { makePutUser } from "@src/adapters/userStore/putUser";
-import { UUIDCodec } from "@src/lib/uuid";
+import { uuidCodec } from "@src/lib/uuid";
 import { makePutPaymentData } from "@src/adapters/userStore/putPayment";
 import { makeInitiateUserSubscription } from "@src/adapters/paymentsManager/initiateUserSubscription";
 import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
@@ -44,7 +44,7 @@ const handler = async (event: PreSignUpTriggerEvent) => {
     config.usersTableName
   );
 
-  const usernameDecoded = decode(UUIDCodec, event.userName);
+  const usernameDecoded = decode(uuidCodec, event.userName);
   if (isLeft(usernameDecoded)) {
     throw new Error(`Username (${event.userName}) not a UUID`);
   }

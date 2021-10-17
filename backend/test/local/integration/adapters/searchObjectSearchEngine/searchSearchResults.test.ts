@@ -24,7 +24,7 @@ import { getLocalTestConfig } from "@test/lib/config";
 import { getMinutesAgo } from "@src/lib/date";
 import { PartialDeep } from "type-fest";
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const config = getLocalTestConfig();
 const logger = getLogger();

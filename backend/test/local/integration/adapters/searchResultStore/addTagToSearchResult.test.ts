@@ -1,8 +1,4 @@
-// TODO
-// - add tag to empty
-// - append tag to existng tags
-// - append duplucated tag
-
+import { isLeft } from "fp-ts/lib/Either";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
@@ -12,8 +8,6 @@ import { buildSearchResult } from "@test/lib/builders";
 import { makeAddTagToSearchResult } from "@src/adapters/searchResultsStore/addTagToSearchResult";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 
-// jest.setTimeout(60000);
-
 describe("adapters/putSearchResults", () => {
   const logger = getLogger();
   const tableName: string = uuid();
@@ -22,15 +16,17 @@ describe("adapters/putSearchResults", () => {
   const putSearchResultsFn = makePutSearchResults(client, tableName);
   const addTagToSearchResultsFn = makeAddTagToSearchResult(client, tableName);
 
+  const newTagId = uuid();
+  const existingTagId = uuid();
+
   beforeEach(async () => {
     await preparesGenericTable(tableName);
   });
 
   it("successfully appends a tag to empty list", async () => {
     const searchResult = buildSearchResult();
-    const newTagId = uuid();
 
-    fromEither(await putSearchResultsFn(logger, []));
+    fromEither(await putSearchResultsFn(logger, [searchResult]));
 
     const initialState = fromEither(
       await getSearchResultFn(logger, searchResult.id)
@@ -41,11 +37,53 @@ describe("adapters/putSearchResults", () => {
 
     expect(initialState.tags).toBeUndefined;
 
-    // Add tag
     const updatedResult = fromEither(
       await addTagToSearchResultsFn(logger, initialState, newTagId)
     );
 
     expect(updatedResult.tags).toEqual([newTagId]);
+  });
+
+  it("successfully appends a tag to existing list", async () => {
+    const searchResult = buildSearchResult({ tags: [existingTagId] });
+
+    fromEither(await putSearchResultsFn(logger, [searchResult]));
+
+    const initialState = fromEither(
+      await getSearchResultFn(logger, searchResult.id)
+    );
+    if (initialState === "NOT_FOUND") {
+      fail("didn't find searchResult initial state");
+    }
+
+    expect(initialState.tags).toBeUndefined;
+
+    const updatedResult = fromEither(
+      await addTagToSearchResultsFn(logger, initialState, newTagId)
+    );
+
+    expect(updatedResult.tags).toEqual([existingTagId, newTagId]);
+  });
+
+  it("fails when trying to appends duplicaed", async () => {
+    const searchResult = buildSearchResult({ tags: [existingTagId] });
+
+    fromEither(await putSearchResultsFn(logger, [searchResult]));
+
+    const initialState = fromEither(
+      await getSearchResultFn(logger, searchResult.id)
+    );
+    if (initialState === "NOT_FOUND") {
+      fail("didn't find searchResult initial state");
+    }
+
+    expect(initialState.tags).toBeUndefined;
+
+    const updatedResultEither = await addTagToSearchResultsFn(
+      logger,
+      initialState,
+      existingTagId
+    );
+    expect(isLeft(updatedResultEither)).toBeTruthy();
   });
 });
