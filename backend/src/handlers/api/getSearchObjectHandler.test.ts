@@ -3,8 +3,11 @@ import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { handler } from "./getSearchObjectHandler";
 import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
-import { fromEither, newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { defaultSearchObjectDomain } from "@test/lib/default";
+import { fromEither } from "@diogovasconcelos/lib/iots";
+import { buildSearchObjectDomain, buildUser } from "@test/lib/builders";
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
+const defaultUser = buildUser();
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -21,16 +24,6 @@ const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<
 >;
 const getSearchObjectMock = jest.fn();
 makeGetSearchObjectMock.mockReturnValue(getSearchObjectMock);
-
-const defaultUser: User = {
-  id: "some-id",
-  email: "some-email",
-  subscription: {
-    status: "ACTIVE",
-    type: "NORMAL",
-    nofSearchObjects: newPositiveInteger(1),
-  },
-};
 
 const buildEvent = (user: User, index: number) => {
   return buildApiRequestEvent({

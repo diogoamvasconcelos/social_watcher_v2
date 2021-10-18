@@ -10,11 +10,22 @@ import {
 } from "@src/domain/models/searchResult";
 import { getNow, toUnixTimstamp } from "@src/lib/date";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import { newLowerCase, newNumberFromStringy } from "@diogovasconcelos/lib/iots";
+import {
+  newEmailFromString,
+  newLowerCase,
+  newNumberFromStringy,
+  newPositiveInteger,
+} from "@diogovasconcelos/lib/iots";
 import { JsonEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import { uuid } from "@src/lib/uuid";
 import { SQSEvent } from "aws-lambda";
 import { SocialMedia } from "@src/domain/models/socialMedia";
+import {
+  ResultTag,
+  SearchObjectDomain,
+  SearchObjectUserDataDomain,
+} from "@src/domain/models/userItem";
+import { User } from "@src/domain/models/user";
 
 export const buildSQSEvent = (items: JsonEncodable[]): SQSEvent => {
   return {
@@ -215,6 +226,104 @@ export const buildYoutubeSearchResult = (
         durationInSeconds: 1,
       },
     },
+    partial ?? {}
+  );
+};
+
+export const buildSearchObjectDataDomain = (): SearchObjectUserDataDomain => {
+  return {
+    keyword: newLowerCase("some_keyword"),
+    searchData: {
+      twitter: {
+        enabledStatus: "ENABLED",
+      },
+      reddit: {
+        enabledStatus: "DISABLED",
+        over18: false,
+      },
+      hackernews: {
+        enabledStatus: "DISABLED",
+        fuzzyMatch: false,
+      },
+      instagram: {
+        enabledStatus: "DISABLED",
+      },
+      youtube: {
+        enabledStatus: "DISABLED",
+      },
+    },
+    notificationData: {
+      discord: {
+        enabledStatus: "ENABLED",
+        channel: "discord-channel",
+        bot: {
+          credentials: {
+            token: "discord-bot-token",
+          },
+        },
+      },
+      slack: {
+        enabledStatus: "DISABLED",
+        channel: "",
+        bot: {
+          credentials: {
+            token: "",
+          },
+        },
+      },
+    },
+    reportData: {
+      email: {
+        status: "DAILY",
+        addresses: [newEmailFromString("default@email.com")],
+      },
+    },
+  };
+};
+
+export const buildSearchObjectDomain = (
+  partial?: PartialDeep<SearchObjectDomain>
+): SearchObjectDomain => {
+  return deepmergeSafe(
+    {
+      ...buildSearchObjectDataDomain(),
+      type: "SEARCH_OBJECT",
+      id: uuid(),
+      lockedStatus: "LOCKED",
+      index: newPositiveInteger(0),
+      createdAt: getNow(),
+    },
+    //@ts-expect-error
+    partial ?? {}
+  );
+};
+
+export const buildResultTag = (partial?: PartialDeep<ResultTag>): ResultTag => {
+  return deepmergeSafe(
+    {
+      type: "RESULT_TAG",
+      id: uuid(),
+      tagId: uuid(),
+      tagType: "FAVORITE",
+      createdAt: getNow(),
+    },
+    //@ts-expect-error
+    partial ?? {}
+  );
+};
+
+export const buildUser = (partial?: PartialDeep<User>): User => {
+  return deepmergeSafe(
+    {
+      id: "some-id",
+      email: "some-email",
+      subscription: {
+        status: "ACTIVE",
+        type: "NORMAL",
+        nofSearchObjects: newPositiveInteger(1),
+      },
+    },
+    //@ts-expect-error
     partial ?? {}
   );
 };

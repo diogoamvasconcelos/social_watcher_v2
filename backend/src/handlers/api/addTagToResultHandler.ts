@@ -28,7 +28,7 @@ import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client
 import { makeGetResultTag } from "@src/adapters/userStore/getResultTag";
 import { makeAddTagToSearchResult } from "@src/adapters/searchResultsStore/addTagToSearchResult";
 
-const handler = async (
+export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<ApiResponse<AddTagToResultErrorCode, AddTagToResultResponse>> => {
   const config = getConfig();

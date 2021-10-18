@@ -7,8 +7,11 @@ import { User } from "@src/domain/models/user";
 import { apiGetUser, buildApiRequestEvent } from "./shared";
 import { isLeft, right } from "fp-ts/lib/Either";
 import { handler } from "./deleteSearchObjectHandler";
-import { defaultSearchObjectDomain } from "@test/lib/default";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { buildSearchObjectDomain, buildUser } from "@test/lib/builders";
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
+const defaultUser = buildUser();
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"),
@@ -31,16 +34,6 @@ const deleteSearchObjectAndPruneMock =
   deleteSearchObjectAndPrune as jest.MockedFunction<
     typeof deleteSearchObjectAndPrune
   >;
-
-const defaultUser: User = {
-  id: "some-id",
-  email: "some-email",
-  subscription: {
-    status: "ACTIVE",
-    type: "NORMAL",
-    nofSearchObjects: newPositiveInteger(1),
-  },
-};
 
 const buildEvent = (user: User) => {
   return buildApiRequestEvent({

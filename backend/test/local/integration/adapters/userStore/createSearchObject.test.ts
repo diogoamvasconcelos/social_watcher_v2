@@ -2,14 +2,15 @@ import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
-import { defaultSearchObjectDomain } from "@test/lib/default";
 import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObject";
-import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
 import { directlyPutUserItemInTable } from "./shared";
+import { buildSearchObjectDomain } from "@test/lib/builders";
 
 jest.setTimeout(45000);
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
 
 describe("createSearchObject", () => {
   const logger = getLogger();
@@ -23,9 +24,7 @@ describe("createSearchObject", () => {
   });
 
   it("can searchObject, if nonexistent", async () => {
-    const newSearchObject = deepmergeSafe(defaultSearchObjectDomain, {
-      id: uuid(),
-    });
+    const newSearchObject = buildSearchObjectDomain();
 
     const createResult = fromEither(
       await createSearchObjectFn(logger, newSearchObject)
@@ -46,7 +45,7 @@ describe("createSearchObject", () => {
       userItem: initialSearchObject,
     });
 
-    const newSearchObject = deepmergeSafe(defaultSearchObjectDomain, {
+    const newSearchObject = buildSearchObjectDomain({
       id: initialSearchObject.id,
       index: initialSearchObject.index,
       keyword: newLowerCase("another-keyword"),

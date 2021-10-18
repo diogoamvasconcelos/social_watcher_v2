@@ -8,10 +8,13 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { defaultSearchObjectDataDomain } from "@test/lib/default";
 import { getNow } from "@src/lib/date";
+import { buildSearchObjectDataDomain } from "@test/lib/builders";
 
 const logger = getLogger();
+
+const defaultSearchObjectDataDomain = buildSearchObjectDataDomain();
+
 const getSearchObjectsForUserFnMocked =
   jest.fn() as jest.MockedFunction<GetSearchObjectsForUserFn>;
 

@@ -1,4 +1,3 @@
-import { defaultSearchObjectDomain } from "@test/lib/default";
 import { makeGetSearchObject } from "@src/adapters/userStore/getSearchObject";
 import { makeGetSearchObjectsForUser } from "@src/adapters/userStore/getSearchObjectsForUser";
 import { makeMoveSearchObject } from "@src/adapters/userStore/moveSearchObject";
@@ -7,15 +6,18 @@ import { getLogger } from "@src/lib/logger";
 import { SearchObjectDomain } from "@src/domain/models/userItem";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
-import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import {
   fromEither,
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
 import _ from "lodash";
+import { buildSearchObjectDomain } from "@test/lib/builders";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 jest.setTimeout(45000);
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
 
 describe("moveSearchObject", () => {
   const logger = getLogger();

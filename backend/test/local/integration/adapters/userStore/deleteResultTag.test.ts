@@ -1,12 +1,12 @@
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
-import { defaultResultTag } from "@test/lib/default";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
 import { directlyPutUserItemInTable } from "./shared";
 import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
 import { makeDeleteResultTag } from "@src/adapters/userStore/deleteResultTag";
+import { buildResultTag } from "@test/lib/builders";
 
 jest.setTimeout(45000);
 
@@ -22,7 +22,7 @@ describe("deleteResultTag", () => {
   });
 
   it("deletes ResultTag, if existent", async () => {
-    const initialResultTag = defaultResultTag;
+    const initialResultTag = buildResultTag();
     await directlyPutUserItemInTable(logger, {
       tableName,
       userItem: initialResultTag,
@@ -41,7 +41,7 @@ describe("deleteResultTag", () => {
   });
 
   it("can't delete nonexistent resultTag", async () => {
-    const deleteResult = await deleteResultTagFn(logger, defaultResultTag);
+    const deleteResult = await deleteResultTagFn(logger, buildResultTag());
 
     expect(isLeft(deleteResult)).toBeTruthy();
   });

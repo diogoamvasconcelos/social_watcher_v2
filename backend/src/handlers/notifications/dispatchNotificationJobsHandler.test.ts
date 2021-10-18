@@ -1,7 +1,7 @@
-import { defaultSearchObjectDomain } from "@test/lib/default";
 import {
   buildHackernewsSearchResult,
   buildRedditSearchResult,
+  buildSearchObjectDomain,
   buildSQSEvent,
   buildTwitterSearchResult,
 } from "@test/lib/builders";
@@ -13,6 +13,8 @@ import { fromEither } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { SearchObjectDomain } from "@src/domain/models/userItem";
 import { SearchResult } from "@src/domain/models/searchResult";
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
 
 // mock: getSearchObjectsForKeyword
 jest.mock("@src/adapters/userStore/getSearchObjectsForKeyword", () => ({

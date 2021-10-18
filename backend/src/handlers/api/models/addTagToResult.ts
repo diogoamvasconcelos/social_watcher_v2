@@ -9,10 +9,13 @@ import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 export const addTagToResultRequestDataCodec = t.type({
   tagId: resultTagIdCodec,
 });
+export type AddTagToResultRequestData = t.TypeOf<
+  typeof addTagToResultRequestDataCodec
+>;
 
 export type AddTagToResultRequest = ApiRequestMetadata & {
   searchResult: Pick<SearchResult, "id">;
-  data: t.TypeOf<typeof addTagToResultRequestDataCodec>;
+  data: AddTagToResultRequestData;
 };
 export type AddTagToResultErrorCode =
   | ApiBaseErrorCode

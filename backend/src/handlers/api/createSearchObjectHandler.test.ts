@@ -15,9 +15,21 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import {
-  defaultSearchObjectDataDomain,
-  defaultSearchObjectDomain,
-} from "@test/lib/default";
+  buildSearchObjectDataDomain,
+  buildSearchObjectDomain,
+  buildUser,
+} from "@test/lib/builders";
+
+const defaultSearchObjectDataDomain = buildSearchObjectDataDomain();
+const defaultSearchObjectDomain = buildSearchObjectDomain(
+  defaultSearchObjectDataDomain
+);
+const defaultUser = buildUser({
+  id: defaultSearchObjectDomain.id,
+  subscription: {
+    nofSearchObjects: newPositiveInteger(2),
+  },
+});
 
 // mock: apiGetUser
 jest.mock("./shared", () => ({
@@ -47,16 +59,6 @@ const makeGetSearchObjectsForUserMock =
   >;
 const getSearchObjectsForUserMock = jest.fn();
 makeGetSearchObjectsForUserMock.mockReturnValue(getSearchObjectsForUserMock);
-
-const defaultUser: User = {
-  id: "some-id",
-  email: "some-email",
-  subscription: {
-    status: "ACTIVE",
-    type: "NORMAL",
-    nofSearchObjects: newPositiveInteger(2),
-  },
-};
 
 const defaultRequestData: SearchObjectUserDataDomain =
   defaultSearchObjectDataDomain;

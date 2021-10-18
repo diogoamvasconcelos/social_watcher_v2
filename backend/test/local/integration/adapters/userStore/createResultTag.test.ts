@@ -1,13 +1,12 @@
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
-import { defaultResultTag } from "@test/lib/default";
-import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
 import { directlyPutUserItemInTable } from "./shared";
 import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
 import { makeCreateResultTag } from "@src/adapters/userStore/createResultTag";
+import { buildResultTag } from "@test/lib/builders";
 
 jest.setTimeout(45000);
 
@@ -23,9 +22,7 @@ describe("createResultTag", () => {
   });
 
   it("creates ResultTag, if nonexistent", async () => {
-    const newResultTag = deepmergeSafe(defaultResultTag, {
-      id: uuid(),
-    });
+    const newResultTag = buildResultTag();
 
     const createResult = fromEither(
       await createResultTagFn(logger, newResultTag)
@@ -40,24 +37,24 @@ describe("createResultTag", () => {
   });
 
   it("can't create resultTag if already exists", async () => {
-    const initialResultTag = defaultResultTag;
+    const initialResultTag = buildResultTag();
     await directlyPutUserItemInTable(logger, {
       tableName,
       userItem: initialResultTag,
     });
 
-    const newSearchObject = deepmergeSafe(defaultResultTag, {
+    const newResultTag = buildResultTag({
       id: initialResultTag.id,
       tagId: initialResultTag.tagId,
     });
 
-    const createResultEither = await createResultTagFn(logger, newSearchObject);
+    const createResultTagEither = await createResultTagFn(logger, newResultTag);
 
     const getResult = fromEither(
       await getResultTagsForUserFn(logger, initialResultTag.id)
     );
 
-    expect(isLeft(createResultEither)).toBeTruthy();
+    expect(isLeft(createResultTagEither)).toBeTruthy();
     expect(getResult).toEqual([initialResultTag]);
   });
 });
