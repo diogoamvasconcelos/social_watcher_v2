@@ -261,7 +261,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/SearchResultId"
 
-     post:
+    post:
       description: Adds a user result tag to a search result
       requestBody:
         required: true
@@ -283,7 +283,7 @@ paths:
         httpMethod: "POST"
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
-        uri: ${add_tag_to_result_invoke_arn}}
+        uri: ${add_tag_to_result_invoke_arn}
 
     options:
       x-amazon-apigateway-integration:
@@ -611,6 +611,13 @@ components:
         required: true
         schema:
           $ref: "#/components/schemas/SearchObjectIndex"
+
+    searchResultId:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/searchResultId"
 
   # ++++++++++++++++++++
   # + SECURITY-SCHEMES +

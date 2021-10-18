@@ -163,7 +163,7 @@ export const toSearchObjectRequest = (
 
   const indexEither = decode(
     searchObjectIndexCodec,
-    event.pathParameters?.index
+    decodeURI(event.pathParameters?.index ?? "")
   );
   if (isLeft(indexEither)) {
     logger.error("Failed to decode path paramters.", {

@@ -50,7 +50,7 @@ const buildEvent = (
 ) => {
   return buildApiRequestEvent({
     user,
-    pathParameters: { resultId },
+    pathParameters: { id: resultId },
     body: requestData,
   });
 };

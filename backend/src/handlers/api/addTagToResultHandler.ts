@@ -146,7 +146,10 @@ const toAddTagToResultRequest = (
     return metadataEither;
   }
 
-  const idEither = decode(searchResultIdCodec, event.pathParameters?.resultId);
+  const idEither = decode(
+    searchResultIdCodec,
+    decodeURI(event.pathParameters?.id ?? "")
+  );
   if (isLeft(idEither)) {
     logger.error("Failed to decode path paramters.", {
       error: idEither.left,
