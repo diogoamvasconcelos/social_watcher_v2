@@ -110,7 +110,7 @@ export const handler = async (
   if (getResultTagEither.right === "NOT_FOUND") {
     return left(
       makeCustomNotFoundResponse(
-        "SEARCH_RESULT_NOT_FOUND",
+        "RESULT_TAG_NOT_FOUND",
         "Failed attempting to get search result"
       )
     );
