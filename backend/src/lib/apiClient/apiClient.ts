@@ -20,6 +20,11 @@ import { decode } from "@diogovasconcelos/lib/iots";
 import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
 import { createSearchObjectResponseCodec } from "../../handlers/api/models/createSearchObject";
 import { getResultTagsResponseCodec } from "@src/handlers/api/models/getResultTags";
+import { SearchResult } from "@src/domain/models/searchResult";
+import {
+  addTagToResultResponseCodec,
+  AddTagToResultUserData,
+} from "@src/handlers/api/models/addTagToResult";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -203,4 +208,20 @@ export const createPaymentsPortal = async (
       data: JSON.stringify(data.userData),
     },
     createPaymentsPortalResponseCodec
+  )(deps);
+
+export const addTagToResult = async (
+  deps: ApiClientDeps,
+  data: {
+    searchResultId: SearchResult["id"];
+    userData: AddTagToResultUserData;
+  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `/searchResult/${data.searchResultId}/tag/add`,
+      data: JSON.stringify(data.userData),
+    },
+    addTagToResultResponseCodec
   )(deps);

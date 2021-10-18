@@ -3,10 +3,15 @@ import {
   getResultTags,
 } from "@src/lib/apiClient/apiClient";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
-import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import {
+  createTestUser,
+  deleteKeyword,
+  deleteUser,
+  getIdToken,
+  TestUser,
+} from "./steps";
 import { GetResultTagsResponse } from "@src/handlers/api/models/getResultTags";
 
 jest.setTimeout(10000);
@@ -15,7 +20,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("get result tags e2e test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
 

@@ -60,6 +60,7 @@ import Stripe from "stripe";
 import { buildSearchResult } from "@test/lib/builders";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
+import { Awaited } from "@src/lib/types";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -117,6 +118,7 @@ export const createTestUser = async (
 
   return { id: userSub, email, password };
 };
+export type TestUser = Awaited<ReturnType<typeof createTestUser>>;
 
 export const deleteUser = async ({
   id,

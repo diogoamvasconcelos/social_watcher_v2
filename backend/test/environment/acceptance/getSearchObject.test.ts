@@ -8,10 +8,15 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
-import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import {
+  createTestUser,
+  deleteKeyword,
+  deleteUser,
+  getIdToken,
+  TestUser,
+} from "./steps";
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 import { isLeft } from "fp-ts/lib/Either";
 
@@ -21,7 +26,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("get searchObject e2e test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
 

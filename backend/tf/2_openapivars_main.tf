@@ -16,6 +16,6 @@ data "template_file" "main_api_openapi_spec_swagger" {
     stripe_webhook_invoke_arn            = aws_lambda_function.stripe_webhook.invoke_arn
     create_payments_portal_invoke_arn    = aws_lambda_function.create_payments_portal.invoke_arn
     get_result_tags_invoke_arn           = aws_lambda_function.get_result_tags.invoke_arn
-    add_tag_to_result_invoke_arn         = aws_lambda_functionadd_tag_to_result.invoke_arn
+    add_tag_to_result_invoke_arn         = aws_lambda_function.add_tag_to_result.invoke_arn
   }
 }

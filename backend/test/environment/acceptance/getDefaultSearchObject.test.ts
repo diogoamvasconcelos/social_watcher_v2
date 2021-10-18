@@ -7,10 +7,15 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
-import { createTestUser, deleteKeyword, deleteUser, getIdToken } from "./steps";
+import {
+  createTestUser,
+  deleteKeyword,
+  deleteUser,
+  getIdToken,
+  TestUser,
+} from "./steps";
 
 jest.setTimeout(10000);
 
@@ -18,7 +23,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("get default searchObject endpoint test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
 

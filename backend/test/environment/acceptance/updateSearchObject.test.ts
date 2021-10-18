@@ -10,7 +10,6 @@ import {
   newPositiveInteger,
   PositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
 import {
@@ -19,6 +18,7 @@ import {
   deleteKeyword,
   deleteUser,
   getIdToken,
+  TestUser,
   updateUserSubscription,
 } from "./steps";
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
@@ -30,7 +30,7 @@ const apiClient = getApiClient(config.apiEndpoint);
 jest.setTimeout(20000);
 
 describe("update searchObject e2e test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   let searchObjectIndex: PositiveInteger;
   const keyword = newLowerCase(uuid());

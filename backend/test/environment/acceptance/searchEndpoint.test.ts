@@ -3,7 +3,6 @@ import {
   newLowerCase,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import { getEnvTestConfig } from "@test/lib/config";
 import {
@@ -13,6 +12,7 @@ import {
   deleteKeyword,
   deleteUser,
   getIdToken,
+  TestUser,
   updateUserSubscription,
 } from "./steps";
 import {
@@ -29,7 +29,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("search endpoint e2e (nearly)", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
 

@@ -1,5 +1,4 @@
 import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import {
   checkKeyword,
@@ -8,13 +7,14 @@ import {
   deleteKeyword,
   deleteUser,
   getIdToken,
+  TestUser,
   updateUserSubscription,
 } from "./steps";
 
 jest.setTimeout(45000);
 
 describe("changes to user subscription", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
 
   const firstKeyword = uuid();

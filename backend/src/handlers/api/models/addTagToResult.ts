@@ -6,16 +6,16 @@ import {
 import { resultTagIdCodec } from "@src/domain/models/userItem";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
-export const addTagToResultRequestDataCodec = t.type({
+export const addTagToResultUserDataCodec = t.type({
   tagId: resultTagIdCodec,
 });
-export type AddTagToResultRequestData = t.TypeOf<
-  typeof addTagToResultRequestDataCodec
+export type AddTagToResultUserData = t.TypeOf<
+  typeof addTagToResultUserDataCodec
 >;
 
 export type AddTagToResultRequest = ApiRequestMetadata & {
   searchResult: Pick<SearchResult, "id">;
-  data: AddTagToResultRequestData;
+  data: AddTagToResultUserData;
 };
 export type AddTagToResultErrorCode =
   | ApiBaseErrorCode

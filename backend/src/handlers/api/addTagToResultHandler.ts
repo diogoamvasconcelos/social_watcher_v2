@@ -17,7 +17,7 @@ import { decodeBodyJSON, toApigwRequestMetadata } from "./shared";
 import {
   AddTagToResultErrorCode,
   AddTagToResultRequest,
-  addTagToResultRequestDataCodec,
+  addTagToResultUserDataCodec,
   AddTagToResultResponse,
 } from "./models/addTagToResult";
 import { decode } from "@diogovasconcelos/lib/iots";
@@ -159,7 +159,7 @@ const toAddTagToResultRequest = (
   const bodyEither = decodeBodyJSON({
     logger,
     body: event.body,
-    decoder: addTagToResultRequestDataCodec,
+    decoder: addTagToResultUserDataCodec,
   });
   if (isLeft(bodyEither)) {
     return bodyEither;

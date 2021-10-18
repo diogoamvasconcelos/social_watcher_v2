@@ -3,7 +3,7 @@ import { SearchResult } from "@src/domain/models/searchResult";
 import { User } from "@src/domain/models/user";
 import { uuid } from "@src/lib/uuid";
 import { handler } from "./addTagToResultHandler";
-import { AddTagToResultRequestData } from "./models/addTagToResult";
+import { AddTagToResultUserData } from "./models/addTagToResult";
 import { buildApiRequestEvent } from "./shared";
 import { makeGetSearchResult } from "@src/adapters/searchResultsStore/getSearchResult";
 import { makeGetResultTag } from "@src/adapters/userStore/getResultTag";
@@ -46,7 +46,7 @@ makeAddTagToSearchResultMock.mockReturnValue(addTagToSearchResultMock);
 const buildEvent = (
   user: User,
   resultId: SearchResult["id"],
-  requestData: AddTagToResultRequestData
+  requestData: AddTagToResultUserData
 ) => {
   return buildApiRequestEvent({
     user,
