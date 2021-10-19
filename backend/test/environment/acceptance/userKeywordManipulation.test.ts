@@ -2,8 +2,8 @@ import {
   newPositiveInteger,
   PositiveInteger,
 } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
+import { AsyncReturnType } from "type-fest";
 import {
   checkKeyword,
   createTestUser,
@@ -17,8 +17,8 @@ import {
 jest.setTimeout(45000);
 
 describe("keyword interaction between multiple users", () => {
-  let testUserA: Awaited<ReturnType<typeof createTestUser>>;
-  let testUserB: Awaited<ReturnType<typeof createTestUser>>;
+  let testUserA: AsyncReturnType<typeof createTestUser>;
+  let testUserB: AsyncReturnType<typeof createTestUser>;
   let userAToken: string;
   let userBToken: string;
   let indexUserA: PositiveInteger;

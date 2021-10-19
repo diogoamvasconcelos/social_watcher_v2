@@ -4,19 +4,19 @@ import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { ScrapeMediaNode } from "instagram-scraping";
 import { fromUnix, getMinutesAgo } from "@src/lib/date";
 import { Logger } from "@src/lib/logger";
-import { Awaited } from "@src/lib/types";
 import {
   InstagramApiKey,
   InstagramMediaNode,
   instagramMediaNodeCodec,
 } from "./models";
+import { AsyncReturnType } from "type-fest";
 
 // instagram-scraping modulen checks env vars (for APIKEY) at load time, so we need to load it on demand
 export const getClient = async (apiKey: InstagramApiKey) => {
   process.env["RAPIDAPI_KEY"] = apiKey;
   return await import("instagram-scraping");
 };
-export type Client = Awaited<ReturnType<typeof getClient>>;
+export type Client = AsyncReturnType<typeof getClient>;
 
 export type InstagramDependencies = {
   client: Client;

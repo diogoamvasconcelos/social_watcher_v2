@@ -41,7 +41,7 @@ import { retryUntil } from "@test/lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
 import { socialMedias } from "@src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "@src/adapters/keywordStore/client";
-import { PartialDeep } from "type-fest";
+import { AsyncReturnType, PartialDeep } from "type-fest";
 import { SearchResult } from "@src/domain/models/searchResult";
 import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
 import {
@@ -60,7 +60,6 @@ import Stripe from "stripe";
 import { buildSearchResult } from "@test/lib/builders";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
-import { Awaited } from "@src/lib/types";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -118,7 +117,7 @@ export const createTestUser = async (
 
   return { id: userSub, email, password };
 };
-export type TestUser = Awaited<ReturnType<typeof createTestUser>>;
+export type TestUser = AsyncReturnType<typeof createTestUser>;
 
 export const deleteUser = async ({
   id,

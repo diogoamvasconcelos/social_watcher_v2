@@ -25,6 +25,10 @@ import {
   addTagToResultResponseCodec,
   AddTagToResultUserData,
 } from "@src/handlers/api/models/addTagToResult";
+import {
+  removeTagFromResultResponseCodec,
+  RemoveTagFromResultUserData,
+} from "@src/handlers/api/models/removeTagFromResult";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -224,4 +228,20 @@ export const addTagToResult = async (
       data: JSON.stringify(data.userData),
     },
     addTagToResultResponseCodec
+  )(deps);
+
+export const removeTagFromResult = async (
+  deps: ApiClientDeps,
+  data: {
+    searchResultId: SearchResult["id"];
+    userData: RemoveTagFromResultUserData;
+  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `/searchResult/${data.searchResultId}/tag/remove`,
+      data: JSON.stringify(data.userData),
+    },
+    removeTagFromResultResponseCodec
   )(deps);

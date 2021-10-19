@@ -1,4 +1,3 @@
-import "jest-extended";
 import { fromEither, newLowerCase } from "@diogovasconcelos/lib/iots";
 import { uuid } from "@src/lib/uuid";
 import { getLogger } from "@src/lib/logger";

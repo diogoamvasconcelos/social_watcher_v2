@@ -7,7 +7,7 @@ import {
   TestUser,
 } from "./steps";
 import {
-  addTagToResult,
+  removeTagFromResult,
   getClient as getApiClient,
   getResultTags,
 } from "@src/lib/apiClient/apiClient";
@@ -19,7 +19,7 @@ const apiClient = getApiClient(config.apiEndpoint);
 
 jest.setTimeout(20000);
 
-describe("addTagToResult e2e test", () => {
+describe("removeTagFromResult e2e test", () => {
   let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
@@ -38,13 +38,6 @@ describe("addTagToResult e2e test", () => {
   });
 
   it("successfully handles the happy flow", async () => {
-    // add syntetic search result
-    const searchResult = await addSearchResultDirectly({
-      keyword,
-      socialMedia: "twitter",
-    });
-    expect(searchResult.tags).toBeUndefined();
-
     // get favourite tag from user
     const getResultTagsResponse = fromEither(
       await getResultTags({
@@ -55,8 +48,16 @@ describe("addTagToResult e2e test", () => {
     expect(getResultTagsResponse.items[0].tagType).toEqual("FAVORITE");
     const favoriteTag = getResultTagsResponse.items[0];
 
+    // add syntetic search result
+    const searchResult = await addSearchResultDirectly({
+      keyword,
+      socialMedia: "twitter",
+      tags: [favoriteTag.tagId],
+    });
+    expect(searchResult.tags).toEqual([favoriteTag.tagId]);
+
     const updatedResult = fromEither(
-      await addTagToResult(
+      await removeTagFromResult(
         { client: apiClient, token: userToken },
         {
           searchResultId: searchResult.id,
@@ -66,6 +67,6 @@ describe("addTagToResult e2e test", () => {
         }
       )
     );
-    expect(updatedResult.tags).toEqual([favoriteTag.tagId]);
+    expect(updatedResult.tags).toBeEmpty();
   });
 });

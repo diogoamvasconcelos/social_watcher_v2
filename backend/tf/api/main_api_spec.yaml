@@ -268,7 +268,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddTagToResultRequestBody"
+              $ref: "#/components/schemas/UpdateTagOnResultRequestBody"
       responses:
         200:
           description: A SearchResult
@@ -284,6 +284,50 @@ paths:
         timeoutInMillis: 29000
         credentials: ${main_api_role_arn}
         uri: ${add_tag_to_result_invoke_arn}
+
+    options:
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: "{ 'statusCode': 200 }"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+      responses:
+        200:
+          $ref: "#/components/responses/cors"
+
+  /searchResult/{id}/tag/remove:
+    parameters:
+      - $ref: "#/components/parameters/SearchResultId"
+
+    post:
+      description: Removes a user result tag from a search result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTagOnResultRequestBody"
+      responses:
+        200:
+          description: A SearchResult
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+      security:
+        - cognitoPool: []
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 29000
+        credentials: ${main_api_role_arn}
+        uri: ${remove_tag_from_result_invoke_arn}
 
     options:
       x-amazon-apigateway-integration:
@@ -530,7 +574,7 @@ components:
         socialMedia:
           type: string
 
-    AddTagToResultRequestBody:
+    UpdateTagOnResultRequestBody:
       type: object
       required:
         - tagId
