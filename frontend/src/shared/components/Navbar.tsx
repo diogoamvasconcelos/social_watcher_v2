@@ -197,6 +197,7 @@ const LogoContainer = styled.div`
 
 export const Navbar: React.FC = () => {
   const userAuthState = useAppSelector((state) => state.userAuth);
+  const userLoggedIn = userAuthState.status !== "NULL";
 
   const [inUserSubPage, setInUserSubPage] = useState(false);
 
@@ -212,11 +213,8 @@ export const Navbar: React.FC = () => {
             <img src={logo} alt="Social Watcher logo" />
           </Link>
         </LogoContainer>
-        <TopMenu
-          inUserSubPage={inUserSubPage}
-          userLoggedIn={userAuthState.status !== "NULL"}
-        />
-        {userAuthState.status !== "NULL" ? (
+        <TopMenu inUserSubPage={inUserSubPage} userLoggedIn={userLoggedIn} />
+        {userLoggedIn ? (
           <UserProfile userDetails={userAuthState} />
         ) : (
           <LoginButtons />

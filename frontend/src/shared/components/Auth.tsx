@@ -1,10 +1,9 @@
 // ref: https://gist.github.com/groundedSAGE/995dc2e14845980fdc547c8ba510169c
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Amplify, Hub } from "@aws-amplify/core";
 import Auth from "@aws-amplify/auth/lib";
 import { HubCallback } from "@aws-amplify/core/lib/Hub";
-import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store";
 import { onLogin, onLogout } from "../reducers/userAuthState";
@@ -12,7 +11,6 @@ import { getConfig } from "../lib/config";
 import { DASHBOARD_PATH, LOGIN_PATH, ROOT_PATH } from "../data/paths";
 import { hasUserSession } from "../lib/userSession";
 import { Redirect } from "react-router-dom";
-import { useRef } from "react";
 
 const config = getConfig();
 
@@ -46,6 +44,26 @@ export const WithAuth: React.FC = () => {
   useEffect(() => {
     redirectStateRef.current = redirectState;
   }, [redirectState]);
+
+  // check user details on initial page load => auto login using cached data in the local store
+  useEffect(() => {
+    const autoLogin = async () => {
+      const userInfo = await Auth.currentUserInfo();
+      dispatch(
+        onLogin({
+          id: userInfo.attributes.sub,
+          email: userInfo.attributes.email,
+          status: userInfo.attributes.email_verified
+            ? "VERIFIED"
+            : "NOT_VERIFIED",
+        })
+      );
+    };
+
+    if (hasUserSession()) {
+      void autoLogin();
+    }
+  }, []);
 
   const authListener: HubCallback = ({ payload: { event, data } }) => {
     switch (event) {
