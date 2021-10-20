@@ -1,5 +1,5 @@
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
-import { uuidCodec } from "@src/lib/uuid";
+import { uuidCodec } from "../../lib/uuid";
 import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
 import { keywordCodec } from "./keyword";

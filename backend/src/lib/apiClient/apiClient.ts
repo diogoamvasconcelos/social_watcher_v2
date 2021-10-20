@@ -19,16 +19,16 @@ import {
 import { decode } from "@diogovasconcelos/lib/iots";
 import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
 import { createSearchObjectResponseCodec } from "../../handlers/api/models/createSearchObject";
-import { getResultTagsResponseCodec } from "@src/handlers/api/models/getResultTags";
-import { SearchResult } from "@src/domain/models/searchResult";
+import { getResultTagsResponseCodec } from "../../handlers/api/models/getResultTags";
+import { SearchResult } from "../../domain/models/searchResult";
 import {
   addTagToResultResponseCodec,
   AddTagToResultUserData,
-} from "@src/handlers/api/models/addTagToResult";
+} from "../../handlers/api/models/addTagToResult";
 import {
   removeTagFromResultResponseCodec,
   RemoveTagFromResultUserData,
-} from "@src/handlers/api/models/removeTagFromResult";
+} from "../../handlers/api/models/removeTagFromResult";
 
 export const getClient = (baseURL: string) => {
   return axios.create({

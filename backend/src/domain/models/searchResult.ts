@@ -3,7 +3,7 @@ import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
-import { uuidCodec } from "@src/lib/uuid";
+import { uuidCodec } from "../../lib/uuid";
 
 export const searchResultIdCodec = t.string;
 

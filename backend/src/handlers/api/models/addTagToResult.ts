@@ -2,8 +2,8 @@ import * as t from "io-ts";
 import {
   SearchResult,
   searchResultCodec,
-} from "@src/domain/models/searchResult";
-import { resultTagIdCodec } from "@src/domain/models/userItem";
+} from "../../../domain/models/searchResult";
+import { resultTagIdCodec } from "../../../domain/models/userItem";
 import { ApiBaseErrorCode, ApiRequestMetadata } from "./models";
 
 export const addTagToResultUserDataCodec = t.type({
