@@ -1,5 +1,8 @@
 import { Keyword } from "@src/domain/models/keyword";
-import { TwitterSearchResult } from "@src/domain/models/searchResult";
+import {
+  toUniqueId,
+  TwitterSearchResult,
+} from "@src/domain/models/searchResult";
 import { Logger } from "@src/lib/logger";
 import {
   getClient as getTwitterClient,
@@ -38,11 +41,16 @@ export const getClientCredentials = async (
 export const outToDomain = (
   keyword: Keyword,
   out: SearchRecentResponseItem
-): TwitterSearchResult => ({
-  socialMedia: "twitter",
-  id: out.id,
-  keyword,
-  happenedAt: out.created_at,
-  data: out,
-  link: `https://twitter.com/x/status/${out.id}`,
-});
+): TwitterSearchResult => {
+  const socialMedia = "twitter";
+  const localId = out.id;
+  return {
+    id: toUniqueId({ socialMedia, localId }),
+    socialMedia,
+    localId,
+    keyword,
+    happenedAt: out.created_at,
+    data: out,
+    link: `https://twitter.com/x/status/${out.id}`,
+  };
+};

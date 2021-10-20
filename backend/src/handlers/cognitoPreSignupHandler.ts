@@ -6,7 +6,7 @@ import { getClient as getUserStoreClient } from "@src/adapters/userStore/client"
 import { getConfig } from "@src/lib/config";
 import { isLeft } from "fp-ts/lib/Either";
 import { makePutUser } from "@src/adapters/userStore/putUser";
-import { UUIDCodec } from "@src/lib/uuid";
+import { uuidCodec } from "@src/lib/uuid";
 import { makePutPaymentData } from "@src/adapters/userStore/putPayment";
 import { makeInitiateUserSubscription } from "@src/adapters/paymentsManager/initiateUserSubscription";
 import { getClientCredentials as getPaymentsCredentials } from "@src/adapters/paymentsManager/client";
@@ -14,6 +14,7 @@ import { getClient as getPaymentsClient } from "@src/lib/stripe/client";
 import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 import { getClient as getSsmClient } from "@src/lib/ssm";
 import { decode } from "@diogovasconcelos/lib/iots";
+import { makeCreateResultTag } from "@src/adapters/userStore/createResultTag";
 
 const config = getConfig();
 const logger = getLogger();
@@ -38,8 +39,12 @@ const handler = async (event: PreSignUpTriggerEvent) => {
     config.stripeNormalProductId,
     subscriptionConfig
   );
+  const createResultTagFn = makeCreateResultTag(
+    userStoreClient,
+    config.usersTableName
+  );
 
-  const usernameDecoded = decode(UUIDCodec, event.userName);
+  const usernameDecoded = decode(uuidCodec, event.userName);
   if (isLeft(usernameDecoded)) {
     throw new Error(`Username (${event.userName}) not a UUID`);
   }
@@ -55,6 +60,7 @@ const handler = async (event: PreSignUpTriggerEvent) => {
       putUserFn,
       putPaymentDataFn,
       initiateUserSubscriptionFn,
+      createResultTagFn,
     },
     {
       id: usernameDecoded.right,

@@ -31,13 +31,13 @@ export type IndexSchema = {
   settings?: { index: Object };
 };
 
-type dependencies = {
+type Dependencies = {
   logger: Logger;
   client: Client;
 };
 
 export const createIndex = async (
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   {
     indexName,
     indexSchema,
@@ -59,7 +59,7 @@ export const createIndex = async (
 };
 
 export const deleteIndex = async (
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   indexName: string
 ) => {
   try {
@@ -74,7 +74,7 @@ export const deleteIndex = async (
 };
 
 export const indexExists = async (
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   indexName: string
 ) => {
   try {
@@ -89,7 +89,7 @@ export const indexExists = async (
 };
 
 export const addAliasToIndex = async (
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   {
     indexName,
     aliasName,
@@ -113,7 +113,7 @@ export const addAliasToIndex = async (
 };
 
 export const bulkIndex = async (
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   {
     indexName,
     items,
@@ -171,7 +171,7 @@ export type RequestParamsSearch = {
 };
 
 export const search = async <T>(
-  { logger, client }: dependencies,
+  { logger, client }: Dependencies,
   {
     indexName,
     searchParams,

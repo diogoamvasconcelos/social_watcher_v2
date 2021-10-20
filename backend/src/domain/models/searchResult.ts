@@ -3,13 +3,26 @@ import { keywordCodec } from "./keyword";
 import { searchRecentResponseItemCodec as twitterSearchItemCodec } from "../../lib/twitter/models";
 import { searchListingItemCodec as redditSearchItemCodec } from "../../lib/reddit/models";
 import { dateISOString, numberFromStringy } from "@diogovasconcelos/lib/iots";
+import { uuidCodec } from "../../lib/uuid";
 
-export const searchResultMetadaCodec = t.type({
-  id: t.string,
+export const searchResultIdCodec = t.string;
+
+const searchResultMetadataCodec = t.type({
+  id: searchResultIdCodec, // unique Id, built from social media and local Id
+  localId: t.string, // id within the social media (could collide across social medias)
   keyword: keywordCodec,
   happenedAt: dateISOString,
   link: t.string,
 });
+
+const searchResultUserDataCodec = t.partial({
+  tags: t.array(uuidCodec), // io-ts bug doesn't allow to reference the resultTagIdCodec...
+});
+
+export const searchResultBaseCodec = t.intersection([
+  searchResultMetadataCodec,
+  searchResultUserDataCodec,
+]);
 
 const searchResultDataBaseCodec = t.partial({
   translatedText: t.string,
@@ -20,7 +33,7 @@ const searchResultDataBaseCodec = t.partial({
 // + Twitter +
 // +++++++++++
 export const twitterSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("twitter"),
     data: t.intersection([searchResultDataBaseCodec, twitterSearchItemCodec]),
@@ -32,7 +45,7 @@ export type TwitterSearchResult = t.TypeOf<typeof twitterSearchResultCodec>;
 // + Reddit +
 // ++++++++++
 export const redditSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("reddit"),
     data: t.intersection([searchResultDataBaseCodec, redditSearchItemCodec]),
@@ -44,7 +57,7 @@ export type RedditSearchResult = t.TypeOf<typeof redditSearchResultCodec>;
 // + Hackernews +
 // ++++++++++++++
 export const hackernewsSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("hackernews"),
     data: t.intersection([
@@ -71,7 +84,7 @@ export type HackernewsSearchResult = t.TypeOf<
 // + Instagram +
 // +++++++++++++
 export const instagramSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("instagram"),
     data: t.intersection([
@@ -99,7 +112,7 @@ export type InstagramSearchResult = t.TypeOf<typeof instagramSearchResultCodec>;
 // +++++++++++
 
 export const youtubeSearchResultCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: t.literal("youtube"),
     data: t.intersection([
@@ -132,3 +145,10 @@ export const searchResultCodec = t.union([
   youtubeSearchResultCodec,
 ]);
 export type SearchResult = t.TypeOf<typeof searchResultCodec>;
+
+export const toUniqueId = ({
+  socialMedia,
+  localId,
+}: Pick<SearchResult, "socialMedia" | "localId">): SearchResult["id"] => {
+  return `${socialMedia}|${localId}`;
+};

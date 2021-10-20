@@ -3,11 +3,13 @@ import { makeCreateSearchObject } from "@src/adapters/userStore/createSearchObje
 import { getLogger } from "@src/lib/logger";
 import { uuid } from "@src/lib/uuid";
 import { client, preparesGenericTable } from "@test/lib/dynamoDb";
-import { defaultSearchObjectDomain } from "@test/lib/default";
 import { makeUpdateSearchObject } from "@src/adapters/userStore/updateSearchObject";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { fromEither } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
+import { buildSearchObjectDomain } from "@test/lib/builders";
+
+const defaultSearchObjectDomain = buildSearchObjectDomain();
 
 describe("updateSearchObject", () => {
   const logger = getLogger();

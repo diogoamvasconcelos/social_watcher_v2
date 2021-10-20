@@ -11,7 +11,7 @@ import { SEARCH_RESULT_SCHEMA } from "./schemas";
 import {
   SearchResult,
   searchResultCodec,
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
 } from "@src/domain/models/searchResult";
 import { socialMediaCodec } from "@src/domain/models/socialMedia";
 import { decode, PositiveInteger } from "@diogovasconcelos/lib/iots";
@@ -27,7 +27,7 @@ export const getSearchResultSchema = (version: PositiveInteger) =>
   SEARCH_RESULT_SCHEMA[`v${version}`];
 
 export const searchResultEsDocumentCodec = t.intersection([
-  searchResultMetadaCodec,
+  searchResultBaseCodec,
   t.type({
     socialMedia: socialMediaCodec,
     data: t.string,

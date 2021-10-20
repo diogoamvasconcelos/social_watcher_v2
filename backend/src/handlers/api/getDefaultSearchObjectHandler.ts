@@ -18,9 +18,9 @@ import { getNow } from "@src/lib/date";
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<ApiResponse<GetSearchObjectErrorCode, GetSearchObjectResponse>> => {
-  const requestEither = toApigwRequestMetadata(event);
-  if (isLeft(requestEither)) {
-    return requestEither;
+  const metadataEither = toApigwRequestMetadata(event);
+  if (isLeft(metadataEither)) {
+    return metadataEither;
   }
 
   const defaultSearchObject: SearchObjectDomain = {
@@ -28,7 +28,7 @@ export const handler = async (
       keyword: newLowerCase("placeholder keyword"),
     }),
     type: "SEARCH_OBJECT",
-    id: requestEither.right.authData.id,
+    id: metadataEither.right.authData.id,
     index: newPositiveInteger(0),
     lockedStatus: "LOCKED",
     createdAt: getNow(),

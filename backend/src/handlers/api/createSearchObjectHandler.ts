@@ -16,15 +16,10 @@ import {
   makeBadRequestResponse,
   makeForbiddenResponse,
   makeInternalErrorResponse,
-  makeRequestMalformedResponse,
   makeSuccessResponse,
 } from "./responses";
-import {
-  apiGetUser,
-  parseRequestBodyJSON,
-  toApigwRequestMetadata,
-} from "./shared";
-import { decode, newPositiveInteger } from "@diogovasconcelos/lib/iots";
+import { apiGetUser, decodeBodyJSON, toApigwRequestMetadata } from "./shared";
+import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import {
   SearchObjectDomain,
   searchObjectUserDataIoCodec,
@@ -143,22 +138,17 @@ const toCreateSearchObjectRequest = (
     return metadataEither;
   }
 
-  const bodyEither = parseRequestBodyJSON(logger, event.body);
+  const bodyEither = decodeBodyJSON({
+    logger,
+    body: event.body,
+    decoder: searchObjectUserDataIoCodec,
+  });
   if (isLeft(bodyEither)) {
     return bodyEither;
-  }
-  const body = bodyEither.right;
-
-  const dataEither = decode(searchObjectUserDataIoCodec, body);
-  if (isLeft(dataEither)) {
-    logger.error("Failed to decode data's property of body.", {
-      error: dataEither.left,
-    });
-    return left(makeRequestMalformedResponse("Request body is invalid."));
   }
 
   return right({
     ...metadataEither.right,
-    data: dataEither.right,
+    data: bodyEither.right,
   });
 };

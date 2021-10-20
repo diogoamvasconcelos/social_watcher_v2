@@ -4,6 +4,7 @@ import _ from "lodash";
 import { map, left, isLeft, right, Either } from "fp-ts/lib/Either";
 import {
   PaymentData,
+  ResultTag,
   SearchObjectDomain,
   searchObjectIoToDomain,
   UserData,
@@ -37,6 +38,8 @@ export const toUserItemDocumentKeys = (userItem: UserItemDomain) => {
       return toSearchObjectDocumentKeys(userItem);
     case "PAYMENT_DATA":
       return toPaymentDataDocumentKeys(userItem);
+    case "RESULT_TAG":
+      return toResultTagDocumentKeys(userItem);
     default:
       return throwUnexpectedCase(userItem, "toUserItemDocKeys");
   }
@@ -69,6 +72,14 @@ export const toPaymentDataDocumentKeys = ({ id }: Pick<PaymentData, "id">) => ({
   sk: "payment",
 });
 
+export const toResultTagDocumentKeys = ({
+  id,
+  tagId,
+}: Pick<ResultTag, "id" | "tagId">) => ({
+  pk: id,
+  sk: `resultTag#${tagId}`,
+});
+
 export const userItemToDocument = (
   domainItem: UserItemDomain
 ): UserItemDocument => {
@@ -89,6 +100,8 @@ export const documentToUserItem = (
         _.omit(docItem, ["pk", "sk", "gsi1pk", "gsi1sk"])
       );
     case "PAYMENT_DATA":
+      return _.omit(docItem, ["pk", "sk"]);
+    case "RESULT_TAG":
       return _.omit(docItem, ["pk", "sk"]);
     default:
       return throwUnexpectedCase(docItem, "documentToUserItem");
@@ -148,6 +161,24 @@ export const unknownToPaymentData = (
       "ERROR",
       `User item is of type ${userItem.type}`,
       "Expected to be USER_DATA",
+    ]);
+  }
+  return right(userItem);
+};
+
+export const unknownToResultTag = (
+  item: unknown
+): Either<string[], ResultTag> => {
+  const userItemEither = unknownToUserItem(item);
+  if (isLeft(userItemEither)) {
+    return userItemEither;
+  }
+  const userItem = userItemEither.right;
+  if (userItem.type !== "RESULT_TAG") {
+    return left([
+      "ERROR",
+      `User item is of type ${userItem.type}`,
+      "Expected to be RESULT_TAG",
     ]);
   }
   return right(userItem);

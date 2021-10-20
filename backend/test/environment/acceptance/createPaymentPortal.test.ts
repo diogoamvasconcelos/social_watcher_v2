@@ -1,5 +1,4 @@
-import { Awaited } from "@src/lib/types";
-import { createTestUser, deleteUser, getIdToken } from "./steps";
+import { createTestUser, deleteUser, getIdToken, TestUser } from "./steps";
 import {
   getClient as getApiClient,
   createPaymentsPortal,
@@ -14,7 +13,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("e2e/createPaymentPortal", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
 
   beforeAll(async () => {

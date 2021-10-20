@@ -1,10 +1,10 @@
-import { Awaited } from "@src/lib/types";
 import { getEnvTestConfig } from "@test/lib/config";
 import {
   createTestUser,
   deleteUser,
   getIdToken,
   getPaymentData,
+  TestUser,
   updateUserPaymentsSubscription,
 } from "@test/environment/acceptance/steps";
 import {
@@ -23,7 +23,7 @@ const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("Trial expiration successful", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
 
   beforeAll(async () => {

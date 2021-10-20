@@ -22,6 +22,7 @@ export const makeUpdateKeywordData = (
     }
     const rightResult = result.right;
     if (rightResult === "CONDITION_CHECK_FAILED") {
+      logger.error("Failed to update keyword data. Condition failed");
       return left("ERROR");
     }
     return right(rightResult);

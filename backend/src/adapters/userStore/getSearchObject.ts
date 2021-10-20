@@ -16,7 +16,6 @@ export const makeGetSearchObject = (
       {
         TableName: tableName,
         Key: toSearchObjectDocumentPartitionKeys({ id, index }),
-        ConsistentRead: true,
       },
       unknownToSearchObject,
       logger

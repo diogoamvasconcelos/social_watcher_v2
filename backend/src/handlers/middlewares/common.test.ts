@@ -1,4 +1,3 @@
-import "jest-extended";
 import { Callback, Context } from "aws-lambda";
 import {
   makeErrorCatchMiddleware,

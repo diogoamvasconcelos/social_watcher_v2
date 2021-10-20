@@ -19,6 +19,16 @@ import {
 import { decode } from "@diogovasconcelos/lib/iots";
 import { getSearchObjectResponseCodec } from "../../handlers/api/models/getSearchObject";
 import { createSearchObjectResponseCodec } from "../../handlers/api/models/createSearchObject";
+import { getResultTagsResponseCodec } from "../../handlers/api/models/getResultTags";
+import { SearchResult } from "../../domain/models/searchResult";
+import {
+  addTagToResultResponseCodec,
+  AddTagToResultUserData,
+} from "../../handlers/api/models/addTagToResult";
+import {
+  removeTagFromResultResponseCodec,
+  RemoveTagFromResultUserData,
+} from "../../handlers/api/models/removeTagFromResult";
 
 export const getClient = (baseURL: string) => {
   return axios.create({
@@ -104,6 +114,14 @@ export const getDefaultSearchObject = createClientMethod(
     url: "user/searchObject/default",
   },
   getSearchObjectResponseCodec
+);
+
+export const getResultTags = createClientMethod(
+  {
+    method: "get",
+    url: "user/resultTag",
+  },
+  getResultTagsResponseCodec
 );
 
 // special case (with extra args), don't use the helper function yet (can be done I guess)
@@ -194,4 +212,36 @@ export const createPaymentsPortal = async (
       data: JSON.stringify(data.userData),
     },
     createPaymentsPortalResponseCodec
+  )(deps);
+
+export const addTagToResult = async (
+  deps: ApiClientDeps,
+  data: {
+    searchResultId: SearchResult["id"];
+    userData: AddTagToResultUserData;
+  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `/searchResult/${data.searchResultId}/tag/add`,
+      data: JSON.stringify(data.userData),
+    },
+    addTagToResultResponseCodec
+  )(deps);
+
+export const removeTagFromResult = async (
+  deps: ApiClientDeps,
+  data: {
+    searchResultId: SearchResult["id"];
+    userData: RemoveTagFromResultUserData;
+  }
+) =>
+  createClientMethod(
+    {
+      method: "post",
+      url: `/searchResult/${data.searchResultId}/tag/remove`,
+      data: JSON.stringify(data.userData),
+    },
+    removeTagFromResultResponseCodec
   )(deps);

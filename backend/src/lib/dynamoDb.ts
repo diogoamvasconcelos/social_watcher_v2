@@ -182,10 +182,47 @@ export const deleteItem = async (
   logger: Logger
 ): Promise<Either<"ERROR", "OK">> => {
   try {
-    await client.delete(params).promise();
+    const deleteResult = await client.delete(params).promise();
+    logger.debug("Delete item result", { result: deleteResult });
     return right("OK");
   } catch (error) {
     logger.error("Call to DynamoDB delete exited with error", { error });
+    return left("ERROR");
+  }
+};
+
+type UpdateItemOptions = {
+  allowAttributeDoesntExist?: boolean;
+};
+export const updateItem = async <T>(
+  client: Client,
+  params: DocumentClient.UpdateItemInput,
+  transformFn: (item: unknown) => Either<string[], T>,
+  options: UpdateItemOptions,
+  logger: Logger
+): Promise<
+  Either<"ERROR", T | "CONDITION_CHECK_FAILED" | "ATTRIBUTE_DOES_NOT_EXIST">
+> => {
+  try {
+    const updateResult = await client.update(params).promise();
+    return applyTransformToItem(transformFn, updateResult.Attributes, logger);
+  } catch (error) {
+    if (error instanceof Error) {
+      // Filter "allowed errors"
+      switch (error.message) {
+        case "The conditional request failed":
+          return right("CONDITION_CHECK_FAILED");
+        case "The provided expression refers to an attribute that does not exist in the item": {
+          if (options.allowAttributeDoesntExist) {
+            return right("ATTRIBUTE_DOES_NOT_EXIST");
+          }
+        }
+      }
+    }
+
+    logger.error("Call to DynamoDB update exited with following error", {
+      error,
+    });
     return left("ERROR");
   }
 };

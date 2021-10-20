@@ -41,7 +41,7 @@ import { retryUntil } from "@test/lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
 import { socialMedias } from "@src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "@src/adapters/keywordStore/client";
-import { PartialDeep } from "type-fest";
+import { AsyncReturnType, PartialDeep } from "type-fest";
 import { SearchResult } from "@src/domain/models/searchResult";
 import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
 import {
@@ -59,6 +59,7 @@ import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import Stripe from "stripe";
 import { buildSearchResult } from "@test/lib/builders";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { makeGetResultTagsForUser } from "@src/adapters/userStore/getResultTagsForUser";
 
 const config = getEnvTestConfig();
 const logger = getLogger();
@@ -116,6 +117,7 @@ export const createTestUser = async (
 
   return { id: userSub, email, password };
 };
+export type TestUser = AsyncReturnType<typeof createTestUser>;
 
 export const deleteUser = async ({
   id,
@@ -183,6 +185,13 @@ export const getUser = async (id: string) => {
 
 export const getPaymentData = async (id: string) => {
   return await makeGetPaymentData(dynamoDbClient, config.usersTableName)(
+    logger,
+    id
+  );
+};
+
+export const getResultTags = async (id: string) => {
+  return await makeGetResultTagsForUser(dynamoDbClient, config.usersTableName)(
     logger,
     id
   );

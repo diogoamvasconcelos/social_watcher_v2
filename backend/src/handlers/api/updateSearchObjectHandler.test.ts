@@ -15,11 +15,18 @@ import {
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
-import {
-  defaultSearchObjectDataDomain,
-  defaultSearchObjectDomain,
-} from "@test/lib/default";
 import { PartialDeep } from "type-fest";
+import {
+  buildSearchObjectDataDomain,
+  buildSearchObjectDomain,
+  buildUser,
+} from "@test/lib/builders";
+
+const defaultSearchObjectDataDomain = buildSearchObjectDataDomain();
+const defaultSearchObjectDomain = buildSearchObjectDomain(
+  defaultSearchObjectDataDomain
+);
+const defaultUser = buildUser({ id: defaultSearchObjectDomain.id });
 
 jest.mock("./shared", () => ({
   ...jest.requireActual("./shared"), // imports all actual implmentations (useful to only mock one export of a module)
@@ -45,16 +52,6 @@ const makeGetSearchObjectMock = makeGetSearchObject as jest.MockedFunction<
 >;
 const getSearchObjectMock = jest.fn();
 makeGetSearchObjectMock.mockReturnValue(getSearchObjectMock);
-
-const defaultUser: User = {
-  id: defaultSearchObjectDomain.id,
-  email: "some-email",
-  subscription: {
-    status: "ACTIVE",
-    type: "NORMAL",
-    nofSearchObjects: newPositiveInteger(1),
-  },
-};
 
 const defaultRequestData: SearchObjectUserDataDomain =
   defaultSearchObjectDataDomain;

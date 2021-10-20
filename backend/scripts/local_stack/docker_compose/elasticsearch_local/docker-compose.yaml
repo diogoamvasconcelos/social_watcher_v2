@@ -4,7 +4,7 @@ services:
     image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.0"
     container_name: elasticsearch-local
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "${ELASTIC_SEARCH_PORT}:9200"
+      - "${ES_KIBANA_PORT}:9300"
     environment:
       - discovery.type=single-node

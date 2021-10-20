@@ -1,4 +1,3 @@
-import "jest-extended";
 import { unknownToSearchResult } from "@src/adapters/searchResultsStore/client";
 import { makePutSearchResults } from "@src/adapters/searchResultsStore/putSearchResults";
 import { scanItems } from "@src/lib/dynamoDb";

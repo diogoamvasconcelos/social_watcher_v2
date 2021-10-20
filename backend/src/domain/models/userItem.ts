@@ -1,4 +1,5 @@
 import { dateISOString, positiveInteger } from "@diogovasconcelos/lib/iots";
+import { uuidCodec } from "../../lib/uuid";
 import * as t from "io-ts";
 import { NumberFromString } from "io-ts-types";
 import { keywordCodec } from "./keyword";
@@ -9,27 +10,37 @@ import {
 import { emailReportConfigCodec } from "./reportJob";
 import { userCodec, userIdCodec } from "./user";
 
+// ++++++++
+// + BASE +
+// ++++++++
+const userItemBaseCodec = t.type({
+  id: userIdCodec,
+});
+
 // +++++++++++++
 // + USER DATA +
 // +++++++++++++
 export const userDataCodec = t.intersection([
+  userItemBaseCodec,
   t.type({ type: t.literal("USER_DATA") }),
   userCodec,
 ]);
 export type UserData = t.TypeOf<typeof userDataCodec>;
 
-// +++++++++++++
+// ++++++++++++++++
 // + PAYMENT DATA +
-// +++++++++++++
+// ++++++++++++++++
 export const paymentDataCodec = t.exact(
-  t.type({
-    type: t.literal("PAYMENT_DATA"),
-    id: userIdCodec,
-    stripe: t.type({
-      customerId: t.string,
-      subscriptionId: t.string,
+  t.intersection([
+    userItemBaseCodec,
+    t.type({
+      type: t.literal("PAYMENT_DATA"),
+      stripe: t.type({
+        customerId: t.string,
+        subscriptionId: t.string,
+      }),
     }),
-  })
+  ])
 );
 export type PaymentData = t.TypeOf<typeof paymentDataCodec>;
 
@@ -110,7 +121,7 @@ export const searchObjectUserDataIoToDomain = (
   io: SearchObjectUserDataIo,
   defaultData?: Omit<SearchObjectUserDataDomain, "keyword">
 ): SearchObjectUserDataDomain => {
-  // adds defaults do Io
+  // adds defaults to Io
   if (!defaultData) {
     defaultData = {
       searchData: {
@@ -176,13 +187,15 @@ export const searchObjectIndexCodec = t.union([
   NumberFromString.pipe(positiveInteger),
   positiveInteger,
 ]);
-const searchObjectBaseCodec = t.type({
-  type: t.literal("SEARCH_OBJECT"),
-  id: userIdCodec,
-  index: searchObjectIndexCodec,
-  lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
-  createdAt: dateISOString,
-});
+const searchObjectBaseCodec = t.intersection([
+  userItemBaseCodec,
+  t.type({
+    type: t.literal("SEARCH_OBJECT"),
+    index: searchObjectIndexCodec,
+    lockedStatus: t.union([t.literal("LOCKED"), t.literal("UNLOCKED")]),
+    createdAt: dateISOString,
+  }),
+]);
 
 export const searchObjectIoCodec = t.intersection([
   searchObjectBaseCodec,
@@ -204,6 +217,25 @@ export const searchObjectIoToDomain = (
   };
 };
 
+// ++++++++++++++
+// + RESULT TAG +
+// ++++++++++++++
+
+// Important: due to io-ts bug, `resultTagIdCodec` can't be used for searchResult["tags"] type
+// when changing this type, please duplicate the changes there too
+export const resultTagIdCodec = uuidCodec;
+
+export const resultTagCodec = t.intersection([
+  userItemBaseCodec,
+  t.type({
+    type: t.literal("RESULT_TAG"),
+    tagId: resultTagIdCodec,
+    tagType: t.union([t.literal("FAVORITE"), t.literal("CUSTOM")]),
+    createdAt: dateISOString,
+  }),
+]);
+export type ResultTag = t.TypeOf<typeof resultTagCodec>;
+
 // +++++++++++++
 // + USER ITEM +
 // +++++++++++++
@@ -212,8 +244,10 @@ export const userItemIoCodec = t.union([
   userDataCodec,
   searchObjectIoCodec,
   paymentDataCodec,
+  resultTagCodec,
 ]);
 export type UserItemDomain =
-  | t.TypeOf<typeof userDataCodec>
+  | UserData
   | SearchObjectDomain
-  | t.TypeOf<typeof paymentDataCodec>;
+  | PaymentData
+  | ResultTag;

@@ -4,14 +4,15 @@ import {
   getUser as getUserApi,
 } from "@src/lib/apiClient/apiClient";
 import { fromEither } from "@diogovasconcelos/lib/iots";
-import { Awaited } from "@src/lib/types";
 import { getEnvTestConfig } from "@test/lib/config";
 import {
   createTestUser,
   deleteUser,
   getIdToken,
   getPaymentData,
+  getResultTags,
   getUser,
+  TestUser,
 } from "./steps";
 
 jest.setTimeout(10000);
@@ -20,7 +21,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("signup e2e test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
 
   beforeAll(async () => {
     testUser = await createTestUser();
@@ -45,6 +46,13 @@ describe("signup e2e test", () => {
         },
       })
     );
+
+    const resultTags = fromEither(await getResultTags(testUser.id));
+    expect(resultTags).toEqual([
+      expect.objectContaining({
+        tagType: "FAVORITE",
+      }),
+    ]);
   });
 
   it("token can be used to access API", async () => {

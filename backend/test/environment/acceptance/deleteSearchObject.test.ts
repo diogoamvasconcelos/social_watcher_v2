@@ -1,4 +1,3 @@
-import { Awaited } from "@src/lib/types";
 import { uuid } from "@src/lib/uuid";
 import {
   fromEither,
@@ -12,6 +11,7 @@ import {
   deleteKeyword,
   deleteUser,
   getIdToken,
+  TestUser,
 } from "./steps";
 import {
   getClient as getApiClient,
@@ -26,7 +26,7 @@ const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("deleteSearchObject endpoint e2e test", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
   const keyword = newLowerCase(uuid());
 

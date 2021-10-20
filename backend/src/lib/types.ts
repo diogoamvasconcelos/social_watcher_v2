@@ -1,7 +1,5 @@
 export type PickRequired<T, K extends keyof T> = Required<Pick<T, K>>[K];
 
-export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
-
 export type RequiredKeys<T> = {
   [K in keyof T]-?: {} extends { [P in K]: T[K] } ? never : K;
 }[keyof T];

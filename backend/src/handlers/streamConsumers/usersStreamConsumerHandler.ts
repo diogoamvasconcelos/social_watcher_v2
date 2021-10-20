@@ -82,8 +82,9 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 newItem,
               })
-            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            newItem.type === "PAYMENT_DATA"
+            : newItem.type === "PAYMENT_DATA" ||
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              newItem.type === "RESULT_TAG"
             ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
@@ -105,7 +106,9 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 oldItem,
                 newItem,
               })
-            : newItem.type === "PAYMENT_DATA" && oldItem.type === "PAYMENT_DATA"
+            : (newItem.type === "PAYMENT_DATA" &&
+                oldItem.type === "PAYMENT_DATA") ||
+              (newItem.type === "RESULT_TAG" && oldItem.type === "RESULT_TAG")
             ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }
@@ -122,8 +125,9 @@ export const handler = async (event: DynamoDBStreamEvent) => {
                 eventName: record.eventName,
                 oldItem,
               })
-            : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            oldItem.type === "PAYMENT_DATA"
+            : oldItem.type === "PAYMENT_DATA" ||
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              oldItem.type === "RESULT_TAG"
             ? right("OK") // skip
             : throwUnexpectedCase({} as never, "handlers/usersStreamConsumers");
         }

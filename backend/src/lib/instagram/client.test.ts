@@ -6,7 +6,6 @@ import { InstagramMediaNode } from "./models";
 import { uuid } from "@src/lib/uuid";
 import { getMinutesAgo, toUnixTimstamp, fromUnix } from "@src/lib/date";
 import _ from "lodash";
-import "jest-extended";
 
 jest.mock("instagram-scraping", () => ({
   ...jest.requireActual("instagram-scraping"),

@@ -11,7 +11,10 @@ import {
   Client as YoutubeClient,
 } from "@src/lib/youtube/client";
 import { Keyword } from "@src/domain/models/keyword";
-import { YoutubeSearchResult } from "@src/domain/models/searchResult";
+import {
+  toUniqueId,
+  YoutubeSearchResult,
+} from "@src/domain/models/searchResult";
 import { iso8061DurationToSeconds } from "@src/lib/date";
 
 export const getClient = getYoutubeClient;
@@ -39,22 +42,27 @@ export const getClientCredentials = async (
 export const outToDomain = (
   keyword: Keyword,
   out: YoutubeVideosResponseItem
-): YoutubeSearchResult => ({
-  socialMedia: "youtube",
-  id: out.id,
-  keyword,
-  happenedAt: out.snippet.publishedAt,
-  data: {
-    id: out.id,
-    title: out.snippet.title,
-    description: out.snippet.description,
-    thumbnailUrl: out.snippet.thumbnails.medium.url,
-    viewCount: out.statistics.viewCount,
-    likeCount: out.statistics.likeCount,
-    dislikeCount: out.statistics.dislikeCount,
-    favoriteCount: out.statistics.favoriteCount,
-    commentCount: out.statistics.commentCount ?? newNumberFromStringy("0"),
-    durationInSeconds: iso8061DurationToSeconds(out.contentDetails.duration),
-  },
-  link: `https://www.youtube.com/watch?v=${out.id}`,
-});
+): YoutubeSearchResult => {
+  const socialMedia = "youtube";
+  const localId = out.id;
+  return {
+    id: toUniqueId({ socialMedia, localId }),
+    socialMedia,
+    localId,
+    keyword,
+    happenedAt: out.snippet.publishedAt,
+    data: {
+      id: out.id,
+      title: out.snippet.title,
+      description: out.snippet.description,
+      thumbnailUrl: out.snippet.thumbnails.medium.url,
+      viewCount: out.statistics.viewCount,
+      likeCount: out.statistics.likeCount,
+      dislikeCount: out.statistics.dislikeCount,
+      favoriteCount: out.statistics.favoriteCount,
+      commentCount: out.statistics.commentCount ?? newNumberFromStringy("0"),
+      durationInSeconds: iso8061DurationToSeconds(out.contentDetails.duration),
+    },
+    link: `https://www.youtube.com/watch?v=${out.id}`,
+  };
+};

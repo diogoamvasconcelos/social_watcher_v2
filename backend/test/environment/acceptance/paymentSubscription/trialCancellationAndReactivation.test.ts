@@ -1,4 +1,3 @@
-import { Awaited } from "@src/lib/types";
 import { getEnvTestConfig } from "@test/lib/config";
 import {
   addNewNormalSubscription,
@@ -7,6 +6,7 @@ import {
   deleteUser,
   getIdToken,
   getPaymentData,
+  TestUser,
 } from "@test/environment/acceptance/steps";
 import {
   getClient as getApiClient,
@@ -24,7 +24,7 @@ const subscriptionConfig = getSubscriptionConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
 describe("Trial cancellation and re-activation", () => {
-  let testUser: Awaited<ReturnType<typeof createTestUser>>;
+  let testUser: TestUser;
   let userToken: string;
 
   beforeAll(async () => {

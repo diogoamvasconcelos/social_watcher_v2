@@ -41,9 +41,9 @@ export type ApiBaseErrorCode =
   | "FORBIDDEN"
   | "UNAUTHORIZED";
 
-// +++++++++++++++++
-// + :SearchObject +
-// +++++++++++++++++
+// ++++++++++++++++
+// + SearchObject +
+// ++++++++++++++++
 
 export type SearchObjectErrorCode = ApiBaseErrorCode | "NOT_FOUND";
 

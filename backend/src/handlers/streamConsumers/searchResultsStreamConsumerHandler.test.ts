@@ -4,6 +4,7 @@ import { Converter } from "aws-sdk/clients/dynamodb";
 import { searchResultToDocument } from "@src/adapters/searchResultsStore/client";
 import { getNow } from "@src/lib/date";
 import { handler } from "./searchResultsStreamConsumerHandler";
+import { toUniqueId } from "@src/domain/models/searchResult";
 
 describe("handlers/searchResultsStreamConsumer", () => {
   const event: DynamoDBStreamEvent = {
@@ -13,7 +14,8 @@ describe("handlers/searchResultsStreamConsumer", () => {
         dynamodb: {
           NewImage: Converter.marshall(
             searchResultToDocument({
-              id: "some-id",
+              id: toUniqueId({ socialMedia: "twitter", localId: "some-id" }),
+              localId: "some-id",
               keyword: newLowerCase("some-keyword"),
               happenedAt: getNow(),
               socialMedia: "twitter",
