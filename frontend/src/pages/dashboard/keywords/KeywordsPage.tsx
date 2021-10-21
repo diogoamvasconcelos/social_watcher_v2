@@ -27,7 +27,7 @@ const NoSearchObjectsWidget: React.FC<{
 }> = ({ onNewSearchObjectClicked }) => {
   return (
     <>
-      <Text>Create your first item</Text>
+      <Text>Configure the first keyword you want to watch</Text>
       <Button
         type="primary"
         style={{ width: "200px", borderRadius: "4px" }}

@@ -20,7 +20,7 @@ import Button from "antd/lib/button";
 import { useHistory } from "react-router-dom";
 import Tooltip from "antd/lib/tooltip";
 import { capitalizeWord } from "../../../shared/lib/text";
-import { SEARCH_PATH } from "../../../shared/data/paths";
+import { ARCHIVES_PATH } from "../../../shared/data/paths";
 import {
   getNotificationMediumIcon,
   getSocialMediaIcon,
@@ -155,7 +155,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
     history.push(`${history.location.pathname}/${searchObject.index}`);
   };
   const handleSearchButtonClicked = () => {
-    history.push(`${SEARCH_PATH}?keyword=${searchObject.keyword}`);
+    history.push(`${ARCHIVES_PATH}?keyword=${searchObject.keyword}`);
   };
 
   return (

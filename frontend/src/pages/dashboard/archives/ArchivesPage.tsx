@@ -17,6 +17,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { PartialDeep, SetOptional } from "type-fest";
 import { keywordCodec } from "@backend/domain/models/keyword";
+import Title from "antd/lib/typography/Title";
 
 // +++++++++
 // + STATE +
@@ -111,6 +112,7 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
 
   return (
     <MainContainer>
+      <Title level={4}>Search through the archived posts</Title>
       <SearchResultsTable
         searchObjects={searchObjects}
         searchRequestState={searchRequestState}
@@ -120,4 +122,4 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
   );
 };
 
-export const SearchPage = Page;
+export const ArchivesPage = Page;

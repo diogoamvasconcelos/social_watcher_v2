@@ -24,7 +24,7 @@ import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
 import { AnyAction } from "@reduxjs/toolkit";
-import { SearchRequestState, updateSearchRequestAction } from "./SearchPage";
+import { SearchRequestState, updateSearchRequestAction } from "./ArchivesPage";
 import {
   decode,
   fromEither,

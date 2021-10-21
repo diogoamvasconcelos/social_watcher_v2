@@ -7,7 +7,6 @@ import { UserPage } from "./pages/user/UserPage";
 import { Provider } from "react-redux";
 import { store } from "./shared/store";
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
-import { TodoPage } from "./pages/misc/TodoPage";
 import { NotFoundPage } from "./pages/misc/notFoundPage";
 import { SigninPage } from "./pages/signin/SigninPage";
 import Layout from "antd/lib/layout";
@@ -15,7 +14,6 @@ import {
   USER_PATH,
   DASHBOARD_PATH,
   ROOT_PATH,
-  GUIDES_PATH,
   SIGNUP_PATH,
   LOGIN_PATH,
 } from "./shared/data/paths";
@@ -33,7 +31,6 @@ const App: React.FC = () => (
               <Route path={ROOT_PATH} exact component={LandingPage} />
               <Route path={DASHBOARD_PATH} component={DashboardPage} />
               <Route path={USER_PATH} component={UserPage} />
-              <Route path={GUIDES_PATH} component={TodoPage} />
               <Route path={[SIGNUP_PATH, LOGIN_PATH]} component={SigninPage} />
               <Route component={NotFoundPage} />
             </Switch>

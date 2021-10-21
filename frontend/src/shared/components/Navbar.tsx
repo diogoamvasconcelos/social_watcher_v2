@@ -17,7 +17,6 @@ import { Header } from "antd/lib/layout/layout";
 import {
   FAQ_PATH,
   DASHBOARD_PATH,
-  GUIDES_PATH,
   PRICING_PATH,
   ROOT_PATH,
   SIGNUP_PATH,
@@ -32,7 +31,6 @@ const navigationConfig: Record<string, string> = {
   product: ROOT_PATH,
   pricing: PRICING_PATH,
   faq: FAQ_PATH,
-  guides: GUIDES_PATH,
   dashboard: DASHBOARD_PATH,
 };
 
@@ -70,10 +68,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   }
 
   if (userLoggedIn) {
-    buttons.push(
-      <Menu.Item key="dashboard">Dashboard</Menu.Item>,
-      <Menu.Item key="guides">Guides</Menu.Item>
-    );
+    buttons.push(<Menu.Item key="dashboard">Dashboard</Menu.Item>);
   }
 
   return (
@@ -81,6 +76,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
       mode="horizontal"
       onClick={handleClick}
       selectedKeys={state.selectedKeys}
+      style={{ width: "360px" }}
     >
       {buttons}
     </Menu>

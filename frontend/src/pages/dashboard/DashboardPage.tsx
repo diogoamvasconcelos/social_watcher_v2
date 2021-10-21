@@ -7,7 +7,7 @@ import FileSearchOutlined from "@ant-design/icons/lib/icons/FileSearchOutlined";
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { KeywordsPage } from "./keywords/KeywordsPage";
-import { SearchPage } from "./search/SearchPage";
+import { ArchivesPage } from "./archives/ArchivesPage";
 import { useLocationChanged } from "../../shared/lib/react";
 import _findKey from "lodash/findKey";
 import { mapRecord } from "../../shared/lib/collections";
@@ -15,7 +15,7 @@ import { SearchObjectConfigPage } from "./searchObjectConfig/SearchObjectConfigP
 import {
   DASHBOARD_PATH,
   KEYWORDS_PATH,
-  SEARCH_PATH,
+  ARCHIVES_PATH,
 } from "../../shared/data/paths";
 import { withLoggedUser } from "@src/shared/components/Auth";
 
@@ -35,8 +35,8 @@ export const navigationConfig: Record<
     icon: <TagsFilled />,
   },
   search: {
-    path: SEARCH_PATH,
-    label: "Search",
+    path: ARCHIVES_PATH,
+    label: "Archives",
     icon: <FileSearchOutlined />,
   },
 };
@@ -99,7 +99,7 @@ const Page: React.FC = () => {
           component={SearchObjectConfigPage}
         />
         <Route path={KEYWORDS_PATH} component={KeywordsPage} />
-        <Route path={SEARCH_PATH} component={SearchPage} />
+        <Route path={ARCHIVES_PATH} component={ArchivesPage} />
       </Switch>
     </Layout>
   );
