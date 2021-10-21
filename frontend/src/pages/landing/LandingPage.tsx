@@ -17,6 +17,9 @@ import { reportMediums } from "@backend/domain/models/reportMedium";
 import { useRef } from "react";
 import { useLocationChanged } from "@src/shared/lib/react";
 import { useEffect } from "react";
+import Collapse from "antd/lib/collapse/Collapse";
+
+const { Panel } = Collapse;
 
 // ++++++++++
 // + Banner +
@@ -246,36 +249,24 @@ type FAQQuestion = {
 };
 
 const FAQ: React.FC<{ questions: FAQQuestion[] }> = ({ questions }) => {
+  const handleContactUsButtonClicked = () => {
+    console.log("handleContactUsButtonClicked");
+  };
   return (
     <FAQContainer>
       <Text>FAQ - Frequenlty asked Questions</Text>
       <FAQListContainer>
-        {questions.map((question) => (
-          <FAQItem data={question} key={question.question} />
-        ))}
+        <Collapse ghost style={{ textAlign: "center" }}>
+          {questions.map((question) => (
+            <Panel header={question.question} key={question.question}>
+              <Text>{question.answer}</Text>
+            </Panel>
+          ))}
+        </Collapse>
       </FAQListContainer>
-      <FAQListItemContainer>
-        <Text>Have more questions?</Text>
-        <Button> Contact us</Button>
-      </FAQListItemContainer>
+      <Text>Have more questions?</Text>
+      <Button onClick={handleContactUsButtonClicked}> Contact us</Button>
     </FAQContainer>
-  );
-};
-
-const FAQListItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const FAQItem: React.FC<{ data: FAQQuestion }> = ({
-  data: { question, answer },
-}) => {
-  return (
-    <FAQListItemContainer>
-      <Text>{question}</Text>
-      <Text>{answer}</Text>
-    </FAQListItemContainer>
   );
 };
 
@@ -340,7 +331,7 @@ export const LandingPage: React.FC = () => {
             {
               question: "How often are the keywords search?",
               answer:
-                "It depends on the social media platform, but usually every minute",
+                "It depends on the social media platform, but usually every minute.",
             },
           ]}
         />
