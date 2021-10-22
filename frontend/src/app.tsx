@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { StrictMode } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import CookieConsent from "react-cookie-consent";
 import { Navbar } from "./shared/components/Navbar";
 import { WithAuth } from "./shared/components/Auth";
 import { UserPage } from "./pages/user/UserPage";
@@ -43,6 +44,21 @@ const App: React.FC = () => (
           </Layout.Content>
           <p style={{ textAlign: "center" }}>Footer placeholder</p>
         </Layout>
+        <CookieConsent
+          buttonText="Got it!"
+          cookieName="ConsentCookie"
+          style={{ background: "#2B373B", fontSize: "14px" }}
+          buttonStyle={{
+            background: "#049784",
+            color: "#fcfcfc",
+            fontSize: "16px",
+            width: "100px",
+          }}
+          // overlay
+        >
+          We use cookies to enhance the user experience.{" "}
+          <a href={TERMS_AND_CONDITIONS_PATH}>Learn more.</a>
+        </CookieConsent>
       </BrowserRouter>
     </Provider>
   </StrictMode>
