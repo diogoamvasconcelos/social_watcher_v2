@@ -49,6 +49,19 @@ export const WithAuth: React.FC = () => {
   useEffect(() => {
     const autoLogin = async () => {
       const userInfo = await Auth.currentUserInfo();
+      if (userInfo == null) {
+        // failed to login, log out just to be sure
+        const signOutResult = await Auth.signOut();
+        if (signOutResult == undefined) {
+          // failed, probably because user doesn't exist
+          console.error(
+            "Failed to login and then failed to logout. Clearing local storage..."
+          );
+          localStorage.clear();
+        }
+        return;
+      }
+
       dispatch(
         onLogin({
           id: userInfo.attributes.sub,

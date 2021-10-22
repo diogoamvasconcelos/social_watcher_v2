@@ -5,12 +5,13 @@ const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 
 const prod = process.env.ENV === "prod";
 
 const config = {
   entry: ["./src/index.tsx"],
-  devtool: prod ? undefined : "eval-source-map",
+  devtool: prod ? "source-map" : "eval-source-map",
   mode: prod ? "production" : "development",
   devServer: {
     historyApiFallback: true,
@@ -90,6 +91,15 @@ const config = {
       "API_ENDPOINT",
       "APP_URL",
     ]),
+    new RobotstxtPlugin({
+      policy: [
+        {
+          userAgent: "*",
+          allow: "/",
+        },
+      ],
+      // sitemap: "https://thesocialwatcher.com/sitemap.xml",
+    }),
   ]
     .concat(process.env.ANALYZE ? [new BundleAnalyzerPlugin()] : [])
     .concat(prod ? [new CleanWebpackPlugin()] : []), // clean up dist folder before build
