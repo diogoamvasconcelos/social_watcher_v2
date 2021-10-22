@@ -61,6 +61,10 @@ const config = {
         ],
       },
       {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
+      {
         test: /\.(svg|jpg)$/,
         use: "file-loader",
       },

@@ -9,3 +9,5 @@ export const KEYWORDS_PATH = `${DASHBOARD_PATH}/keywords`;
 export const KEYWORDS_NEW_PATH_ARG = "new";
 export const KEYWORDS_NEW_PATH = `${DASHBOARD_PATH}/keywords/${KEYWORDS_NEW_PATH_ARG}`;
 export const ARCHIVES_PATH = `${DASHBOARD_PATH}/archives`;
+export const TERMS_AND_CONDITIONS_PATH = `/terms`;
+export const PRIVACY_POLICY_PATH = `/privacy`;

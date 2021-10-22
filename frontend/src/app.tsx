@@ -16,8 +16,12 @@ import {
   ROOT_PATH,
   SIGNUP_PATH,
   LOGIN_PATH,
+  TERMS_AND_CONDITIONS_PATH,
+  PRIVACY_POLICY_PATH,
 } from "./shared/data/paths";
 import { LandingPage } from "./pages/landing/LandingPage";
+import { TermsPage } from "./pages/terms/TermsPage";
+import { PrivacyPage } from "./pages/terms/PrivacyPage";
 
 const App: React.FC = () => (
   <StrictMode>
@@ -32,6 +36,8 @@ const App: React.FC = () => (
               <Route path={DASHBOARD_PATH} component={DashboardPage} />
               <Route path={USER_PATH} component={UserPage} />
               <Route path={[SIGNUP_PATH, LOGIN_PATH]} component={SigninPage} />
+              <Route path={TERMS_AND_CONDITIONS_PATH} component={TermsPage} />
+              <Route path={PRIVACY_POLICY_PATH} component={PrivacyPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Layout.Content>
