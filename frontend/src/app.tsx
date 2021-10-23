@@ -23,6 +23,7 @@ import {
 import { LandingPage } from "./pages/landing/LandingPage";
 import { TermsPage } from "./pages/terms/TermsPage";
 import { PrivacyPage } from "./pages/terms/PrivacyPage";
+import { Footer } from "./shared/components/Footer";
 
 const App: React.FC = () => (
   <StrictMode>
@@ -42,7 +43,7 @@ const App: React.FC = () => (
               <Route component={NotFoundPage} />
             </Switch>
           </Layout.Content>
-          <p style={{ textAlign: "center" }}>Footer placeholder</p>
+          <Footer />
         </Layout>
         <CookieConsent
           buttonText="Got it!"
