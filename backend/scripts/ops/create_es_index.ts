@@ -1,6 +1,6 @@
 /* 
 How to run:
-- scripts/with_env.js yarn ts-node scripts/ops/create_es_index.ts  --env de
+- scripts/with_env.js yarn ts-node scripts/ops/create_es_index.ts  --env dev
 */
 
 import {
@@ -14,7 +14,7 @@ const config = getConfig();
 const logger = getLogger();
 const client = getClient(config.mainElasticSearchUrl);
 
-const main = async () => {
+export const main = async () => {
   const res = await createSearchResultIndex(
     { logger, client },
     config.searchResultIndexVersion
@@ -22,4 +22,4 @@ const main = async () => {
   logger.info("createSearchResultIndex completed", { res });
 };
 
-void main();
+//void main();

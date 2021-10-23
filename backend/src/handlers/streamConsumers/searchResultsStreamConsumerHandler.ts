@@ -23,6 +23,7 @@ export const handler = async (event: DynamoDBStreamEvent) => {
   );
 
   const searchResults = event.Records.map((record) => {
+    // TODO: Handle delete
     const image = Converter.unmarshall(record.dynamodb?.NewImage ?? {});
     return fromEither(unknownToSearchResult(image));
   });

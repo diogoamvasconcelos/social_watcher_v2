@@ -17,7 +17,7 @@ const config = getConfig();
 const logger = getLogger();
 const client = getClient(config.mainElasticSearchUrl);
 
-const main = async () => {
+export const main = async () => {
   const indexVersion = config.searchResultIndexVersion;
   const indexName = getSearchResultIndexName(indexVersion);
 
@@ -56,4 +56,4 @@ const main = async () => {
   });
 };
 
-void main();
+// void main();
