@@ -12,6 +12,7 @@ resource "aws_lambda_function" "dispatch_report_jobs" {
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "10"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.dispatch_report_jobs_lambda_file)
   description      = "Queues Report jobs for users that requested reports on specific keywords to SQSs"
   depends_on       = [aws_cloudwatch_log_group.dispatch_report_jobs]

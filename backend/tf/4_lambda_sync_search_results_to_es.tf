@@ -10,8 +10,9 @@ resource "aws_lambda_function" "sync_search_results_to_es" {
   handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
-  memory_size      = "128"
+  memory_size      = "256"
   timeout          = "15"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.sync_search_results_to_es_lambda_file)
   description      = "Syncs/indexes search results to elastic search"
   depends_on       = [aws_cloudwatch_log_group.sync_search_results_to_es]

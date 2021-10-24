@@ -10,8 +10,9 @@ resource "aws_lambda_function" "dispatch_search_jobs" {
   handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
-  memory_size      = "256"
+  memory_size      = "512"
   timeout          = "10"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.dispatch_search_jobs_lambda_file)
   description      = "Sends search jobs from Keywords table to SQSs"
   depends_on       = [aws_cloudwatch_log_group.dispatch_search_jobs]

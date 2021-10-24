@@ -12,6 +12,7 @@ resource "aws_lambda_function" "get_search_object" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.get_search_object_lambda_file)
   description      = "Gets user's search object by index"
   depends_on       = [aws_cloudwatch_log_group.get_search_object]

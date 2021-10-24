@@ -12,6 +12,7 @@ resource "aws_lambda_function" "search_results_stream_consumer" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.search_results_stream_consumer_lambda_file)
   description      = "Search Results table stream consumer"
   depends_on       = [aws_cloudwatch_log_group.search_results_stream_consumer]

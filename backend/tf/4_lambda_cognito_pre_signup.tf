@@ -12,6 +12,7 @@ resource "aws_lambda_function" "cognito_pre_signup" {
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "10"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.cognito_pre_signup_lambda_file)
   description      = "Pre-signup lambda for cognito user pool."
   depends_on       = [aws_cloudwatch_log_group.cognito_pre_signup]

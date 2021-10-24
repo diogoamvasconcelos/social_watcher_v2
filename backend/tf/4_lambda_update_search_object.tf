@@ -12,6 +12,7 @@ resource "aws_lambda_function" "update_search_object" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.update_search_object_lambda_file)
   description      = "Updates a SearcObject"
   depends_on       = [aws_cloudwatch_log_group.update_search_object]

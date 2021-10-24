@@ -12,6 +12,7 @@ resource "aws_lambda_function" "notify_discord" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "15"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.notify_discord_lambda_file)
   description      = "Notify to Discord the searchResults/Notification jobs"
   depends_on       = [aws_cloudwatch_log_group.notify_discord]

@@ -12,6 +12,7 @@ resource "aws_lambda_function" "get_result_tags" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.get_result_tags_lambda_file)
   description      = "Gets user's result tags"
   depends_on       = [aws_cloudwatch_log_group.get_result_tags]

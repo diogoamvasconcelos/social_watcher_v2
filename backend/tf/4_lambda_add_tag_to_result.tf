@@ -12,6 +12,7 @@ resource "aws_lambda_function" "add_tag_to_result" {
   runtime          = "nodejs14.x"
   memory_size      = "128"
   timeout          = "3"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.add_tag_to_result_lambda_file)
   description      = "Adds a user result tag to a search result"
   depends_on       = [aws_cloudwatch_log_group.add_tag_to_result]

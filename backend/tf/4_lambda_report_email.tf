@@ -12,6 +12,7 @@ resource "aws_lambda_function" "report_email" {
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "15"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.report_email_lambda_file)
   description      = "Send reports by Email for report jobs"
   depends_on       = [aws_cloudwatch_log_group.report_email]

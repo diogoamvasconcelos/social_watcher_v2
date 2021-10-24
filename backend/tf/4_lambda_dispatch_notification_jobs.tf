@@ -12,6 +12,7 @@ resource "aws_lambda_function" "dispatch_notification_jobs" {
   runtime          = "nodejs14.x"
   memory_size      = "256"
   timeout          = "15"
+  architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.dispatch_notification_jobs_lambda_file)
   description      = "Dispatches Notification jobs for the different notification mediums"
   depends_on       = [aws_cloudwatch_log_group.dispatch_notification_jobs]
