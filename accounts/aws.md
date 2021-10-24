@@ -1,3 +1,11 @@
+# Main, prod
+
 account: 317887603465
-account name: diogo.vasconcelos.sw
+name: diogo.vasconcelos.sw
 email: diogo.am.vasconcelos+sw@gmail.com
+
+# Nonprod
+
+account: 754130566640
+name: social-watcher-nonprod
+email: diogo.am.vasconcelos+sw-nonprod@gmail.com

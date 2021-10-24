@@ -211,8 +211,9 @@ const Pricing: React.FC = () => {
       <PricingBoxesContainer>
         <PricingBoxContainer>
           <Text>Free Trial</Text>
-          <Text>2 keywords</Text>
-          <Text>10 days</Text>
+          <Text>1 keyword</Text>
+          <Text>30 days</Text>
+          <Text>No credit card</Text>
         </PricingBoxContainer>
         <PricingBoxContainer>
           <Text>Monthly</Text>
