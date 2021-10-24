@@ -22,6 +22,7 @@ const handler = async (event: SQSEvent) => {
   );
 
   const searchResults: SearchResult[] = event.Records.map((record) => {
+    // TODO: handle DELETED items
     return fromEither(decode(searchResultCodec, JSON.parse(record.body)));
   });
 

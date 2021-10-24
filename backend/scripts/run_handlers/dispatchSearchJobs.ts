@@ -2,7 +2,7 @@
 import { lambdaHandler } from "@src/handlers/searchers/dispatchSearchJobsHandler";
 
 // scripts/with_env.js yarn ts-node scripts/run_handlers/dispatchSearchJobs.ts
-const main = async () => {
+export const main = async () => {
   try {
     const result = await lambdaHandler({} as any, {} as any, {} as any);
     console.log("Successfully executed Lambda Handler, response:", result);
@@ -11,4 +11,4 @@ const main = async () => {
   }
 };
 
-void main();
+// void main();

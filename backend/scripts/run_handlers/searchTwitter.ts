@@ -2,7 +2,7 @@
 import { lambdaHandler } from "@src/handlers/searchers/searchTwitterHandler";
 
 // scripts/with_env.js yarn ts-node scripts/run_handlers/searchTwitter.ts
-const main = async () => {
+export const main = async () => {
   try {
     const result = await lambdaHandler(
       {
@@ -22,4 +22,4 @@ const main = async () => {
   }
 };
 
-void main();
+// void main();
