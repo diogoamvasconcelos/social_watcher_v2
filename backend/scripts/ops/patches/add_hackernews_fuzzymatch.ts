@@ -1,6 +1,6 @@
 /* 
-How to run:
-scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register scripts/ops/patches/add_local_id_to_results' --env dev
+how to run:
+scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register scripts/ops/patches/add_hackernews_fuzzymatch' --env dev
 */
 
 import * as t from "io-ts";
@@ -15,52 +15,49 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { isLeft, left, right } from "fp-ts/lib/Either";
 import { ApplyDdbItemFn, applyToAllDdbItems } from "../ops_utils";
 import {
-  SearchResult,
-  searchResultCodec,
-  toUniqueId,
+  HackernewsSearchResult,
+  hackernewsSearchResultCodec,
 } from "@src/domain/models/searchResult";
 import { decode, fromEither } from "@diogovasconcelos/lib";
 
-const searchResultWithOptionaLocalIdCodec = t.union([
-  searchResultCodec,
-  t.type({ localId: t.undefined }),
+const hackernewsResultWithOptionaFuzzyMatchCodec = t.union([
+  hackernewsSearchResultCodec,
+  t.type({ data: t.type({ fuzzyMatch: t.undefined }) }),
 ]);
-type SearchResultWithoutLocalId = Omit<SearchResult, "localId">;
+type HackernewsResultWithOutFuzzyMatch = Omit<
+  HackernewsSearchResult,
+  "fuzzyMatch"
+>;
 
-const addLocalIdFn: ApplyDdbItemFn = async (
+const addHackernewsFuzzyMatchFn: ApplyDdbItemFn = async (
   logger,
   dynamoDBClient,
   { tableName, item }
 ) => {
-  if (item.socialMedia === "hackernews") {
-    // temporary skip hackernews
+  if (item.socialMedia !== "hackernews") {
+    // skip non-hackernews
     return right("OK");
   }
 
-  const decodedSearchResult = fromEither(
-    decode(searchResultWithOptionaLocalIdCodec, item)
+  const decodedHackernewsSearchResult = fromEither(
+    decode(hackernewsResultWithOptionaFuzzyMatchCodec, item)
   );
 
-  if (decodedSearchResult.localId != undefined) {
+  if (decodedHackernewsSearchResult.data.fuzzyMatch != undefined) {
     // no need to patch, skip
     return right("OK");
   }
-  const searchResult =
-    decodedSearchResult as unknown as SearchResultWithoutLocalId; // ugly
-
-  const localId = searchResult.id;
-  const uniqueId = toUniqueId({
-    socialMedia: searchResult.socialMedia,
-    localId,
-  });
+  const hackernewsSearchResult =
+    decodedHackernewsSearchResult as unknown as HackernewsResultWithOutFuzzyMatch; // ugly
 
   const updateParams: DocumentClient.UpdateItemInput = {
     TableName: tableName,
-    Key: searchResultToPrimaryKey(uniqueId),
-    UpdateExpression: "SET #li = :li, #id = :id",
-    ConditionExpression: "attribute_exists(#id) AND attribute_not_exists(#li)",
-    ExpressionAttributeNames: { "#li": "localId", "#id": "id" },
-    ExpressionAttributeValues: { ":li": localId, ":id": uniqueId },
+    Key: searchResultToPrimaryKey(hackernewsSearchResult.id),
+    UpdateExpression: "SET #d.#fm = :fm",
+    ConditionExpression:
+      "attribute_exists(pk) AND attribute_not_exists(#d.#fm)",
+    ExpressionAttributeNames: { "#d": "data", "#fm": "fuzzyMatch" },
+    ExpressionAttributeValues: { ":fm": true }, // hardcode to "true" as they used to be all fuzzyMatch searches
     ReturnValues: "ALL_NEW",
   };
 
@@ -96,7 +93,7 @@ export const main = async () => {
   await applyToAllDdbItems(
     logger,
     config.searchResultsTableName,
-    addLocalIdFn,
+    addHackernewsFuzzyMatchFn,
     { throttling: "SOFT" }
   );
 };
