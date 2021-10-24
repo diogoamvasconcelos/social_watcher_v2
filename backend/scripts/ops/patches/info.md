@@ -9,7 +9,7 @@ yarn with-local-stack 'jest --testMatch "<rootDir>scripts/ops/patches/<patch_fil
 ## How to run the patch
 
 ```
-scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register scripts/ops/patches/<patch_file_name>' --env dev
+scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/patches/<patch_file_name>' --env dev
 ```
 
 > Remember to unccomment the `void main()` from the `<patch_file_name>.ts`, run, and then comment it back again

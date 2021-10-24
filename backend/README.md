@@ -31,5 +31,5 @@ yarn tsc -b
 ## Run ts-node
 
 ```
-scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register test/manual/youtube.ts' --env dev
+scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register test/manual/youtube.ts' --env dev
 ```

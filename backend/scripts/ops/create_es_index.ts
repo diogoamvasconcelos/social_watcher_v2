@@ -1,6 +1,6 @@
 /* 
 How to run:
-- scripts/with_env.js yarn ts-node scripts/ops/create_es_index.ts  --env dev
+- scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/create_es_index.ts' --env dev
 */
 
 import {

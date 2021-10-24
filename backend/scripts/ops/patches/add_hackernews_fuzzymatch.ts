@@ -1,6 +1,6 @@
 /* 
 how to run:
-scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register scripts/ops/patches/add_hackernews_fuzzymatch' --env dev
+scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/patches/add_hackernews_fuzzymatch' --env dev
 */
 
 import * as t from "io-ts";
@@ -93,7 +93,7 @@ export const main = async () => {
   await applyToAllDdbItems(
     logger,
     config.searchResultsTableName,
-    addHackernewsFuzzyMatchFn,
+    { applyItemFn: addHackernewsFuzzyMatchFn },
     { throttling: "SOFT" }
   );
 };

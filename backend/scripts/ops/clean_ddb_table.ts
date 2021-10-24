@@ -1,6 +1,6 @@
 /* 
 How to run:
-- scripts/with_env.js yarn ts-node scripts/ops/clean_ddb_table.ts
+- scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/clean_ddb_table.ts' --env dev
 */
 
 import { getConfig } from "@src/lib/config";
@@ -35,7 +35,9 @@ export const main = async () => {
   await Promise.all([
     // applyToAllDdbItems(logger, config.usersTableName, deleteItemFn),
     // applyToAllDdbItems(logger, config.keywordsTableName, deleteItemFn),
-    applyToAllDdbItems(logger, config.searchResultsTableName, deleteItemFn),
+    applyToAllDdbItems(logger, config.searchResultsTableName, {
+      applyItemFn: deleteItemFn,
+    }),
   ]);
 };
 

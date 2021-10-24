@@ -1,8 +1,3 @@
-/* 
-How to run:
-- scripts/with_env.js yarn ts-node scripts/ops/clean_ddb_table.ts
-*/
-
 import { DefaultOkReturn } from "@src/domain/ports/shared";
 import { Logger } from "@src/lib/logger";
 import DynamoDB, { DocumentClient, ScanInput } from "aws-sdk/clients/dynamodb";
@@ -17,6 +12,16 @@ export type ApplyDdbItemFn = (
     tableName: string;
     tableKeySchema: DynamoDB.KeySchema;
     item: DocumentClient.AttributeMap;
+  }
+) => DefaultOkReturn;
+
+export type ApplyDdbItemBatchFn = (
+  logger: Logger,
+  dynamoDBClient: Client,
+  args: {
+    tableName: string;
+    tableKeySchema: DynamoDB.KeySchema;
+    items: DocumentClient.AttributeMap[];
   }
 ) => DefaultOkReturn;
 
@@ -38,7 +43,13 @@ const throttlingConfig: Record<
 export const applyToAllDdbItems = async (
   logger: Logger,
   tableName: string,
-  applyFn: ApplyDdbItemFn,
+  {
+    applyItemFn,
+    applyItemBatchFn,
+  }: {
+    applyItemFn?: ApplyDdbItemFn;
+    applyItemBatchFn?: ApplyDdbItemBatchFn;
+  },
   { throttling }: ApplyToAllDdbItemsOptions = { throttling: "SOFT" }
 ) => {
   try {
@@ -75,19 +86,43 @@ export const applyToAllDdbItems = async (
       itemCount += scanResult.Count ?? 0;
       cursor = scanResult.LastEvaluatedKey;
 
-      await Promise.all(
-        (scanResult.Items ?? []).map(async (item) => {
-          const applyResultEither = await applyFn(logger, dynamoDBClient, {
+      if (applyItemFn) {
+        await Promise.all(
+          (scanResult.Items ?? []).map(async (item) => {
+            const applyResultEither = await applyItemFn(
+              logger,
+              dynamoDBClient,
+              {
+                tableName,
+                tableKeySchema,
+                item,
+              }
+            );
+            if (isLeft(applyResultEither)) {
+              logger.error("Failed to applyItemFn", { tableName, item });
+              throw new Error("Failed calling applyItemFn");
+            }
+          })
+        );
+      }
+
+      if (applyItemBatchFn) {
+        const applyResultEither = await applyItemBatchFn(
+          logger,
+          dynamoDBClient,
+          {
             tableName,
             tableKeySchema,
-            item,
-          });
-          if (isLeft(applyResultEither)) {
-            logger.error("Failed to applyFn", { tableName, item });
-            throw new Error("Failed calling applyFn");
+            items: scanResult.Items ?? [],
           }
-        })
-      );
+        );
+        if (isLeft(applyResultEither)) {
+          logger.error("Failed to applyItemBatchFn", {
+            tableName,
+          });
+          throw new Error("Failed calling applyItemBatchFn");
+        }
+      }
 
       logger.info(`Processing ${scanResult.Count}(${itemCount}) new items...`);
 

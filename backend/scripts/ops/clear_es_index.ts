@@ -1,6 +1,6 @@
 /* 
 How to run:
-- scripts/with_env.js yarn ts-node scripts/ops/clear_es_index.ts  --env dev
+- scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/clear_es_index.ts' --env dev
 */
 
 import { isLeft } from "fp-ts/lib/Either";
@@ -38,6 +38,10 @@ export const main = async () => {
     });
     return;
   }
+  logger.info("Deleted index", {
+    index: indexName,
+    result: deleteEither.right,
+  });
 
   const createEither = await createSearchResultIndex(
     { logger, client },

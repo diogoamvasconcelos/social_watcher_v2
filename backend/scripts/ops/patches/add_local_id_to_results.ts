@@ -1,6 +1,6 @@
 /* 
 How to run:
-scripts/with_env.js 'yarn ts-node -r tsconfig-paths/register scripts/ops/patches/add_local_id_to_results' --env dev
+scripts/with_env.js 'yarn ts-node --files -r tsconfig-paths/register scripts/ops/patches/add_local_id_to_results' --env dev
 */
 
 import * as t from "io-ts";
@@ -96,7 +96,7 @@ export const main = async () => {
   await applyToAllDdbItems(
     logger,
     config.searchResultsTableName,
-    addLocalIdFn,
+    { applyItemFn: addLocalIdFn },
     { throttling: "SOFT" }
   );
 };
