@@ -20,7 +20,7 @@ import {
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 import { isLeft } from "fp-ts/lib/Either";
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

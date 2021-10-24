@@ -1,6 +1,6 @@
 export default {
   trial: {
-    nofSearchWords: 5,
-    durationInDays: 10,
+    nofSearchObjects: 1,
+    durationInDays: 30,
   },
 };

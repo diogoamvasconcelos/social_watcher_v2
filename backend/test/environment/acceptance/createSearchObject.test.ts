@@ -19,7 +19,7 @@ import {
 } from "./steps";
 import { SearchObjectUserDataIo } from "@src/domain/models/userItem";
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

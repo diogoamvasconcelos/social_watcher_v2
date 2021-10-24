@@ -14,7 +14,7 @@ import {
 } from "./steps";
 import { GetResultTagsResponse } from "@src/handlers/api/models/getResultTags";
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

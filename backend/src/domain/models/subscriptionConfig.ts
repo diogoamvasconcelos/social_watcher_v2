@@ -8,7 +8,7 @@ import subscriptionConfig from "@config/subscription";
 
 export const subscriptionConfigCodec = t.type({
   trial: t.type({
-    nofSearchWords: positiveInteger,
+    nofSearchObjects: positiveInteger,
     durationInDays: positiveInteger,
   }),
 });

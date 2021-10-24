@@ -14,7 +14,7 @@ import {
   updateUserSearchObject,
 } from "./steps";
 
-jest.setTimeout(45000);
+jest.setTimeout(60000);
 
 describe("keyword interaction between multiple users", () => {
   let testUserA: AsyncReturnType<typeof createTestUser>;

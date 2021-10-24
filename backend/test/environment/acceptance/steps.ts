@@ -37,7 +37,7 @@ import {
 } from "@src/lib/apiClient/apiClient";
 import { KeywordData } from "@src/domain/models/keyword";
 import { makeGetKeywordData } from "@src/adapters/keywordStore/getKeywordData";
-import { retryUntil } from "@test/lib/retry";
+import { retryUntil, sleep } from "@test/lib/retry";
 import { isLeft, isRight } from "fp-ts/lib/Either";
 import { socialMedias } from "@src/domain/models/socialMedia";
 import { toDocumentPrimaryKeys } from "@src/adapters/keywordStore/client";
@@ -107,6 +107,9 @@ export const createTestUser = async (
       logger
     )
   );
+
+  // wait a bit for stripe webhook, before changing subcription, otherwise it gets overriten
+  await sleep(5000);
 
   if (subscriptionData) {
     await updateUserSubscription({

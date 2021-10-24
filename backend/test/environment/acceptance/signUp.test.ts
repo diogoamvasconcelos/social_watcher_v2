@@ -15,7 +15,7 @@ import {
   TestUser,
 } from "./steps";
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

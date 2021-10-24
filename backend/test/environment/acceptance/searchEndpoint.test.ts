@@ -23,7 +23,7 @@ import { retryUntil, sleep } from "@test/lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
 import { getMinutesAgo } from "@src/lib/date";
 
-jest.setTimeout(45000);
+jest.setTimeout(60000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
@@ -178,7 +178,8 @@ const trySearchUsingApi = async (...searchArgs: Parameters<typeof search>) => {
   return fromEither(
     await retryUntil(
       async () => fromEither(await search(...searchArgs)),
-      (res) => res.items.length > 0
+      (res) => res.items.length > 0,
+      6
     )
   );
 };

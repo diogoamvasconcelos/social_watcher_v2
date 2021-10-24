@@ -20,7 +20,7 @@ import {
 } from "@src/lib/apiClient/apiClient";
 import { isLeft } from "fp-ts/lib/Either";
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);

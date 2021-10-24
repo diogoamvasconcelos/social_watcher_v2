@@ -16,7 +16,7 @@ import { retryUntil } from "@test/lib/retry";
 import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 import { addDays } from "@src/lib/date";
 
-jest.setTimeout(30000);
+jest.setTimeout(45000);
 
 const config = getEnvTestConfig();
 const subscriptionConfig = getSubscriptionConfig();
@@ -51,7 +51,7 @@ describe("Trial expiration successful", () => {
     expect(user.subscription.type).toEqual("TRIAL");
     expect(user.subscription.status).toEqual("ACTIVE");
     expect(user.subscription.nofSearchObjects).toEqual(
-      subscriptionConfig.trial.nofSearchWords
+      subscriptionConfig.trial.nofSearchObjects
     );
     expect(new Date(user.subscription.expiresAt ?? 0).toDateString()).toEqual(
       addDays(

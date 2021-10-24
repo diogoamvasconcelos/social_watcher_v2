@@ -37,4 +37,4 @@ local:
 
 dev:
   MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com
-  STRIPE_PRODUCT_NORMAL_ID: price_1InUZLDuqMWaCw56vjA9oh7M
+  STRIPE_PRODUCT_NORMAL_ID: price_1JoAkZDuqMWaCw56xJwVZHXy

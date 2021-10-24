@@ -17,7 +17,7 @@ import { uuid } from "@src/lib/uuid";
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 describe("removeTagFromResult e2e test", () => {
   let testUser: TestUser;

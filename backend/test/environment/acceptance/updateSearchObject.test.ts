@@ -27,7 +27,7 @@ import { isLeft } from "fp-ts/lib/Either";
 const config = getEnvTestConfig();
 const apiClient = getApiClient(config.apiEndpoint);
 
-jest.setTimeout(20000);
+jest.setTimeout(45000);
 
 describe("update searchObject e2e test", () => {
   let testUser: TestUser;

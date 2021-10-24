@@ -40,7 +40,7 @@ export const makeInitiateUserSubscription = (
         items: [
           {
             price: subscriptionProductId,
-            quantity: subscriptionConfig.trial.nofSearchWords,
+            quantity: subscriptionConfig.trial.nofSearchObjects,
           },
         ],
         trial_period_days: subscriptionConfig.trial.durationInDays,
