@@ -1,1 +1,0 @@
-facebook page: https://www.facebook.com/The-Social-Watcher-103316418818625
