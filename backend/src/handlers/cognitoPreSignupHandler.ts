@@ -15,6 +15,7 @@ import { getSubscriptionConfig } from "@src/domain/models/subscriptionConfig";
 import { getClient as getSsmClient } from "@src/lib/ssm";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { makeCreateResultTag } from "@src/adapters/userStore/createResultTag";
+import { isTestEmail } from "@src/domain/controllers/isTestUser";
 
 const config = getConfig();
 const logger = getLogger();
@@ -39,6 +40,11 @@ const handler = async (event: PreSignUpTriggerEvent) => {
     config.stripeNormalProductId,
     subscriptionConfig
   );
+  const initiateTestUserSubscriptionFn = makeInitiateUserSubscription(
+    paymentsClient,
+    config.stripeTestProductId,
+    subscriptionConfig
+  );
   const createResultTagFn = makeCreateResultTag(
     userStoreClient,
     config.usersTableName
@@ -59,7 +65,9 @@ const handler = async (event: PreSignUpTriggerEvent) => {
       logger,
       putUserFn,
       putPaymentDataFn,
-      initiateUserSubscriptionFn,
+      initiateUserSubscriptionFn: isTestEmail(email)
+        ? initiateTestUserSubscriptionFn // use stripe test account for env tests
+        : initiateUserSubscriptionFn,
       createResultTagFn,
     },
     {

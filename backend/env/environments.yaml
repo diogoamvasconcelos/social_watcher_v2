@@ -34,7 +34,9 @@ local:
   ES_KIBANA_PORT: 9300
   MAIN_ELASTIC_SEARCH_URL: http://localhost:9200
   STRIPE_PRODUCT_NORMAL_ID: dummy
+  STRIPE_PRODUCT_TEST_ID: dummy
 
 dev:
   MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com
-  STRIPE_PRODUCT_NORMAL_ID: price_1JoAkZDuqMWaCw56xJwVZHXy
+  STRIPE_PRODUCT_NORMAL_ID: price_1JoW0JDuqMWaCw56Dh44xBmR
+  STRIPE_PRODUCT_TEST_ID: price_1JoW0JDuqMWaCw56Dh44xBmR

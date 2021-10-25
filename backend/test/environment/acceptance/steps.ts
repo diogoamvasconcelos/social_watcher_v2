@@ -407,7 +407,7 @@ export const updateUserPaymentsSubscription = async (
   );
 };
 
-export const deleteNormalSubsctiption = async (paymentData: PaymentData) => {
+export const deleteTestSubsctiption = async (paymentData: PaymentData) => {
   const stripeClient = getPaymentsClient(
     await getPaymentsCredentials(getSsmClient(), logger)
   );
@@ -420,7 +420,7 @@ export const deleteNormalSubsctiption = async (paymentData: PaymentData) => {
   );
 };
 
-export const addNewNormalSubscription = async (
+export const addNewTestSubscription = async (
   paymentData: PaymentData,
   paymentMethod: string
 ) => {
@@ -443,7 +443,7 @@ export const addNewNormalSubscription = async (
         customer: paymentData.stripe.customerId,
         items: [
           {
-            price: config.stripeNormalProductId,
+            price: config.stripeTestProductId,
             quantity: 10,
           },
         ],

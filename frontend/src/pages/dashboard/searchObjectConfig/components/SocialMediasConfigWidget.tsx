@@ -211,9 +211,9 @@ const RedditCustomOptions: React.FC<RedditCustomOptionsProps> = ({
   );
 };
 
-// ++++++++++
+// ++++++++++++++
 // + Hackernews +
-// ++++++++++
+// ++++++++++++++
 
 type HackernewsCustomOptionsProps = {
   hackernewsSearchData: SearchObjectUserDataDomain["searchData"]["hackernews"];

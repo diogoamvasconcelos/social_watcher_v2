@@ -128,7 +128,7 @@ export const searchObjectUserDataIoToDomain = (
         twitter: { enabledStatus: "DISABLED" },
         reddit: {
           enabledStatus: "DISABLED",
-          over18: false,
+          over18: true,
         },
         hackernews: {
           enabledStatus: "DISABLED",

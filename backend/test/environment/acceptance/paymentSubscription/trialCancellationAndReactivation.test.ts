@@ -1,8 +1,8 @@
 import { getEnvTestConfig } from "@test/lib/config";
 import {
-  addNewNormalSubscription,
+  addNewTestSubscription,
   createTestUser,
-  deleteNormalSubsctiption,
+  deleteTestSubsctiption,
   deleteUser,
   getIdToken,
   getPaymentData,
@@ -55,7 +55,7 @@ describe("Trial cancellation and re-activation", () => {
       throw new Error("Failed to get user PaymentsData");
     }
 
-    await deleteNormalSubsctiption(paymentData);
+    await deleteTestSubsctiption(paymentData);
 
     const cancelledUser = fromEither(
       await retryUntil(
@@ -83,7 +83,7 @@ describe("Trial cancellation and re-activation", () => {
     );
 
     // add new subscription (re-activation)
-    await addNewNormalSubscription(paymentData, "pm_card_visa");
+    await addNewTestSubscription(paymentData, "pm_card_visa");
 
     const reactivatedUser = fromEither(
       await retryUntil(

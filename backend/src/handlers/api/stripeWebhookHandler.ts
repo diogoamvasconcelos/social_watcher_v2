@@ -36,6 +36,7 @@ import {
   decode,
   newPositiveInteger,
 } from "@diogovasconcelos/lib/iots";
+import { isTestEmail } from "@src/domain/controllers/isTestUser";
 
 const config = getConfig();
 
@@ -142,14 +143,6 @@ const handleSubscriptionUpdatedEvent = async (
     return left("ERROR");
   }
 
-  const newPriceItem = newSubsctiption.items.data[0];
-  if (newPriceItem.price.id != config.stripeNormalProductId) {
-    deps.logger.error(
-      `stripe's event data price id (${newPriceItem.price.id}) doesn't match expected one (${config.stripeNormalProductId})`
-    );
-    return left("ERROR");
-  }
-
   const userEither = await getUserByCustomerId(deps, newSubsctiption.customer);
   if (isLeft(userEither)) {
     return userEither;
@@ -161,6 +154,21 @@ const handleSubscriptionUpdatedEvent = async (
     return left("ERROR");
   }
   const { user, paymentData } = userEither.right;
+
+  const newPriceItem = newSubsctiption.items.data[0];
+  if (newPriceItem.price.id !== config.stripeNormalProductId) {
+    if (
+      newPriceItem.price.id === config.stripeTestProductId &&
+      isTestEmail(user.email)
+    ) {
+      // Allow if a test user using the test product (used in env tests)
+    } else {
+      deps.logger.error(
+        `stripe's event data price id (${newPriceItem.price.id}) doesn't match expected one (${config.stripeNormalProductId})`
+      );
+      return left("ERROR");
+    }
+  }
 
   // Update paymentData
   paymentData.stripe.subscriptionId = newSubsctiption.id;

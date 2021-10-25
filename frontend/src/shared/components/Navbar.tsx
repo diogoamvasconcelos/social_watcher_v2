@@ -24,6 +24,7 @@ import {
   LOGIN_PATH,
 } from "../data/paths";
 import { UserAuthStateDetails } from "../reducers/userAuthState";
+import { hasUserSession } from "../lib/userSession";
 
 const config = getConfig();
 
@@ -83,7 +84,13 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   );
 };
 
-const ButtonsContainer = styled.div``;
+const ButtonsContainer = styled.div`
+  margin: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+`;
 
 const LoginButton = styled(Button)`
   color: white;
@@ -170,12 +177,22 @@ const LoginButtons: React.FC = () => {
     history.push(SIGNUP_PATH);
   };
 
+  const newUser = !hasUserSession();
+
   return (
     <ButtonsContainer>
-      <LoginButton type="text" onClick={handleSignupClicked} key="signup">
+      <LoginButton
+        type={newUser ? "primary" : "ghost"}
+        onClick={handleSignupClicked}
+        key="signup"
+      >
         Start free trial
       </LoginButton>
-      <LoginButton type="primary" onClick={handleLoginClicked} key="login">
+      <LoginButton
+        type={newUser ? "ghost" : "primary"}
+        onClick={handleLoginClicked}
+        key="login"
+      >
         Log in
       </LoginButton>
     </ButtonsContainer>

@@ -7,6 +7,7 @@ variable "tf_dir" {}
 
 # config-specific envinoment vars
 variable "stripe_product_normal_id" {}
+variable "stripe_product_test_id" {}
 locals {
   lambda_handler = "index.lambdaHandler"
 
@@ -22,6 +23,7 @@ locals {
     SEARCH_RESULT_INDEX_VERSION            = 1
     SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL    = aws_sqs_queue.sync_search_results_to_es.id
     STRIPE_PRODUCT_NORMAL_ID               = var.stripe_product_normal_id
+    STRIPE_PRODUCT_TEST_ID                 = var.stripe_product_test_id
     SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL = aws_sqs_queue.search_results_notifications.id
     NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME  = "{notificationMedium}_notification_jobs"
     REPORT_JOBS_QUEUE_TEMPLATE_NAME        = "{reportMedium}_report_jobs"

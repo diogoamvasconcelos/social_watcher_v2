@@ -44,6 +44,8 @@ export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
             return "Can't have more than 3 words";
           case "TOO_LONG":
             return "Can't be more than 40 characters long";
+          case "TOO_SHORT":
+            return "Can't be less than 3 characters";
           case "STARTS_WITH_SPACE":
             return "Can't start with a 'space'";
           case "ENDS_WITH_SPACE":
