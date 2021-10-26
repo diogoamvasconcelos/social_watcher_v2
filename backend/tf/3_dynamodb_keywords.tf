@@ -3,6 +3,9 @@ resource "aws_dynamodb_table" "keywords" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "pk"
   range_key    = "sk"
+  point_in_time_recovery {
+    enabled = local.is_prod
+  }
   attribute {
     name = "pk"
     type = "S"

@@ -5,7 +5,10 @@ import { Client, outToDomain } from "./client";
 
 export const makeSearchInstagram = (client: Client): SearchInstagramFn => {
   return async (logger, keyword) => {
-    const results = await search({ logger, client }, keyword);
+    const results = await search({ logger, client }, keyword, {
+      maxResults: 200,
+      minutesAgo: 60 * 24 * 1, // 1 day
+    });
 
     if (isLeft(results)) {
       logger.error("instagram search failed", { error: results.left });

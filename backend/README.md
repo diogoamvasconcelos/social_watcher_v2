@@ -22,6 +22,12 @@ yarn test:environment
 scripts/with_env.js yarn 'jest -t="some text"'
 ```
 
+### Or file
+
+```
+scripts/with_env.js 'yarn jest --testMatch "<rootDir>test/environment/acceptance/paymentSubscription/trialCancellationAndReactivation.test.ts"' --env dev
+```
+
 ## Update ts for frontend
 
 ```

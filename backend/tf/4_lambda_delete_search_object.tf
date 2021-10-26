@@ -14,7 +14,7 @@ resource "aws_lambda_function" "delete_search_object" {
   timeout          = "3"
   architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.delete_search_object_lambda_file)
-  description      = "Deletes a SearcObject"
+  description      = "Deletes a SearchObject"
   depends_on       = [aws_cloudwatch_log_group.delete_search_object]
 
   environment {

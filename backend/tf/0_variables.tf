@@ -9,6 +9,8 @@ variable "tf_dir" {}
 variable "stripe_product_normal_id" {}
 variable "stripe_product_test_id" {}
 locals {
+
+  is_prod = var.env == "prod"
   lambda_handler = "index.lambdaHandler"
 
   lambda_env_vars = {
@@ -31,5 +33,6 @@ locals {
 
   tags = {
     project = "social watcher"
+    env = var.env
   }
 }
