@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "dev": "scripts/with_env.js 'webpack serve'",
+    "dev-with-prod-be": "scripts/with_env.js 'webpack serve' --env local-with-prod-be",
     "analyze": "ANALYZE=1 scripts/with_env.js 'webpack serve'",
     "check-all": "yarn lint:check && yarn typecheck && yarn test",
     "typecheck": "tsc",
@@ -14,9 +15,8 @@
     "test": "jest",
     "audit": "yarn audit",
     "upgrade-pkgs": "yarn upgrade-interactive --latest --deep",
-    "deploy": "scripts/with_env.js 'scripts/deploy.sh' --env dev",
-    "deploy-prod": "scripts/with_env.js 'scripts/deploy.sh' --env prod",
-    "deploy-infra": "scripts/with_env.js 'scripts/terraform_deploy.sh' --env dev"
+    "deploy-app": "scripts/with_env.js 'scripts/deploy.sh' --env prod",
+    "deploy-infra": "scripts/with_env.js 'scripts/terraform_deploy.sh' --env prod"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.4",

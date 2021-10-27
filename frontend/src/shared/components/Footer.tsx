@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
     <MainContainer>
       <InformationContainter>
         <Text>{`© ${year} the Social Watcher, Diogo Vasconcelos AB`}</Text>
-        <a href={`mailto: ${supportEmail}`}>{supportEmail}</a>
+        <Text>{supportEmail}</Text>
       </InformationContainter>
       <NavigationContainter>
         <a href={TERMS_AND_CONDITIONS_PATH}>Terms and Conditions</a>

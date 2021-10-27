@@ -4,17 +4,26 @@ common:
   OUT_DIR: "${rootPath}/.out"
   TF_DIR: "${rootPath}/tf"
   AWS_REGION: us-east-1
+  S3_BUCKET_NAME: fe-page
+
+local:
+  # against dev/nonprod backend
+  APP_URL: "http://localhost:8080"
+  API_ENDPOINT: https://l0nkaf6mph.execute-api.us-east-1.amazonaws.com/api/
+  COGNITO_USER_POOL_ID: us-east-1_ND6BUjiwR
+  COGNITO_CLIENT_ID: 762vr28bjqpu3vligd3i5ei19
+  COGNITO_CLIENT_DOMAIN: https://thesocialwatcher-nonprod.auth.us-east-1.amazoncognito.com
+
+local-with-prod-be:
+  APP_URL: "http://localhost:8080"
   API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
   COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
   COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
-  S3_BUCKET_NAME: fe-page
-
-local:
-  APP_URL: "http://localhost:8080"
-
-dev:
-  APP_URL: "https://d2r5id69pzx1ip.cloudfront.net"
 
 prod:
   APP_URL: "https://thesocialwatcher.com"
+  API_ENDPOINT: https://r2iyq5t3oe.execute-api.us-east-1.amazonaws.com/api
+  COGNITO_USER_POOL_ID: us-east-1_BGoxkHJoy
+  COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
+  COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com

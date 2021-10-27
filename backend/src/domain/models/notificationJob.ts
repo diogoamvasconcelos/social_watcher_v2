@@ -42,7 +42,6 @@ export type DiscordNotificatonJob = t.TypeOf<
 // + Slack +
 // +++++++++++
 
-// TODO: fix this with actual required fields
 export const slackNotificationConfigCodec = t.intersection([
   notificationConfigBaseCodec,
   t.type({
