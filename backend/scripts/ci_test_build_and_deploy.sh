@@ -15,9 +15,13 @@ echo "Deploying dev..."
 $THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env dev
 echo "Env testing dev"
 yarn run test:environment
-# echo "Building prod..."
-# $THIS_PATH/with_env.js "yarn build" --env prod
-# echo "Deploying prod..."
-# $THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env prod
+
+if [[ $@ == *--prod* ]]; then
+	echo "Building prod..."
+	$THIS_PATH/with_env.js "yarn build" --env prod
+	echo "Deploying prod..."
+	$THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env prod
+fi
+
 echo "Prep types for FE"
 yarn compile-ts4fe
