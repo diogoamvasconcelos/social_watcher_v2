@@ -14,7 +14,8 @@ jest.setTimeout(30000);
 const lambdaName = getEnvTestConfig().reportEmailLambdaName;
 
 describe("handlers/reportEmail", () => {
-  it("can report an email", async () => {
+  // TODO: reactivate this test once SES is available in the non-prod account
+  it.skip("can report an email", async () => {
     const searchJobEvent = buildEmailReportJobEvent();
 
     const invokeResult = fromEither(

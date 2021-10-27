@@ -2,7 +2,8 @@ import { Either, left, right } from "fp-ts/lib/Either";
 import { Keyword } from "../models/keyword";
 
 export const keywordLimits = {
-  length: 40,
+  minLength: 3,
+  maxLength: 40,
   words: 3,
 };
 
@@ -10,6 +11,7 @@ export type ValidateKeywordErrors =
   | "TOO_MANY_WORDS"
   | "STARTS_WITH_SPACE"
   | "ENDS_WITH_SPACE"
+  | "TOO_SHORT"
   | "TOO_LONG";
 
 export const validateKeyword = (
@@ -32,8 +34,13 @@ export const validateKeyword = (
   if (keyword.endsWith(space)) {
     return left("ENDS_WITH_SPACE");
   }
-  // - max 40 chars long
-  if (keyword.length > keywordLimits.length) {
+  // - min length
+  if (keyword.length < keywordLimits.minLength) {
+    return left("TOO_SHORT");
+  }
+
+  // - max length
+  if (keyword.length > keywordLimits.maxLength) {
     return left("TOO_LONG");
   }
 

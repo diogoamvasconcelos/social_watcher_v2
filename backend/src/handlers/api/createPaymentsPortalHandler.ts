@@ -18,6 +18,9 @@ import { getClient as getUsersStoreClient } from "@src/adapters/userStore/client
 import { makeGetPaymentData } from "@src/adapters/userStore/getPaymentData";
 import { makeInternalErrorResponse, makeSuccessResponse } from "./responses";
 
+// * Customize the portal here: https://dashboard.stripe.com/test/settings/billing/portal
+// * Don't forget that you need to add the products so users can update their plans
+
 const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<

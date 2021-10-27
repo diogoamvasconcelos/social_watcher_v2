@@ -1,5 +1,3 @@
-// TODO: Add tests
-
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { getLogger } from "@src/lib/logger";
 import { ApiResponse } from "./models/models";

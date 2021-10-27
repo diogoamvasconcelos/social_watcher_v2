@@ -29,6 +29,6 @@ export const getEnvTestConfig = () => {
     searchResultsTableName: ensure("SEARCH_RESULTS_TABLE_NAME"),
     syncSearchResultsToEs: ensure("SYNC_SEARCH_RESULTS_TO_ES_LAMBDA_NAME"),
     mainElasticSearchUrl: ensure("MAIN_ELASTIC_SEARCH_URL"),
-    stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
+    stripeTestProductId: ensure("STRIPE_PRODUCT_TEST_ID"),
   };
 };

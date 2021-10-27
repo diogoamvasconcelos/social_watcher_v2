@@ -1,7 +1,7 @@
 
 resource "aws_cloudwatch_event_rule" "trigger_cron_search_jobs" {
   name                = "trigger_cron_search_jobs"
-  schedule_expression = "rate(10 minutes)"
+  schedule_expression = local.is_prod ? "rate(5 minutes)" : "rate(360 minutes)"
 
   tags = local.tags
 }

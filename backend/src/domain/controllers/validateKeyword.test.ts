@@ -29,12 +29,22 @@ describe("controllers/validateKeyword", () => {
     ["has simbols", newLowerCase("simbols-!#$%^&*()@"), right("OK")],
     [
       "almost a long word",
-      newLowerCase("a".repeat(keywordLimits.length)),
+      newLowerCase("a".repeat(keywordLimits.maxLength)),
       right("OK"),
     ],
     [
+      "shortest word possible",
+      newLowerCase("a".repeat(keywordLimits.minLength)),
+      right("OK"),
+    ],
+    [
+      "too short word",
+      newLowerCase("a".repeat(keywordLimits.minLength - 1)),
+      left("TOO_SHORT"),
+    ],
+    [
       "very long word",
-      newLowerCase("a".repeat(keywordLimits.length + 1)),
+      newLowerCase("a".repeat(keywordLimits.maxLength + 1)),
       left("TOO_LONG"),
     ],
     ["uuid is fine (used in tests)", newLowerCase(uuid()), right("OK")],

@@ -17,6 +17,7 @@ export const getConfig = () => {
       "SYNC_SEARCH_RESULTS_TO_ES_QUEUE_URL"
     ),
     stripeNormalProductId: ensure("STRIPE_PRODUCT_NORMAL_ID"),
+    stripeTestProductId: ensure("STRIPE_PRODUCT_TEST_ID"),
     searchResultsNotificationsQueueUrl: ensure(
       "SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL"
     ),

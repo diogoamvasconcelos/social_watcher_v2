@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Text from "antd/lib/typography/Text";
 import { ConfigWidgetProps } from "../SearchObjectConfigPage";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
-import { useAppDispatch } from "../../../../shared/store";
+import { useAppDispatch, useAppSelector } from "../../../../shared/store";
 import { PartialDeep } from "type-fest";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { updateReportData } from "../searchObjectConfigState";
@@ -84,7 +84,19 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
   reportData,
 }) => {
   const dispatch = useAppDispatch();
+  const userEmail = useAppSelector(
+    (state) => state.userAuth.status !== "NULL" && state.userAuth.email
+  );
   const [addEmailInputValue, setAddEmailInputValue] = useState("");
+
+  useEffect(() => {
+    // Pre-fil user email if empty list
+    if (!userEmail || reportData.email.addresses) {
+      setAddEmailInputValue("");
+    } else {
+      setAddEmailInputValue(userEmail);
+    }
+  }, [userEmail, reportData.email.addresses]); // reset the add email input on add/removes
 
   const dispatchUpdateNotificationData = (
     data: PartialDeep<SearchObjectDomain["reportData"]["email"]>
@@ -111,9 +123,6 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
       // TODO: show error?
       return;
     }
-
-    // clear
-    setAddEmailInputValue("");
 
     dispatchUpdateNotificationData({
       addresses: [
@@ -147,6 +156,7 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
   };
 
   const isEnabled = reportData.email.status != "DISABLED";
+
   return (
     <>
       <Text>Email</Text>

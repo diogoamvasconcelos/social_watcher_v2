@@ -23,7 +23,8 @@
 
 # Slack - notification
 
-- done
+- done bot
+- todo: a proper app (easier to integrate, users don't need to create a bot)
 
 # Email - notification
 
@@ -60,3 +61,9 @@
 - pricing is tricky and you need a partner
   - https://respond.io/blog/whatsapp-business-api-pricing
   - https://www.twilio.com/whatsapp
+
+# Chrome Extension - notifications
+
+- show missed notifications on startup
+- show seen/new icon on notifications
+- show banner in real time

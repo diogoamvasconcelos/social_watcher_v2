@@ -4,6 +4,9 @@ resource "aws_dynamodb_table" "users" {
   hash_key     = "pk"
   range_key    = "sk"
 
+  point_in_time_recovery {
+    enabled = local.is_prod
+  }
   attribute {
     name = "pk"
     type = "S"

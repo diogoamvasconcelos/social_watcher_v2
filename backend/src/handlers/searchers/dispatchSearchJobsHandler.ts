@@ -100,7 +100,7 @@ export const filterKeywords = (
       // - https://docs.google.com/spreadsheets/d/1fS1pXaw-j79P1-mrVHD3agRqLvb-ARYbumLtoRdcKlU/edit#gid=0
       return applyCooldownToKeywords(
         {
-          cooldownPeriodInMinutes: 24 * 60,
+          cooldownPeriodInMinutes: 24 * 60, // TODO: increase freq in production
           maxSearchObjectsPerSearch: 10,
         },
         keywords
@@ -112,7 +112,7 @@ export const filterKeywords = (
       // TODO: request quota extension
       return applyCooldownToKeywords(
         {
-          cooldownPeriodInMinutes: 12 * 60,
+          cooldownPeriodInMinutes: 12 * 60, // TODO: increase freq in production
         },
         keywords
       );

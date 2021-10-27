@@ -14,7 +14,7 @@ resource "aws_lambda_function" "create_search_object" {
   timeout          = "3"
   architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.create_search_object_lambda_file)
-  description      = "Creates a SearcObject"
+  description      = "Creates a SearchObject"
   depends_on       = [aws_cloudwatch_log_group.create_search_object]
 
   environment {

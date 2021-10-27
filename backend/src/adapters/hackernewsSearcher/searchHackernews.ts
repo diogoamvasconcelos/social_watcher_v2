@@ -7,7 +7,7 @@ export const makeSearchHackernews = (client: Client): SearchHackernewsFn => {
   return async (logger, keyword) => {
     const results = await search({ logger, client }, keyword, {
       maxResults: 100,
-      minutesAgo: 20,
+      minutesAgo: 10,
     });
 
     if (isLeft(results)) {

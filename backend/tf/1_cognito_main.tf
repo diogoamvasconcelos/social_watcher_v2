@@ -58,7 +58,7 @@ resource "aws_cognito_user_pool_client" "main_pool_client" {
 }
 
 resource "aws_cognito_user_pool_domain" "main_pool" {
-  domain       = "thesocialwatcher"
+  domain       = local.is_prod ? "thesocialwatcher" : "thesocialwatcher-nonprod"
   user_pool_id = aws_cognito_user_pool.main_pool.id
 }
 
