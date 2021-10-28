@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { isLeft } from "fp-ts/lib/Either";
 import { SearchResponse } from "@backend/handlers/api/models/search";
-import { newPositiveInteger } from "@diogovasconcelos/lib";
+import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { apiSearch } from "../../../shared/lib/apiClient";
 import { ActionStatus } from "@src/shared/lib/reduxThunk";
 

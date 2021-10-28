@@ -9,7 +9,7 @@ import {
   apiUpdateSearchObject,
   apiGetDefaultSearchObject,
 } from "../../../shared/lib/apiClient";
-import { newLowerCase } from "@diogovasconcelos/lib";
+import { newLowerCase } from "@diogovasconcelos/lib/iots";
 
 export const getUserSearchObject = createAsyncThunk(
   "get:searchObject",

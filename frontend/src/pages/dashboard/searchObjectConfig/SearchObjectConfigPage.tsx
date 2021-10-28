@@ -19,7 +19,7 @@ import {
   resetConfigState,
   updateUserSearchObject,
 } from "./searchObjectConfigState";
-import { decode } from "@diogovasconcelos/lib";
+import { decode } from "@diogovasconcelos/lib/iots";
 import {
   SearchObjectDomain,
   searchObjectIndexCodec,

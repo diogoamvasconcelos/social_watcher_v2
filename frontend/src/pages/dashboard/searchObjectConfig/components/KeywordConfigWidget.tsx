@@ -3,7 +3,7 @@ import { ConfigWidgetProps } from "../SearchObjectConfigPage";
 import Text from "antd/lib/typography/Text";
 import { useAppDispatch } from "../../../../shared/store";
 import { updateKeyword } from "../searchObjectConfigState";
-import { newLowerCase } from "@diogovasconcelos/lib";
+import { newLowerCase } from "@diogovasconcelos/lib/iots";
 import {
   validateKeyword,
   ValidateKeywordErrors,
