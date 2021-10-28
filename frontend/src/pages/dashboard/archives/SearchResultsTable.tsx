@@ -18,7 +18,7 @@ import { SearchResult } from "@backend/domain/models/searchResult";
 import Select from "antd/lib/select";
 import { Keyword } from "@backend/domain/models/keyword";
 import DatePicker, { RangePickerProps } from "antd/lib/date-picker";
-import { useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import Button from "antd/lib/button";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import Text from "antd/lib/typography/Text";
@@ -35,9 +35,38 @@ import {
 } from "@diogovasconcelos/lib/iots";
 import { isNonEmpty } from "fp-ts/lib/Array";
 import { momentOrNull } from "@src/shared/lib/moment";
+import { createAction, createReducer } from "@reduxjs/toolkit";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
+
+// +++++++++
+// + STATE +
+// +++++++++
+
+type TableConfigState = {
+  posts: {
+    text: "ONLY_ORIGINAL" | "ONLY_TRANSLATION" | "BOTH";
+  };
+};
+const tableConfigInitialState: TableConfigState = {
+  posts: {
+    text: "BOTH",
+  },
+};
+
+const updateTableConfigPostsText =
+  createAction<TableConfigState["posts"]["text"]>("UPDATE_POSTS_TEXT");
+
+const tableConfigStateReducer = createReducer<TableConfigState>(
+  tableConfigInitialState,
+  (builder) => {
+    builder.addCase(updateTableConfigPostsText, (state, action) => {
+      return deepmergeSafe(state, { posts: { text: action.payload } });
+    });
+  }
+);
 
 // +++++++++++++
 // + CONTAINER +
@@ -62,6 +91,10 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   const searchResult = useAppSelector((state) => state.search);
   const [isSearcing, setIsSearching] = useState(false);
   const [searchEnabled, setSearchEnabled] = useState(false);
+  const [tableConfigState, dispatchTableConfigStateAction] = useReducer(
+    tableConfigStateReducer,
+    tableConfigInitialState
+  );
 
   useEffect(() => {
     // hacky way to know how when the search has ended...probably worth improving
@@ -103,12 +136,15 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
           searchRequestState={searchRequestState}
           dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
           searchEnabled={searchEnabled}
+          tableConfigState={tableConfigState}
+          dispatchTableConfigStateAction={dispatchTableConfigStateAction}
         />
         <ResultsTable
           searchResults={searchResult}
           loading={isSearcing}
           searchRequestState={searchRequestState}
           dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
+          tableConfigState={tableConfigState}
         />
       </TableContainer>
     </>
@@ -132,18 +168,20 @@ type SearchTableProps = {
   loading: boolean;
   searchRequestState: SearchRequestState;
   dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
+  tableConfigState: TableConfigState;
 };
 const ResultsTable: React.FC<SearchTableProps> = ({
   searchResults,
   loading,
   searchRequestState,
   dispatchSearchRequestStateAction,
+  tableConfigState: { posts: postsConfig },
 }) => {
   const columns: ColumnsType<TableRecord> = [
     {
       title: "Social Media",
       dataIndex: "socialMedia",
-      render: (text, record) => (
+      render: (text: string, record: TableRecord) => (
         <a href={record.link} target="_blank">
           {text}
         </a>
@@ -153,7 +191,20 @@ const ResultsTable: React.FC<SearchTableProps> = ({
     { title: "Text", dataIndex: "text" },
     { title: "Language", dataIndex: "lang" },
     { title: "Translated Text", dataIndex: "translatedText" },
-  ];
+  ].filter((column) => {
+    switch (column.dataIndex) {
+      case "text":
+        return (
+          postsConfig.text === "ONLY_ORIGINAL" || postsConfig.text === "BOTH"
+        );
+      case "translatedText":
+        return (
+          postsConfig.text === "ONLY_TRANSLATION" || postsConfig.text === "BOTH"
+        );
+      default:
+        return true;
+    }
+  });
 
   const handleTableChange: TableProps<TableRecord>["onChange"] = (
     pagination,
@@ -229,6 +280,8 @@ type TableHeaderProps = {
   searchRequestState: SearchRequestState; // not used atm
   dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
   searchEnabled: boolean;
+  tableConfigState: TableConfigState;
+  dispatchTableConfigStateAction: React.Dispatch<AnyAction>;
 };
 
 const TableHeader: React.FC<TableHeaderProps> = ({
@@ -237,6 +290,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   searchRequestState,
   dispatchSearchRequestStateAction,
   searchEnabled,
+  tableConfigState,
+  dispatchTableConfigStateAction,
 }) => {
   const initialKeyword = newLowerCase("choose a keyword");
 
@@ -260,7 +315,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   };
 
   const handleRangePickerChanged: RangePickerProps["onChange"] = (
-    dates,
+    _dates,
     [startDate, endDate]
   ) => {
     dispatchSearchRequestStateAction(
@@ -283,6 +338,12 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   const handleSearchClicked = () => {
     onSearch();
+  };
+
+  const handlePostConfigTextChanged = (
+    val: TableConfigState["posts"]["text"]
+  ) => {
+    dispatchTableConfigStateAction(updateTableConfigPostsText(val));
   };
 
   const allowedKeywords: Keyword[] = searchObjects
@@ -346,6 +407,28 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           onClick={handleSearchClicked}
           disabled={!searchEnabled}
         />
+      </TableHeaderRow>
+      <TableHeaderRow>
+        <Text>Table config</Text>
+      </TableHeaderRow>
+      <TableHeaderRow>
+        <Text>Posts text</Text>
+        <Select
+          placeholder="text"
+          onChange={handlePostConfigTextChanged}
+          value={tableConfigState.posts.text}
+          style={{ width: "200px" }}
+        >
+          <Option value="BOTH" key="BOTH">
+            Original and Translation
+          </Option>
+          <Option value="ONLY_ORIGINAL" key="ONLY_ORIGINAL">
+            Original only
+          </Option>
+          <Option value="ONLY_TRANSLATION" key="ONLY_TRANSLATION">
+            Translation only
+          </Option>
+        </Select>
       </TableHeaderRow>
     </TableHeaderContainer>
   );

@@ -52,7 +52,7 @@ export const UserPage: React.FC = () => {
           alignItems: "center",
         }}
       >
-        {<JSONViewer name="user" json={user} />}
+        {<JSONViewer name="user" json={user} darkMode={true} />}
         <Button
           type="primary"
           style={{ width: "200px" }}
