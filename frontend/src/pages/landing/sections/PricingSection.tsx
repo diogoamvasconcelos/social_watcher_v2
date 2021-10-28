@@ -13,9 +13,7 @@ const PricingContainer = styled(SectionContainer)`
   );
 `;
 
-const PricingContentContainer = styled(SectionContentContainer)`
-  gap: 100px;
-`;
+const PricingContentContainer = styled(SectionContentContainer)``;
 
 const PricingBoxContainer = styled.div`
   border-radius: 8px;
