@@ -174,7 +174,7 @@ const SearchObjectItem: React.FC<SearchObjectItemProp> = ({ searchObject }) => {
             onClick={handleConfigButtonClicked}
           />
         </Tooltip>
-        <Tooltip title="Go to search">
+        <Tooltip title="Search in Archives">
           <Button
             style={{ gridColumnStart: "3", justifySelf: "end" }}
             type="default"
