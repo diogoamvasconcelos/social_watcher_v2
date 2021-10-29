@@ -7,7 +7,7 @@ import Switch from "antd/lib/switch";
 import { useAppDispatch } from "../../../../shared/store";
 import { updateNotificationData } from "../searchObjectConfigState";
 import Divider from "antd/lib/divider";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { PartialDeep } from "type-fest";
 import {
   NotificationMedium,

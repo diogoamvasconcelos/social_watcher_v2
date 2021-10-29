@@ -1,5 +1,7 @@
-// default import jest-extended for more functionality
-import "jest-extended";
+// add all jest-extended matchers
+// @ts-expect-error
+import * as matchers from "jest-extended";
+expect.extend(matchers);
 
 // silence the logger
 if (process.env.LOG_LEVEL === undefined) {

@@ -14,10 +14,13 @@ import {
   toRightOrUndefined,
 } from "@diogovasconcelos/lib/iots";
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
 import { PartialDeep, SetOptional } from "type-fest";
 import { keywordCodec } from "@backend/domain/models/keyword";
 import Title from "antd/lib/typography/Title";
+import { socialMediaCodec } from "@backend/domain/models/socialMedia";
+import { nonEmptyArray } from "io-ts-types/lib/nonEmptyArray";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import _pick from "lodash/pick";
 
 // +++++++++
 // + STATE +
@@ -39,7 +42,10 @@ const searchRequestStateReducer = createReducer<SearchRequestState>(
   searchRequestInitialState,
   (builder) => {
     builder.addCase(updateSearchRequestAction, (state, action) => {
-      return deepmergeSafe(state, action.payload);
+      return {
+        ...deepmergeSafe(state, action.payload),
+        ..._pick(action.payload, "socialMediaQuery"), // deepmerge here doesn't work well with arrays as they get concatenated
+      } as SearchRequestState;
     });
   }
 );
@@ -55,7 +61,10 @@ const getParamsFromQueryString = (
 
   const keywordEither = decode(keywordCodec, s.keyword);
   const textEither = decode(t.string, s.text);
-  // const socialMediaEither = decode(keywordCodec, s.keyword); // TODO: improve this when implemented
+  const socialMediaEither = decode(
+    nonEmptyArray(socialMediaCodec),
+    s.socialMedias
+  );
   const timeStartEither = decode(dateISOString, s.timeStart);
   const timeEndEither = decode(dateISOString, s.timeEnd);
 
@@ -66,7 +75,7 @@ const getParamsFromQueryString = (
       happenedAtEnd: toRightOrUndefined(timeEndEither),
     },
     dataQuery: toRightOrUndefined(textEither),
-    // socialMedia: toRightOrUndefined(socialMediaEither),
+    socialMediaQuery: toRightOrUndefined(socialMediaEither),
   };
 };
 
@@ -98,7 +107,10 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
 
   useEffect(() => {
     // Update QueryString
-    const newSearch = qs.parse(search, { parseNumbers: true });
+    const newSearch = qs.parse(search, {
+      parseNumbers: true,
+      arrayFormat: "comma",
+    });
     history.replace({
       search: qs.stringify({
         ...newSearch,
@@ -106,6 +118,7 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
         text: searchRequestState.dataQuery,
         timeStart: searchRequestState.timeQuery?.happenedAtStart,
         timeEnd: searchRequestState.timeQuery?.happenedAtEnd,
+        socialMedias: searchRequestState.socialMediaQuery?.join(","),
       }),
     });
   }, [searchRequestState]);

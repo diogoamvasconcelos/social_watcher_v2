@@ -1,4 +1,4 @@
-import { ensureString } from "@diogovasconcelos/lib";
+import { ensureString } from "@diogovasconcelos/lib/config";
 
 export const getConfig = () => {
   return {

@@ -1,20 +1,11 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { isLeft } from "fp-ts/lib/Either";
+import { createSlice } from "@reduxjs/toolkit";
 import { CreatePaymentsPortalResponse } from "@backend/handlers/api/models/createPaymentsPortal";
 import { apiCreatePaymentsPortal } from "../../shared/lib/apiClient";
+import { createApiActionWithArgs } from "@src/shared/lib/redux";
 
-export const createPaymentPortal = createAsyncThunk(
+export const createPaymentPortal = createApiActionWithArgs(
   "post:user/payments/create-portal",
-  async (
-    args: Parameters<typeof apiCreatePaymentsPortal>,
-    { rejectWithValue }
-  ) => {
-    const res = await apiCreatePaymentsPortal(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiCreatePaymentsPortal
 );
 
 export type UserPageState = CreatePaymentsPortalResponse;

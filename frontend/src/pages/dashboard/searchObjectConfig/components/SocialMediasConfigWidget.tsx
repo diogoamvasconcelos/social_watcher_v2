@@ -8,7 +8,7 @@ import Switch from "antd/lib/switch";
 import { useAppDispatch } from "../../../../shared/store";
 import { updateSearchData } from "../searchObjectConfigState";
 import { SearchObjectUserDataDomain } from "@backend/domain/models/userItem";
-import { deepmergeSafe } from "@diogovasconcelos/lib";
+import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import _some from "lodash/some";
 import Tooltip from "antd/lib/tooltip";
 import InfoCircleOutlined from "@ant-design/icons/lib/icons/InfoCircleOutlined";

@@ -1,10 +1,28 @@
 import * as t from "io-ts";
-import { isRight, left, Either, isLeft, right } from "fp-ts/lib/Either";
+import {
+  isRight,
+  left,
+  Either,
+  isLeft,
+  right,
+  Left,
+  Right,
+} from "fp-ts/lib/Either";
 import * as A from "fp-ts/lib/Array";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import * as ruins from "ruins-ts";
 import { DateFromISOString, NumberFromString } from "io-ts-types";
 import isEmail from "validator/lib/isEmail";
+
+export type LeftValue<T> = T extends Left<infer U> ? U : never;
+export type RightValue<T> = T extends Right<infer U> ? U : never;
+
+export type EitherLeft<T extends { _tag: string }> = LeftValue<
+  Extract<T, { _tag: "Left" }>
+>;
+export type EitherRight<T extends { _tag: string }> = RightValue<
+  Extract<T, { _tag: "Right" }>
+>;
 
 export const fromEither = ruins.fromEither;
 

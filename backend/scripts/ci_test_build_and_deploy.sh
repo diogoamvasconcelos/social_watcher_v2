@@ -21,6 +21,8 @@ if [[ $@ == *--prod* ]]; then
 	$THIS_PATH/with_env.js "yarn build" --env prod
 	echo "Deploying prod..."
 	$THIS_PATH/with_env.js $THIS_PATH/terraform_deploy.sh --env prod
+else
+	echo "Skipping prod deploy (use --prod to enable it)"
 fi
 
 echo "Prep types for FE"

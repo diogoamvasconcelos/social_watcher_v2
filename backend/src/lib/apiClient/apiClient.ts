@@ -72,7 +72,9 @@ export type ApiError = AxiosResponse | "DECODE_ERROR";
 // + Methods +
 // +++++++++++
 
-type ClientMethod<U> = (deps: ApiClientDeps) => Promise<Either<ApiError, U>>;
+export type ClientMethod<U> = (
+  deps: ApiClientDeps
+) => Promise<Either<ApiError, U>>;
 const createClientMethod = <U>(
   params: GenericCallParams,
   resultDecoder: t.Decoder<unknown, U>

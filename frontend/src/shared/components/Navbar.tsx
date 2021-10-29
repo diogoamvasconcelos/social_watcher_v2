@@ -121,7 +121,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDetails }) => {
 
   const menu = (
     <Menu onClick={handleItemClicked}>
-      <Menu.Item style={{ pointerEvents: "none" }}>
+      <Menu.Item style={{ pointerEvents: "none" }} key="email">
         {/*makes it not clickable/selectable*/}
         <Text>{userDetails.email}</Text>
       </Menu.Item>

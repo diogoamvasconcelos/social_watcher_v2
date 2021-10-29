@@ -1,15 +1,19 @@
+import { JsonObjectEncodable } from "@diogovasconcelos/lib/models/jsonEncodable";
 import React from "react";
 import ReactJson from "react-json-view";
-import { JsonObjectEncodable } from "@diogovasconcelos/lib";
 import { gruvBoxDarkHardBase16, gruvBoxLightHardBase16 } from "./base16Themes";
 
 type JSONViewerProps = {
   json?: JsonObjectEncodable;
-  [x: string]: unknown; //rest
+  darkMode?: boolean;
+  [x: string]: unknown; // rest
 };
 
-export const JSONViewer: React.FC<JSONViewerProps> = ({ json, ...rest }) => {
-  const { darkMode } = { darkMode: true }; // TODO
+export const JSONViewer: React.FC<JSONViewerProps> = ({
+  json,
+  darkMode,
+  ...rest
+}) => {
   return (
     <ReactJson
       style={{
