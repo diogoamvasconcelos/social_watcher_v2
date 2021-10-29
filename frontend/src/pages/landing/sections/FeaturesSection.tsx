@@ -41,7 +41,7 @@ export const FeaturesSection: React.FC = () => {
       <Text>Features</Text>
       <FeaturesContentContainer>
         <FeaturesBoxContainer>
-          <BoxTitle>Social Media Platforms</BoxTitle>
+          <BoxTitle>Supported Social Media</BoxTitle>
           {socialMedias.map((socialMedia) => (
             <ListItem
               text={capitalizeWord(socialMedia)}
@@ -51,7 +51,7 @@ export const FeaturesSection: React.FC = () => {
           ))}
         </FeaturesBoxContainer>
         <FeaturesBoxContainer>
-          <BoxTitle>Notification Platforms</BoxTitle>
+          <BoxTitle>Available Notification Platforms</BoxTitle>
           {notificationMediums.map((notificationMedium) => (
             <ListItem
               text={capitalizeWord(notificationMedium)}
