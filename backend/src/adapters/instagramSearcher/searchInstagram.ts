@@ -7,7 +7,7 @@ export const makeSearchInstagram = (client: Client): SearchInstagramFn => {
   return async (logger, keyword) => {
     const results = await search({ logger, client }, keyword, {
       maxResults: 200,
-      minutesAgo: 60 * 24 * 1, // 1 day
+      minutesAgo: 60 * (12 + 3), //3 hours overlap
     });
 
     if (isLeft(results)) {
