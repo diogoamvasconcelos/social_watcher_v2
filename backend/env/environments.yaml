@@ -51,5 +51,5 @@ prod:
   COGNITO_CLIENT_ID: 3am3e9e4ho7r9timp1ejv91np9
   COGNITO_CLIENT_DOMAIN: https://thesocialwatcher.auth.us-east-1.amazoncognito.com
   MAIN_ELASTIC_SEARCH_URL: https://search-main-4n3p5dmsencx7oqrf5p23qqocu.us-east-1.es.amazonaws.com
-  STRIPE_PRODUCT_NORMAL_ID: price_1JoW0JDuqMWaCw56Dh44xBmR
+  STRIPE_PRODUCT_NORMAL_ID: price_1JoASfDuqMWaCw56KsoeVwUA
   STRIPE_PRODUCT_TEST_ID: price_1JoW0JDuqMWaCw56Dh44xBmR
