@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { isLeft } from "fp-ts/lib/Either";
+import { createSlice } from "@reduxjs/toolkit";
 import { User } from "@backend/domain/models/user";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { apiGetSearchObjects, apiGetUser } from "../lib/apiClient";
+import { createApiAction } from "../lib/redux";
 
 export type UserState = {
   details?: User;
@@ -10,25 +10,11 @@ export type UserState = {
   fetchStatus: "idle" | "loading";
 };
 
-export const getUserDetails = createAsyncThunk(
-  "get:user",
-  async (_, { rejectWithValue }) => {
-    const res = await apiGetUser();
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
-);
-export const getUserSearchObjects = createAsyncThunk(
+export const getUserDetails = createApiAction("get:user", apiGetUser);
+
+export const getUserSearchObjects = createApiAction(
   "get:searchObjects",
-  async (_, { rejectWithValue }) => {
-    const res = await apiGetSearchObjects();
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiGetSearchObjects
 );
 
 const initialState: UserState = {

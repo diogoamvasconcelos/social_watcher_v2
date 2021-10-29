@@ -1,22 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { isLeft } from "fp-ts/lib/Either";
+import { createSlice } from "@reduxjs/toolkit";
 import { SearchResponse } from "@backend/handlers/api/models/search";
 import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { apiSearch } from "../../../shared/lib/apiClient";
 import { ActionStatus } from "@src/shared/lib/reduxThunk";
+import { createApiActionWithArgs } from "@src/shared/lib/redux";
 
 export type SearchRequestData = Parameters<typeof apiSearch>[0];
 
-export const searchKeyword = createAsyncThunk(
-  "search",
-  async (arg: SearchRequestData, { rejectWithValue }) => {
-    const res = await apiSearch(arg);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
-);
+export const searchKeyword = createApiActionWithArgs("search", apiSearch);
 
 export type SearchState = SearchResponse & { status: ActionStatus };
 

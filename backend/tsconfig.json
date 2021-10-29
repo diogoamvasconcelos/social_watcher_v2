@@ -13,6 +13,13 @@
     },
     "sourceMap": true
   },
-  "include": ["src/", "scripts/**/*.ts", "test/", "typings/", "config/"],
+  "include": [
+    "src/",
+    "scripts/**/*.ts",
+    "test/",
+    "typings/",
+    "config/",
+    "./jest.*.ts"
+  ],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**"]
 }

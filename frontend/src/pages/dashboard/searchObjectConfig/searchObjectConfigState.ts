@@ -1,6 +1,5 @@
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isLeft } from "fp-ts/lib/Either";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ActionStatus } from "../../../shared/lib/reduxThunk";
 import {
   apiCreateSearchObject,
@@ -10,69 +9,34 @@ import {
   apiGetDefaultSearchObject,
 } from "../../../shared/lib/apiClient";
 import { newLowerCase } from "@diogovasconcelos/lib/iots";
+import {
+  createApiAction,
+  createApiActionWithArgs,
+} from "@src/shared/lib/redux";
 
-export const getUserSearchObject = createAsyncThunk(
+export const getUserSearchObject = createApiActionWithArgs(
   "get:searchObject",
-  async (args: Parameters<typeof apiGetSearchObject>, { rejectWithValue }) => {
-    const res = await apiGetSearchObject(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiGetSearchObject
 );
 
-export const createUserSearchObject = createAsyncThunk(
+export const createUserSearchObject = createApiActionWithArgs(
   "post:searchObject",
-  async (
-    args: Parameters<typeof apiCreateSearchObject>,
-    { rejectWithValue }
-  ) => {
-    const res = await apiCreateSearchObject(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiCreateSearchObject
 );
 
-export const updateUserSearchObject = createAsyncThunk(
+export const updateUserSearchObject = createApiActionWithArgs(
   "put:searchObject",
-  async (
-    args: Parameters<typeof apiUpdateSearchObject>,
-    { rejectWithValue }
-  ) => {
-    const res = await apiUpdateSearchObject(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiUpdateSearchObject
 );
 
-export const deleteUserSearchObject = createAsyncThunk(
+export const deleteUserSearchObject = createApiActionWithArgs(
   "delete:searchObject",
-  async (
-    args: Parameters<typeof apiDeleteSearchObject>,
-    { rejectWithValue }
-  ) => {
-    const res = await apiDeleteSearchObject(...args);
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiDeleteSearchObject
 );
 
-export const getDefaultSearchObject = createAsyncThunk(
+export const getDefaultSearchObject = createApiAction(
   "get:defaultSearchObject",
-  async (_, { rejectWithValue }) => {
-    const res = await apiGetDefaultSearchObject();
-    if (isLeft(res)) {
-      return rejectWithValue(res.left);
-    }
-    return res.right;
-  }
+  apiGetDefaultSearchObject
 );
 
 export type SearchObjectConfigState = {

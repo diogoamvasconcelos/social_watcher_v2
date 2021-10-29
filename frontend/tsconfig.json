@@ -6,6 +6,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types", "./typings"],
+    "types": ["jest-extended"],
     "paths": {
       "@backend/*": ["../backend/src/*"],
       "@src/*": ["./src/*"]
@@ -17,7 +18,8 @@
     "./test",
     "./typings",
     "./assets",
-    "./tf/cloudfront_functions/*.js"
+    "./tf/cloudfront_functions/*.js",
+    "./jest.*.ts"
   ],
   "exclude": ["**/node_modules", ".build/*", "**/.*/", "tmp/**", "../backend"],
   "references": [{ "path": "../backend" }]

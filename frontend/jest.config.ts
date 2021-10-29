@@ -25,6 +25,9 @@ const config: Config.InitialOptions = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: ["<rootDir>/node_modules/(?!(.*/es|.*/esm)/)"],
+
+  // A list of paths to modules that run some code to configure or set up the testing framework before each test
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
 
 export default config;
