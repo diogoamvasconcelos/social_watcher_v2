@@ -39,7 +39,7 @@ export const HowItWorksSection: React.FC = () => {
         <HiWBox>
           <HiWBoxTitle>
             <SearchOutlined />
-            <Text>Search</Text>
+            <Text>Automatic Search</Text>
           </HiWBoxTitle>
           <Text>
             The Social Watcher is always* searching the many social medias for
@@ -49,7 +49,7 @@ export const HowItWorksSection: React.FC = () => {
         <HiWBox>
           <HiWBoxTitle>
             <NotificationOutlined />
-            <Text>Notify</Text>
+            <Text>Get Notifications</Text>
           </HiWBoxTitle>
           <Text>
             When it finds any relevant data, it sends you a notification right
@@ -59,7 +59,7 @@ export const HowItWorksSection: React.FC = () => {
         <HiWBox>
           <HiWBoxTitle>
             <FileTextOutlined />
-            <Text>Report</Text>
+            <Text>Get Reports</Text>
           </HiWBoxTitle>
           <Text>
             You can also get daily or even weekly reports with the summary all
@@ -69,11 +69,11 @@ export const HowItWorksSection: React.FC = () => {
         <HiWBox>
           <HiWBoxTitle>
             <FileSearchOutlined />
-            <Text>Archive</Text>
+            <Text>Browse the Archive</Text>
           </HiWBoxTitle>
           <Text>
             All these data is also stored in the "archives", which can be
-            accessed and searched through the Dashboard
+            browsed through the Dashboard
           </Text>
         </HiWBox>
       </HiWContentContainer>
