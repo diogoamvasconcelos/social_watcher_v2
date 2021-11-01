@@ -31,7 +31,7 @@ export const formatEmailReport = async (
 	</mjml>
 `;
 
-  //console.log(rawMjml); // handy for tests to get the raw mjml at https://mjml.io/try-it-live/6mr_9TfdyiQ
+  // console.log(rawMjml); // handy for tests to get the raw mjml at https://mjml.io/try-it-live/6mr_9TfdyiQ
   const minified = await minify(rawMjml);
   return mjml2html(minified, {}).html;
 };
@@ -80,6 +80,7 @@ const head = `
 `;
 
 const buildHeaderSection = ({
+  keyword,
   searchFrequency,
   searchStart,
 }: EmailReportJob) => {
@@ -92,7 +93,7 @@ const buildHeaderSection = ({
 		<mj-text color="${colors.lightText}">${capitalizeWord(
     searchFrequency
   )} report - ${searchStart}</mj-text>
-		<mj-text color="${colors.lightText}">Keyword: pureref</mj-text>
+		<mj-text color="${colors.lightText}">Keyword: ${keyword}</mj-text>
 	</mj-column>
 </mj-section>
 	`;
@@ -110,7 +111,7 @@ const buildSummarySection = ({
 
   const summary = `Found ${resultsString} posts for '${keyword}'`;
 
-  const resultsUrl = `https://thesocialwatcher.com/user/dashboard/search?${qs.stringify(
+  const resultsUrl = `https://thesocialwatcher.com/user/dashboard/archives?${qs.stringify(
     {
       keyword: keyword,
       timeStart: searchStart,
@@ -216,7 +217,7 @@ const buildResultItem = (result: SearchResult, isEvenItem: boolean) => {
 	<mj-column>
 		<mj-text mj-class="${textClasses.subheader}" color="${
     colors.darkText
-  }"><a href=${result.link}>${title}</a></mj-text>
+  }"><a href="${result.link}">${title}</a></mj-text>
 	</mj-column>
 	<mj-column>
 		<mj-image width="32px" src="${getSocialMediaIcon(

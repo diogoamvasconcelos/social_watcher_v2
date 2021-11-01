@@ -9,6 +9,9 @@ import { getClient, sendEmail } from "@src/lib/ses";
 import {
   buildInstagramSearchResult,
   buildTwitterSearchResult,
+  buildRedditSearchResult,
+  buildHackernewsSearchResult,
+  buildYoutubeSearchResult,
 } from "@test/lib/builders";
 import { formatEmailReport } from "@src/domain/controllers/formatEmailReport";
 
@@ -48,12 +51,22 @@ const generateHtml = async () => {
     link: "https://instagram.com",
     happenedAt: newDateISOString("2021-01-01T06:00:00"),
   });
+  const searchResult3 = buildRedditSearchResult();
+  const searchResult4 = buildHackernewsSearchResult();
+  const searchResult5 = buildYoutubeSearchResult();
 
   return formatEmailReport({
     keyword,
     searchFrequency: "DAILY",
     searchStart: newDateISOString("2021-01-01T06:00:00"),
-    searchResults: [searchResult0, searchResult1, searchResult2],
+    searchResults: [
+      searchResult0,
+      searchResult1,
+      searchResult2,
+      searchResult3,
+      searchResult4,
+      searchResult5,
+    ],
     reportMedium: "email",
     config: {
       status: "DAILY",

@@ -10,7 +10,7 @@ import { formatEmailReport } from "@src/domain/controllers/formatEmailReport";
 
 const logger = getLogger();
 
-const handler = async (event: SQSEvent) => {
+export const handler = async (event: SQSEvent) => {
   const emailReporterClient = getEmailReporterClient();
   const sendEmailFn = makeSendEmail(emailReporterClient);
 
