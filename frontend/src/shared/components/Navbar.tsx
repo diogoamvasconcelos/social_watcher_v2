@@ -10,7 +10,6 @@ import { getConfig } from "../lib/config";
 import _findKey from "lodash/findKey";
 import Text from "antd/lib/typography/Text";
 import Menu from "antd/lib/menu";
-import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
 import { Header } from "antd/lib/layout/layout";
@@ -25,6 +24,10 @@ import {
 } from "../data/paths";
 import { UserAuthStateDetails } from "../reducers/userAuthState";
 import { hasUserSession } from "../lib/userSession";
+import { size } from "@src/shared/style/sizing";
+import { PrimaryButton } from "../style/components/button";
+import { colors } from "../style/colors";
+import { fontSize } from "../style/fonts";
 
 const config = getConfig();
 
@@ -34,6 +37,21 @@ const navigationConfig: Record<string, string> = {
   faq: FAQ_PATH,
   dashboard: DASHBOARD_PATH,
 };
+
+const StyledMenu = styled(Menu)`
+  background: transparent;
+
+  color: ${colors.neutral.dark3};
+  font-size: ${fontSize.size18px};
+
+  &&& .ant-menu-item-selected {
+    color: ${colors.support.purple.dark1};
+
+    ::after {
+      border-bottom-color: ${colors.support.purple.dark1};
+    }
+  }
+`;
 
 type TopMenuProps = {
   inUserSubPage: boolean;
@@ -73,14 +91,13 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   }
 
   return (
-    <Menu
+    <StyledMenu
       mode="horizontal"
       onClick={handleClick}
       selectedKeys={state.selectedKeys}
-      style={{ width: "360px" }}
     >
       {buttons}
-    </Menu>
+    </StyledMenu>
   );
 };
 
@@ -90,13 +107,6 @@ const ButtonsContainer = styled.div`
   flex-direction: row;
   gap: 8px;
   align-items: center;
-`;
-
-const LoginButton = styled(Button)`
-  color: white;
-  :hover {
-    color: gray;
-  }
 `;
 
 type UserProfileProps = {
@@ -181,27 +191,32 @@ const LoginButtons: React.FC = () => {
 
   return (
     <ButtonsContainer>
-      <LoginButton
+      <PrimaryButton
         type={newUser ? "primary" : "ghost"}
         onClick={handleSignupClicked}
         key="signup"
       >
         Start free trial
-      </LoginButton>
-      <LoginButton
+      </PrimaryButton>
+      <PrimaryButton
         type={newUser ? "ghost" : "primary"}
         onClick={handleLoginClicked}
         key="login"
       >
         Log in
-      </LoginButton>
+      </PrimaryButton>
     </ButtonsContainer>
   );
 };
 
+const StyledHeader = styled(Header)`
+  background-color: ${colors.neutral.light3};
+`;
+
 const NavbarContainer = styled.div`
   display: flex;
   flex-direction: row;
+  height: ${size.size64px};
 `;
 
 const LogoContainer = styled.div`
@@ -219,7 +234,7 @@ export const Navbar: React.FC = () => {
   });
 
   return (
-    <Header>
+    <StyledHeader>
       <NavbarContainer>
         <LogoContainer>
           <Link to={ROOT_PATH}>
@@ -233,6 +248,6 @@ export const Navbar: React.FC = () => {
           <LoginButtons />
         )}
       </NavbarContainer>
-    </Header>
+    </StyledHeader>
   );
 };
