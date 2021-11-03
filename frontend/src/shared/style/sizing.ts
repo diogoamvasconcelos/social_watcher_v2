@@ -6,6 +6,7 @@ export const size = {
   size32px: "32px",
   size40px: "40px",
   size64px: "64px",
+  size96px: "96px",
   size128px: "128px",
 };
 

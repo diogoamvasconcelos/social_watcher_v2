@@ -30,6 +30,7 @@ const PricingBoxContainer = styled(ContentBox)`
   background: linear-gradient(0deg, ${colors.neutral.dark2} 57%, ${colors
     .neutral.light3} 43%);
   padding: ${size.size16px} ${size.size8px} ${size.size32px} ${size.size8px};
+  width: 260px;
 `;
 
 const PriceText = styled(Text)`
@@ -39,7 +40,7 @@ const PriceText = styled(Text)`
   padding: 0 0 ${size.size16px} 0;
 
   & .big-price-text {
-    font-size: ${fontSize.size36px};
+    font-size: ${fontSize.size48px};
   }
 `;
 

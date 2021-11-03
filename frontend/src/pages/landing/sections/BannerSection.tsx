@@ -11,7 +11,6 @@ import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 import { size } from "@src/shared/style/sizing";
 
 const BannerContainer = styled(SectionContainer)`
-  height: 304;
   position: relative;
 `;
 
@@ -27,16 +26,18 @@ const Background = styled.div`
 `;
 
 const BannerContentContainer = styled(SectionContentContainer)`
-  padding: ${size.size32px} 0px 0px 0px;
+  padding-top: ${size.size64px};
+  /* padding-bottom: ${size.size32px}; */
   gap: ${size.size64px};
 `;
 
 const BannerDetailsContainer = styled.div`
+  max-width: 520px;
+  padding-top: ${size.size32px};
   display: flex;
   flex-direction: column;
   gap: 16px;
   align-items: center;
-  max-width: 520px;
 
   // the text
   & span {

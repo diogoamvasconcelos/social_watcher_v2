@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { SectionContainer, SectionTitle } from "./shared";
+import {
+  SectionContainer,
+  SectionTitle,
+  SectionContentContainer,
+} from "./shared";
 import Text from "antd/lib/typography/Text";
 import Collapse from "antd/lib/collapse/Collapse";
 import { fontSize } from "@src/shared/style/fonts";
@@ -12,15 +16,14 @@ import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 
 const FAQContainer = styled(SectionContainer)``;
 
-const FAQListContainer = styled.div`
-  display: flex;
+const FAQListContainer = styled(SectionContentContainer)`
   flex-direction: column;
   gap: ${size.size8px};
+  max-width: 800px;
 `;
 
 const StyledCollapse = styled(Collapse)`
   background-color: ${colors.neutral.light2};
-  width: 800px;
 `;
 
 const QuestionText = styled(Text)`

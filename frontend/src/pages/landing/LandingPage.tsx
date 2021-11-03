@@ -77,9 +77,14 @@ export const LandingPage: React.FC = () => {
         <FaqSection
           questions={[
             {
-              question: "How often are the keywords search?",
+              question: "How often are the keywords searched?",
               answer:
                 "It depends on the social media platform, but for most, it’s every 5 minutes.",
+            },
+            {
+              question: "Can I change the value of a keyword?",
+              answer:
+                "Yes, you can at anytime configure a keyword's value as well as any parameter regarding social media, notification and reports.",
             },
           ]}
         />

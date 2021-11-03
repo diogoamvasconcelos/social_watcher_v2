@@ -12,8 +12,8 @@ export const SectionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${size.size32px} 0px;
-  gap: ${size.size32px};
+  padding: ${size.size64px} 0 ${size.size96px} 0;
+  gap: ${size.size16px};
 `;
 
 export const SectionContentContainer = styled.div`
@@ -22,6 +22,7 @@ export const SectionContentContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   gap: ${size.size32px};
+  padding: 0 ${size.size16px};
 
   z-index: 1;
 `;

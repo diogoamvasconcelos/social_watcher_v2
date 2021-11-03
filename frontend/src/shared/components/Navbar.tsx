@@ -40,6 +40,7 @@ const navigationConfig: Record<string, string> = {
 
 const StyledMenu = styled(Menu)`
   background: transparent;
+  flex-grow: 1;
 
   color: ${colors.neutral.dark2};
   font-size: ${fontSize.size18px};
@@ -109,6 +110,21 @@ const ButtonsContainer = styled.div`
   align-items: center;
 `;
 
+const UserButtonStyled = styled(Dropdown.Button)`
+  & .ant-btn {
+    background-color: transparent;
+    border-style: none;
+  }
+
+  & .anticon {
+    font-size: ${size.size32px};
+    color: ${colors.neutral.dark2};
+    // fix the misalignment bug
+    position: relative;
+    bottom: ${size.size4px};
+  }
+`;
+
 type UserProfileProps = {
   userDetails: UserAuthStateDetails;
 };
@@ -146,7 +162,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDetails }) => {
   );
 
   return (
-    <Dropdown.Button
+    <UserButtonStyled
       overlay={menu}
       trigger={["click"]}
       icon={<UserOutlined />}
@@ -217,6 +233,7 @@ const StyledHeader = styled(Header)`
 const NavbarContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   height: ${size.size64px};
 `;
 
@@ -225,7 +242,7 @@ const LogoContainer = styled.div`
 
   // the img
   & img {
-    height: 100%;
+    height: 64px;
   }
 
   // the text

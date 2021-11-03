@@ -6,4 +6,6 @@ export const fontSize = {
   size24px: "24px",
   size30px: "30px",
   size36px: "36px",
+  size48px: "48px",
+  size60px: "60px",
 };
