@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useLocationChanged } from "@src/shared/lib/react";
@@ -22,6 +22,8 @@ const MainContainer = styled.div`
 
 export const LandingPage: React.FC = () => {
   const history = useHistory();
+
+  const [pageAlreadyLoaded, setPageAlreadyLoaded] = useState(false);
 
   const howItWorksRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -58,7 +60,13 @@ export const LandingPage: React.FC = () => {
   useLocationChanged((location) => scrollToHash(location.hash));
   useEffect(() => {
     // Hacky way to scroll on page reload, but need to wait for the browser scroll restoration to finish
-    setTimeout(() => scrollToHash(history.location.hash), 300);
+    setTimeout(
+      () => {
+        scrollToHash(history.location.hash);
+        setPageAlreadyLoaded(true);
+      },
+      pageAlreadyLoaded ? 0 : 500
+    );
   });
 
   return (

@@ -125,6 +125,21 @@ const UserButtonStyled = styled(Dropdown.Button)`
   }
 `;
 
+const UserMenuStyled = styled(Menu)`
+  box-shadow: 0px 0px 6px hsla(0, 0%, 0%, 0.2);
+`;
+
+const UserMenuTopItem = styled(Menu.Item)`
+  // makes it not clickable/selectable
+  pointer-events: none;
+
+  color: ${colors.neutral.dark1};
+`;
+
+const UserMenuItem = styled(Menu.Item)`
+  color: ${colors.neutral.dark3};
+`;
+
 type UserProfileProps = {
   userDetails: UserAuthStateDetails;
 };
@@ -146,19 +161,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDetails }) => {
   };
 
   const menu = (
-    <Menu onClick={handleItemClicked}>
-      <Menu.Item style={{ pointerEvents: "none" }} key="email">
-        {/*makes it not clickable/selectable*/}
-        <Text>{userDetails.email}</Text>
-      </Menu.Item>
+    <UserMenuStyled onClick={handleItemClicked}>
+      <UserMenuTopItem key="email">{userDetails.email}</UserMenuTopItem>
       <Menu.Divider />
-      <Menu.Item key="account">
-        <Text>Account</Text>
-      </Menu.Item>
-      <Menu.Item key="logout">
-        <Text>Log out</Text>
-      </Menu.Item>
-    </Menu>
+      <UserMenuItem key="account">Account</UserMenuItem>
+      <UserMenuItem key="logout" style={{ color: colors.support.red.medium }}>
+        Log out
+      </UserMenuItem>
+    </UserMenuStyled>
   );
 
   return (
