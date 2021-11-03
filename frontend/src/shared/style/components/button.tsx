@@ -1,7 +1,17 @@
 import Button from "antd/lib/button";
-import styled from "styled-components";
-import { radius } from "../sizing";
+import styled, { css } from "styled-components";
+import { radius, size } from "../sizing";
+
+const buttonBase = css`
+  border-radius: ${radius.size10px};
+  padding: ${size.size4px} ${size.size24px};
+`;
 
 export const PrimaryButton = styled(Button)`
-  border-radius: ${radius.size10px};
+  ${buttonBase}
+`;
+
+export const ElevatedPrimaryButton = styled(Button)`
+  ${buttonBase}
+  box-shadow: 0 2px 5px hsla(0, 0%, 0%, .2);
 `;

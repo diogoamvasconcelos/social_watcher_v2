@@ -1,4 +1,5 @@
 export const size = {
+  size4px: "4px",
   size8px: "8px",
   size16px: "16px",
   size24px: "24px",
@@ -9,5 +10,5 @@ export const size = {
 };
 
 export const radius = {
-  size10px: "10px",
+  size10px: "16px",
 };

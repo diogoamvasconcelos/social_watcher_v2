@@ -41,7 +41,7 @@ const navigationConfig: Record<string, string> = {
 const StyledMenu = styled(Menu)`
   background: transparent;
 
-  color: ${colors.neutral.dark3};
+  color: ${colors.neutral.dark2};
   font-size: ${fontSize.size18px};
 
   &&& .ant-menu-item-selected {
@@ -211,6 +211,7 @@ const LoginButtons: React.FC = () => {
 
 const StyledHeader = styled(Header)`
   background-color: ${colors.neutral.light3};
+  margin-bottom: ${size.size4px};
 `;
 
 const NavbarContainer = styled.div`
@@ -221,6 +222,18 @@ const NavbarContainer = styled.div`
 
 const LogoContainer = styled.div`
   flex-grow: 1;
+
+  // the img
+  & img {
+    height: 100%;
+  }
+
+  // the text
+  & span {
+    margin: ${size.size16px};
+    color: ${colors.neutral.dark2};
+    font-size: ${fontSize.size20px};
+  }
 `;
 
 export const Navbar: React.FC = () => {
@@ -239,6 +252,7 @@ export const Navbar: React.FC = () => {
         <LogoContainer>
           <Link to={ROOT_PATH}>
             <img src={logo} alt="Social Watcher logo" />
+            <Text>The Social Watcher</Text>
           </Link>
         </LogoContainer>
         <TopMenu inUserSubPage={inUserSubPage} userLoggedIn={userLoggedIn} />

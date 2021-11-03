@@ -2,20 +2,33 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { SIGNUP_PATH } from "@src/shared/data/paths";
-import logo from "../../../../assets/logo-og.jpg";
+import heroImg from "../../../../assets/hero-img.svg";
 import Text from "antd/lib/typography/Text";
-import Button from "antd/lib/button";
 import { SectionContainer, SectionContentContainer } from "./shared";
+import { colors } from "@src/shared/style/colors";
+import { fontSize } from "@src/shared/style/fonts";
+import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
+import { size } from "@src/shared/style/sizing";
 
 const BannerContainer = styled(SectionContainer)`
-  // https://cssgradient.io/
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 121, 113, 1) 22%,
-    rgba(184, 238, 233, 1) 100%
-  );
+  height: 304;
+  position: relative;
+`;
+
+const Background = styled.div`
+  // background bleeds out down into the next section
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: -40%;
+
+  background: linear-gradient(93.8deg, #102a43 0%, #829ab1 102.19%);
+`;
+
+const BannerContentContainer = styled(SectionContentContainer)`
+  padding: ${size.size32px} 0px 0px 0px;
+  gap: ${size.size64px};
 `;
 
 const BannerDetailsContainer = styled.div`
@@ -24,7 +37,12 @@ const BannerDetailsContainer = styled.div`
   gap: 16px;
   align-items: center;
   max-width: 520px;
-  text-align: center;
+
+  // the text
+  & span {
+    color: ${colors.neutral.light2};
+    text-align: center;
+  }
 `;
 
 export const BannerSection: React.FC = () => {
@@ -36,26 +54,27 @@ export const BannerSection: React.FC = () => {
 
   return (
     <BannerContainer>
-      <SectionContentContainer>
-        <img src={logo} alt="Logo" style={{ maxWidth: "400px" }} />
+      <BannerContentContainer>
+        <img src={heroImg} alt="hero image" style={{ maxWidth: "400px" }} />
         <BannerDetailsContainer>
-          <Text style={{ fontSize: "32px" }}>
-            Track <strong>keywords</strong> in the most popular{" "}
-            <strong>social media</strong>
+          <Text style={{ fontSize: fontSize.size20px }}>
+            {
+              "Are you regularly searching for the same keywords in social media?"
+            }
           </Text>
-          <Text style={{ fontSize: "20px" }}>
-            Get real-time <strong>notifications</strong> when new content is
-            published
+          <Text style={{ fontSize: fontSize.size30px }}>
+            Get <strong>notifications</strong> when a <strong>keyword</strong>{" "}
+            is mentioned on <strong>social media</strong>
           </Text>
-          <Button
+          <ElevatedPrimaryButton
             type="primary"
             onClick={handleFreeTrialClicked}
-            style={{ width: "200px" }}
           >
             Start free trial
-          </Button>
+          </ElevatedPrimaryButton>
         </BannerDetailsContainer>
-      </SectionContentContainer>
+      </BannerContentContainer>
+      <Background />
     </BannerContainer>
   );
 };

@@ -14,7 +14,7 @@ import { ReportMedium } from "@backend/domain/models/reportMedium";
 
 export const getSocialMediaIcon = (
   socialMedia: SocialMedia
-): React.ReactNode => {
+): React.ReactElement => {
   const getIcon = () => {
     switch (socialMedia) {
       case "twitter":
@@ -39,7 +39,7 @@ export const getSocialMediaIcon = (
 
 export const getNotificationMediumIcon = (
   notificationMedium: NotificationMedium
-): React.ReactNode => {
+): React.ReactElement => {
   const getIcon = () => {
     switch (notificationMedium) {
       case "discord":
@@ -61,7 +61,7 @@ export const getNotificationMediumIcon = (
 
 export const getReportMediumIcon = (
   reportMedium: ReportMedium
-): React.ReactNode => {
+): React.ReactElement => {
   const getIcon = () => {
     switch (reportMedium) {
       case "email":

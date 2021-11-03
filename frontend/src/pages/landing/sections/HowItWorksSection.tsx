@@ -1,82 +1,73 @@
 import React from "react";
 import styled from "styled-components";
-import { SectionContainer, SectionContentContainer } from "./shared";
-import Text from "antd/lib/typography/Text";
+import {
+  SectionContainer,
+  SectionContentContainer,
+  SectionTitle,
+  ContentBox,
+  ContentBoxTitle,
+  ContentBoxText,
+} from "./shared";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import NotificationOutlined from "@ant-design/icons/lib/icons/NotificationOutlined";
 import FileTextOutlined from "@ant-design/icons/lib/icons/FileTextOutlined";
 import FileSearchOutlined from "@ant-design/icons/lib/icons/FileSearchOutlined";
-
-const HiWContainer = styled(SectionContainer)`
-  background: aliceblue;
-`;
+import { colors } from "@src/shared/style/colors";
+import { size } from "@src/shared/style/sizing";
+import { boxDropShadow, boxRoundBorder } from "@src/shared/style/box";
 
 const HiWContentContainer = styled(SectionContentContainer)``;
 
-const HiWBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
-  align-items: center;
-  text-align: center;
-  width: 200px;
-`;
+const HiWBox = styled(ContentBox)`
+  ${boxDropShadow}
+  ${boxRoundBorder}
+  background-color: ${colors.neutral.light2};
 
-const HiWBoxTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  align-items: center;
-  font-size: 20px;
+  & .anticon {
+    font-size: ${size.size64px};
+    color: ${colors.neutral.dark2};
+  }
 `;
 
 export const HowItWorksSection: React.FC = () => {
   return (
-    <HiWContainer>
-      <Text> How it works</Text>
+    <SectionContainer>
+      <SectionTitle style={{ color: colors.neutral.light2 }}>
+        How it works
+      </SectionTitle>
       <HiWContentContainer>
         <HiWBox>
-          <HiWBoxTitle>
-            <SearchOutlined />
-            <Text>Automatic Search</Text>
-          </HiWBoxTitle>
-          <Text>
-            The Social Watcher is always* searching the many social medias for
-            your selected "keywords"
-          </Text>
+          <SearchOutlined />
+          <ContentBoxTitle>Automatic Search</ContentBoxTitle>
+          <ContentBoxText>
+            The Social Watcher regularly searches social medias for your
+            selected "keywords"
+          </ContentBoxText>
         </HiWBox>
         <HiWBox>
-          <HiWBoxTitle>
-            <NotificationOutlined />
-            <Text>Get Notifications</Text>
-          </HiWBoxTitle>
-          <Text>
+          <NotificationOutlined />
+          <ContentBoxTitle>Get Notifications</ContentBoxTitle>
+          <ContentBoxText>
             When it finds any relevant data, it sends you a notification right
             away
-          </Text>
+          </ContentBoxText>
         </HiWBox>
         <HiWBox>
-          <HiWBoxTitle>
-            <FileTextOutlined />
-            <Text>Get Reports</Text>
-          </HiWBoxTitle>
-          <Text>
-            You can also get daily or even weekly reports with the summary all
-            of findings
-          </Text>
+          <FileTextOutlined />
+          <ContentBoxTitle>Get Reports</ContentBoxTitle>
+          <ContentBoxText>
+            Get daily or weekly reports with all the findings
+          </ContentBoxText>
         </HiWBox>
         <HiWBox>
-          <HiWBoxTitle>
-            <FileSearchOutlined />
-            <Text>Browse the Archive</Text>
-          </HiWBoxTitle>
-          <Text>
-            All these data is also stored in the "archives", which can be
-            browsed through the Dashboard
-          </Text>
+          <FileSearchOutlined />
+          <ContentBoxTitle>Browse the Archive</ContentBoxTitle>
+          <ContentBoxText>
+            All findings are stored in the "archives", which can be viewed
+            through the Dashboard
+          </ContentBoxText>
         </HiWBox>
       </HiWContentContainer>
-    </HiWContainer>
+    </SectionContainer>
   );
 };

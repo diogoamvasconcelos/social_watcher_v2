@@ -7,12 +7,14 @@ import { HowItWorksSection } from "./sections/HowItWorksSection";
 import { PricingSection } from "./sections/PricingSection";
 import { FaqSection } from "./sections/FAQSection";
 import { FeaturesSection } from "./sections/FeaturesSection";
+import { colors } from "@src/shared/style/colors";
 
 // ++++++++
 // + PAGE +
 // ++++++++
 
 const MainContainer = styled.div`
+  background-color: ${colors.neutral.light3};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,7 +79,7 @@ export const LandingPage: React.FC = () => {
             {
               question: "How often are the keywords search?",
               answer:
-                "It depends on the social media platform, but usually every minute.",
+                "It depends on the social media platform, but for most, it’s every 5 minutes.",
             },
           ]}
         />
