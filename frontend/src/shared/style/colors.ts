@@ -15,6 +15,7 @@ export const colors = {
     dark1: "#0E7C86",
     medium: "#2CB1BC",
     light1: "#54D1DB",
+    light1b: "#B3F1FF",
     light2: "#E0FCFF",
     light3: "#F0FEFF",
   },

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import logo from "../../../assets/logo-navbar.jpg";
+import Logo from "../../../assets/binocular-logo.svg";
 import styled from "styled-components";
 import Auth from "@aws-amplify/auth/lib";
 import { useAppSelector } from "../store";
@@ -28,6 +28,7 @@ import { size } from "@src/shared/style/sizing";
 import { PrimaryButton } from "../style/components/button";
 import { colors } from "../style/colors";
 import { fontSize } from "../style/fonts";
+import Icon from "@ant-design/icons/lib/components/Icon";
 
 const config = getConfig();
 
@@ -41,6 +42,7 @@ const navigationConfig: Record<string, string> = {
 const StyledMenu = styled(Menu)`
   background: transparent;
   flex-grow: 1;
+  justify-content: end;
 
   color: ${colors.neutral.dark2};
   font-size: ${fontSize.size18px};
@@ -244,20 +246,25 @@ const NavbarContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   height: ${size.size64px};
 `;
 
 const LogoContainer = styled.div`
-  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${size.size8px};
+
+  min-width: 250px;
 
   // the img
-  & img {
-    height: 64px;
+  & .anticon {
+    font-size: 56px;
   }
 
   // the text
   & span {
-    margin: ${size.size16px};
     color: ${colors.neutral.dark2};
     font-size: ${fontSize.size20px};
   }
@@ -276,12 +283,12 @@ export const Navbar: React.FC = () => {
   return (
     <StyledHeader>
       <NavbarContainer>
-        <LogoContainer>
-          <Link to={ROOT_PATH}>
-            <img src={logo} alt="Social Watcher logo" />
+        <Link to={ROOT_PATH}>
+          <LogoContainer>
+            <Icon component={Logo} />
             <Text>The Social Watcher</Text>
-          </Link>
-        </LogoContainer>
+          </LogoContainer>
+        </Link>
         <TopMenu inUserSubPage={inUserSubPage} userLoggedIn={userLoggedIn} />
         {userLoggedIn ? (
           <UserProfile userDetails={userAuthState} />

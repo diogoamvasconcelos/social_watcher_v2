@@ -50,7 +50,7 @@ const PriceBoxList = styled(ContentBoxList)`
   & span {
     color: ${colors.neutral.light2};
   }
-  .anticon {
+  & .anticon {
     color: ${colors.neutral.light2};
   }
 `;

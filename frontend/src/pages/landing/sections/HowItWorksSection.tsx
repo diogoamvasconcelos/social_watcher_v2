@@ -8,13 +8,14 @@ import {
   ContentBoxTitle,
   ContentBoxText,
 } from "./shared";
-import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
+import binocularIcon from "../../../../assets/binocular-outline.svg";
 import NotificationOutlined from "@ant-design/icons/lib/icons/NotificationOutlined";
 import FileTextOutlined from "@ant-design/icons/lib/icons/FileTextOutlined";
 import FileSearchOutlined from "@ant-design/icons/lib/icons/FileSearchOutlined";
 import { colors } from "@src/shared/style/colors";
 import { size } from "@src/shared/style/sizing";
 import { boxDropShadow, boxRoundBorder } from "@src/shared/style/box";
+import Icon from "@ant-design/icons/lib/components/Icon";
 
 const HiWContentContainer = styled(SectionContentContainer)``;
 
@@ -37,11 +38,11 @@ export const HowItWorksSection: React.FC = () => {
       </SectionTitle>
       <HiWContentContainer>
         <HiWBox>
-          <SearchOutlined />
+          <Icon component={binocularIcon} />
           <ContentBoxTitle>Automatic Search</ContentBoxTitle>
           <ContentBoxText>
-            The Social Watcher regularly searches social medias for your
-            selected "keywords"
+            The Social Watcher regularly searches social media for your selected
+            keywords
           </ContentBoxText>
         </HiWBox>
         <HiWBox>
@@ -61,7 +62,7 @@ export const HowItWorksSection: React.FC = () => {
         </HiWBox>
         <HiWBox>
           <FileSearchOutlined />
-          <ContentBoxTitle>Browse the Archive</ContentBoxTitle>
+          <ContentBoxTitle>Browse the Archives</ContentBoxTitle>
           <ContentBoxText>
             All findings are stored in the "archives", which can be viewed
             through the Dashboard

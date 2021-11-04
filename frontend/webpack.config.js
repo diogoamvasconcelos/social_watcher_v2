@@ -65,8 +65,20 @@ const config = {
         loader: "html-loader",
       },
       {
-        test: /\.(svg|jpg)$/,
+        test: /\.jpg$/,
         use: "file-loader",
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              // babel: false,
+              icon: true,
+            },
+          },
+        ],
       },
     ],
   },
