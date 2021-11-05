@@ -68,10 +68,13 @@ const TopMenu: React.FC<TopMenuProps> = ({ inUserSubPage, userLoggedIn }) => {
   });
 
   useLocationChanged((location) => {
-    const currentKey = _findKey(
-      navigationConfig,
-      (path) => location.pathname == path
-    );
+    const currentKey = _findKey(navigationConfig, (path) => {
+      if (path === ROOT_PATH) {
+        // exact match for root
+        return path === location.pathname;
+      }
+      return location.pathname.startsWith(path);
+    });
     setState({ selectedKeys: currentKey ? [currentKey] : [] });
   });
 

@@ -1,13 +1,15 @@
 import React from "react";
 import { SocialMedia } from "@backend/domain/models/socialMedia";
 import Tooltip from "antd/lib/tooltip";
+import Icon from "@ant-design/icons/lib/components/Icon";
 import TwitterOutlined from "@ant-design/icons/lib/icons/TwitterOutlined";
 import RedditOutlined from "@ant-design/icons/lib/icons/RedditOutlined";
-import WarningOutlined from "@ant-design/icons/lib/icons/WarningOutlined";
 import InstagramOutlined from "@ant-design/icons/lib/icons/InstagramOutlined";
 import YoutubeOutlined from "@ant-design/icons/lib/icons/YoutubeOutlined";
 import SlackOutlined from "@ant-design/icons/lib/icons/SlackOutlined";
 import MailOutlined from "@ant-design/icons/lib/icons/MailOutlined";
+import DiscordIcon from "../../../assets/discord-icon.svg";
+import HackernewsIcon from "../../../assets/hackernews-icon.svg";
 import { capitalizeWord } from "../lib/text";
 import { NotificationMedium } from "@backend/domain/models/notificationMedium";
 import { ReportMedium } from "@backend/domain/models/reportMedium";
@@ -22,7 +24,7 @@ export const getSocialMediaIcon = (
       case "reddit":
         return <RedditOutlined />;
       case "hackernews":
-        return <WarningOutlined />;
+        return <Icon component={HackernewsIcon} />;
       case "instagram":
         return <InstagramOutlined />;
       case "youtube":
@@ -43,7 +45,7 @@ export const getNotificationMediumIcon = (
   const getIcon = () => {
     switch (notificationMedium) {
       case "discord":
-        return <WarningOutlined />;
+        return <Icon component={DiscordIcon} />;
       case "slack":
         return <SlackOutlined />;
     }

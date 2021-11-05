@@ -6,7 +6,6 @@ import { BannerSection } from "./sections/BannerSection";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 import { PricingSection } from "./sections/PricingSection";
 import { FaqSection } from "./sections/FAQSection";
-import { FeaturesSection } from "./sections/FeaturesSection";
 import { colors } from "@src/shared/style/colors";
 
 // ++++++++
@@ -26,7 +25,6 @@ export const LandingPage: React.FC = () => {
   const [pageAlreadyLoaded, setPageAlreadyLoaded] = useState(false);
 
   const howItWorksRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
   const faqRef = useRef<HTMLDivElement>(null);
 
@@ -40,10 +38,6 @@ export const LandingPage: React.FC = () => {
     switch (hash) {
       case "#how-it-works": {
         scrollToRef(howItWorksRef);
-        break;
-      }
-      case "#features": {
-        scrollToRef(featuresRef);
         break;
       }
       case "#pricing": {
@@ -75,9 +69,6 @@ export const LandingPage: React.FC = () => {
       <div ref={howItWorksRef}>
         <HowItWorksSection />
       </div>
-      <div ref={featuresRef}>
-        <FeaturesSection />
-      </div>
       <div ref={pricingRef}>
         <PricingSection />
       </div>
@@ -87,7 +78,7 @@ export const LandingPage: React.FC = () => {
             {
               question: "How often are the keywords searched?",
               answer:
-                "It depends on the social media platform, but for most, it’s every 5 minutes.",
+                "For social media, they are searched every 5 minutes. But due to some service limitations the following social media are searched less often: instagram (every 12hours), youtube (every 12 hours).",
             },
             {
               question: "Can I change the value of a keyword?",

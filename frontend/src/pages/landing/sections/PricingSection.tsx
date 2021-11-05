@@ -47,9 +47,8 @@ const PriceText = styled(Text)`
 const PriceBoxList = styled(ContentBoxList)`
   padding: ${size.size8px} 0px ${size.size8px} 0px;
 
-  & span {
-    color: ${colors.neutral.light2};
-  }
+  color: ${colors.neutral.light2};
+
   & .anticon {
     color: ${colors.neutral.light2};
   }

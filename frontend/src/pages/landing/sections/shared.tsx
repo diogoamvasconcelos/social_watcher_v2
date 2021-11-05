@@ -62,7 +62,7 @@ export const ContentBoxList = styled.div`
   align-items: flex-start;
 `;
 
-const ContentIconTextContainer = styled.div`
+const ContentIconTextContainer = styled.div<{ newIconSize?: string }>`
   display: flex;
   flex-direction: row;
   gap: ${size.size8px};
@@ -70,15 +70,21 @@ const ContentIconTextContainer = styled.div`
   justify-content: center;
 
   & .anticon {
-    font-size: ${size.size16px};
+    font-size: ${(props) =>
+      props.newIconSize ? props.newIconSize : size.size16px};
     color: ${colors.neutral.dark3};
   }
 `;
 
-export const ContentIconTextText = styled(ContentBoxText)`
-  font-size: ${fontSize.size18px};
+// this is a div in order to access to custom prop without an error in the DOM
+export const ContentIconTextText = styled.div<{
+  newFontSize?: string;
+}>`
+  font-size: ${(props) =>
+    props.newFontSize ? props.newFontSize : fontSize.size18px};
   // fix to align correctly icon on multilined text
-  line-height: ${fontSize.size18px};
+  line-height: ${(props) =>
+    props.newFontSize ? props.newFontSize : fontSize.size18px};
 
   text-align: start;
 `;
@@ -86,11 +92,14 @@ export const ContentIconTextText = styled(ContentBoxText)`
 export const ContentIconText: React.FC<{
   text: string;
   Icon: React.ReactElement;
-}> = ({ text, Icon }) => {
+  styleOverride?: { newFontSize?: string; newIconSize?: string };
+}> = ({ text, Icon, styleOverride }) => {
   return (
-    <ContentIconTextContainer>
+    <ContentIconTextContainer newIconSize={styleOverride?.newIconSize}>
       {Icon}
-      <ContentIconTextText>{text}</ContentIconTextText>
+      <ContentIconTextText newFontSize={styleOverride?.newFontSize}>
+        {text}
+      </ContentIconTextText>
     </ContentIconTextContainer>
   );
 };
