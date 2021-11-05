@@ -241,8 +241,7 @@ const LoginButtons: React.FC = () => {
 };
 
 const StyledHeader = styled(Header)`
-  background-color: ${colors.neutral.light3};
-  margin-bottom: ${size.size4px};
+  background-color: ${colors.neutral.light2};
 `;
 
 const NavbarContainer = styled.div`

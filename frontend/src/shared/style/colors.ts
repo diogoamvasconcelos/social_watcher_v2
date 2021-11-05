@@ -7,6 +7,7 @@ export const colors = {
     mediumDark: "#829AB1",
     mediumLight: "#BCCCDC",
     light1: "#BCCCDC",
+    light15: "#D9E2EC",
     light2: "#F0F4F8",
     light3: "#F5F7FA",
   },

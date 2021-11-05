@@ -1,7 +1,6 @@
 import "./App.css";
 import React, { StrictMode } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import CookieConsent from "react-cookie-consent";
 import { Navbar } from "./shared/components/Navbar";
 import { WithAuth } from "./shared/components/Auth";
 import { UserPage } from "./pages/user/UserPage";
@@ -24,13 +23,20 @@ import { LandingPage } from "./pages/landing/LandingPage";
 import { TermsPage } from "./pages/terms/TermsPage";
 import { PrivacyPage } from "./pages/terms/PrivacyPage";
 import { Footer } from "./shared/components/Footer";
+import styled from "styled-components";
+import { CookieBanner } from "./shared/components/CookieBanner";
+import { colors } from "./shared/style/colors";
+
+const LayoutStyled = styled(Layout)`
+  background-color: ${colors.neutral.light3};
+`;
 
 const App: React.FC = () => (
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <WithAuth />
-        <Layout className="layout">
+        <LayoutStyled className="layout">
           <Navbar />
           <Layout.Content>
             <Switch>
@@ -44,22 +50,8 @@ const App: React.FC = () => (
             </Switch>
           </Layout.Content>
           <Footer />
-        </Layout>
-        <CookieConsent
-          buttonText="Got it!"
-          cookieName="ConsentCookie"
-          style={{ background: "#2B373B", fontSize: "14px" }}
-          buttonStyle={{
-            background: "#049784",
-            color: "#fcfcfc",
-            fontSize: "16px",
-            width: "100px",
-          }}
-          // overlay
-        >
-          We use cookies to enhance the user experience.{" "}
-          <a href={TERMS_AND_CONDITIONS_PATH}>Learn more.</a>
-        </CookieConsent>
+        </LayoutStyled>
+        <CookieBanner />
       </BrowserRouter>
     </Provider>
   </StrictMode>

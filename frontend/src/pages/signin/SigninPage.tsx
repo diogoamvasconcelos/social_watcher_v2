@@ -16,12 +16,17 @@ import { useAppDispatch } from "@src/shared/store";
 import { hasUserSession } from "@src/shared/lib/userSession";
 import { setLoginRedirectUrl } from "@src/shared/reducers/redirectState";
 import { useEffect } from "react";
+import { colors } from "@src/shared/style/colors";
+
+const PageContainer = styled.div`
+  background-color: transparent;
+`;
 
 const StyledAmplifyAuth = styled(AmplifyAuthenticator)`
-  --amplify-background-color: #d9e2ec;
-  --amplify-primary-color: #334e68;
-  --amplify-primary-tint: #bcccdc;
-  --amplify-primary-shade: #102a43;
+  --amplify-background-color: ${colors.neutral.light15};
+  --amplify-primary-color: ${colors.primary.medium2};
+  --amplify-primary-tint: ${colors.primary.dark1};
+  --amplify-primary-shade: ${colors.neutral.dark2};
 `;
 
 export const SigninPage: React.FC = () => {
@@ -39,12 +44,12 @@ export const SigninPage: React.FC = () => {
   const alreadyLoggedIn = hasUserSession();
 
   return alreadyLoggedIn ? (
-    <>
+    <PageContainer>
       <p>Already logged-in</p>
       <AmplifySignOut />
-    </>
+    </PageContainer>
   ) : (
-    <>
+    <PageContainer>
       <StyledAmplifyAuth
         usernameAlias="email"
         initialAuthState={isSignUp ? AuthState.SignUp : AuthState.SignIn}
@@ -69,6 +74,6 @@ export const SigninPage: React.FC = () => {
         />
         <AmplifySignIn slot="sign-in" usernameAlias="email" />
       </StyledAmplifyAuth>
-    </>
+    </PageContainer>
   );
 };

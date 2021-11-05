@@ -12,6 +12,9 @@ import { size } from "@src/shared/style/sizing";
 
 const BannerContainer = styled(SectionContainer)`
   position: relative;
+
+  // add small margin to navbar to give a better effect to the selection undeline on the navbar items
+  margin-top: 2px;
 `;
 
 const Background = styled.div`

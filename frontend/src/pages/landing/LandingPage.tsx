@@ -6,14 +6,13 @@ import { BannerSection } from "./sections/BannerSection";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 import { PricingSection } from "./sections/PricingSection";
 import { FaqSection } from "./sections/FAQSection";
-import { colors } from "@src/shared/style/colors";
 
 // ++++++++
 // + PAGE +
 // ++++++++
 
 const MainContainer = styled.div`
-  background-color: ${colors.neutral.light3};
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
