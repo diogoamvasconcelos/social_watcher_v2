@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "@backend/domain/models/user";
 import { SearchObjectDomain } from "@backend/domain/models/userItem";
 import { apiGetSearchObjects, apiGetUser } from "../lib/apiClient";
-import { createApiAction } from "../lib/redux";
+import { createApiAction, logRejected } from "../lib/redux";
 
 export type UserState = {
   details?: User;
@@ -27,12 +27,17 @@ const userStateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // TODO: add `.addCase(xxxxxx.rejected, ...)
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.details = action.payload;
       })
+      .addCase(getUserDetails.rejected, (_state, action) => {
+        logRejected("getUserDetails request", action);
+      })
       .addCase(getUserSearchObjects.fulfilled, (state, action) => {
         state.searchObjects = action.payload.items;
+      })
+      .addCase(getUserSearchObjects.rejected, (_state, action) => {
+        logRejected("getUserSearchObjects request", action);
       });
   },
 });

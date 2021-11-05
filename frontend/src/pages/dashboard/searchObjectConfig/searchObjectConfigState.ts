@@ -12,6 +12,7 @@ import { newLowerCase } from "@diogovasconcelos/lib/iots";
 import {
   createApiAction,
   createApiActionWithArgs,
+  logRejected,
 } from "@src/shared/lib/redux";
 
 export const getUserSearchObject = createApiActionWithArgs(
@@ -99,8 +100,9 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject = state.fetchedSearchObject = action.payload;
         state.getStatus = "FULFILLED";
       })
-      .addCase(getUserSearchObject.rejected, (state, _action) => {
+      .addCase(getUserSearchObject.rejected, (state, action) => {
         state.getStatus = "REJECTED";
+        logRejected("getUserSearchObject request", action);
       })
       .addCase(getDefaultSearchObject.pending, (state, _action) => {
         state.getStatus = "PENDING";
@@ -112,8 +114,9 @@ const searchObjectConfigStateSlice = createSlice({
         };
         state.getStatus = "FULFILLED";
       })
-      .addCase(getDefaultSearchObject.rejected, (state, _action) => {
+      .addCase(getDefaultSearchObject.rejected, (state, action) => {
         state.getStatus = "REJECTED";
+        logRejected("getDefaultSearchObject request", action);
       })
       .addCase(createUserSearchObject.pending, (state, _action) => {
         state.writeStatus = "PENDING";
@@ -122,8 +125,9 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject = state.fetchedSearchObject = action.payload;
         state.writeStatus = "FULFILLED";
       })
-      .addCase(createUserSearchObject.rejected, (state, _action) => {
+      .addCase(createUserSearchObject.rejected, (state, action) => {
         state.writeStatus = "REJECTED";
+        logRejected("createUserSearchObject request", action);
       })
       .addCase(updateUserSearchObject.pending, (state, _action) => {
         state.writeStatus = "PENDING";
@@ -132,8 +136,9 @@ const searchObjectConfigStateSlice = createSlice({
         state.searchObject = state.fetchedSearchObject = action.payload;
         state.writeStatus = "FULFILLED";
       })
-      .addCase(updateUserSearchObject.rejected, (state, _action) => {
+      .addCase(updateUserSearchObject.rejected, (state, action) => {
         state.writeStatus = "REJECTED";
+        logRejected("updateUserSearchObject request", action);
       })
       .addCase(deleteUserSearchObject.pending, (state, _action) => {
         state.writeStatus = "PENDING";
@@ -143,8 +148,9 @@ const searchObjectConfigStateSlice = createSlice({
           initialState.searchObject;
         state.writeStatus = "FULFILLED";
       })
-      .addCase(deleteUserSearchObject.rejected, (state, _action) => {
+      .addCase(deleteUserSearchObject.rejected, (state, action) => {
         state.writeStatus = "REJECTED";
+        logRejected("deleteUserSearchObject request", action);
       });
   },
 });

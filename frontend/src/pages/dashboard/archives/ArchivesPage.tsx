@@ -1,6 +1,5 @@
 import * as t from "io-ts";
 import React, { useEffect, useReducer } from "react";
-import styled from "styled-components";
 import { getUserSearchObjects } from "@src/shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "@src/shared/store";
 import { SearchResultsTable } from "./SearchResultsTable";
@@ -21,6 +20,7 @@ import { socialMediaCodec } from "@backend/domain/models/socialMedia";
 import { nonEmptyArray } from "io-ts-types/lib/nonEmptyArray";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import _pick from "lodash/pick";
+import { MainSubPageContainter } from "../shared";
 
 // +++++++++
 // + STATE +
@@ -83,11 +83,6 @@ const getParamsFromQueryString = (
 // + PAGE +
 // ++++++++
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -124,14 +119,14 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
   }, [searchRequestState]);
 
   return (
-    <MainContainer>
+    <MainSubPageContainter>
       <Title level={4}>Search through the archived posts</Title>
       <SearchResultsTable
         searchObjects={searchObjects}
         searchRequestState={searchRequestState}
         dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
       />
-    </MainContainer>
+    </MainSubPageContainter>
   );
 };
 

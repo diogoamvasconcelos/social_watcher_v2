@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import message from "antd/lib/message";
 import { Either, isLeft } from "fp-ts/lib/Either";
 
 // TODO: have a single createApiAction fn
@@ -33,3 +34,9 @@ export const createApiAction = <L, R>(
       return res.right;
     }
   );
+
+export const logRejected = (actionName: string, actionData: any) => {
+  console.log(`Rejected ${actionName} : ${JSON.stringify(actionData)}`);
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  message.error(`${actionName} failed`);
+};

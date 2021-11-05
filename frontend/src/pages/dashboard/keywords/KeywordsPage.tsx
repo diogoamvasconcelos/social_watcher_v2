@@ -7,10 +7,10 @@ import {
 } from "../../../shared/reducers/userState";
 import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
-import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { KEYWORDS_NEW_PATH, USER_PATH } from "../../../shared/data/paths";
 import Button from "antd/lib/button";
+import { MainSubPageContainter } from "../shared";
 
 const LoadingUserWidget: React.FC = () => {
   return (
@@ -43,18 +43,6 @@ const NoSearchObjectsWidget: React.FC<{
 // + PAGE +
 // ++++++++
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  /* TODO: fix this attempt to center items */
-  position: relative;
-  left: 50%;
-  transform: translate(-100%, 0%);
-  padding: 8px;
-`;
-
 const Page: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -74,7 +62,7 @@ const Page: React.FC = () => {
   };
 
   return (
-    <MainContainer>
+    <MainSubPageContainter>
       {user ? (
         <>
           <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
@@ -96,7 +84,7 @@ const Page: React.FC = () => {
       ) : (
         <LoadingUserWidget />
       )}
-    </MainContainer>
+    </MainSubPageContainter>
   );
 };
 

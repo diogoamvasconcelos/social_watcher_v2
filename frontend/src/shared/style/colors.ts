@@ -11,13 +11,15 @@ export const colors = {
     light3: "#F5F7FA",
   },
   primary: {
-    dark2: "#044E54",
-    dark1: "#0E7C86",
-    medium: "#2CB1BC",
-    light1: "#54D1DB",
+    dark3: "#003E6B",
+    dark2: "#0F609B",
+    dark1: "#2680C2",
+    medium: "#4098D7",
+    medium2: "#448EF7",
+    light1: "#84C5F4",
     light1b: "#B3F1FF",
-    light2: "#E0FCFF",
-    light3: "#F0FEFF",
+    light2: "#E4F2FC",
+    light3: "#F1F8FD",
   },
   support: {
     purple: {

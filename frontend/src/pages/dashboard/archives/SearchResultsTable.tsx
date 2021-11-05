@@ -104,12 +104,7 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   const dispatchSearch = () => {
     if (searchEnabled && searchRequestState.keyword) {
       setIsSearching(true);
-      void dispatch(
-        searchKeyword({
-          ...searchRequestState,
-          keyword: searchRequestState.keyword, // tsc is dumb here...
-        })
-      );
+      void dispatch(searchKeyword([searchRequestState]));
     }
   };
 

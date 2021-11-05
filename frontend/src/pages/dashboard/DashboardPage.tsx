@@ -18,12 +18,10 @@ import {
   ARCHIVES_PATH,
 } from "../../shared/data/paths";
 import { withLoggedUser } from "@src/shared/components/Auth";
+import styled from "styled-components";
+import { colors } from "@src/shared/style/colors";
 
 // ref: https://preview.pro.ant.design/dashboard/analysis/
-
-// +++++++++++
-// + SIDEBAR +
-// +++++++++++
 
 export const navigationConfig: Record<
   string,
@@ -40,6 +38,30 @@ export const navigationConfig: Record<
     icon: <FileSearchOutlined />,
   },
 };
+
+// +++++++++++
+// + SIDEBAR +
+// +++++++++++
+
+const StyledSides = styled(Sider)`
+  background-color: ${colors.neutral.light2};
+  /*span 100% of the viewport*/
+  min-height: 100vh;
+
+  & .ant-menu {
+    background-color: transparent;
+    color: ${colors.neutral.dark3};
+
+    & .ant-menu-item-selected {
+      background-color: ${colors.primary.light2};
+      color: ${colors.primary.medium2};
+    }
+  }
+
+  & .ant-layout-sider-trigger {
+    background-color: ${colors.neutral.dark1};
+  }
+`;
 
 const SideBar: React.FC = () => {
   const history = useHistory();
@@ -63,12 +85,7 @@ const SideBar: React.FC = () => {
   });
 
   return (
-    <Sider
-      collapsible
-      collapsed={collapsed}
-      onCollapse={onCollapse}
-      style={{ minHeight: "100vh" /*span 100% of the viewport*/ }}
-    >
+    <StyledSides collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <Menu mode="inline" onClick={handleClick} selectedKeys={selectedKeys}>
         {mapRecord(navigationConfig, (key, value) => (
           <Menu.Item key={key} icon={value.icon}>
@@ -76,7 +93,7 @@ const SideBar: React.FC = () => {
           </Menu.Item>
         ))}
       </Menu>
-    </Sider>
+    </StyledSides>
   );
 };
 
@@ -84,24 +101,39 @@ const SideBar: React.FC = () => {
 // + PAGE +
 // ++++++++
 
+const MainContainer = styled.div`
+  & .ant-layout {
+    background: ${colors.neutral.light3};
+  }
+`;
+
+const ContentContainer = styled.div`
+  /* center content */
+  flex-grow: 1;
+`;
+
 const Page: React.FC = () => {
   return (
-    <Layout>
-      <SideBar />
-      <Switch>
-        <Route
-          path={DASHBOARD_PATH}
-          exact
-          render={() => <Redirect to={KEYWORDS_PATH} />}
-        ></Route>
-        <Route
-          path={`${KEYWORDS_PATH}/:index`}
-          component={SearchObjectConfigPage}
-        />
-        <Route path={KEYWORDS_PATH} component={KeywordsPage} />
-        <Route path={ARCHIVES_PATH} component={ArchivesPage} />
-      </Switch>
-    </Layout>
+    <MainContainer>
+      <Layout>
+        <SideBar />
+        <ContentContainer>
+          <Switch>
+            <Route
+              path={DASHBOARD_PATH}
+              exact
+              render={() => <Redirect to={KEYWORDS_PATH} />}
+            ></Route>
+            <Route
+              path={`${KEYWORDS_PATH}/:index`}
+              component={SearchObjectConfigPage}
+            />
+            <Route path={KEYWORDS_PATH} component={KeywordsPage} />
+            <Route path={ARCHIVES_PATH} component={ArchivesPage} />
+          </Switch>
+        </ContentContainer>
+      </Layout>
+    </MainContainer>
   );
 };
 

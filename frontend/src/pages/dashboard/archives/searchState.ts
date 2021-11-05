@@ -3,7 +3,7 @@ import { SearchResponse } from "@backend/handlers/api/models/search";
 import { newPositiveInteger } from "@diogovasconcelos/lib/iots";
 import { apiSearch } from "../../../shared/lib/apiClient";
 import { ActionStatus } from "@src/shared/lib/reduxThunk";
-import { createApiActionWithArgs } from "@src/shared/lib/redux";
+import { createApiActionWithArgs, logRejected } from "@src/shared/lib/redux";
 
 export type SearchRequestData = Parameters<typeof apiSearch>[0];
 
@@ -32,9 +32,7 @@ const searchStateSlice = createSlice({
       })
       .addCase(searchKeyword.rejected, (state, action) => {
         state.status = "REJECTED";
-        console.log(
-          `Rejected searchKeyword request: ${JSON.stringify(action)}`
-        );
+        logRejected("searchKeyword request", action);
       })
       .addCase(searchKeyword.pending, (state, _action) => {
         state.status = "PENDING";
