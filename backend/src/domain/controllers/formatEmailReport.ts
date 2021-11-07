@@ -18,15 +18,23 @@ type EmailReportOptions = {
 
 export const formatEmailReport = async (
   reportJob: EmailReportJob,
-  { maxNumberResults }: EmailReportOptions = { maxNumberResults: 10 }
+  { maxNumberResults }: EmailReportOptions = { maxNumberResults: 15 }
 ) => {
+  const resultsUrl = `https://thesocialwatcher.com/user/dashboard/archives?${qs.stringify(
+    {
+      keyword: reportJob.keyword,
+      timeStart: reportJob.searchStart,
+      timeEnd: reportJob.searchEnd,
+    }
+  )}`;
+
   const rawMjml = `
 	<mjml>
 		${head}
 		<mj-body>
 			${buildHeaderSection(reportJob)}
-			${buildSummarySection(reportJob)}
-			${buildResultsSection(reportJob, maxNumberResults)}
+			${buildSummarySection(reportJob, resultsUrl)}
+			${buildResultsSection(reportJob, resultsUrl, maxNumberResults)}
 		</mj-body>
 	</mjml>
 `;
@@ -99,24 +107,16 @@ const buildHeaderSection = ({
 	`;
 };
 
-const buildSummarySection = ({
-  keyword,
-  searchResults,
-  searchStart,
-}: EmailReportJob) => {
+const buildSummarySection = (
+  { keyword, searchResults }: EmailReportJob,
+  resultsUrl: string
+) => {
   const resultGroups = _.groupBy(searchResults, "socialMedia");
   const resultsString = Object.entries(resultGroups)
     .map(([socialMedia, results]) => `${results.length} ${socialMedia}`)
     .join(", ");
 
   const summary = `Found ${resultsString} posts for '${keyword}'`;
-
-  const resultsUrl = `https://thesocialwatcher.com/user/dashboard/archives?${qs.stringify(
-    {
-      keyword: keyword,
-      timeStart: searchStart,
-    }
-  )}`;
 
   return `
 <mj-section background-color="${colors.lightBg}" padding="8px 0px 0px 0px">
@@ -144,12 +144,18 @@ ${divider(colors.strongBg)}
 
 const buildResultsSection = (
   { keyword, searchResults }: EmailReportJob,
+  resultsUrl: string,
   maxNumberResults: EmailReportOptions["maxNumberResults"]
 ) => {
+  const numberOfResultsToDisplay = Math.min(
+    maxNumberResults,
+    searchResults.length
+  );
+
   const header = `
 <mj-section background-color="#F0F4F8" padding="12px 0px 2px 0px">
 	<mj-column>
-		<mj-text mj-class="${textClasses.header}" color="#102A43">Latest '${keyword}' posts:</mj-text>
+		<mj-text mj-class="${textClasses.header}" color="#102A43">Latest ${numberOfResultsToDisplay} '${keyword}' posts:</mj-text>
 	</mj-column>
 </mj-section>
 `;
@@ -162,9 +168,20 @@ const buildResultsSection = (
     .map((result, i) => buildResultItem(result, i % 2 == 0))
     .join(divider(colors.strongBg));
 
+  const seeMoreSecton =
+    numberOfResultsToDisplay < searchResults.length
+      ? `
+    <mj-section background-color="${colors.lightBg}" padding="0px">
+	<mj-column>
+		<mj-button background-color="${colors.actionBg}" href="${resultsUrl}">See more Posts</mj-button>
+	</mj-column>
+</mj-section>`
+      : "";
+
   return `
 	${header}
 	${body}
+  ${seeMoreSecton}
 	`;
 };
 

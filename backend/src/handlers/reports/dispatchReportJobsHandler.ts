@@ -27,7 +27,7 @@ import {
   PositiveInteger,
   toSingleEither,
 } from "@diogovasconcelos/lib/iots";
-import { getHoursAgo } from "@src/lib/date";
+import { getHoursAgo, getNow } from "@src/lib/date";
 import { throwUnexpectedCase } from "@src/lib/runtime";
 import { ReportMedium, reportMediums } from "@src/domain/models/reportMedium";
 import { SearchObjectDomain } from "@src/domain/models/userItem";
@@ -213,6 +213,7 @@ const searchForReport = async (
           searchFrequency: frequency,
           searchResults: searchEither.right.items,
           searchStart: searchStart,
+          searchEnd: getNow(),
         });
       })
     )
