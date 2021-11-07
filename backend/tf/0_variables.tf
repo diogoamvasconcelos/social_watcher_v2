@@ -10,7 +10,7 @@ variable "stripe_product_normal_id" {}
 variable "stripe_product_test_id" {}
 locals {
 
-  is_prod = var.env == "prod"
+  is_prod        = var.env == "prod"
   lambda_handler = "index.lambdaHandler"
 
   lambda_env_vars = {
@@ -29,10 +29,11 @@ locals {
     SEARCH_RESULTS_NOTIFICATIONS_QUEUE_URL = aws_sqs_queue.search_results_notifications.id
     NOTIFICATION_JOBS_QUEUE_TEMPLATE_NAME  = "{notificationMedium}_notification_jobs"
     REPORT_JOBS_QUEUE_TEMPLATE_NAME        = "{reportMedium}_report_jobs"
+    RAPIDAPI_KEY                           = aws_ssm_parameter.rapidapi_keys.value
   }
 
   tags = {
     project = "social watcher"
-    env = var.env
+    env     = var.env
   }
 }

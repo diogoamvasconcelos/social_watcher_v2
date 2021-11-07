@@ -11,8 +11,7 @@ jest.setTimeout(30000);
 const lambdaName = getEnvTestConfig().searchInstagramLambdaName;
 
 describe("handler/searchInstagram", () => {
-  // TODO: when RapidAPI allow this test we can re-enable it
-  it.skip("can handle a instagram search job", async () => {
+  it("can handle a instagram search job", async () => {
     const searchJobEvent = buildInstagramSearchJobEvent();
 
     const invokeResult = fromEither(

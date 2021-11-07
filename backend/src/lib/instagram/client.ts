@@ -1,3 +1,5 @@
+// need to import here so webpack tree-shaking doesn't remove this module
+import "instagram-scraping";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import { decode } from "@diogovasconcelos/lib/iots";
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
@@ -11,9 +13,9 @@ import {
 } from "./models";
 import { AsyncReturnType } from "type-fest";
 
-// instagram-scraping modulen checks env vars (for APIKEY) at load time, so we need to load it on demand
+// instagram-scraping module checks env vars (for APIKEY) at load time, so we need to load it on demand
 export const getClient = async (apiKey: InstagramApiKey) => {
-  process.env["RAPIDAPI_KEY"] = apiKey;
+  process.env["RAPIDAPI_KEY"] = apiKey; // this is not really doing anything as because of webpack treeshaking workaround the env var is part of the lambdas
   return await import("instagram-scraping");
 };
 export type Client = AsyncReturnType<typeof getClient>;
@@ -95,7 +97,10 @@ export const search = async (
     }
     return right(nodesResult);
   } catch (error) {
-    logger.error("instagra:search failed", { error });
+    logger.error("instagra:search failed", {
+      error,
+      errorMessage: error.message,
+    });
     return left("ERROR");
   }
 };
