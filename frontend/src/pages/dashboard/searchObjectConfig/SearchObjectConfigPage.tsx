@@ -36,6 +36,7 @@ import LeftOutlined from "@ant-design/icons/lib/icons/LeftOutlined";
 import Tooltip from "antd/lib/tooltip";
 import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 import { MainSubPageContainter } from "../shared";
+import message from "antd/lib/message";
 
 const { Step } = Steps;
 
@@ -115,9 +116,6 @@ const Page: React.FC = () => {
   );
 
   useEffect(() => {
-    // TODO: still buggy on revisting this page after a change
-    void dispatch(resetConfigState());
-
     if (isRight(indexEither) && indexEither.right !== KEYWORDS_NEW_PATH_ARG) {
       void dispatch(getUserSearchObject([indexEither.right]));
     } else if (newIndex) {
@@ -156,8 +154,12 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if (searchObjectConfig.writeStatus === "FULFILLED") {
+      void message.info(`${confirmModalType} successful`);
       history.push(navigationConfig["keywords"].path);
+      // HACK: reset config state so on page revisit it won't still be FULFILLED
+      dispatch(resetConfigState());
     } else if (searchObjectConfig.writeStatus === "REJECTED") {
+      void message.error(`${confirmModalType} failed`);
       setConfirmModalVisible(false);
     }
   }, [searchObjectConfig.writeStatus]);
