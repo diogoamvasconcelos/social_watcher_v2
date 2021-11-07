@@ -15,12 +15,11 @@ import {
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { PartialDeep, SetOptional } from "type-fest";
 import { keywordCodec } from "@backend/domain/models/keyword";
-import Title from "antd/lib/typography/Title";
 import { socialMediaCodec } from "@backend/domain/models/socialMedia";
 import { nonEmptyArray } from "io-ts-types/lib/nonEmptyArray";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import _pick from "lodash/pick";
-import { MainSubPageContainter } from "../shared";
+import { MainSubPageContainter, MainSubPageTitle } from "../shared";
 
 // +++++++++
 // + STATE +
@@ -120,7 +119,7 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
 
   return (
     <MainSubPageContainter>
-      <Title level={4}>Search through the archived posts</Title>
+      <MainSubPageTitle>Search through the archived posts</MainSubPageTitle>
       <SearchResultsTable
         searchObjects={searchObjects}
         searchRequestState={searchRequestState}

@@ -19,7 +19,6 @@ import Select from "antd/lib/select";
 import { Keyword } from "@backend/domain/models/keyword";
 import DatePicker, { RangePickerProps } from "antd/lib/date-picker";
 import { useEffect, useReducer } from "react";
-import Button from "antd/lib/button";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
 import Text from "antd/lib/typography/Text";
 import Input from "antd/lib/input";
@@ -37,6 +36,8 @@ import { isNonEmpty } from "fp-ts/lib/Array";
 import { momentOrNull } from "@src/shared/lib/moment";
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
+import { clampText } from "@src/shared/lib/text";
+import { PrimaryButton } from "@src/shared/style/components/button";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -156,6 +157,7 @@ type TableRecord = Omit<
 > & {
   socialMedia: string;
   happenedAt: string;
+  fullText: string;
 };
 
 type SearchTableProps = {
@@ -234,13 +236,23 @@ const ResultsTable: React.FC<SearchTableProps> = ({
   return (
     <Table
       columns={columns}
+      expandable={{
+        expandedRowRender: (record) => (
+          <p style={{ margin: 0 }}>{record.fullText}</p>
+        ),
+        rowExpandable: (record) => record.fullText.length > 0,
+      }}
       dataSource={searchResults.items.map((result) => ({
         ...result,
         socialMedia: toSocialMediaLabel(result.socialMedia),
         happenedAt: toLocalTimestamp(result.happenedAt),
-        text: getTextFromSearchResult(result),
+        text: clampText(getTextFromSearchResult(result), 100),
         lang: result.data.lang,
-        translatedText: result.data.translatedText ?? "n/a",
+        translatedText:
+          result.data.lang === "en"
+            ? null
+            : clampText(result.data.translatedText ?? "n/a", 100),
+        fullText: result.data.translatedText ?? getTextFromSearchResult(result),
       }))}
       pagination={paginationConfig}
       rowKey="id"
@@ -349,18 +361,29 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <TableHeaderContainer>
-      <Select
-        defaultValue={initialKeyword}
-        value={searchRequestState.keyword}
-        onChange={handleSelectKeyword}
-        style={{ minWidth: 200 }}
-      >
-        {allowedKeywords.map((keyword) => (
-          <Option value={keyword} key={keyword}>
-            {keyword}
-          </Option>
-        ))}
-      </Select>
+      <TableHeaderRow>
+        <Select
+          defaultValue={initialKeyword}
+          value={searchRequestState.keyword}
+          onChange={handleSelectKeyword}
+          style={{ minWidth: 400 }}
+        >
+          {allowedKeywords.map((keyword) => (
+            <Option value={keyword} key={keyword}>
+              {keyword}
+            </Option>
+          ))}
+        </Select>
+        <PrimaryButton
+          size="large"
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleSearchClicked}
+          disabled={!searchEnabled}
+        >
+          Search
+        </PrimaryButton>
+      </TableHeaderRow>
       <TableHeaderRow>
         <Text>Filters</Text>
       </TableHeaderRow>
@@ -393,14 +416,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({
             momentOrNull(searchRequestState.timeQuery?.happenedAtEnd),
           ]}
           style={{ width: "240px" }}
-        />
-        <Button
-          type="primary"
-          style={{ width: "60px", height: "100%", borderRadius: "4px" }}
-          icon={<SearchOutlined />}
-          size="small"
-          onClick={handleSearchClicked}
-          disabled={!searchEnabled}
         />
       </TableHeaderRow>
       <TableHeaderRow>

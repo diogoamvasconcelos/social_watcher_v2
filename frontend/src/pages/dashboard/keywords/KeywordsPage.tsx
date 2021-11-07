@@ -9,15 +9,15 @@ import { useAppDispatch, useAppSelector } from "../../../shared/store";
 import { SearchObjectsList } from "./SearchObjectsList";
 import { useHistory } from "react-router-dom";
 import { KEYWORDS_NEW_PATH, USER_PATH } from "../../../shared/data/paths";
-import Button from "antd/lib/button";
-import { MainSubPageContainter } from "../shared";
+import { MainSubPageContainter, MainSubPageTitle } from "../shared";
+import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 
 const LoadingUserWidget: React.FC = () => {
   return (
-    <div style={{ display: "flex", gap: "8px" }}>
-      <Text>Loading User</Text>
+    <>
+      <MainSubPageTitle>Loading User</MainSubPageTitle>
       <Spin />
-    </div>
+    </>
   );
 };
 
@@ -28,13 +28,14 @@ const NoSearchObjectsWidget: React.FC<{
   return (
     <>
       <Text>Configure the first keyword you want to watch</Text>
-      <Button
+      <ElevatedPrimaryButton
+        size="large"
         type="primary"
         style={{ width: "200px", borderRadius: "4px" }}
         onClick={onNewSearchObjectClicked}
       >
         Add new keyword
-      </Button>
+      </ElevatedPrimaryButton>
     </>
   );
 };
@@ -65,7 +66,6 @@ const Page: React.FC = () => {
     <MainSubPageContainter>
       {user ? (
         <>
-          <Text>{`Keywords (${searchObjects.length}/${user.subscription.nofSearchObjects})`}</Text>
           {searchObjects.length == 0 ? (
             <NoSearchObjectsWidget
               onNewSearchObjectClicked={handleNewSearchObjectClicked}

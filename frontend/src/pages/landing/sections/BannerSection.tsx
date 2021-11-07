@@ -73,6 +73,7 @@ export const BannerSection: React.FC = () => {
           </Text>
           <ElevatedPrimaryButton
             type="primary"
+            size="large"
             onClick={handleFreeTrialClicked}
           >
             Start free trial

@@ -6,5 +6,9 @@ export const boxDropShadow = css`
 `;
 
 export const boxRoundBorder = css`
-  border-radius: ${radius.size10px};
+  border-radius: ${radius.size16px};
+`;
+
+export const boxLessRoundBorder = css`
+  border-radius: ${radius.size8px};
 `;

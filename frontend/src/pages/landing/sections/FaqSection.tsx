@@ -67,7 +67,10 @@ export const FaqSection: React.FC<{ questions: FAQQuestion[] }> = ({
       </FAQListContainer>
       <MoreQuestionText>Have more questions?</MoreQuestionText>
       <a href={`mailto:${supportEmail}`}>
-        <ElevatedPrimaryButton type="ghost"> Contact us</ElevatedPrimaryButton>
+        <ElevatedPrimaryButton size="large" type="ghost">
+          {" "}
+          Contact us
+        </ElevatedPrimaryButton>
       </a>
     </FAQContainer>
   );

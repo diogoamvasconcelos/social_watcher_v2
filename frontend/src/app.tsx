@@ -28,7 +28,7 @@ import { CookieBanner } from "./shared/components/CookieBanner";
 import { colors } from "./shared/style/colors";
 
 const LayoutStyled = styled(Layout)`
-  background-color: ${colors.neutral.light3};
+  background-color: ${colors.neutral.light2};
 `;
 
 const App: React.FC = () => (

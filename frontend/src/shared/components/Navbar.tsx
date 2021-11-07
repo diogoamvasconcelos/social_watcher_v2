@@ -223,6 +223,7 @@ const LoginButtons: React.FC = () => {
   return (
     <ButtonsContainer>
       <PrimaryButton
+        size="large"
         type={newUser ? "primary" : "ghost"}
         onClick={handleSignupClicked}
         key="signup"
@@ -230,6 +231,7 @@ const LoginButtons: React.FC = () => {
         Start free trial
       </PrimaryButton>
       <PrimaryButton
+        size="large"
         type={newUser ? "ghost" : "primary"}
         onClick={handleLoginClicked}
         key="login"
@@ -241,7 +243,7 @@ const LoginButtons: React.FC = () => {
 };
 
 const StyledHeader = styled(Header)`
-  background-color: ${colors.neutral.light2};
+  background-color: ${colors.neutral.light3};
 `;
 
 const NavbarContainer = styled.div`

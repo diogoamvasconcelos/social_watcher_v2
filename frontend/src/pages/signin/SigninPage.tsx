@@ -17,6 +17,7 @@ import { hasUserSession } from "@src/shared/lib/userSession";
 import { setLoginRedirectUrl } from "@src/shared/reducers/redirectState";
 import { useEffect } from "react";
 import { colors } from "@src/shared/style/colors";
+import { radius } from "@src/shared/style/sizing";
 
 const PageContainer = styled.div`
   background-color: transparent;
@@ -27,6 +28,9 @@ const StyledAmplifyAuth = styled(AmplifyAuthenticator)`
   --amplify-primary-color: ${colors.primary.medium2};
   --amplify-primary-tint: ${colors.primary.dark1};
   --amplify-primary-shade: ${colors.neutral.dark2};
+
+  --border-radius: ${radius.size16px};
+  --box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.2);
 `;
 
 export const SigninPage: React.FC = () => {

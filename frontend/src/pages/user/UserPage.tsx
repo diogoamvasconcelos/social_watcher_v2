@@ -5,8 +5,9 @@ import { createPaymentPortal } from "./userPageState";
 import { useHistory } from "react-router";
 import { getUserDetails } from "../../shared/reducers/userState";
 import { getConfig } from "../../shared/lib/config";
-import Button from "antd/lib/button";
 import Title from "antd/lib/typography/Title";
+import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
+import { size } from "@src/shared/style/sizing";
 
 const config = getConfig();
 
@@ -48,19 +49,20 @@ export const UserPage: React.FC = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
+          gap: size.size16px,
           alignItems: "center",
+          padding: size.size32px,
         }}
       >
         {<JSONViewer name="user" json={user} darkMode={true} />}
-        <Button
+        <ElevatedPrimaryButton
+          size="large"
           type="primary"
-          style={{ width: "200px" }}
           onClick={handleManageSubscriptionClicked}
           loading={waitingForPortalSession}
         >
           Manage Subscription
-        </Button>
+        </ElevatedPrimaryButton>
       </div>
     </>
   );

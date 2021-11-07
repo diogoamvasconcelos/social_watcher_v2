@@ -94,7 +94,7 @@ export const PricingSection: React.FC = () => {
               Icon={<CheckCircleOutlined />}
             />
           </PriceBoxList>
-          <ElevatedPrimaryButton type="primary">
+          <ElevatedPrimaryButton size="large" type="primary">
             Try 30 days free
           </ElevatedPrimaryButton>
         </PricingBoxContainer>

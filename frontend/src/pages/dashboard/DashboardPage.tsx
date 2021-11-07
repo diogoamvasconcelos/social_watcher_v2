@@ -102,9 +102,9 @@ const SideBar: React.FC = () => {
 // ++++++++
 
 const MainContainer = styled.div`
-  & .ant-layout {
+  /* & .ant-layout {
     background: ${colors.neutral.light3};
-  }
+  } */
 `;
 
 const ContentContainer = styled.div`

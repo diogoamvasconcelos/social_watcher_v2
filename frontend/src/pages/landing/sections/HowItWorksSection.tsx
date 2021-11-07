@@ -35,7 +35,7 @@ const HiWContentContainer = styled(SectionContentContainer)``;
 const HiWBox = styled(ContentBox)`
   ${boxDropShadow}
   ${boxRoundBorder}
-  background-color: ${colors.neutral.light2};
+  background-color: ${colors.neutral.light3};
 
   display: grid;
   grid-auto-rows: 230px 162px;

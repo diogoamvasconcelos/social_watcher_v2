@@ -19,7 +19,7 @@ export const CookieBanner: React.FC = () => {
         color: colors.neutral.light3,
         fontSize: fontSize.size18px,
         width: size.size128px,
-        borderRadius: radius.size10px,
+        borderRadius: radius.size16px,
         padding: `${size.size4px} ${size.size24px}`,
         boxShadow: "0 2px 5px hsla(0, 0%, 0%, .2)",
       }}

@@ -26,7 +26,6 @@ import {
 } from "@backend/domain/models/userItem";
 import Spin from "antd/lib/spin";
 import { isLeft, isRight } from "fp-ts/lib/Either";
-import Button from "antd/lib/button";
 import { navigationConfig } from "../DashboardPage";
 import _every from "lodash/every";
 import _isEqual from "lodash/isEqual";
@@ -35,12 +34,10 @@ import Modal, { ModalProps } from "antd/lib/modal/Modal";
 import RightOutlined from "@ant-design/icons/lib/icons/RightOutlined";
 import LeftOutlined from "@ant-design/icons/lib/icons/LeftOutlined";
 import Tooltip from "antd/lib/tooltip";
+import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
+import { MainSubPageContainter } from "../shared";
 
 const { Step } = Steps;
-
-const MainContainer = styled.div`
-  padding: 8px;
-`;
 
 const TopBarContainer = styled.div`
   display: flex;
@@ -227,7 +224,7 @@ const Page: React.FC = () => {
   );
 
   return (
-    <MainContainer>
+    <MainSubPageContainter>
       {isRight(indexEither) ? (
         <>
           <TopBarContainer>
@@ -253,36 +250,44 @@ const Page: React.FC = () => {
                   : undefined
               }
             >
-              <Button
+              <ElevatedPrimaryButton
+                size="large"
                 type="primary"
                 onClick={handleSaveButton}
                 disabled={!saveAllowed || !searchObjectIsDirty}
               >
                 {newIndex ? "Add" : "Apply"}
-              </Button>
+              </ElevatedPrimaryButton>
             </Tooltip>
             <Tooltip title="Go back">
-              <Button type="default" onClick={handleDiscardButton}>
+              <ElevatedPrimaryButton
+                size="large"
+                type="default"
+                onClick={handleDiscardButton}
+              >
                 Discard
-              </Button>
+              </ElevatedPrimaryButton>
             </Tooltip>
-            <Button
+            <ElevatedPrimaryButton
+              size="large"
               type="text"
               danger={true}
               onClick={handleDeleteButton}
               hidden={newIndex || searchObjectIsDirty}
             >
               Delete
-            </Button>
+            </ElevatedPrimaryButton>
           </TopBarContainer>
           <BottomBarContainer>
-            <Button
+            <ElevatedPrimaryButton
+              size="large"
               type="default"
               onClick={() => setCurrentStep(currentStep - 1)}
               disabled={currentStep == 0}
               icon={<LeftOutlined />}
             />
-            <Button
+            <ElevatedPrimaryButton
+              size="large"
               type="primary"
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={currentStep == stepsContent.length - 1}
@@ -310,7 +315,7 @@ const Page: React.FC = () => {
       ) : (
         <InvalidIndexWidget />
       )}
-    </MainContainer>
+    </MainSubPageContainter>
   );
 };
 
@@ -384,8 +389,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 // TODO: improve this
 const InvalidIndexWidget: React.FC = () => {
   return (
-    <MainContainer>
+    <MainSubPageContainter>
       <Text>INVALID</Text>
-    </MainContainer>
+    </MainSubPageContainter>
   );
 };
