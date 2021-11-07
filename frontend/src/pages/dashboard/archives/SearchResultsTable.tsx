@@ -90,21 +90,14 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const searchResult = useAppSelector((state) => state.search);
-  const [isSearcing, setIsSearching] = useState(false);
   const [searchEnabled, setSearchEnabled] = useState(false);
   const [tableConfigState, dispatchTableConfigStateAction] = useReducer(
     tableConfigStateReducer,
     tableConfigInitialState
   );
 
-  useEffect(() => {
-    // hacky way to know how when the search has ended...probably worth improving
-    setIsSearching(false);
-  }, [searchResult]);
-
   const dispatchSearch = () => {
     if (searchEnabled && searchRequestState.keyword) {
-      setIsSearching(true);
       void dispatch(searchKeyword([searchRequestState]));
     }
   };
@@ -123,6 +116,8 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
     dispatchSearch();
   }, [searchRequestState.pagination, searchEnabled]);
 
+  const isSearching = searchResult.status === "PENDING";
+
   return (
     <>
       <TableContainer>
@@ -134,10 +129,11 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
           searchEnabled={searchEnabled}
           tableConfigState={tableConfigState}
           dispatchTableConfigStateAction={dispatchTableConfigStateAction}
+          isSearching={isSearching}
         />
         <ResultsTable
           searchResults={searchResult}
-          loading={isSearcing}
+          loading={isSearching}
           searchRequestState={searchRequestState}
           dispatchSearchRequestStateAction={dispatchSearchRequestStateAction}
           tableConfigState={tableConfigState}
@@ -287,6 +283,7 @@ type TableHeaderProps = {
   searchRequestState: SearchRequestState; // not used atm
   dispatchSearchRequestStateAction: React.Dispatch<AnyAction>;
   searchEnabled: boolean;
+  isSearching: boolean;
   tableConfigState: TableConfigState;
   dispatchTableConfigStateAction: React.Dispatch<AnyAction>;
 };
@@ -297,6 +294,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   searchRequestState,
   dispatchSearchRequestStateAction,
   searchEnabled,
+  isSearching,
   tableConfigState,
   dispatchTableConfigStateAction,
 }) => {
@@ -380,6 +378,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           icon={<SearchOutlined />}
           onClick={handleSearchClicked}
           disabled={!searchEnabled}
+          loading={isSearching}
         >
           Search
         </PrimaryButton>
