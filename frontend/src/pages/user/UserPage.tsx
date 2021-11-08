@@ -5,11 +5,33 @@ import { createPaymentPortal } from "./userPageState";
 import { useHistory } from "react-router";
 import { getUserDetails } from "../../shared/reducers/userState";
 import { getConfig } from "../../shared/lib/config";
-import Title from "antd/lib/typography/Title";
+import Text from "antd/lib/typography/Text";
 import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
-import { size } from "@src/shared/style/sizing";
+import { radius, size } from "@src/shared/style/sizing";
+import styled from "styled-components";
+import { fontSize } from "@src/shared/style/fonts";
+import { colors } from "@src/shared/style/colors";
 
 const config = getConfig();
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled(Text)`
+  text-align: center;
+  font-size: ${fontSize.size24px};
+  color: ${colors.neutral.dark2};
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${size.size16px};
+  padding: ${size.size32px};
+`;
 
 export const UserPage: React.FC = () => {
   const history = useHistory();
@@ -43,18 +65,23 @@ export const UserPage: React.FC = () => {
   }, [portalSessionUrl]);
 
   return (
-    <>
-      <Title level={4}>User</Title>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: size.size16px,
-          alignItems: "center",
-          padding: size.size32px,
-        }}
-      >
-        {<JSONViewer name="user" json={user} darkMode={true} />}
+    <PageContainer>
+      <Title>Your Account</Title>
+      <ContentContainer>
+        {
+          <JSONViewer
+            name="user"
+            json={user}
+            darkMode={true}
+            // Styled component does not work with JSONViewer
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              borderRadius: radius.radius8px,
+              padding: size.size16px,
+            }}
+          />
+        }
         <ElevatedPrimaryButton
           size="large"
           type="primary"
@@ -63,7 +90,7 @@ export const UserPage: React.FC = () => {
         >
           Manage Subscription
         </ElevatedPrimaryButton>
-      </div>
-    </>
+      </ContentContainer>
+    </PageContainer>
   );
 };

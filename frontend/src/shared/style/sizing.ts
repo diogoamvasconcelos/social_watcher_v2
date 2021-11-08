@@ -11,7 +11,7 @@ export const size = {
 };
 
 export const radius = {
-  size8px: "8px",
-  size16px: "16px",
-  size20px: "20px",
+  radius8px: "8px",
+  radius16px: "16px",
+  radius20px: "20px",
 };

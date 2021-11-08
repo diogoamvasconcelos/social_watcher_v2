@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { radius, size } from "../sizing";
 
 const buttonBase = css`
-  border-radius: ${radius.size20px};
+  border-radius: ${radius.radius20px};
   padding: ${size.size4px} ${size.size24px};
 `;
 

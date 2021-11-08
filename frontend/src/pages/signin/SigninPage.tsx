@@ -29,7 +29,7 @@ const StyledAmplifyAuth = styled(AmplifyAuthenticator)`
   --amplify-primary-tint: ${colors.primary.dark1};
   --amplify-primary-shade: ${colors.neutral.dark2};
 
-  --border-radius: ${radius.size16px};
+  --border-radius: ${radius.radius16px};
   --box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.2);
 `;
 
