@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../shared/store";
 import { JSONViewer } from "../../shared/components/JSONViewer/JSONViewer";
 import { createPaymentPortal } from "./userPageState";
@@ -64,14 +64,33 @@ export const UserPage: React.FC = () => {
     }
   }, [portalSessionUrl]);
 
+  const refinedUser = useMemo(() => {
+    if (!user) {
+      return undefined;
+    }
+
+    return {
+      email: user.email,
+      subscription: {
+        status: user.subscription.status,
+        numberOfKeywords: user.subscription.nofSearchObjects,
+        type: user.subscription.type,
+        trialExpiresAt:
+          user.subscription.type === "TRIAL"
+            ? user.subscription.expiresAt
+            : undefined,
+      },
+    };
+  }, [Object.values(user ?? {})]);
+
   return (
     <PageContainer>
       <Title>Your Account</Title>
       <ContentContainer>
         {
           <JSONViewer
-            name="user"
-            json={user}
+            name="account"
+            json={refinedUser}
             darkMode={true}
             // Styled component does not work with JSONViewer
             style={{
