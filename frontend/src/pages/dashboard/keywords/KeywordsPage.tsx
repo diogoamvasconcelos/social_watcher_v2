@@ -47,8 +47,11 @@ const NoSearchObjectsWidget: React.FC<{
 const Page: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.details);
-  const searchObjects = useAppSelector((state) => state.user.searchObjects);
+  const {
+    details: user,
+    searchObjects,
+    status: fetchStatus,
+  } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     void dispatch(getUserDetails());
@@ -64,7 +67,7 @@ const Page: React.FC = () => {
 
   return (
     <MainSubPageContainter>
-      {user ? (
+      {user && fetchStatus != "PENDING" ? (
         <>
           {searchObjects.length == 0 ? (
             <NoSearchObjectsWidget

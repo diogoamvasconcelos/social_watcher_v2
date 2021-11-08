@@ -20,17 +20,11 @@ import {
   newEmailFromString,
 } from "@diogovasconcelos/lib/iots";
 import { isLeft } from "fp-ts/lib/Either";
+import { MainContainer } from "./shared";
 
 // ++++++++++
 // + WIDGET +
 // ++++++++++
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 8px;
-`;
 
 export const ReportsConfigWidget: React.FC<ConfigWidgetProps> = ({
   searchObject,

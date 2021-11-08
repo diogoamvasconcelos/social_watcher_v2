@@ -16,17 +16,11 @@ import {
 import { capitalizeWord } from "../../../../shared/lib/text";
 import Tooltip from "antd/lib/tooltip";
 import InfoCircleOutlined from "@ant-design/icons/lib/icons/InfoCircleOutlined";
+import { MainContainer } from "./shared";
 
 // ++++++++++
 // + WIDGET +
 // ++++++++++
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 8px;
-`;
 
 export const NotificationsConfigWidget: React.FC<ConfigWidgetProps> = ({
   searchObject,

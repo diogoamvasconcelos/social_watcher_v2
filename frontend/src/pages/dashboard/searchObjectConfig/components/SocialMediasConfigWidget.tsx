@@ -12,17 +12,11 @@ import { deepmergeSafe } from "@diogovasconcelos/lib/deepmerge";
 import _some from "lodash/some";
 import Tooltip from "antd/lib/tooltip";
 import InfoCircleOutlined from "@ant-design/icons/lib/icons/InfoCircleOutlined";
+import { MainContainer } from "./shared";
 
 // ++++++++++
 // + WIDGET +
 // ++++++++++
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 8px;
-`;
 
 const SocialMediasContainer = styled.div`
   display: flex;

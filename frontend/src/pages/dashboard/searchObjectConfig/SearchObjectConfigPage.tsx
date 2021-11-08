@@ -37,6 +37,7 @@ import Tooltip from "antd/lib/tooltip";
 import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 import { MainSubPageContainter } from "../shared";
 import message from "antd/lib/message";
+import Divider from "antd/lib/divider";
 
 const { Step } = Steps;
 
@@ -296,6 +297,7 @@ const Page: React.FC = () => {
               icon={<RightOutlined />}
             />
           </BottomBarContainer>
+          <Divider />
           {searchObjectConfig.searchObject && !isLoading ? (
             <CurrentConfigWidget
               searchObject={searchObjectConfig.searchObject}
