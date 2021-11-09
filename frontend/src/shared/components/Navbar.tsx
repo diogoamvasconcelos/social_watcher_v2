@@ -117,8 +117,11 @@ const ButtonsContainer = styled.div`
 
 const UserButtonStyled = styled(Dropdown.Button)`
   & .ant-btn {
-    background-color: transparent;
-    border-style: none;
+    // override the .ant-btn-group>span:last-child:not(:first-child)>.ant-btn style corners
+    border-radius: ${size.size32px} !important;
+    padding: ${size.size8px};
+    width: ${size.size40px};
+    height: ${size.size40px};
   }
 
   & .anticon {
