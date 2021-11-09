@@ -6,6 +6,7 @@ export const MainContainer = styled.div`
   flex-direction: column;
   padding: ${size.size16px};
   gap: ${size.size8px};
+  align-items: center;
 `;
 
 export const RowDiv = styled.div`

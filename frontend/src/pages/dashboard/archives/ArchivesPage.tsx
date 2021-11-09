@@ -119,7 +119,7 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
 
   return (
     <MainSubPageContainter>
-      <MainSubPageTitle>Search through the archived posts</MainSubPageTitle>
+      <MainSubPageTitle>Search the Archived posts</MainSubPageTitle>
       <SearchResultsTable
         searchObjects={searchObjects}
         searchRequestState={searchRequestState}
