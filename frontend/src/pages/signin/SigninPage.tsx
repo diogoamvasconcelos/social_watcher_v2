@@ -7,6 +7,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { AuthState } from "@aws-amplify/ui-components";
 import styled from "styled-components";
+import Text from "antd/lib/typography/Text";
 import { useHistory } from "react-router-dom";
 import { SIGNUP_PATH } from "@src/shared/data/paths";
 import qs from "query-string";
@@ -17,13 +18,28 @@ import { hasUserSession } from "@src/shared/lib/userSession";
 import { setLoginRedirectUrl } from "@src/shared/reducers/redirectState";
 import { useEffect } from "react";
 import { colors } from "@src/shared/style/colors";
-import { radius } from "@src/shared/style/sizing";
+import { radius, size } from "@src/shared/style/sizing";
+import { fontSize } from "@src/shared/style/fonts";
 
 const PageContainer = styled.div`
   background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${size.size16px};
+  padding: ${size.size32px};
+`;
+
+const Heading = styled(Text)`
+  font-size: ${fontSize.size24px};
+  color: ${colors.neutral.dark3};
 `;
 
 const StyledAmplifyAuth = styled(AmplifyAuthenticator)`
+  --amplify-primary-color: ${colors.primary.medium2};
+`;
+
+const StyledAmplifySignOut = styled(AmplifySignOut)`
   --amplify-background-color: ${colors.neutral.light15};
   --amplify-primary-color: ${colors.primary.medium2};
   --amplify-primary-tint: ${colors.primary.dark1};
@@ -49,8 +65,8 @@ export const SigninPage: React.FC = () => {
 
   return alreadyLoggedIn ? (
     <PageContainer>
-      <p>Already logged-in</p>
-      <AmplifySignOut />
+      <Heading>Already logged-in</Heading>
+      <StyledAmplifySignOut />
     </PageContainer>
   ) : (
     <PageContainer>

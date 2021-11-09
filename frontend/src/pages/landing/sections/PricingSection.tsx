@@ -17,6 +17,8 @@ import { fontSize } from "@src/shared/style/fonts";
 import { ElevatedPrimaryButton } from "@src/shared/style/components/button";
 import CheckCircleOutlined from "@ant-design/icons/lib/icons/CheckCircleOutlined";
 import { size } from "@src/shared/style/sizing";
+import { useHistory } from "react-router-dom";
+import { SIGNUP_PATH } from "@src/shared/data/paths";
 
 const PricingContainer = styled(SectionContainer)`
   background: ${colors.neutral.light1};
@@ -55,6 +57,12 @@ const PriceBoxList = styled(ContentBoxList)`
 `;
 
 export const PricingSection: React.FC = () => {
+  const history = useHistory();
+
+  const handleFreeTrialClicked = () => {
+    history.push(SIGNUP_PATH);
+  };
+
   return (
     <PricingContainer>
       <SectionTitle>Pricing</SectionTitle>
@@ -94,7 +102,11 @@ export const PricingSection: React.FC = () => {
               Icon={<CheckCircleOutlined />}
             />
           </PriceBoxList>
-          <ElevatedPrimaryButton size="large" type="primary">
+          <ElevatedPrimaryButton
+            size="large"
+            type="primary"
+            onClick={handleFreeTrialClicked}
+          >
             Try 30 days free
           </ElevatedPrimaryButton>
         </PricingBoxContainer>
