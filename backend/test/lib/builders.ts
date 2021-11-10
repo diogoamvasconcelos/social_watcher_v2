@@ -219,7 +219,6 @@ export const buildYoutubeSearchResult = (
         description: "decription",
         viewCount: newNumberFromStringy("0"),
         likeCount: newNumberFromStringy("0"),
-        dislikeCount: newNumberFromStringy("0"),
         favoriteCount: newNumberFromStringy("0"),
         commentCount: newNumberFromStringy("0"),
         thumbnailUrl: "thumbnail-url",

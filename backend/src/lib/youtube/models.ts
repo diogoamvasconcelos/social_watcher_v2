@@ -81,7 +81,7 @@ export const youtubeVideosResponseItemCodec = t.exact(
       t.type({
         viewCount: numberFromStringy,
         likeCount: numberFromStringy,
-        dislikeCount: numberFromStringy,
+        // dislikeCount: numberFromStringy, // made private by youtube: https://blog.youtube/news-and-events/update-to-youtube/
         favoriteCount: numberFromStringy,
       }),
       t.partial({

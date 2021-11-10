@@ -58,7 +58,6 @@ export const outToDomain = (
       thumbnailUrl: out.snippet.thumbnails.medium.url,
       viewCount: out.statistics.viewCount,
       likeCount: out.statistics.likeCount,
-      dislikeCount: out.statistics.dislikeCount,
       favoriteCount: out.statistics.favoriteCount,
       commentCount: out.statistics.commentCount ?? newNumberFromStringy("0"),
       durationInSeconds: iso8061DurationToSeconds(out.contentDetails.duration),

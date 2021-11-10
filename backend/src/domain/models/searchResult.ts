@@ -124,7 +124,6 @@ export const youtubeSearchResultCodec = t.intersection([
         thumbnailUrl: t.string,
         viewCount: numberFromStringy,
         likeCount: numberFromStringy,
-        dislikeCount: numberFromStringy,
         favoriteCount: numberFromStringy,
         commentCount: numberFromStringy,
         durationInSeconds: t.number,
