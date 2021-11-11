@@ -158,7 +158,7 @@ const EmailConfigWidget: React.FC<EmailConfigWidgetProps> = ({
         <RowDiv>
           <LabelDiv>
             <Text>Frequency</Text>
-            <Tooltip title="Daily: sent once a day at 12:00, Weekly: sent every friday">
+            <Tooltip title="Daily: sent once a day at 16:00UTC Weekly: sent every friday">
               <InfoCircleOutlined />
             </Tooltip>
           </LabelDiv>
