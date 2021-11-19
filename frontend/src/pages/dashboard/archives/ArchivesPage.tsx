@@ -25,7 +25,7 @@ import { MainSubPageContainter, MainSubPageTitle } from "../shared";
 // + STATE +
 // +++++++++
 
-export type SearchRequestState = SetOptional<SearchRequestData, "keyword">;
+export type SearchRequestState = SetOptional<SearchRequestData, "keywords">;
 const searchRequestInitialState: SearchRequestState = {
   pagination: {
     limit: newPositiveInteger(20),
@@ -43,7 +43,7 @@ const searchRequestStateReducer = createReducer<SearchRequestState>(
     builder.addCase(updateSearchRequestAction, (state, action) => {
       return {
         ...deepmergeSafe(state, action.payload),
-        ..._pick(action.payload, "socialMediaQuery"), // deepmerge here doesn't work well with arrays as they get concatenated
+        ..._pick(action.payload, "keywords", "socialMediaQuery"), // deepmerge here doesn't work well with arrays as they get concatenated
       } as SearchRequestState;
     });
   }
@@ -58,7 +58,7 @@ const getParamsFromQueryString = (
 ): PartialDeep<SearchRequestState> => {
   const s = qs.parse(queryString);
 
-  const keywordEither = decode(keywordCodec, s.keyword);
+  const keywordsEither = decode(nonEmptyArray(keywordCodec), s.keywords);
   const textEither = decode(t.string, s.text);
   const socialMediaEither = decode(
     nonEmptyArray(socialMediaCodec),
@@ -68,7 +68,7 @@ const getParamsFromQueryString = (
   const timeEndEither = decode(dateISOString, s.timeEnd);
 
   return {
-    keyword: toRightOrUndefined(keywordEither),
+    keywords: toRightOrUndefined(keywordsEither),
     timeQuery: {
       happenedAtStart: toRightOrUndefined(timeStartEither),
       happenedAtEnd: toRightOrUndefined(timeEndEither),
@@ -108,7 +108,7 @@ const Page: React.FC<RouteComponentProps> = ({ location: { search } }) => {
     history.replace({
       search: qs.stringify({
         ...newSearch,
-        keyword: searchRequestState.keyword,
+        keywords: searchRequestState.keywords?.join(","),
         text: searchRequestState.dataQuery,
         timeStart: searchRequestState.timeQuery?.happenedAtStart,
         timeEnd: searchRequestState.timeQuery?.happenedAtEnd,

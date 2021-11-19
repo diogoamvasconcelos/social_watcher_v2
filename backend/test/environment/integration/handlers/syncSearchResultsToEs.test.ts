@@ -47,7 +47,9 @@ describe("handlers/syncSearchResultsToEs", () => {
       await retryUntil(
         async () => {
           await refreshIndices(client);
-          return fromEither(await searchSearchResultsFn(logger, { keyword }));
+          return fromEither(
+            await searchSearchResultsFn(logger, { keywords: [keyword] })
+          );
         },
         (res) => res.items.length == searchResults.length
       )

@@ -187,7 +187,7 @@ const searchForReport = async (
 ): Promise<Either<"ERROR"[], ReportJobBase[]>> => {
   const searchStart = calcSearchStartDate(frequency);
 
-  const baseParams: Omit<SearchSearchResultsParams, "keyword"> = {
+  const baseParams: Omit<SearchSearchResultsParams, "keywords"> = {
     pagination: {
       limit: maxItems,
       offset: newPositiveInteger(0),
@@ -202,7 +202,7 @@ const searchForReport = async (
       keywords.map(async (keyword) => {
         const searchEither = await searchSearchResultsFn(logger, {
           ...baseParams,
-          keyword,
+          keywords: [keyword],
         });
         if (isLeft(searchEither)) {
           return searchEither;

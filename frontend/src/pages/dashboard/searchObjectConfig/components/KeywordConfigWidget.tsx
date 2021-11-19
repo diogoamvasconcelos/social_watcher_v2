@@ -8,21 +8,8 @@ import {
   validateKeyword,
   ValidateKeywordErrors,
 } from "@backend/domain/controllers/validateKeyword";
-import styled from "styled-components";
 import { isLeft } from "fp-ts/lib/Either";
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 2px;
-`;
-
-const RowDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-`;
+import { MainContainer, RowDiv } from "./shared";
 
 export const KeywordConfigWidget: React.FC<ConfigWidgetProps> = ({
   searchObject,

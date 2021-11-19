@@ -82,7 +82,8 @@ describe("indexSearchResults", () => {
     ]);
 
     expect(
-      fromEither(await searchSearchResultsFn(logger, { keyword })).items.sort
+      fromEither(await searchSearchResultsFn(logger, { keywords: [keyword] }))
+        .items.sort
     ).toEqual(
       [
         searchResultDog,
@@ -95,25 +96,37 @@ describe("indexSearchResults", () => {
 
     expect(
       fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "dog" })
+        await searchSearchResultsFn(logger, {
+          keywords: [keyword],
+          dataQuery: "dog",
+        })
       ).items
     ).toIncludeAllMembers([searchResultDog, searchResultDogNCat]);
 
     expect(
       fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "cat" })
+        await searchSearchResultsFn(logger, {
+          keywords: [keyword],
+          dataQuery: "cat",
+        })
       ).items
     ).toIncludeAllMembers([searchResultCat, searchResultDogNCat]);
 
     expect(
       fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "human" })
+        await searchSearchResultsFn(logger, {
+          keywords: [keyword],
+          dataQuery: "human",
+        })
       ).items
     ).toIncludeAllMembers([searchResultHuman]);
 
     expect(
       fromEither(
-        await searchSearchResultsFn(logger, { keyword, dataQuery: "airplane" })
+        await searchSearchResultsFn(logger, {
+          keywords: [keyword],
+          dataQuery: "airplane",
+        })
       ).items
     ).toEqual([]);
   });
@@ -149,7 +162,7 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           timeQuery: { happenedAtStart: queryStartTime },
         })
       ).items
@@ -158,7 +171,7 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           timeQuery: { happenedAtEnd: queryEndTime },
         })
       ).items
@@ -167,7 +180,7 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           timeQuery: {
             happenedAtStart: queryStartTime,
             happenedAtEnd: queryEndTime,
@@ -226,7 +239,7 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           socialMediaQuery: ["twitter"],
         })
       ).items
@@ -235,7 +248,7 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           socialMediaQuery: ["twitter", "reddit"],
         })
       ).items
@@ -244,11 +257,53 @@ describe("indexSearchResults", () => {
     expect(
       fromEither(
         await searchSearchResultsFn(logger, {
-          keyword,
+          keywords: [keyword],
           socialMediaQuery: ["instagram", "reddit"],
         })
       ).items
     ).toIncludeAllMembers([instgramGoodSearchResult, redditGoodSearchResult]);
+  });
+
+  it("can search multiple keywords", async () => {
+    const keywordA = newLowerCase(uuid());
+    const keywordB = newLowerCase(uuid());
+    const keywordC = newLowerCase(uuid());
+
+    const resultA = buildSearchResult({
+      keyword: keywordA,
+    });
+    const resultB = buildSearchResult({
+      keyword: keywordB,
+    });
+    const resultC = buildSearchResult({
+      keyword: keywordC,
+    });
+
+    await indexSearchResults([resultA, resultB, resultC]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keywords: [keywordA],
+        })
+      ).items
+    ).toIncludeAllMembers([resultA]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keywords: [keywordA, keywordB],
+        })
+      ).items
+    ).toIncludeAllMembers([resultA, resultB]);
+
+    expect(
+      fromEither(
+        await searchSearchResultsFn(logger, {
+          keywords: [keywordA, keywordB, keywordC],
+        })
+      ).items
+    ).toIncludeAllMembers([resultA, resultB, resultC]);
   });
 });
 

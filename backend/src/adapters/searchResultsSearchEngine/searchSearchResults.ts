@@ -20,15 +20,15 @@ export const makeSearchSearchResults = (
 ): SearchSearchResultsFn => {
   return async (
     logger,
-    { keyword, dataQuery, timeQuery, socialMediaQuery, pagination }
+    { keywords, dataQuery, timeQuery, socialMediaQuery, pagination }
   ) => {
     const queriesMust: JsonObjectEncodable[] = [];
     // keyword
     queriesMust.push({
       constant_score: {
         filter: {
-          term: {
-            keyword,
+          terms: {
+            keyword: keywords,
           },
         },
       },
