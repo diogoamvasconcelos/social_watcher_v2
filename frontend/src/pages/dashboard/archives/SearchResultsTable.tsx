@@ -16,7 +16,7 @@ import React, { ChangeEvent, useState } from "react";
 import { toLocalTimestamp } from "../../../shared/lib/formatting";
 import { SearchResult } from "@backend/domain/models/searchResult";
 import Select from "antd/lib/select";
-import { Keyword } from "@backend/domain/models/keyword";
+import { Keyword, keywordCodec } from "@backend/domain/models/keyword";
 import DatePicker, { RangePickerProps } from "antd/lib/date-picker";
 import { useEffect, useReducer } from "react";
 import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
@@ -97,19 +97,26 @@ export const SearchResultsTable: React.FC<SearchResultsTableProps> = ({
   );
 
   const dispatchSearch = () => {
-    if (searchEnabled && searchRequestState.keyword) {
+    if (searchEnabled && searchRequestState.keywords) {
       void dispatch(searchKeyword([searchRequestState]));
     }
   };
 
   useEffect(() => {
-    // search only enabled if selected keyword is valid
+    if (searchRequestState.keywords == undefined) {
+      setSearchEnabled(false);
+      return;
+    }
+
+    // search only enabled if all selected keywords are valid
     setSearchEnabled(
-      searchObjects
-        .map((searchObject) => searchObject.keyword)
-        .includes(newLowerCase(searchRequestState.keyword ?? ""))
+      searchRequestState.keywords.every((keyword) =>
+        searchObjects
+          .map((searchObject) => searchObject.keyword)
+          .includes(newLowerCase(keyword ?? ""))
+      )
     );
-  }, [searchRequestState.keyword, searchObjects]);
+  }, [searchRequestState.keywords, searchObjects]);
 
   useEffect(() => {
     // hacky way to search when table pagination changes
@@ -298,12 +305,16 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   tableConfigState,
   dispatchTableConfigStateAction,
 }) => {
-  const initialKeyword = newLowerCase("choose a keyword");
-
   // TODO: allow search for multiple keywords
-  const handleSelectKeyword = (val: string) => {
+  const handleSelectKeyword = (vals: string[]) => {
+    const keywords = fromEither(
+      toSingleEither(vals.map((val) => decode(keywordCodec, val)))
+    );
+
     dispatchSearchRequestStateAction(
-      updateSearchRequestAction({ keyword: newLowerCase(val) })
+      updateSearchRequestAction({
+        keywords: isNonEmpty(keywords) ? keywords : undefined,
+      })
     );
   };
 
@@ -361,9 +372,10 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     <TableHeaderContainer>
       <TableHeaderRow>
         <Select
-          defaultValue={initialKeyword}
-          value={searchRequestState.keyword}
+          placeholder="choose one or more keywords"
           onChange={handleSelectKeyword}
+          mode="multiple"
+          allowClear
           style={{ minWidth: 400 }}
         >
           {allowedKeywords.map((keyword) => (
