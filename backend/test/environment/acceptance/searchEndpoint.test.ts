@@ -22,6 +22,9 @@ import {
 import { retryUntil, sleep } from "@test/lib/retry";
 import { isLeft } from "fp-ts/lib/Either";
 import { getMinutesAgo } from "@src/lib/date";
+import _ from "lodash";
+import { SearchResult } from "@src/domain/models/searchResult";
+import { isNonEmpty } from "fp-ts/lib/Array";
 
 jest.setTimeout(60000);
 
@@ -31,66 +34,99 @@ const apiClient = getApiClient(config.apiEndpoint);
 describe("search endpoint e2e (nearly)", () => {
   let testUser: TestUser;
   let userToken: string;
-  const keyword = newLowerCase(uuid());
+  const nofKeywords = newPositiveInteger(3);
+  const keywords = _.range(nofKeywords).map((_) => newLowerCase(uuid()));
+  let searchResults: SearchResult[];
 
   beforeAll(async () => {
     testUser = await createTestUser({
-      nofSearchObjects: newPositiveInteger(1),
+      nofSearchObjects: nofKeywords,
     });
 
     userToken = await getIdToken({
       username: testUser.email,
       password: testUser.password,
     });
+
+    // add syntetic search results for each keyword
+    searchResults = await Promise.all(
+      keywords.map(
+        async (keyword) =>
+          await addSearchResultDirectly({
+            keyword,
+            socialMedia: "twitter",
+          })
+      )
+    );
   });
 
   afterAll(async () => {
     await deleteUser(testUser);
-    await deleteKeyword(keyword);
+    await Promise.all(keywords.map(async (keyword) => deleteKeyword(keyword)));
   });
 
   it("can search for an allowed keyword", async () => {
-    // add syntetic search result
-    const searchResult = await addSearchResultDirectly({
-      keyword,
-      socialMedia: "twitter",
-    });
-
     // add keyword to user
     await createUserSearchObject({
       token: userToken,
-      keyword,
+      keyword: keywords[0],
       twitterStatus: "ENABLED",
     });
 
     const searchResponse = await trySearchUsingApi(
       { client: apiClient, token: userToken },
-      { userData: { keyword } }
+      { userData: { keywords: [keywords[0]] } }
     );
 
-    expect(searchResponse.items).toEqual([searchResult]);
+    expect(searchResponse.items).toEqual([searchResults[0]]);
+  });
+
+  it("can search for multiple keyword", async () => {
+    // add more keywords to user
+    const otherKeywords = keywords.slice(1, 3);
+    await Promise.all(
+      otherKeywords.map(
+        async (keyword) =>
+          await createUserSearchObject({
+            token: userToken,
+            keyword,
+            twitterStatus: "ENABLED",
+          })
+      )
+    );
+
+    const searchResponse = await trySearchUsingApi(
+      { client: apiClient, token: userToken },
+      {
+        userData: {
+          keywords: isNonEmpty(otherKeywords) ? otherKeywords : [keywords[0]],
+        },
+      }
+    );
+
+    expect(searchResponse.items).toIncludeSameMembers(
+      searchResults.slice(1, 3)
+    );
   });
 
   it("can search with time queries", async () => {
     const queryStartTime = getMinutesAgo(20);
     const queryEndTime = getMinutesAgo(10);
+    const keyword = keywords[0];
 
     // add syntetic search result before range
     await addSearchResultDirectly({
       keyword,
-      socialMedia: "twitter",
       happenedAt: getMinutesAgo(1, new Date(queryStartTime)),
     });
     // add syntetic search result withing range
     const searchResultWithin = await addSearchResultDirectly({
       keyword,
-      socialMedia: "twitter",
       happenedAt: getMinutesAgo(1, new Date(queryEndTime)),
     });
     // add syntetic search result after range
     await addSearchResultDirectly({
       keyword,
-      socialMedia: "twitter",
       happenedAt: getMinutesAgo(-1, new Date(queryEndTime)),
     });
 
@@ -98,7 +134,7 @@ describe("search endpoint e2e (nearly)", () => {
       { client: apiClient, token: userToken },
       {
         userData: {
-          keyword,
+          keywords: [keyword],
           timeQuery: {
             happenedAtStart: queryStartTime,
             happenedAtEnd: queryEndTime,
@@ -111,6 +147,8 @@ describe("search endpoint e2e (nearly)", () => {
   });
 
   it("can search with social media", async () => {
+    const keyword = keywords[0];
+
     // add syntetic twitter search result
     await addSearchResultDirectly({
       keyword,
@@ -126,7 +164,7 @@ describe("search endpoint e2e (nearly)", () => {
       { client: apiClient, token: userToken },
       {
         userData: {
-          keyword,
+          keywords: [keyword],
           socialMediaQuery: ["reddit"],
         },
       }
@@ -138,11 +176,12 @@ describe("search endpoint e2e (nearly)", () => {
   // IMPORTANT:
   // run this test last as it disables the keyword
   it("can't search for not allowed keywords", async () => {
+    const keyword = keywords[0];
     const anotherKeyword = newLowerCase(uuid());
 
     let responseEither = await search(
       { client: apiClient, token: userToken },
-      { userData: { keyword: anotherKeyword } }
+      { userData: { keywords: [anotherKeyword] } }
     );
 
     expect(
@@ -162,7 +201,7 @@ describe("search endpoint e2e (nearly)", () => {
 
     responseEither = await search(
       { client: apiClient, token: userToken },
-      { userData: { keyword } }
+      { userData: { keywords: [keyword] } }
     );
 
     expect(

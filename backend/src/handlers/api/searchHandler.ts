@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { isLeft, left, right } from "fp-ts/lib/Either";
+import { isLeft, isRight, left, right } from "fp-ts/lib/Either";
 import { getLogger } from "@src/lib/logger";
 import { apigwMiddlewareStack } from "@src/handlers/middlewares/apigwMiddleware";
 import { ApiResponse } from "./models/models";
@@ -20,6 +20,7 @@ import {
   searchRequestUserDataCodec,
   SearchResponse,
 } from "./models/search";
+import { toSingleEither } from "@diogovasconcelos/lib/iots";
 
 const handler = async (
   event: APIGatewayProxyEvent
@@ -46,17 +47,29 @@ const handler = async (
   }
   const request = requestEither.right;
 
-  const isUsingKeywordEither = await isUserUsingKeyword(
-    { logger, getSearchObjectsForUserFn },
-    request.keyword,
-    request.authData.id
+  const isUsingKeywordsEither = await Promise.all(
+    request.keywords.map(
+      async (keyword) =>
+        await isUserUsingKeyword(
+          { logger, getSearchObjectsForUserFn },
+          keyword,
+          request.authData.id
+        )
+    )
   );
-  if (isLeft(isUsingKeywordEither)) {
+  if (isLeft(toSingleEither(isUsingKeywordsEither))) {
     return left(
       makeInternalErrorResponse("Failed to check if keyword is being used.")
     );
   }
-  if (!isUsingKeywordEither.right) {
+  if (
+    !isUsingKeywordsEither.some(
+      (isUsingKeyword) => isRight(isUsingKeyword) && isUsingKeyword.right
+    )
+  ) {
+    logger.error("One of the keywords is not used by user", {
+      isUsingKeywordsEither,
+    });
     return left(
       makeForbiddenResponse("Keyword not part of user's SearchObjects.")
     );

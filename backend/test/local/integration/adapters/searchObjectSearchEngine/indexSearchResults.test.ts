@@ -59,7 +59,7 @@ describe("indexSearchResults", () => {
 
     await refreshIndices(client);
     const searchedResults = fromEither(
-      await searchSearchResultsFn(logger, { keyword })
+      await searchSearchResultsFn(logger, { keywords: [keyword] })
     );
 
     expect(indexResult).toEqual("OK");

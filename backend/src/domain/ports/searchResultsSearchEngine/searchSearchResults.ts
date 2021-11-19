@@ -30,7 +30,7 @@ export type SearchSearchResultsResult = t.TypeOf<
 
 export const SearchSearchResultParamsCodec = t.intersection([
   t.type({
-    keyword: keywordCodec,
+    keywords: nonEmptyArray(keywordCodec),
   }),
   t.partial({
     dataQuery: t.string,
