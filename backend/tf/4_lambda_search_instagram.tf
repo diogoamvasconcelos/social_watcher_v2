@@ -11,7 +11,7 @@ resource "aws_lambda_function" "search_instagram" {
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
   memory_size      = "128"
-  timeout          = "15"
+  timeout          = "30"
   architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.search_instagram_lambda_file)
   description      = "Searches instagram for specifc keyword"
