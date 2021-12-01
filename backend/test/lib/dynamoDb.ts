@@ -50,10 +50,9 @@ export const preparesGenericTable = async (tableName: string) => {
           { AttributeName: "gsi1sk", KeyType: "RANGE" },
         ],
         Projection: { ProjectionType: "ALL" },
-        ProvisionedThroughput: { ReadCapacityUnits: 1, WriteCapacityUnits: 1 },
       },
     ],
-    ProvisionedThroughput: { ReadCapacityUnits: 1, WriteCapacityUnits: 1 },
+    BillingMode: "PAY_PER_REQUEST",
     TableName: tableName,
   };
 
