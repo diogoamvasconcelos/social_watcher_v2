@@ -10,8 +10,8 @@ resource "aws_lambda_function" "stripe_webhook" {
   handler          = local.lambda_handler
   role             = aws_iam_role.lambda_default.arn
   runtime          = "nodejs14.x"
-  memory_size      = "128"
-  timeout          = "3"
+  memory_size      = "512"
+  timeout          = "10"
   architectures    = ["arm64"]
   source_code_hash = filebase64sha256(local.stripe_webhook_lambda_file)
   description      = "Lambda for the Stripe Webhook"
