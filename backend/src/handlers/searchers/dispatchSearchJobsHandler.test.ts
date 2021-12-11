@@ -8,7 +8,7 @@ import { getHoursAgo } from "@src/lib/date";
 
 describe("dispatchSearchJobs", () => {
   describe("filterKeywords", () => {
-    it("limits instagram to 10 keywords/searchobjects", () => {
+    it.skip("limits instagram to 10 keywords/searchobjects", () => {
       const keywords = _.range(20).map(() =>
         buildRandomKeywordData("instagram")
       );
@@ -20,11 +20,11 @@ describe("dispatchSearchJobs", () => {
 
     it("filters keywords still in cooldown", () => {
       const keywords = [
-        buildRandomKeywordData("instagram", getHoursAgo(2)), // within cooldown
-        buildRandomKeywordData("instagram", getHoursAgo(25)), // outside of cooldown
+        buildRandomKeywordData("youtube", getHoursAgo(2)), // within cooldown
+        buildRandomKeywordData("youtube", getHoursAgo(25)), // outside of cooldown
       ];
 
-      const filteredKeywords = filterKeywords("instagram", keywords);
+      const filteredKeywords = filterKeywords("youtube", keywords);
 
       expect(filteredKeywords).toHaveLength(1);
       expect(filteredKeywords[0]).toEqual(keywords[1]);
