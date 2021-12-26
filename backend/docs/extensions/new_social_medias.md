@@ -11,7 +11,7 @@
 
 ## Using public API
 
-- https://rapidapi.com/restyler/api/instagram40/pricing
+- https://rapidapi.com/neotank/api/instagram130/
 - https://www.npmjs.com/package/instagram-scraping
 
 # Hackernews

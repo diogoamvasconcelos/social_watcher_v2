@@ -8,7 +8,7 @@ import { getHoursAgo } from "@src/lib/date";
 
 describe("dispatchSearchJobs", () => {
   describe("filterKeywords", () => {
-    it.skip("limits instagram to 10 keywords/searchobjects", () => {
+    it("limits instagram to 10 keywords/searchobjects", () => {
       const keywords = _.range(20).map(() =>
         buildRandomKeywordData("instagram")
       );
