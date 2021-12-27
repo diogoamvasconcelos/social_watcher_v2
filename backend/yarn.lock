@@ -4046,10 +4046,10 @@ ini@^1.3.4:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-instagram-scraping@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/instagram-scraping/-/instagram-scraping-1.0.16.tgz#23ae2de5345a882c0be266aff5efda1e0e069e17"
-  integrity sha512-7qnMzAVwm6yIJYkxUOJNIWwrIaAGvR3SWPpl1cwCEP2WkoYwmGCmS27Al2voHCglkufJwZXtvISbS3ZcnGmsNg==
+instagram-scraping@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/instagram-scraping/-/instagram-scraping-1.0.17.tgz#84b7f577a34a4a884342e681877c318577ba2e9b"
+  integrity sha512-gPlKBUSuh5VYWD6uVbOvw68L7YqMJRYsTAzOYwkLGLe1ItB7QNfvJcniHIMlYRzMuoS44Ox0LHFyIFygDBhVfQ==
   dependencies:
     async "^2.6.0"
     axios "^0.21.1"

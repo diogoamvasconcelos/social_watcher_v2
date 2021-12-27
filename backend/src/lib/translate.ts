@@ -19,7 +19,7 @@ export const translateText = async (
       lang: result.SourceLanguageCode,
     });
   } catch (error) {
-    logger.error("translateText failed", { error });
+    logger.error("translateText failed", { error, request });
     return left("ERROR");
   }
 };

@@ -95,11 +95,8 @@ export const filterKeywords = (
     case "hackernews":
       return keywords;
     case "instagram": {
-      // Due to RapidAPI instagram being 404, just skip for now
-      return [];
-
       // Due to RapidAPI limits, instagram searchs needs to be more restricted
-      // - https://rapidapi.com/restyler/api/instagram40/pricing
+      // - https://rapidapi.com/neotank/api/instagram130/pricing
       // - https://docs.google.com/spreadsheets/d/1fS1pXaw-j79P1-mrVHD3agRqLvb-ARYbumLtoRdcKlU/edit#gid=0
       return applyCooldownToKeywords(
         {
