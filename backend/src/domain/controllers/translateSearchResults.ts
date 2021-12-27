@@ -22,7 +22,9 @@ export const translateSearchResults = async <T extends SearchResult>(
         result.data.lang
       );
       if (isLeft(translateResult)) {
-        logger.info(`Failed to translate(${result.data.lang}): ${text}`);
+        logger.info(`Failed to translate(${result.data.lang}): ${text}`, {
+          result,
+        });
         return result;
       }
       return deepmergeSafe(result, {
