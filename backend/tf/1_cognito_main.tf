@@ -49,7 +49,7 @@ resource "aws_cognito_user_pool_client" "main_pool_client" {
     "ALLOW_USER_SRP_AUTH" // required for @aws-amplify/ui-react
   ]
   supported_identity_providers         = ["COGNITO"]
-  prevent_user_existence_errors        = "ENABLED"
+  prevent_user_existence_errors        = "ENABLED" // nice to prevent attackers from figuring out if a user exists
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["openid", "email", "aws.cognito.signin.user.admin", "profile"]

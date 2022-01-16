@@ -100,7 +100,7 @@ export const filterKeywords = (
       // - https://docs.google.com/spreadsheets/d/1fS1pXaw-j79P1-mrVHD3agRqLvb-ARYbumLtoRdcKlU/edit#gid=0
       return applyCooldownToKeywords(
         {
-          cooldownPeriodInMinutes: 60 * 12, // TODO: increase freq in production
+          cooldownPeriodInMinutes: 60 * 24 * 6, // TODO: increase freq in production
           maxSearchObjectsPerSearch: 10,
         },
         keywords
