@@ -1,5 +1,5 @@
 // add all jest-extended matchers
-// @ts-expect-error
+// @ts-expect-error ignore is not a module
 import * as matchers from "jest-extended";
 expect.extend(matchers);
 
